@@ -1,0 +1,30 @@
+diff --git a/node_modules/@radix-ui/react-presence/.DS_Store b/node_modules/@radix-ui/react-presence/.DS_Store
+new file mode 100644
+index 0000000..7d342b4
+Binary files /dev/null and b/node_modules/@radix-ui/react-presence/.DS_Store differ
+diff --git a/node_modules/@radix-ui/react-presence/dist/index.js b/node_modules/@radix-ui/react-presence/dist/index.js
+index 8d89ba7..9d345a7 100644
+--- a/node_modules/@radix-ui/react-presence/dist/index.js
++++ b/node_modules/@radix-ui/react-presence/dist/index.js
+@@ -27,7 +27,7 @@ const $a2fa0214bb2735a1$export$99c2b779aa4e8b8b = (props)=>{
+     const child = typeof children === 'function' ? children({
+         present: presence.isPresent
+     }) : $fnLeV$react.Children.only(children);
+-    const ref = $fnLeV$radixuireactcomposerefs.useComposedRefs(presence.ref, child.ref);
++    const ref = $fnLeV$radixuireactcomposerefs.useComposedRefs(presence.ref, child.props.ref ? child.props.ref : child.ref);
+     const forceMount = typeof children === 'function';
+     return forceMount || presence.isPresent ? /*#__PURE__*/ $fnLeV$react.cloneElement(child, {
+         ref: ref
+diff --git a/node_modules/@radix-ui/react-presence/dist/index.mjs b/node_modules/@radix-ui/react-presence/dist/index.mjs
+index 1a5bc83..c15ffb9 100644
+--- a/node_modules/@radix-ui/react-presence/dist/index.mjs
++++ b/node_modules/@radix-ui/react-presence/dist/index.mjs
+@@ -22,7 +22,7 @@ const $921a889cee6df7e8$export$99c2b779aa4e8b8b = (props)=>{
+     const child = typeof children === 'function' ? children({
+         present: presence.isPresent
+     }) : $iqq3r$Children.only(children);
+-    const ref = $iqq3r$useComposedRefs(presence.ref, child.ref);
++    const ref = $iqq3r$useComposedRefs(presence.ref, child.props.ref ? child.props.ref: child.ref);
+     const forceMount = typeof children === 'function';
+     return forceMount || presence.isPresent ? /*#__PURE__*/ $iqq3r$cloneElement(child, {
+         ref: ref

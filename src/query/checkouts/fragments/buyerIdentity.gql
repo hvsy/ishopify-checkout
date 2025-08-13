@@ -1,0 +1,8 @@
+fragment BuyerIdentity on Cart{
+    buyerIdentity {
+        email
+        phone
+        countryCode
+        __typename
+    }
+}

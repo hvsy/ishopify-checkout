@@ -1,0 +1,78 @@
+fragment CartFields on Cart{
+    id
+    ...BuyerIdentity
+    totalQuantity
+    discountCodes {
+        code
+        applicable
+    }
+    deliveryGroups(first: 10,withCarrierRates: false) {
+        __typename
+        edges {
+            __typename
+            node {
+                __typename
+                id
+                selectedDeliveryOption {
+                    __typename
+                    code
+                    description
+                    deliveryMethodType
+                    title
+                    handle
+                    estimatedCost {
+                        amount
+                        currencyCode
+                    }
+                }
+            }
+        }
+    }
+    ...Delivery
+    discountAllocations {
+        ... on CartCodeDiscountAllocation{
+            code
+        }
+        ... on CartCustomDiscountAllocation{
+            title
+        }
+        ... on CartAutomaticDiscountAllocation{
+            title
+        }
+        targetType
+        __typename
+        discountedAmount {
+            __typename
+            amount
+            currencyCode
+        }
+        discountApplication {
+            __typename
+            allocationMethod
+            targetSelection
+            targetType
+            value {
+                ... on MoneyV2{
+                    currencyCode
+                    amount
+                }
+            }
+        }
+    }
+    cost {
+        checkoutChargeAmount {
+            amount
+            currencyCode
+        }
+        subtotalAmount {
+            amount
+            currencyCode
+        }
+        subtotalAmountEstimated
+        totalAmount {
+            currencyCode
+            amount
+        }
+        totalAmountEstimated
+    }
+}

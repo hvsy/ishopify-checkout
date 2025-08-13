@@ -1,0 +1,75 @@
+{
+  "name": "checkout",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "postinstall": "patch-package"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.13.8",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@shopify/graphql-client": "^1.4.0",
+    "@tailwindcss/vite": "^4.0.12",
+    "@types/node": "^20.12.3",
+    "axios": "^1.6.8",
+    "big.js": "^7.0.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "currency.js": "^2.0.4",
+    "dayjs": "^1.11.10",
+    "graphql": "^16.11.0",
+    "js-cookie": "^3.0.5",
+    "js-md5": "^0.8.3",
+    "lodash-es": "^4.17.21",
+    "lucide-react": "^0.364.0",
+    "mitt": "^3.0.1",
+    "radix-ui": "^1.0.1",
+    "rc-field-form": "^2.5.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-error-boundary": "^6.0.0",
+    "react-frame-component": "^5.2.7",
+    "react-responsive": "^10.0.0",
+    "react-router-dom": "^6.22.3",
+    "rimraf": "^5.0.7",
+    "swr": "^2.3.0",
+    "tailwind-merge": "^2.2.2",
+    "tailwindcss": "^4.0.12",
+    "usehooks-ts": "^3.1.0",
+    "validator": "^13.15.15",
+    "zod": "^3.23.8",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/big.js": "^6.2.2",
+    "@types/js-cookie": "^3.0.6",
+    "@types/lodash-es": "^4.17.12",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@types/validator": "^13.11.10",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "msw": "^2.2.14",
+    "patch-package": "^8.0.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.0"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  },
+  "overrides": {
+    "@types/react": "npm:types-react@rc",
+    "@types/react-dom": "npm:types-react-dom@rc"
+  }
+}

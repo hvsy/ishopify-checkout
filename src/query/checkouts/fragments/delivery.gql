@@ -1,0 +1,25 @@
+fragment Delivery on Cart{
+    delivery {
+        addresses(selected: true){
+            id
+            selected
+            oneTimeUse
+            address {
+                ... on CartDeliveryAddress{
+                    firstName
+                    lastName
+                    name
+                    address1
+                    address2
+                    phone
+                    city
+                    countryCode
+                    provinceCode
+                    formatted
+                    formattedArea
+                    zip
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,39 @@
+fragment DeliveryGroups on Cart{
+    id
+    __typename
+
+    deliveryGroups(first: 10, withCarrierRates: $withCarrierRates) {
+        __typename
+        edges {
+            __typename
+            node {
+                __typename
+                id
+                deliveryOptions {
+                    __typename
+                    title
+                    handle
+                    estimatedCost {
+                        amount
+                        currencyCode
+                    }
+                    deliveryMethodType
+                    description
+                    code
+                }
+                selectedDeliveryOption {
+                    __typename
+                    code
+                    description
+                    deliveryMethodType
+                    title
+                    handle
+                    estimatedCost {
+                        amount
+                        currencyCode
+                    }
+                }
+            }
+        }
+    }
+}

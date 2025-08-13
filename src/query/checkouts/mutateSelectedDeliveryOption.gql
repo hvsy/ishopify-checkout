@@ -1,0 +1,7 @@
+mutation SelectedDeliveryOption($cartId : ID!,$options : [CartSelectedDeliveryOptionInput!]!){
+    cartSelectedDeliveryOptionsUpdate(cartId: $cartId,selectedDeliveryOptions: $options){
+       cart {
+           id
+       }
+    }
+}

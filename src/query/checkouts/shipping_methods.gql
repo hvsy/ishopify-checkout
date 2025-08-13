@@ -1,0 +1,35 @@
+query ShippingMethods($cartId : ID!,$countryCode : String,$withCarrierRates : Boolean){
+    cart(id:  $cartId){
+        discountAllocations {
+            ... on CartCodeDiscountAllocation{
+                code
+            }
+            ... on CartCustomDiscountAllocation{
+                title
+            }
+            ... on CartAutomaticDiscountAllocation{
+                title
+            }
+            targetType
+            __typename
+            discountedAmount {
+                __typename
+                amount
+                currencyCode
+            }
+            discountApplication {
+                __typename
+                allocationMethod
+                targetSelection
+                targetType
+                value {
+                    ... on MoneyV2{
+                        currencyCode
+                        amount
+                    }
+                }
+            }
+        }
+        ... DeliveryGroups @defer(label : $countryCode)
+    }
+}

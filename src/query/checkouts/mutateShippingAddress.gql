@@ -1,0 +1,62 @@
+mutation ContactAddressUpdate($cartId : ID!,
+    $delivery : CartDeliveryAddressInput!,
+    $id : ID!,
+    $buyerIdentity : CartBuyerIdentityInput!,
+    $create : Boolean = false,
+){
+    cartBuyerIdentityUpdate(cartId: $cartId,
+        buyerIdentity:$buyerIdentity){
+        userErrors {
+            code
+            field
+            message
+        }
+        warnings {
+            code
+            message
+            target
+        }
+    }
+    cartDeliveryAddressesUpdate (cartId: $cartId,addresses: [{
+        id: $id
+        selected: true
+        address: {
+            deliveryAddress: $delivery
+        }
+    }]) @skip(if: $create){
+        cart {
+            ...CartFields
+        }
+        userErrors {
+            code
+            field
+            message
+        }
+        warnings {
+            code
+            message
+            target
+        }
+    }
+
+    cartDeliveryAddressesAdd(cartId: $cartId,addresses: [{
+        selected: true
+        address: {
+            deliveryAddress: $delivery
+        }
+    }]) @include(if: $create){
+        cart {
+            ...CartFields
+        }
+        userErrors {
+            code
+            field
+            message
+        }
+        warnings {
+            code
+            message
+            target
+        }
+    }
+}

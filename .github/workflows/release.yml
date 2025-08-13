@@ -1,0 +1,39 @@
+name: release
+#  - name: pull request
+#      if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '版本号'
+        required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  release:
+    # if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: 将aliyun oss复制到latest目录
+        uses: coscene-io/setup-ossutil@v2
+        #        uses: ./actions
+        with:
+          endpoint: "${{ secrets.OSS_ENDPOINT }}"
+          access-key-id: "${{ secrets.OSS_ACCESS_KEY }}"
+          access-key-secret: "${{ secrets.OSS_ACCESS_SECRET }}"
+          sts-token: "${{ secrets.OSS_STS_TOKEN }}"
+      - run: ossutil --mode=AK cp  -f -r "oss://${{ secrets.OSS_BUCKET_NAME}}/releases/${{ secrets.OSS_PREFIX}}/${{ github.head_ref || github.ref_name }}/${{ github.event.inputs.version}}/" "oss://${{ secrets.OSS_BUCKET_NAME}}/releases/${{ secrets.OSS_PREFIX}}/${{ github.head_ref || github.ref_name }}/latest"
+
+      - name: 推送钉钉通知
+        uses: leafney/dingtalk-action@v1
+        env:
+          DINGTALK_ACCESS_TOKEN: ${{ secrets.DING_TALK_ACCESS }}
+        with:
+          text: '${{ secrets.OSS_PREFIX}}@${{ github.head_ref || github.ref_name }}:${{ github.event.inputs.version}}已发布成latest版本'

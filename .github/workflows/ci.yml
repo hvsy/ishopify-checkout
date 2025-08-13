@@ -1,0 +1,114 @@
+# This is a basic workflow to help you get started with Actions
+# https://github.com/brennerm/github-actions-pr-close-showcase/blob/master/.github/workflows/pr-close.yml
+# https://github.com/orgs/community/discussions/26724
+
+name: CI
+#  - name: pull request
+#      if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main", "rc", "dev" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    outputs:
+      date: ${{ steps.date.outputs.date }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v4
+      #            - name: 获取当前分支名称
+      #              shell: bash
+      #              run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      #              id: extract_branch
+
+      #      - name: ls current directory
+      #        run: pwd && ls -l
+
+      - name: 设置 Node.js 版本 22.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22.x"
+
+      - name: 安装yarn
+        run: npm install -g yarn
+
+      #      - name: Setup Nodejs with yarn caching
+      #        uses: actions/setup-node@v3
+      #        with:
+      #          node-version: "22.x"
+      #          cache: yarn
+
+      - name: 安装依赖
+        run: yarn install
+
+      - name: 编译打包
+        run: yarn build
+
+      - name: 获取当前日期时间
+        id: date
+        run: echo "::set-output name=date::$(date +'%y%m%d%H%M%S')"
+        env:
+          TZ: "Asia/Shanghai"
+
+      #      - name: Bump version and push tag
+      #        id: tag_version
+      #        uses: mathieudutour/github-tag-action@v6.2
+      #        with:
+      #          github_token: ${{ secrets.GITHUB_TOKEN }}
+      #          dry_run : true
+      #          custom_tag: ${{ steps.date.outputs.date }}
+
+      - name: 上传到aliyun oss
+        uses: coscene-io/setup-ossutil@v2
+        with:
+          endpoint: "${{ secrets.OSS_ENDPOINT }}"
+          access-key-id: "${{ secrets.OSS_ACCESS_KEY }}"
+          access-key-secret: "${{ secrets.OSS_ACCESS_SECRET }}"
+          sts-token: "${{ secrets.OSS_STS_TOKEN }}"
+      - run: ossutil --mode=AK cp -r ./dist/ "oss://${{ secrets.OSS_BUCKET_NAME}}/releases/${{ secrets.OSS_PREFIX}}/${{ github.head_ref || github.ref_name }}/${{ steps.date.outputs.date }}"
+
+      - name: 推送钉钉通知
+        uses: leafney/dingtalk-action@v1
+        env:
+          DINGTALK_ACCESS_TOKEN: ${{ secrets.DING_TALK_ACCESS }}
+        with:
+          text: '${{ secrets.OSS_PREFIX}}@${{ github.head_ref || github.ref_name }}已发布成功,版本号为: ${{ steps.date.outputs.date }}'
+
+
+  release:
+    name : "发布"
+    needs: build
+    if: ${{ github.ref_name == 'dev' || github.ref_name == 'rc' }}
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: 将aliyun oss复制到latest目录
+        uses: coscene-io/setup-ossutil@v2
+        #        uses: ./actions
+        with:
+          endpoint: "${{ secrets.OSS_ENDPOINT }}"
+          access-key-id: "${{ secrets.OSS_ACCESS_KEY }}"
+          access-key-secret: "${{ secrets.OSS_ACCESS_SECRET }}"
+          sts-token: "${{ secrets.OSS_STS_TOKEN }}"
+      - run: ossutil --mode=AK cp  -f -r "oss://${{ secrets.OSS_BUCKET_NAME}}/releases/${{ secrets.OSS_PREFIX}}/${{ github.head_ref || github.ref_name }}/${{ needs.build.outputs.date }}/" "oss://${{ secrets.OSS_BUCKET_NAME}}/releases/${{ secrets.OSS_PREFIX}}/${{ github.head_ref || github.ref_name }}/latest"
+
+      - name: 推送钉钉通知
+        uses: leafney/dingtalk-action@v1
+        env:
+          DINGTALK_ACCESS_TOKEN: ${{ secrets.DING_TALK_ACCESS }}
+        with:
+          text: '${{ secrets.OSS_PREFIX}}@${{ github.head_ref || github.ref_name }}:${{ needs.build.outputs.date }}已发布成latest版本'
+

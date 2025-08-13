@@ -1,0 +1,72 @@
+fragment LineItems on Cart{
+    lines(first : $first,after : $cursor){
+        edges{
+            cursor
+            node{
+                id
+                quantity
+                merchandise{
+                    ... on ProductVariant{
+                        ...Variant
+                    }
+                }
+                attributes{
+                    key
+                    value
+                }
+                cost {
+                    amountPerQuantity {
+                        amount
+                        currencyCode
+                    }
+                    compareAtAmountPerQuantity {
+                        amount
+                        currencyCode
+                    }
+                    subtotalAmount {
+                        amount
+                        currencyCode
+                    }
+                    totalAmount {
+                        amount
+                        currencyCode
+                    }
+                }
+                discountAllocations {
+                    ... on CartCodeDiscountAllocation{
+                        code
+                    }
+                    ... on CartCustomDiscountAllocation{
+                        title
+                    }
+                    ... on CartAutomaticDiscountAllocation{
+                        title
+                    }
+                    targetType
+                    __typename
+                    discountedAmount {
+                        __typename
+                        amount
+                        currencyCode
+                    }
+                    discountApplication {
+                        __typename
+                        allocationMethod
+                        targetSelection
+                        targetType
+                        value {
+                            ... on MoneyV2{
+                                currencyCode
+                                amount
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        pageInfo {
+            hasNextPage
+            endCursor
+        }
+    }
+}

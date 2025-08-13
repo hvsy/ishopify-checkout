@@ -1,0 +1,8 @@
+mutation CheckoutEmail($cartId : ID!,$buyer: CartBuyerIdentityInput!){
+    cartBuyerIdentityUpdate(cartId: $cartId,buyerIdentity: $buyer){
+        cart {
+            id
+            ...BuyerIdentity
+        }
+    }
+}

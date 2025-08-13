@@ -1,0 +1,6574 @@
+[
+  {
+    "code": "AF",
+    "name": "Afghanistan",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Afghanistan",
+    "zones": []
+  },
+  {
+    "code": "AX",
+    "name": "Aland Islands",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Åland Islands",
+    "zones": []
+  },
+  {
+    "code": "AL",
+    "name": "Albania",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Albania",
+    "zones": []
+  },
+  {
+    "code": "DZ",
+    "name": "Algeria",
+    "zone_label": "Province",
+    "group": "African Countries",
+    "label": "Algeria",
+    "zones": []
+  },
+  {
+    "code": "AD",
+    "name": "Andorra",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Andorra",
+    "zones": []
+  },
+  {
+    "code": "AO",
+    "name": "Angola",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Angola",
+    "zones": []
+  },
+  {
+    "code": "AI",
+    "name": "Anguilla",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Anguilla",
+    "zones": []
+  },
+  {
+    "code": "AG",
+    "name": "Antigua And Barbuda",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Antigua & Barbuda",
+    "zones": []
+  },
+  {
+    "code": "AR",
+    "name": "Argentina",
+    "zone_label": "Province",
+    "zones": [
+      {
+        "name": "Buenos Aires",
+        "code": "B",
+        "label": "Buenos Aires"
+      },
+      {
+        "name": "Catamarca",
+        "code": "K",
+        "label": "Catamarca"
+      },
+      {
+        "name": "Chaco",
+        "code": "H",
+        "label": "Chaco"
+      },
+      {
+        "name": "Chubut",
+        "code": "U",
+        "label": "Chubut"
+      },
+      {
+        "name": "Ciudad Autónoma de Buenos Aires",
+        "code": "C",
+        "label": "Ciudad Autónoma de Buenos Aires"
+      },
+      {
+        "name": "Córdoba",
+        "code": "X",
+        "label": "Córdoba"
+      },
+      {
+        "name": "Corrientes",
+        "code": "W",
+        "label": "Corrientes"
+      },
+      {
+        "name": "Entre Ríos",
+        "code": "E",
+        "label": "Entre Ríos"
+      },
+      {
+        "name": "Formosa",
+        "code": "P",
+        "label": "Formosa"
+      },
+      {
+        "name": "Jujuy",
+        "code": "Y",
+        "label": "Jujuy"
+      },
+      {
+        "name": "La Pampa",
+        "code": "L",
+        "label": "La Pampa"
+      },
+      {
+        "name": "La Rioja",
+        "code": "F",
+        "label": "La Rioja"
+      },
+      {
+        "name": "Mendoza",
+        "code": "M",
+        "label": "Mendoza"
+      },
+      {
+        "name": "Misiones",
+        "code": "N",
+        "label": "Misiones"
+      },
+      {
+        "name": "Neuquén",
+        "code": "Q",
+        "label": "Neuquén"
+      },
+      {
+        "name": "Río Negro",
+        "code": "R",
+        "label": "Río Negro"
+      },
+      {
+        "name": "Salta",
+        "code": "A",
+        "label": "Salta"
+      },
+      {
+        "name": "San Juan",
+        "code": "J",
+        "label": "San Juan"
+      },
+      {
+        "name": "San Luis",
+        "code": "D",
+        "label": "San Luis"
+      },
+      {
+        "name": "Santa Cruz",
+        "code": "Z",
+        "label": "Santa Cruz"
+      },
+      {
+        "name": "Santa Fe",
+        "code": "S",
+        "label": "Santa Fe"
+      },
+      {
+        "name": "Santiago Del Estero",
+        "code": "G",
+        "label": "Santiago Del Estero"
+      },
+      {
+        "name": "Tierra Del Fuego",
+        "code": "V",
+        "label": "Tierra Del Fuego"
+      },
+      {
+        "name": "Tucumán",
+        "code": "T",
+        "label": "Tucumán"
+      }
+    ],
+    "group": "South American Countries",
+    "label": "Argentina"
+  },
+  {
+    "code": "AM",
+    "name": "Armenia",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Armenia",
+    "zones": []
+  },
+  {
+    "code": "AW",
+    "name": "Aruba",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Aruba",
+    "zones": []
+  },
+  {
+    "code": "AU",
+    "name": "Australia",
+    "zone_label": "State/territory",
+    "zones": [
+      {
+        "name": "Australian Capital Territory",
+        "code": "ACT",
+        "label": "Australian Capital Territory"
+      },
+      {
+        "name": "New South Wales",
+        "code": "NSW",
+        "label": "New South Wales"
+      },
+      {
+        "name": "Northern Territory",
+        "code": "NT",
+        "label": "Northern Territory"
+      },
+      {
+        "name": "Queensland",
+        "code": "QLD",
+        "label": "Queensland"
+      },
+      {
+        "name": "South Australia",
+        "code": "SA",
+        "label": "South Australia"
+      },
+      {
+        "name": "Tasmania",
+        "code": "TAS",
+        "label": "Tasmania"
+      },
+      {
+        "name": "Victoria",
+        "code": "VIC",
+        "label": "Victoria"
+      },
+      {
+        "name": "Western Australia",
+        "code": "WA",
+        "label": "Western Australia"
+      }
+    ],
+    "group": "Oceanian Countries",
+    "label": "Australia"
+  },
+  {
+    "code": "AT",
+    "name": "Austria",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Austria",
+    "zones": []
+  },
+  {
+    "code": "AZ",
+    "name": "Azerbaijan",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Azerbaijan",
+    "zones": []
+  },
+  {
+    "code": "BS",
+    "name": "Bahamas",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Bahamas",
+    "zones": []
+  },
+  {
+    "code": "BH",
+    "name": "Bahrain",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Bahrain",
+    "zones": []
+  },
+  {
+    "code": "BD",
+    "name": "Bangladesh",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Bangladesh",
+    "zones": []
+  },
+  {
+    "code": "BB",
+    "name": "Barbados",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Barbados",
+    "zones": []
+  },
+  {
+    "code": "BY",
+    "name": "Belarus",
+    "zone_label": "Province",
+    "group": "European Countries",
+    "label": "Belarus",
+    "zones": []
+  },
+  {
+    "code": "BE",
+    "name": "Belgium",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Belgium",
+    "zones": []
+  },
+  {
+    "code": "BZ",
+    "name": "Belize",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Belize",
+    "zones": []
+  },
+  {
+    "code": "BJ",
+    "name": "Benin",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Benin",
+    "zones": []
+  },
+  {
+    "code": "BM",
+    "name": "Bermuda",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Bermuda",
+    "zones": []
+  },
+  {
+    "code": "BT",
+    "name": "Bhutan",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Bhutan",
+    "zones": []
+  },
+  {
+    "code": "BO",
+    "name": "Bolivia",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "Bolivia",
+    "zones": []
+  },
+  {
+    "code": "BQ",
+    "name": "Bonaire, Sint Eustatius and Saba",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "Caribbean Netherlands",
+    "zones": []
+  },
+  {
+    "code": "BA",
+    "name": "Bosnia And Herzegovina",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Bosnia & Herzegovina",
+    "zones": []
+  },
+  {
+    "code": "BW",
+    "name": "Botswana",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Botswana",
+    "zones": []
+  },
+  {
+    "code": "BV",
+    "name": "Bouvet Island",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Bouvet Island",
+    "zones": []
+  },
+  {
+    "code": "BR",
+    "name": "Brazil",
+    "zone_label": "State",
+    "zones": [
+      {
+        "name": "Acre",
+        "code": "AC",
+        "label": "Acre"
+      },
+      {
+        "name": "Alagoas",
+        "code": "AL",
+        "label": "Alagoas"
+      },
+      {
+        "name": "Amapá",
+        "code": "AP",
+        "label": "Amapá"
+      },
+      {
+        "name": "Amazonas",
+        "code": "AM",
+        "label": "Amazonas"
+      },
+      {
+        "name": "Bahia",
+        "code": "BA",
+        "label": "Bahia"
+      },
+      {
+        "name": "Ceará",
+        "code": "CE",
+        "label": "Ceará"
+      },
+      {
+        "name": "Distrito Federal",
+        "code": "DF",
+        "label": "Distrito Federal"
+      },
+      {
+        "name": "Espírito Santo",
+        "code": "ES",
+        "label": "Espírito Santo"
+      },
+      {
+        "name": "Goiás",
+        "code": "GO",
+        "label": "Goiás"
+      },
+      {
+        "name": "Maranhão",
+        "code": "MA",
+        "label": "Maranhão"
+      },
+      {
+        "name": "Mato Grosso",
+        "code": "MT",
+        "label": "Mato Grosso"
+      },
+      {
+        "name": "Mato Grosso do Sul",
+        "code": "MS",
+        "label": "Mato Grosso do Sul"
+      },
+      {
+        "name": "Minas Gerais",
+        "code": "MG",
+        "label": "Minas Gerais"
+      },
+      {
+        "name": "Pará",
+        "code": "PA",
+        "label": "Pará"
+      },
+      {
+        "name": "Paraíba",
+        "code": "PB",
+        "label": "Paraíba"
+      },
+      {
+        "name": "Paraná",
+        "code": "PR",
+        "label": "Paraná"
+      },
+      {
+        "name": "Pernambuco",
+        "code": "PE",
+        "label": "Pernambuco"
+      },
+      {
+        "name": "Piauí",
+        "code": "PI",
+        "label": "Piauí"
+      },
+      {
+        "name": "Rio Grande do Norte",
+        "code": "RN",
+        "label": "Rio Grande do Norte"
+      },
+      {
+        "name": "Rio Grande do Sul",
+        "code": "RS",
+        "label": "Rio Grande do Sul"
+      },
+      {
+        "name": "Rio de Janeiro",
+        "code": "RJ",
+        "label": "Rio de Janeiro"
+      },
+      {
+        "name": "Rondônia",
+        "code": "RO",
+        "label": "Rondônia"
+      },
+      {
+        "name": "Roraima",
+        "code": "RR",
+        "label": "Roraima"
+      },
+      {
+        "name": "Santa Catarina",
+        "code": "SC",
+        "label": "Santa Catarina"
+      },
+      {
+        "name": "São Paulo",
+        "code": "SP",
+        "label": "São Paulo"
+      },
+      {
+        "name": "Sergipe",
+        "code": "SE",
+        "label": "Sergipe"
+      },
+      {
+        "name": "Tocantins",
+        "code": "TO",
+        "label": "Tocantins"
+      }
+    ],
+    "group": "South American Countries",
+    "label": "Brazil"
+  },
+  {
+    "code": "IO",
+    "name": "British Indian Ocean Territory",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "British Indian Ocean Territory",
+    "zones": []
+  },
+  {
+    "code": "BN",
+    "name": "Brunei",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Brunei",
+    "zones": []
+  },
+  {
+    "code": "BG",
+    "name": "Bulgaria",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Bulgaria",
+    "zones": []
+  },
+  {
+    "code": "BF",
+    "name": "Burkina Faso",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Burkina Faso",
+    "zones": []
+  },
+  {
+    "code": "BI",
+    "name": "Burundi",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Burundi",
+    "zones": []
+  },
+  {
+    "code": "KH",
+    "name": "Cambodia",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Cambodia",
+    "zones": []
+  },
+  {
+    "code": "CA",
+    "name": "Canada",
+    "zone_label": "Province",
+    "zones": [
+      {
+        "name": "Alberta",
+        "code": "AB",
+        "label": "Alberta"
+      },
+      {
+        "name": "British Columbia",
+        "code": "BC",
+        "label": "British Columbia"
+      },
+      {
+        "name": "Manitoba",
+        "code": "MB",
+        "label": "Manitoba"
+      },
+      {
+        "name": "New Brunswick",
+        "code": "NB",
+        "label": "New Brunswick"
+      },
+      {
+        "name": "Newfoundland",
+        "code": "NL",
+        "label": "Newfoundland"
+      },
+      {
+        "name": "Northwest Territories",
+        "code": "NT",
+        "label": "Northwest Territories"
+      },
+      {
+        "name": "Nova Scotia",
+        "code": "NS",
+        "label": "Nova Scotia"
+      },
+      {
+        "name": "Nunavut",
+        "code": "NU",
+        "label": "Nunavut"
+      },
+      {
+        "name": "Ontario",
+        "code": "ON",
+        "label": "Ontario"
+      },
+      {
+        "name": "Prince Edward Island",
+        "code": "PE",
+        "label": "Prince Edward Island"
+      },
+      {
+        "name": "Quebec",
+        "code": "QC",
+        "label": "Quebec"
+      },
+      {
+        "name": "Saskatchewan",
+        "code": "SK",
+        "label": "Saskatchewan"
+      },
+      {
+        "name": "Yukon",
+        "code": "YT",
+        "label": "Yukon"
+      }
+    ],
+    "group": "North American Countries",
+    "label": "Canada"
+  },
+  {
+    "code": "CV",
+    "name": "Cape Verde",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Cape Verde",
+    "zones": []
+  },
+  {
+    "code": "KY",
+    "name": "Cayman Islands",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Cayman Islands",
+    "zones": []
+  },
+  {
+    "code": "CF",
+    "name": "Central African Republic",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Central African Republic",
+    "zones": []
+  },
+  {
+    "code": "TD",
+    "name": "Chad",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Chad",
+    "zones": []
+  },
+  {
+    "code": "CL",
+    "name": "Chile",
+    "zone_label": "State",
+    "group": "South American Countries",
+    "label": "Chile",
+    "zones": []
+  },
+  {
+    "code": "CN",
+    "name": "China",
+    "zone_label": "Province",
+    "zones": [
+      {
+        "name": "Anhui",
+        "code": "AH",
+        "label": "Anhui"
+      },
+      {
+        "name": "Beijing",
+        "code": "BJ",
+        "label": "Beijing"
+      },
+      {
+        "name": "Chongqing",
+        "code": "CQ",
+        "label": "Chongqing"
+      },
+      {
+        "name": "Fujian",
+        "code": "FJ",
+        "label": "Fujian"
+      },
+      {
+        "name": "Gansu",
+        "code": "GS",
+        "label": "Gansu"
+      },
+      {
+        "name": "Guangdong",
+        "code": "GD",
+        "label": "Guangdong"
+      },
+      {
+        "name": "Guangxi",
+        "code": "GX",
+        "label": "Guangxi"
+      },
+      {
+        "name": "Guizhou",
+        "code": "GZ",
+        "label": "Guizhou"
+      },
+      {
+        "name": "Hainan",
+        "code": "HI",
+        "label": "Hainan"
+      },
+      {
+        "name": "Hebei",
+        "code": "HE",
+        "label": "Hebei"
+      },
+      {
+        "name": "Heilongjiang",
+        "code": "HL",
+        "label": "Heilongjiang"
+      },
+      {
+        "name": "Henan",
+        "code": "HA",
+        "label": "Henan"
+      },
+      {
+        "name": "Hubei",
+        "code": "HB",
+        "label": "Hubei"
+      },
+      {
+        "name": "Hunan",
+        "code": "HN",
+        "label": "Hunan"
+      },
+      {
+        "name": "Inner Mongolia",
+        "code": "NM",
+        "label": "Inner Mongolia"
+      },
+      {
+        "name": "Jiangsu",
+        "code": "JS",
+        "label": "Jiangsu"
+      },
+      {
+        "name": "Jiangxi",
+        "code": "JX",
+        "label": "Jiangxi"
+      },
+      {
+        "name": "Jilin",
+        "code": "JL",
+        "label": "Jilin"
+      },
+      {
+        "name": "Liaoning",
+        "code": "LN",
+        "label": "Liaoning"
+      },
+      {
+        "name": "Ningxia",
+        "code": "NX",
+        "label": "Ningxia"
+      },
+      {
+        "name": "Qinghai",
+        "code": "QH",
+        "label": "Qinghai"
+      },
+      {
+        "name": "Shaanxi",
+        "code": "SN",
+        "label": "Shaanxi"
+      },
+      {
+        "name": "Shandong",
+        "code": "SD",
+        "label": "Shandong"
+      },
+      {
+        "name": "Shanghai",
+        "code": "SH",
+        "label": "Shanghai"
+      },
+      {
+        "name": "Shanxi",
+        "code": "SX",
+        "label": "Shanxi"
+      },
+      {
+        "name": "Sichuan",
+        "code": "SC",
+        "label": "Sichuan"
+      },
+      {
+        "name": "Tianjin",
+        "code": "TJ",
+        "label": "Tianjin"
+      },
+      {
+        "name": "Xinjiang",
+        "code": "XJ",
+        "label": "Xinjiang"
+      },
+      {
+        "name": "Xizang",
+        "code": "YZ",
+        "label": "Xizang"
+      },
+      {
+        "name": "Yunnan",
+        "code": "YN",
+        "label": "Yunnan"
+      },
+      {
+        "name": "Zhejiang",
+        "code": "ZJ",
+        "label": "Zhejiang"
+      }
+    ],
+    "group": "Asian Countries",
+    "label": "China"
+  },
+  {
+    "code": "CX",
+    "name": "Christmas Island",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Christmas Island",
+    "zones": []
+  },
+  {
+    "code": "CC",
+    "name": "Cocos (Keeling) Islands",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Cocos (Keeling) Islands",
+    "zones": []
+  },
+  {
+    "code": "CO",
+    "name": "Colombia",
+    "zone_label": "Province",
+    "zones": [
+      {
+        "name": "Amazonas",
+        "code": "AMA",
+        "label": "Amazonas"
+      },
+      {
+        "name": "Antioquia",
+        "code": "ANT",
+        "label": "Antioquia"
+      },
+      {
+        "name": "Arauca",
+        "code": "ARA",
+        "label": "Arauca"
+      },
+      {
+        "name": "Atlántico",
+        "code": "ATL",
+        "label": "Atlántico"
+      },
+      {
+        "name": "Bogotá, D.C.",
+        "code": "DC",
+        "label": "Bogotá, D.C."
+      },
+      {
+        "name": "Bolívar",
+        "code": "BOL",
+        "label": "Bolívar"
+      },
+      {
+        "name": "Boyacá",
+        "code": "BOY",
+        "label": "Boyacá"
+      },
+      {
+        "name": "Caldas",
+        "code": "CAL",
+        "label": "Caldas"
+      },
+      {
+        "name": "Caquetá",
+        "code": "CAQ",
+        "label": "Caquetá"
+      },
+      {
+        "name": "Casanare",
+        "code": "CAS",
+        "label": "Casanare"
+      },
+      {
+        "name": "Cauca",
+        "code": "CAU",
+        "label": "Cauca"
+      },
+      {
+        "name": "Cesar",
+        "code": "CES",
+        "label": "Cesar"
+      },
+      {
+        "name": "Chocó",
+        "code": "CHO",
+        "label": "Chocó"
+      },
+      {
+        "name": "Córdoba",
+        "code": "COR",
+        "label": "Córdoba"
+      },
+      {
+        "name": "Cundinamarca",
+        "code": "CUN",
+        "label": "Cundinamarca"
+      },
+      {
+        "name": "Guainía",
+        "code": "GUA",
+        "label": "Guainía"
+      },
+      {
+        "name": "Guaviare",
+        "code": "GUV",
+        "label": "Guaviare"
+      },
+      {
+        "name": "Huila",
+        "code": "HUI",
+        "label": "Huila"
+      },
+      {
+        "name": "La Guajira",
+        "code": "LAG",
+        "label": "La Guajira"
+      },
+      {
+        "name": "Magdalena",
+        "code": "MAG",
+        "label": "Magdalena"
+      },
+      {
+        "name": "Meta",
+        "code": "MET",
+        "label": "Meta"
+      },
+      {
+        "name": "Nariño",
+        "code": "NAR",
+        "label": "Nariño"
+      },
+      {
+        "name": "Norte de Santander",
+        "code": "NSA",
+        "label": "Norte de Santander"
+      },
+      {
+        "name": "Putumayo",
+        "code": "PUT",
+        "label": "Putumayo"
+      },
+      {
+        "name": "Quindío",
+        "code": "QUI",
+        "label": "Quindío"
+      },
+      {
+        "name": "Risaralda",
+        "code": "RIS",
+        "label": "Risaralda"
+      },
+      {
+        "name": "San Andrés, Providencia y Santa Catalina",
+        "code": "SAP",
+        "label": "San Andrés, Providencia y Santa Catalina"
+      },
+      {
+        "name": "Santander",
+        "code": "SAN",
+        "label": "Santander"
+      },
+      {
+        "name": "Sucre",
+        "code": "SUC",
+        "label": "Sucre"
+      },
+      {
+        "name": "Tolima",
+        "code": "TOL",
+        "label": "Tolima"
+      },
+      {
+        "name": "Valle del Cauca",
+        "code": "VAC",
+        "label": "Valle del Cauca"
+      },
+      {
+        "name": "Vaupés",
+        "code": "VAU",
+        "label": "Vaupés"
+      },
+      {
+        "name": "Vichada",
+        "code": "VID",
+        "label": "Vichada"
+      }
+    ],
+    "group": "South American Countries",
+    "label": "Colombia"
+  },
+  {
+    "code": "KM",
+    "name": "Comoros",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Comoros",
+    "zones": []
+  },
+  {
+    "code": "CG",
+    "name": "Congo",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Congo - Brazzaville",
+    "zones": []
+  },
+  {
+    "code": "CD",
+    "name": "Congo, The Democratic Republic Of The",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Congo - Kinshasa",
+    "zones": []
+  },
+  {
+    "code": "CK",
+    "name": "Cook Islands",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Cook Islands",
+    "zones": []
+  },
+  {
+    "code": "CR",
+    "name": "Costa Rica",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Costa Rica",
+    "zones": []
+  },
+  {
+    "code": "HR",
+    "name": "Croatia",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Croatia",
+    "zones": []
+  },
+  {
+    "code": "CU",
+    "name": "Cuba",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Cuba",
+    "zones": []
+  },
+  {
+    "code": "CW",
+    "name": "Curaçao",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Curaçao",
+    "zones": []
+  },
+  {
+    "code": "CY",
+    "name": "Cyprus",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Cyprus",
+    "zones": []
+  },
+  {
+    "code": "CZ",
+    "name": "Czech Republic",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Czech Republic",
+    "zones": []
+  },
+  {
+    "code": "CI",
+    "name": "Côte d'Ivoire",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Côte d’Ivoire",
+    "zones": []
+  },
+  {
+    "code": "DK",
+    "name": "Denmark",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Denmark",
+    "zones": []
+  },
+  {
+    "code": "DJ",
+    "name": "Djibouti",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Djibouti",
+    "zones": []
+  },
+  {
+    "code": "DM",
+    "name": "Dominica",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Dominica",
+    "zones": []
+  },
+  {
+    "code": "DO",
+    "name": "Dominican Republic",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Dominican Republic",
+    "zones": []
+  },
+  {
+    "code": "EC",
+    "name": "Ecuador",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "Ecuador",
+    "zones": []
+  },
+  {
+    "code": "EG",
+    "name": "Egypt",
+    "zone_label": "Governorate",
+    "zones": [
+      {
+        "name": "6th of October",
+        "code": "SU",
+        "label": "6th of October"
+      },
+      {
+        "name": "Al Sharqia",
+        "code": "SHR",
+        "label": "Al Sharqia"
+      },
+      {
+        "name": "Alexandria",
+        "code": "ALX",
+        "label": "Alexandria"
+      },
+      {
+        "name": "Aswan",
+        "code": "ASN",
+        "label": "Aswan"
+      },
+      {
+        "name": "Asyut",
+        "code": "AST",
+        "label": "Asyut"
+      },
+      {
+        "name": "Beheira",
+        "code": "BH",
+        "label": "Beheira"
+      },
+      {
+        "name": "Beni Suef",
+        "code": "BNS",
+        "label": "Beni Suef"
+      },
+      {
+        "name": "Cairo",
+        "code": "C",
+        "label": "Cairo"
+      },
+      {
+        "name": "Dakahlia",
+        "code": "DK",
+        "label": "Dakahlia"
+      },
+      {
+        "name": "Damietta",
+        "code": "DT",
+        "label": "Damietta"
+      },
+      {
+        "name": "Faiyum",
+        "code": "FYM",
+        "label": "Faiyum"
+      },
+      {
+        "name": "Gharbia",
+        "code": "GH",
+        "label": "Gharbia"
+      },
+      {
+        "name": "Giza",
+        "code": "GZ",
+        "label": "Giza"
+      },
+      {
+        "name": "Helwan",
+        "code": "HU",
+        "label": "Helwan"
+      },
+      {
+        "name": "Ismailia",
+        "code": "IS",
+        "label": "Ismailia"
+      },
+      {
+        "name": "Kafr el-Sheikh",
+        "code": "KFS",
+        "label": "Kafr el-Sheikh"
+      },
+      {
+        "name": "Luxor",
+        "code": "LX",
+        "label": "Luxor"
+      },
+      {
+        "name": "Matrouh",
+        "code": "MT",
+        "label": "Matrouh"
+      },
+      {
+        "name": "Minya",
+        "code": "MN",
+        "label": "Minya"
+      },
+      {
+        "name": "Monufia",
+        "code": "MNF",
+        "label": "Monufia"
+      },
+      {
+        "name": "New Valley",
+        "code": "WAD",
+        "label": "New Valley"
+      },
+      {
+        "name": "North Sinai",
+        "code": "SIN",
+        "label": "North Sinai"
+      },
+      {
+        "name": "Port Said",
+        "code": "PTS",
+        "label": "Port Said"
+      },
+      {
+        "name": "Qalyubia",
+        "code": "KB",
+        "label": "Qalyubia"
+      },
+      {
+        "name": "Qena",
+        "code": "KN",
+        "label": "Qena"
+      },
+      {
+        "name": "Red Sea",
+        "code": "BA",
+        "label": "Red Sea"
+      },
+      {
+        "name": "Sohag",
+        "code": "SHG",
+        "label": "Sohag"
+      },
+      {
+        "name": "South Sinai",
+        "code": "JS",
+        "label": "South Sinai"
+      },
+      {
+        "name": "Suez",
+        "code": "SUZ",
+        "label": "Suez"
+      }
+    ],
+    "group": "African Countries",
+    "label": "Egypt"
+  },
+  {
+    "code": "SV",
+    "name": "El Salvador",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "El Salvador",
+    "zones": []
+  },
+  {
+    "code": "GQ",
+    "name": "Equatorial Guinea",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Equatorial Guinea",
+    "zones": []
+  },
+  {
+    "code": "ER",
+    "name": "Eritrea",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Eritrea",
+    "zones": []
+  },
+  {
+    "code": "EE",
+    "name": "Estonia",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Estonia",
+    "zones": []
+  },
+  {
+    "code": "ET",
+    "name": "Ethiopia",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Ethiopia",
+    "zones": []
+  },
+  {
+    "code": "FK",
+    "name": "Falkland Islands (Malvinas)",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "Falkland Islands",
+    "zones": []
+  },
+  {
+    "code": "FO",
+    "name": "Faroe Islands",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Faroe Islands",
+    "zones": []
+  },
+  {
+    "code": "FJ",
+    "name": "Fiji",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Fiji",
+    "zones": []
+  },
+  {
+    "code": "FI",
+    "name": "Finland",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Finland",
+    "zones": []
+  },
+  {
+    "code": "FR",
+    "name": "France",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "France",
+    "zones": []
+  },
+  {
+    "code": "GF",
+    "name": "French Guiana",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "French Guiana",
+    "zones": []
+  },
+  {
+    "code": "PF",
+    "name": "French Polynesia",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "French Polynesia",
+    "zones": []
+  },
+  {
+    "code": "TF",
+    "name": "French Southern Territories",
+    "zone_label": "Region",
+    "group": "Other Countries",
+    "label": "French Southern Territories",
+    "zones": []
+  },
+  {
+    "code": "GA",
+    "name": "Gabon",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Gabon",
+    "zones": []
+  },
+  {
+    "code": "GM",
+    "name": "Gambia",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Gambia",
+    "zones": []
+  },
+  {
+    "code": "GE",
+    "name": "Georgia",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Georgia",
+    "zones": []
+  },
+  {
+    "code": "DE",
+    "name": "Germany",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Germany",
+    "zones": []
+  },
+  {
+    "code": "GH",
+    "name": "Ghana",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Ghana",
+    "zones": []
+  },
+  {
+    "code": "GI",
+    "name": "Gibraltar",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Gibraltar",
+    "zones": []
+  },
+  {
+    "code": "GR",
+    "name": "Greece",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Greece",
+    "zones": []
+  },
+  {
+    "code": "GL",
+    "name": "Greenland",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Greenland",
+    "zones": []
+  },
+  {
+    "code": "GD",
+    "name": "Grenada",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Grenada",
+    "zones": []
+  },
+  {
+    "code": "GP",
+    "name": "Guadeloupe",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Guadeloupe",
+    "zones": []
+  },
+  {
+    "code": "GT",
+    "name": "Guatemala",
+    "zone_label": "Region",
+    "zones": [
+      {
+        "name": "Alta Verapaz",
+        "code": "AVE",
+        "label": "Alta Verapaz"
+      },
+      {
+        "name": "Baja Verapaz",
+        "code": "BVE",
+        "label": "Baja Verapaz"
+      },
+      {
+        "name": "Chimaltenango",
+        "code": "CMT",
+        "label": "Chimaltenango"
+      },
+      {
+        "name": "Chiquimula",
+        "code": "CQM",
+        "label": "Chiquimula"
+      },
+      {
+        "name": "El Progreso",
+        "code": "EPR",
+        "label": "El Progreso"
+      },
+      {
+        "name": "Escuintla",
+        "code": "ESC",
+        "label": "Escuintla"
+      },
+      {
+        "name": "Guatemala",
+        "code": "GUA",
+        "label": "Guatemala"
+      },
+      {
+        "name": "Huehuetenango",
+        "code": "HUE",
+        "label": "Huehuetenango"
+      },
+      {
+        "name": "Izabal",
+        "code": "IZA",
+        "label": "Izabal"
+      },
+      {
+        "name": "Jalapa",
+        "code": "JAL",
+        "label": "Jalapa"
+      },
+      {
+        "name": "Jutiapa",
+        "code": "JUT",
+        "label": "Jutiapa"
+      },
+      {
+        "name": "Petén",
+        "code": "PET",
+        "label": "Petén"
+      },
+      {
+        "name": "Quetzaltenango",
+        "code": "QUE",
+        "label": "Quetzaltenango"
+      },
+      {
+        "name": "Quiché",
+        "code": "QUI",
+        "label": "Quiché"
+      },
+      {
+        "name": "Retalhuleu",
+        "code": "RET",
+        "label": "Retalhuleu"
+      },
+      {
+        "name": "Sacatepéquez",
+        "code": "SAC",
+        "label": "Sacatepéquez"
+      },
+      {
+        "name": "San Marcos",
+        "code": "SMA",
+        "label": "San Marcos"
+      },
+      {
+        "name": "Santa Rosa",
+        "code": "SRO",
+        "label": "Santa Rosa"
+      },
+      {
+        "name": "Sololá",
+        "code": "SOL",
+        "label": "Sololá"
+      },
+      {
+        "name": "Suchitepéquez",
+        "code": "SUC",
+        "label": "Suchitepéquez"
+      },
+      {
+        "name": "Totonicapán",
+        "code": "TOT",
+        "label": "Totonicapán"
+      },
+      {
+        "name": "Zacapa",
+        "code": "ZAC",
+        "label": "Zacapa"
+      }
+    ],
+    "group": "Central American Countries",
+    "label": "Guatemala"
+  },
+  {
+    "code": "GG",
+    "name": "Guernsey",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Guernsey",
+    "zones": []
+  },
+  {
+    "code": "GN",
+    "name": "Guinea",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Guinea",
+    "zones": []
+  },
+  {
+    "code": "GW",
+    "name": "Guinea Bissau",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Guinea-Bissau",
+    "zones": []
+  },
+  {
+    "code": "GY",
+    "name": "Guyana",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "Guyana",
+    "zones": []
+  },
+  {
+    "code": "HT",
+    "name": "Haiti",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Haiti",
+    "zones": []
+  },
+  {
+    "code": "HM",
+    "name": "Heard Island And Mcdonald Islands",
+    "zone_label": "Region",
+    "group": "Other Countries",
+    "label": "Heard & McDonald Islands",
+    "zones": []
+  },
+  {
+    "code": "VA",
+    "name": "Holy See (Vatican City State)",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Vatican City",
+    "zones": []
+  },
+  {
+    "code": "HN",
+    "name": "Honduras",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Honduras",
+    "zones": []
+  },
+  {
+    "code": "HK",
+    "name": "Hong Kong",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Hong Kong SAR China",
+    "zones": []
+  },
+  {
+    "code": "HU",
+    "name": "Hungary",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Hungary",
+    "zones": []
+  },
+  {
+    "code": "IS",
+    "name": "Iceland",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Iceland",
+    "zones": []
+  },
+  {
+    "code": "IN",
+    "name": "India",
+    "zone_label": "State",
+    "zones": [
+      {
+        "name": "Andaman and Nicobar",
+        "code": "AN",
+        "label": "Andaman and Nicobar"
+      },
+      {
+        "name": "Andhra Pradesh",
+        "code": "AP",
+        "label": "Andhra Pradesh"
+      },
+      {
+        "name": "Arunachal Pradesh",
+        "code": "AR",
+        "label": "Arunachal Pradesh"
+      },
+      {
+        "name": "Assam",
+        "code": "AS",
+        "label": "Assam"
+      },
+      {
+        "name": "Bihar",
+        "code": "BR",
+        "label": "Bihar"
+      },
+      {
+        "name": "Chandigarh",
+        "code": "CH",
+        "label": "Chandigarh"
+      },
+      {
+        "name": "Chattisgarh",
+        "code": "CG",
+        "label": "Chattisgarh"
+      },
+      {
+        "name": "Dadra and Nagar Haveli",
+        "code": "DN",
+        "label": "Dadra and Nagar Haveli"
+      },
+      {
+        "name": "Daman and Diu",
+        "code": "DD",
+        "label": "Daman and Diu"
+      },
+      {
+        "name": "Delhi",
+        "code": "DL",
+        "label": "Delhi"
+      },
+      {
+        "name": "Goa",
+        "code": "GA",
+        "label": "Goa"
+      },
+      {
+        "name": "Gujarat",
+        "code": "GJ",
+        "label": "Gujarat"
+      },
+      {
+        "name": "Haryana",
+        "code": "HR",
+        "label": "Haryana"
+      },
+      {
+        "name": "Himachal Pradesh",
+        "code": "HP",
+        "label": "Himachal Pradesh"
+      },
+      {
+        "name": "Jammu and Kashmir",
+        "code": "JK",
+        "label": "Jammu and Kashmir"
+      },
+      {
+        "name": "Jharkhand",
+        "code": "JH",
+        "label": "Jharkhand"
+      },
+      {
+        "name": "Karnataka",
+        "code": "KA",
+        "label": "Karnataka"
+      },
+      {
+        "name": "Kerala",
+        "code": "KL",
+        "label": "Kerala"
+      },
+      {
+        "name": "Lakshadweep",
+        "code": "LD",
+        "label": "Lakshadweep"
+      },
+      {
+        "name": "Madhya Pradesh",
+        "code": "MP",
+        "label": "Madhya Pradesh"
+      },
+      {
+        "name": "Maharashtra",
+        "code": "MH",
+        "label": "Maharashtra"
+      },
+      {
+        "name": "Manipur",
+        "code": "MN",
+        "label": "Manipur"
+      },
+      {
+        "name": "Meghalaya",
+        "code": "ML",
+        "label": "Meghalaya"
+      },
+      {
+        "name": "Mizoram",
+        "code": "MZ",
+        "label": "Mizoram"
+      },
+      {
+        "name": "Nagaland",
+        "code": "NL",
+        "label": "Nagaland"
+      },
+      {
+        "name": "Orissa",
+        "code": "OR",
+        "label": "Orissa"
+      },
+      {
+        "name": "Puducherry",
+        "code": "PY",
+        "label": "Puducherry"
+      },
+      {
+        "name": "Punjab",
+        "code": "PB",
+        "label": "Punjab"
+      },
+      {
+        "name": "Rajasthan",
+        "code": "RJ",
+        "label": "Rajasthan"
+      },
+      {
+        "name": "Sikkim",
+        "code": "SK",
+        "label": "Sikkim"
+      },
+      {
+        "name": "Tamil Nadu",
+        "code": "TN",
+        "label": "Tamil Nadu"
+      },
+      {
+        "name": "Telangana",
+        "code": "TS",
+        "label": "Telangana"
+      },
+      {
+        "name": "Tripura",
+        "code": "TR",
+        "label": "Tripura"
+      },
+      {
+        "name": "Uttar Pradesh",
+        "code": "UP",
+        "label": "Uttar Pradesh"
+      },
+      {
+        "name": "Uttarakhand",
+        "code": "UK",
+        "label": "Uttarakhand"
+      },
+      {
+        "name": "West Bengal",
+        "code": "WB",
+        "label": "West Bengal"
+      }
+    ],
+    "group": "Asian Countries",
+    "label": "India"
+  },
+  {
+    "code": "ID",
+    "name": "Indonesia",
+    "zone_label": "Province",
+    "zones": [
+      {
+        "name": "Aceh",
+        "code": "AC",
+        "label": "Aceh"
+      },
+      {
+        "name": "Bali",
+        "code": "BA",
+        "label": "Bali"
+      },
+      {
+        "name": "Bangka Belitung",
+        "code": "BB",
+        "label": "Bangka Belitung"
+      },
+      {
+        "name": "Banten",
+        "code": "BT",
+        "label": "Banten"
+      },
+      {
+        "name": "Bengkulu",
+        "code": "BE",
+        "label": "Bengkulu"
+      },
+      {
+        "name": "Gorontalo",
+        "code": "GO",
+        "label": "Gorontalo"
+      },
+      {
+        "name": "Jakarta",
+        "code": "JK",
+        "label": "Jakarta"
+      },
+      {
+        "name": "Jambi",
+        "code": "JA",
+        "label": "Jambi"
+      },
+      {
+        "name": "Jawa Barat",
+        "code": "JB",
+        "label": "Jawa Barat"
+      },
+      {
+        "name": "Jawa Tengah",
+        "code": "JT",
+        "label": "Jawa Tengah"
+      },
+      {
+        "name": "Jawa Timur",
+        "code": "JI",
+        "label": "Jawa Timur"
+      },
+      {
+        "name": "Kalimantan Barat",
+        "code": "KB",
+        "label": "Kalimantan Barat"
+      },
+      {
+        "name": "Kalimantan Selatan",
+        "code": "KS",
+        "label": "Kalimantan Selatan"
+      },
+      {
+        "name": "Kalimantan Tengah",
+        "code": "KT",
+        "label": "Kalimantan Tengah"
+      },
+      {
+        "name": "Kalimantan Timur",
+        "code": "KI",
+        "label": "Kalimantan Timur"
+      },
+      {
+        "name": "Kalimantan Utara",
+        "code": "KU",
+        "label": "Kalimantan Utara"
+      },
+      {
+        "name": "Kepulauan Riau",
+        "code": "KR",
+        "label": "Kepulauan Riau"
+      },
+      {
+        "name": "Lampung",
+        "code": "LA",
+        "label": "Lampung"
+      },
+      {
+        "name": "Maluku",
+        "code": "MA",
+        "label": "Maluku"
+      },
+      {
+        "name": "Maluku Utara",
+        "code": "MU",
+        "label": "Maluku Utara"
+      },
+      {
+        "name": "Nusa Tenggara Barat",
+        "code": "NB",
+        "label": "Nusa Tenggara Barat"
+      },
+      {
+        "name": "Nusa Tenggara Timur",
+        "code": "NT",
+        "label": "Nusa Tenggara Timur"
+      },
+      {
+        "name": "Papua",
+        "code": "PA",
+        "label": "Papua"
+      },
+      {
+        "name": "Papua Barat",
+        "code": "PB",
+        "label": "Papua Barat"
+      },
+      {
+        "name": "Riau",
+        "code": "RI",
+        "label": "Riau"
+      },
+      {
+        "name": "Sulawesi Barat",
+        "code": "SR",
+        "label": "Sulawesi Barat"
+      },
+      {
+        "name": "Sulawesi Selatan",
+        "code": "SN",
+        "label": "Sulawesi Selatan"
+      },
+      {
+        "name": "Sulawesi Tengah",
+        "code": "ST",
+        "label": "Sulawesi Tengah"
+      },
+      {
+        "name": "Sulawesi Tenggara",
+        "code": "SG",
+        "label": "Sulawesi Tenggara"
+      },
+      {
+        "name": "Sulawesi Utara",
+        "code": "SA",
+        "label": "Sulawesi Utara"
+      },
+      {
+        "name": "Sumatra Barat",
+        "code": "SB",
+        "label": "Sumatra Barat"
+      },
+      {
+        "name": "Sumatra Selatan",
+        "code": "SS",
+        "label": "Sumatra Selatan"
+      },
+      {
+        "name": "Sumatra Utara",
+        "code": "SU",
+        "label": "Sumatra Utara"
+      },
+      {
+        "name": "Yogyakarta",
+        "code": "YO",
+        "label": "Yogyakarta"
+      }
+    ],
+    "group": "Asian Countries",
+    "label": "Indonesia"
+  },
+  {
+    "code": "IR",
+    "name": "Iran, Islamic Republic Of",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Iran",
+    "zones": []
+  },
+  {
+    "code": "IQ",
+    "name": "Iraq",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Iraq",
+    "zones": []
+  },
+  {
+    "code": "IE",
+    "name": "Ireland",
+    "zone_label": "County",
+    "zones": [
+      {
+        "name": "Carlow",
+        "code": "CW",
+        "label": "Carlow"
+      },
+      {
+        "name": "Cavan",
+        "code": "CN",
+        "label": "Cavan"
+      },
+      {
+        "name": "Clare",
+        "code": "CE",
+        "label": "Clare"
+      },
+      {
+        "name": "Cork",
+        "code": "CO",
+        "label": "Cork"
+      },
+      {
+        "name": "Donegal",
+        "code": "DL",
+        "label": "Donegal"
+      },
+      {
+        "name": "Dublin",
+        "code": "D",
+        "label": "Dublin"
+      },
+      {
+        "name": "Galway",
+        "code": "G",
+        "label": "Galway"
+      },
+      {
+        "name": "Kerry",
+        "code": "KY",
+        "label": "Kerry"
+      },
+      {
+        "name": "Kildare",
+        "code": "KE",
+        "label": "Kildare"
+      },
+      {
+        "name": "Kilkenny",
+        "code": "KK",
+        "label": "Kilkenny"
+      },
+      {
+        "name": "Laois",
+        "code": "LS",
+        "label": "Laois"
+      },
+      {
+        "name": "Leitrim",
+        "code": "LM",
+        "label": "Leitrim"
+      },
+      {
+        "name": "Limerick",
+        "code": "LK",
+        "label": "Limerick"
+      },
+      {
+        "name": "Longford",
+        "code": "LD",
+        "label": "Longford"
+      },
+      {
+        "name": "Louth",
+        "code": "LH",
+        "label": "Louth"
+      },
+      {
+        "name": "Mayo",
+        "code": "MO",
+        "label": "Mayo"
+      },
+      {
+        "name": "Meath",
+        "code": "MH",
+        "label": "Meath"
+      },
+      {
+        "name": "Monaghan",
+        "code": "MN",
+        "label": "Monaghan"
+      },
+      {
+        "name": "Offaly",
+        "code": "OY",
+        "label": "Offaly"
+      },
+      {
+        "name": "Roscommon",
+        "code": "RN",
+        "label": "Roscommon"
+      },
+      {
+        "name": "Sligo",
+        "code": "SO",
+        "label": "Sligo"
+      },
+      {
+        "name": "Tipperary",
+        "code": "TA",
+        "label": "Tipperary"
+      },
+      {
+        "name": "Waterford",
+        "code": "WD",
+        "label": "Waterford"
+      },
+      {
+        "name": "Westmeath",
+        "code": "WH",
+        "label": "Westmeath"
+      },
+      {
+        "name": "Wexford",
+        "code": "WX",
+        "label": "Wexford"
+      },
+      {
+        "name": "Wicklow",
+        "code": "WW",
+        "label": "Wicklow"
+      }
+    ],
+    "group": "European Countries",
+    "label": "Ireland"
+  },
+  {
+    "code": "IM",
+    "name": "Isle Of Man",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Isle of Man",
+    "zones": []
+  },
+  {
+    "code": "IL",
+    "name": "Israel",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Israel",
+    "zones": []
+  },
+  {
+    "code": "IT",
+    "name": "Italy",
+    "zone_label": "Province",
+    "zones": [
+      {
+        "name": "Agrigento",
+        "code": "AG",
+        "label": "Agrigento"
+      },
+      {
+        "name": "Alessandria",
+        "code": "AL",
+        "label": "Alessandria"
+      },
+      {
+        "name": "Ancona",
+        "code": "AN",
+        "label": "Ancona"
+      },
+      {
+        "name": "Aosta",
+        "code": "AO",
+        "label": "Aosta"
+      },
+      {
+        "name": "Arezzo",
+        "code": "AR",
+        "label": "Arezzo"
+      },
+      {
+        "name": "Ascoli Piceno",
+        "code": "AP",
+        "label": "Ascoli Piceno"
+      },
+      {
+        "name": "Asti",
+        "code": "AT",
+        "label": "Asti"
+      },
+      {
+        "name": "Avellino",
+        "code": "AV",
+        "label": "Avellino"
+      },
+      {
+        "name": "Bari",
+        "code": "BA",
+        "label": "Bari"
+      },
+      {
+        "name": "Barletta-Andria-Trani",
+        "code": "BT",
+        "label": "Barletta-Andria-Trani"
+      },
+      {
+        "name": "Belluno",
+        "code": "BL",
+        "label": "Belluno"
+      },
+      {
+        "name": "Benevento",
+        "code": "BN",
+        "label": "Benevento"
+      },
+      {
+        "name": "Bergamo",
+        "code": "BG",
+        "label": "Bergamo"
+      },
+      {
+        "name": "Biella",
+        "code": "BI",
+        "label": "Biella"
+      },
+      {
+        "name": "Bologna",
+        "code": "BO",
+        "label": "Bologna"
+      },
+      {
+        "name": "Bolzano",
+        "code": "BZ",
+        "label": "Bolzano"
+      },
+      {
+        "name": "Brescia",
+        "code": "BS",
+        "label": "Brescia"
+      },
+      {
+        "name": "Brindisi",
+        "code": "BR",
+        "label": "Brindisi"
+      },
+      {
+        "name": "Cagliari",
+        "code": "CA",
+        "label": "Cagliari"
+      },
+      {
+        "name": "Caltanissetta",
+        "code": "CL",
+        "label": "Caltanissetta"
+      },
+      {
+        "name": "Campobasso",
+        "code": "CB",
+        "label": "Campobasso"
+      },
+      {
+        "name": "Carbonia-Iglesias",
+        "code": "CI",
+        "label": "Carbonia-Iglesias"
+      },
+      {
+        "name": "Caserta",
+        "code": "CE",
+        "label": "Caserta"
+      },
+      {
+        "name": "Catania",
+        "code": "CT",
+        "label": "Catania"
+      },
+      {
+        "name": "Catanzaro",
+        "code": "CZ",
+        "label": "Catanzaro"
+      },
+      {
+        "name": "Chieti",
+        "code": "CH",
+        "label": "Chieti"
+      },
+      {
+        "name": "Como",
+        "code": "CO",
+        "label": "Como"
+      },
+      {
+        "name": "Cosenza",
+        "code": "CS",
+        "label": "Cosenza"
+      },
+      {
+        "name": "Cremona",
+        "code": "CR",
+        "label": "Cremona"
+      },
+      {
+        "name": "Crotone",
+        "code": "KR",
+        "label": "Crotone"
+      },
+      {
+        "name": "Cuneo",
+        "code": "CN",
+        "label": "Cuneo"
+      },
+      {
+        "name": "Enna",
+        "code": "EN",
+        "label": "Enna"
+      },
+      {
+        "name": "Fermo",
+        "code": "FM",
+        "label": "Fermo"
+      },
+      {
+        "name": "Ferrara",
+        "code": "FE",
+        "label": "Ferrara"
+      },
+      {
+        "name": "Firenze",
+        "code": "FI",
+        "label": "Firenze"
+      },
+      {
+        "name": "Foggia",
+        "code": "FG",
+        "label": "Foggia"
+      },
+      {
+        "name": "Forlì-Cesena",
+        "code": "FC",
+        "label": "Forlì-Cesena"
+      },
+      {
+        "name": "Frosinone",
+        "code": "FR",
+        "label": "Frosinone"
+      },
+      {
+        "name": "Genova",
+        "code": "GE",
+        "label": "Genova"
+      },
+      {
+        "name": "Gorizia",
+        "code": "GO",
+        "label": "Gorizia"
+      },
+      {
+        "name": "Grosseto",
+        "code": "GR",
+        "label": "Grosseto"
+      },
+      {
+        "name": "Imperia",
+        "code": "IM",
+        "label": "Imperia"
+      },
+      {
+        "name": "Isernia",
+        "code": "IS",
+        "label": "Isernia"
+      },
+      {
+        "name": "L'Aquila",
+        "code": "AQ",
+        "label": "L'Aquila"
+      },
+      {
+        "name": "La Spezia",
+        "code": "SP",
+        "label": "La Spezia"
+      },
+      {
+        "name": "Latina",
+        "code": "LT",
+        "label": "Latina"
+      },
+      {
+        "name": "Lecce",
+        "code": "LE",
+        "label": "Lecce"
+      },
+      {
+        "name": "Lecco",
+        "code": "LC",
+        "label": "Lecco"
+      },
+      {
+        "name": "Livorno",
+        "code": "LI",
+        "label": "Livorno"
+      },
+      {
+        "name": "Lodi",
+        "code": "LO",
+        "label": "Lodi"
+      },
+      {
+        "name": "Lucca",
+        "code": "LU",
+        "label": "Lucca"
+      },
+      {
+        "name": "Macerata",
+        "code": "MC",
+        "label": "Macerata"
+      },
+      {
+        "name": "Mantova",
+        "code": "MN",
+        "label": "Mantova"
+      },
+      {
+        "name": "Massa-Carrara",
+        "code": "MS",
+        "label": "Massa-Carrara"
+      },
+      {
+        "name": "Matera",
+        "code": "MT",
+        "label": "Matera"
+      },
+      {
+        "name": "Medio Campidano",
+        "code": "VS",
+        "label": "Medio Campidano"
+      },
+      {
+        "name": "Messina",
+        "code": "ME",
+        "label": "Messina"
+      },
+      {
+        "name": "Milano",
+        "code": "MI",
+        "label": "Milano"
+      },
+      {
+        "name": "Modena",
+        "code": "MO",
+        "label": "Modena"
+      },
+      {
+        "name": "Monza e Brianza",
+        "code": "MB",
+        "label": "Monza e Brianza"
+      },
+      {
+        "name": "Napoli",
+        "code": "NA",
+        "label": "Napoli"
+      },
+      {
+        "name": "Novara",
+        "code": "NO",
+        "label": "Novara"
+      },
+      {
+        "name": "Nuoro",
+        "code": "NU",
+        "label": "Nuoro"
+      },
+      {
+        "name": "Ogliastra",
+        "code": "OG",
+        "label": "Ogliastra"
+      },
+      {
+        "name": "Olbia-Tempio",
+        "code": "OT",
+        "label": "Olbia-Tempio"
+      },
+      {
+        "name": "Oristano",
+        "code": "OR",
+        "label": "Oristano"
+      },
+      {
+        "name": "Padova",
+        "code": "PD",
+        "label": "Padova"
+      },
+      {
+        "name": "Palermo",
+        "code": "PA",
+        "label": "Palermo"
+      },
+      {
+        "name": "Parma",
+        "code": "PR",
+        "label": "Parma"
+      },
+      {
+        "name": "Pavia",
+        "code": "PV",
+        "label": "Pavia"
+      },
+      {
+        "name": "Perugia",
+        "code": "PG",
+        "label": "Perugia"
+      },
+      {
+        "name": "Pesaro e Urbino",
+        "code": "PU",
+        "label": "Pesaro e Urbino"
+      },
+      {
+        "name": "Pescara",
+        "code": "PE",
+        "label": "Pescara"
+      },
+      {
+        "name": "Piacenza",
+        "code": "PC",
+        "label": "Piacenza"
+      },
+      {
+        "name": "Pisa",
+        "code": "PI",
+        "label": "Pisa"
+      },
+      {
+        "name": "Pistoia",
+        "code": "PT",
+        "label": "Pistoia"
+      },
+      {
+        "name": "Pordenone",
+        "code": "PN",
+        "label": "Pordenone"
+      },
+      {
+        "name": "Potenza",
+        "code": "PZ",
+        "label": "Potenza"
+      },
+      {
+        "name": "Prato",
+        "code": "PO",
+        "label": "Prato"
+      },
+      {
+        "name": "Ragusa",
+        "code": "RG",
+        "label": "Ragusa"
+      },
+      {
+        "name": "Ravenna",
+        "code": "RA",
+        "label": "Ravenna"
+      },
+      {
+        "name": "Reggio Calabria",
+        "code": "RC",
+        "label": "Reggio Calabria"
+      },
+      {
+        "name": "Reggio Emilia",
+        "code": "RE",
+        "label": "Reggio Emilia"
+      },
+      {
+        "name": "Rieti",
+        "code": "RI",
+        "label": "Rieti"
+      },
+      {
+        "name": "Rimini",
+        "code": "RN",
+        "label": "Rimini"
+      },
+      {
+        "name": "Roma",
+        "code": "RM",
+        "label": "Roma"
+      },
+      {
+        "name": "Rovigo",
+        "code": "RO",
+        "label": "Rovigo"
+      },
+      {
+        "name": "Salerno",
+        "code": "SA",
+        "label": "Salerno"
+      },
+      {
+        "name": "Sassari",
+        "code": "SS",
+        "label": "Sassari"
+      },
+      {
+        "name": "Savona",
+        "code": "SV",
+        "label": "Savona"
+      },
+      {
+        "name": "Siena",
+        "code": "SI",
+        "label": "Siena"
+      },
+      {
+        "name": "Siracusa",
+        "code": "SR",
+        "label": "Siracusa"
+      },
+      {
+        "name": "Sondrio",
+        "code": "SO",
+        "label": "Sondrio"
+      },
+      {
+        "name": "Taranto",
+        "code": "TA",
+        "label": "Taranto"
+      },
+      {
+        "name": "Teramo",
+        "code": "TE",
+        "label": "Teramo"
+      },
+      {
+        "name": "Terni",
+        "code": "TR",
+        "label": "Terni"
+      },
+      {
+        "name": "Torino",
+        "code": "TO",
+        "label": "Torino"
+      },
+      {
+        "name": "Trapani",
+        "code": "TP",
+        "label": "Trapani"
+      },
+      {
+        "name": "Trento",
+        "code": "TN",
+        "label": "Trento"
+      },
+      {
+        "name": "Treviso",
+        "code": "TV",
+        "label": "Treviso"
+      },
+      {
+        "name": "Trieste",
+        "code": "TS",
+        "label": "Trieste"
+      },
+      {
+        "name": "Udine",
+        "code": "UD",
+        "label": "Udine"
+      },
+      {
+        "name": "Varese",
+        "code": "VA",
+        "label": "Varese"
+      },
+      {
+        "name": "Venezia",
+        "code": "VE",
+        "label": "Venezia"
+      },
+      {
+        "name": "Verbano-Cusio-Ossola",
+        "code": "VB",
+        "label": "Verbano-Cusio-Ossola"
+      },
+      {
+        "name": "Vercelli",
+        "code": "VC",
+        "label": "Vercelli"
+      },
+      {
+        "name": "Verona",
+        "code": "VR",
+        "label": "Verona"
+      },
+      {
+        "name": "Vibo Valentia",
+        "code": "VV",
+        "label": "Vibo Valentia"
+      },
+      {
+        "name": "Vicenza",
+        "code": "VI",
+        "label": "Vicenza"
+      },
+      {
+        "name": "Viterbo",
+        "code": "VT",
+        "label": "Viterbo"
+      }
+    ],
+    "group": "European Countries",
+    "label": "Italy"
+  },
+  {
+    "code": "JM",
+    "name": "Jamaica",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Jamaica",
+    "zones": []
+  },
+  {
+    "code": "JP",
+    "name": "Japan",
+    "zone_label": "Prefecture",
+    "zones": [
+      {
+        "name": "Hokkaidō",
+        "code": "JP-01",
+        "label": "Hokkaidō"
+      },
+      {
+        "name": "Aomori",
+        "code": "JP-02",
+        "label": "Aomori"
+      },
+      {
+        "name": "Iwate",
+        "code": "JP-03",
+        "label": "Iwate"
+      },
+      {
+        "name": "Miyagi",
+        "code": "JP-04",
+        "label": "Miyagi"
+      },
+      {
+        "name": "Akita",
+        "code": "JP-05",
+        "label": "Akita"
+      },
+      {
+        "name": "Yamagata",
+        "code": "JP-06",
+        "label": "Yamagata"
+      },
+      {
+        "name": "Fukushima",
+        "code": "JP-07",
+        "label": "Fukushima"
+      },
+      {
+        "name": "Ibaraki",
+        "code": "JP-08",
+        "label": "Ibaraki"
+      },
+      {
+        "name": "Tochigi",
+        "code": "JP-09",
+        "label": "Tochigi"
+      },
+      {
+        "name": "Gunma",
+        "code": "JP-10",
+        "label": "Gunma"
+      },
+      {
+        "name": "Saitama",
+        "code": "JP-11",
+        "label": "Saitama"
+      },
+      {
+        "name": "Chiba",
+        "code": "JP-12",
+        "label": "Chiba"
+      },
+      {
+        "name": "Tōkyō",
+        "code": "JP-13",
+        "label": "Tōkyō"
+      },
+      {
+        "name": "Kanagawa",
+        "code": "JP-14",
+        "label": "Kanagawa"
+      },
+      {
+        "name": "Niigata",
+        "code": "JP-15",
+        "label": "Niigata"
+      },
+      {
+        "name": "Toyama",
+        "code": "JP-16",
+        "label": "Toyama"
+      },
+      {
+        "name": "Ishikawa",
+        "code": "JP-17",
+        "label": "Ishikawa"
+      },
+      {
+        "name": "Fukui",
+        "code": "JP-18",
+        "label": "Fukui"
+      },
+      {
+        "name": "Yamanashi",
+        "code": "JP-19",
+        "label": "Yamanashi"
+      },
+      {
+        "name": "Nagano",
+        "code": "JP-20",
+        "label": "Nagano"
+      },
+      {
+        "name": "Gifu",
+        "code": "JP-21",
+        "label": "Gifu"
+      },
+      {
+        "name": "Shizuoka",
+        "code": "JP-22",
+        "label": "Shizuoka"
+      },
+      {
+        "name": "Aichi",
+        "code": "JP-23",
+        "label": "Aichi"
+      },
+      {
+        "name": "Mie",
+        "code": "JP-24",
+        "label": "Mie"
+      },
+      {
+        "name": "Shiga",
+        "code": "JP-25",
+        "label": "Shiga"
+      },
+      {
+        "name": "Kyōto",
+        "code": "JP-26",
+        "label": "Kyōto"
+      },
+      {
+        "name": "Ōsaka",
+        "code": "JP-27",
+        "label": "Ōsaka"
+      },
+      {
+        "name": "Hyōgo",
+        "code": "JP-28",
+        "label": "Hyōgo"
+      },
+      {
+        "name": "Nara",
+        "code": "JP-29",
+        "label": "Nara"
+      },
+      {
+        "name": "Wakayama",
+        "code": "JP-30",
+        "label": "Wakayama"
+      },
+      {
+        "name": "Tottori",
+        "code": "JP-31",
+        "label": "Tottori"
+      },
+      {
+        "name": "Shimane",
+        "code": "JP-32",
+        "label": "Shimane"
+      },
+      {
+        "name": "Okayama",
+        "code": "JP-33",
+        "label": "Okayama"
+      },
+      {
+        "name": "Hiroshima",
+        "code": "JP-34",
+        "label": "Hiroshima"
+      },
+      {
+        "name": "Yamaguchi",
+        "code": "JP-35",
+        "label": "Yamaguchi"
+      },
+      {
+        "name": "Tokushima",
+        "code": "JP-36",
+        "label": "Tokushima"
+      },
+      {
+        "name": "Kagawa",
+        "code": "JP-37",
+        "label": "Kagawa"
+      },
+      {
+        "name": "Ehime",
+        "code": "JP-38",
+        "label": "Ehime"
+      },
+      {
+        "name": "Kōchi",
+        "code": "JP-39",
+        "label": "Kōchi"
+      },
+      {
+        "name": "Fukuoka",
+        "code": "JP-40",
+        "label": "Fukuoka"
+      },
+      {
+        "name": "Saga",
+        "code": "JP-41",
+        "label": "Saga"
+      },
+      {
+        "name": "Nagasaki",
+        "code": "JP-42",
+        "label": "Nagasaki"
+      },
+      {
+        "name": "Kumamoto",
+        "code": "JP-43",
+        "label": "Kumamoto"
+      },
+      {
+        "name": "Ōita",
+        "code": "JP-44",
+        "label": "Ōita"
+      },
+      {
+        "name": "Miyazaki",
+        "code": "JP-45",
+        "label": "Miyazaki"
+      },
+      {
+        "name": "Kagoshima",
+        "code": "JP-46",
+        "label": "Kagoshima"
+      },
+      {
+        "name": "Okinawa",
+        "code": "JP-47",
+        "label": "Okinawa"
+      }
+    ],
+    "group": "Asian Countries",
+    "label": "Japan"
+  },
+  {
+    "code": "JE",
+    "name": "Jersey",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Jersey",
+    "zones": []
+  },
+  {
+    "code": "JO",
+    "name": "Jordan",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Jordan",
+    "zones": []
+  },
+  {
+    "code": "KZ",
+    "name": "Kazakhstan",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Kazakhstan",
+    "zones": []
+  },
+  {
+    "code": "KE",
+    "name": "Kenya",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Kenya",
+    "zones": []
+  },
+  {
+    "code": "KI",
+    "name": "Kiribati",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Kiribati",
+    "zones": []
+  },
+  {
+    "code": "KP",
+    "name": "Korea, Democratic People's Republic Of",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "North Korea",
+    "zones": []
+  },
+  {
+    "code": "XK",
+    "name": "Kosovo",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Kosovo",
+    "zones": []
+  },
+  {
+    "code": "KW",
+    "name": "Kuwait",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Kuwait",
+    "zones": []
+  },
+  {
+    "code": "KG",
+    "name": "Kyrgyzstan",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Kyrgyzstan",
+    "zones": []
+  },
+  {
+    "code": "LA",
+    "name": "Lao People's Democratic Republic",
+    "zone_label": "Province",
+    "group": "Asian Countries",
+    "label": "Laos",
+    "zones": []
+  },
+  {
+    "code": "LV",
+    "name": "Latvia",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Latvia",
+    "zones": []
+  },
+  {
+    "code": "LB",
+    "name": "Lebanon",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Lebanon",
+    "zones": []
+  },
+  {
+    "code": "LS",
+    "name": "Lesotho",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Lesotho",
+    "zones": []
+  },
+  {
+    "code": "LR",
+    "name": "Liberia",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Liberia",
+    "zones": []
+  },
+  {
+    "code": "LY",
+    "name": "Libyan Arab Jamahiriya",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Libya",
+    "zones": []
+  },
+  {
+    "code": "LI",
+    "name": "Liechtenstein",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Liechtenstein",
+    "zones": []
+  },
+  {
+    "code": "LT",
+    "name": "Lithuania",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Lithuania",
+    "zones": []
+  },
+  {
+    "code": "LU",
+    "name": "Luxembourg",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Luxembourg",
+    "zones": []
+  },
+  {
+    "code": "MO",
+    "name": "Macao",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Macau SAR China",
+    "zones": []
+  },
+  {
+    "code": "MK",
+    "name": "Macedonia, Republic Of",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Macedonia",
+    "zones": []
+  },
+  {
+    "code": "MG",
+    "name": "Madagascar",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Madagascar",
+    "zones": []
+  },
+  {
+    "code": "MW",
+    "name": "Malawi",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Malawi",
+    "zones": []
+  },
+  {
+    "code": "MY",
+    "name": "Malaysia",
+    "zone_label": "State/territory",
+    "zones": [
+      {
+        "name": "Johor",
+        "code": "JHR",
+        "label": "Johor"
+      },
+      {
+        "name": "Kedah",
+        "code": "KDH",
+        "label": "Kedah"
+      },
+      {
+        "name": "Kelantan",
+        "code": "KTN",
+        "label": "Kelantan"
+      },
+      {
+        "name": "Kuala Lumpur",
+        "code": "KUL",
+        "label": "Kuala Lumpur"
+      },
+      {
+        "name": "Labuan",
+        "code": "LBN",
+        "label": "Labuan"
+      },
+      {
+        "name": "Melaka",
+        "code": "MLK",
+        "label": "Melaka"
+      },
+      {
+        "name": "Negeri Sembilan",
+        "code": "NSN",
+        "label": "Negeri Sembilan"
+      },
+      {
+        "name": "Pahang",
+        "code": "PHG",
+        "label": "Pahang"
+      },
+      {
+        "name": "Perak",
+        "code": "PRK",
+        "label": "Perak"
+      },
+      {
+        "name": "Perlis",
+        "code": "PLS",
+        "label": "Perlis"
+      },
+      {
+        "name": "Pulau Pinang",
+        "code": "PNG",
+        "label": "Pulau Pinang"
+      },
+      {
+        "name": "Putrajaya",
+        "code": "PJY",
+        "label": "Putrajaya"
+      },
+      {
+        "name": "Sabah",
+        "code": "SBH",
+        "label": "Sabah"
+      },
+      {
+        "name": "Sarawak",
+        "code": "SWK",
+        "label": "Sarawak"
+      },
+      {
+        "name": "Selangor",
+        "code": "SGR",
+        "label": "Selangor"
+      },
+      {
+        "name": "Terengganu",
+        "code": "TRG",
+        "label": "Terengganu"
+      }
+    ],
+    "group": "Asian Countries",
+    "label": "Malaysia"
+  },
+  {
+    "code": "MV",
+    "name": "Maldives",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Maldives",
+    "zones": []
+  },
+  {
+    "code": "ML",
+    "name": "Mali",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Mali",
+    "zones": []
+  },
+  {
+    "code": "MT",
+    "name": "Malta",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Malta",
+    "zones": []
+  },
+  {
+    "code": "MQ",
+    "name": "Martinique",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Martinique",
+    "zones": []
+  },
+  {
+    "code": "MR",
+    "name": "Mauritania",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Mauritania",
+    "zones": []
+  },
+  {
+    "code": "MU",
+    "name": "Mauritius",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Mauritius",
+    "zones": []
+  },
+  {
+    "code": "YT",
+    "name": "Mayotte",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Mayotte",
+    "zones": []
+  },
+  {
+    "code": "MX",
+    "name": "Mexico",
+    "zone_label": "State",
+    "zones": [
+      {
+        "name": "Aguascalientes",
+        "code": "AGS",
+        "label": "Aguascalientes"
+      },
+      {
+        "name": "Baja California",
+        "code": "BC",
+        "label": "Baja California"
+      },
+      {
+        "name": "Baja California Sur",
+        "code": "BCS",
+        "label": "Baja California Sur"
+      },
+      {
+        "name": "Campeche",
+        "code": "CAMP",
+        "label": "Campeche"
+      },
+      {
+        "name": "Chiapas",
+        "code": "CHIS",
+        "label": "Chiapas"
+      },
+      {
+        "name": "Chihuahua",
+        "code": "CHIH",
+        "label": "Chihuahua"
+      },
+      {
+        "name": "Ciudad de México",
+        "code": "DF",
+        "label": "Ciudad de México"
+      },
+      {
+        "name": "Coahuila",
+        "code": "COAH",
+        "label": "Coahuila"
+      },
+      {
+        "name": "Colima",
+        "code": "COL",
+        "label": "Colima"
+      },
+      {
+        "name": "Durango",
+        "code": "DGO",
+        "label": "Durango"
+      },
+      {
+        "name": "Guanajuato",
+        "code": "GTO",
+        "label": "Guanajuato"
+      },
+      {
+        "name": "Guerrero",
+        "code": "GRO",
+        "label": "Guerrero"
+      },
+      {
+        "name": "Hidalgo",
+        "code": "HGO",
+        "label": "Hidalgo"
+      },
+      {
+        "name": "Jalisco",
+        "code": "JAL",
+        "label": "Jalisco"
+      },
+      {
+        "name": "México",
+        "code": "MEX",
+        "label": "México"
+      },
+      {
+        "name": "Michoacán",
+        "code": "MICH",
+        "label": "Michoacán"
+      },
+      {
+        "name": "Morelos",
+        "code": "MOR",
+        "label": "Morelos"
+      },
+      {
+        "name": "Nayarit",
+        "code": "NAY",
+        "label": "Nayarit"
+      },
+      {
+        "name": "Nuevo León",
+        "code": "NL",
+        "label": "Nuevo León"
+      },
+      {
+        "name": "Oaxaca",
+        "code": "OAX",
+        "label": "Oaxaca"
+      },
+      {
+        "name": "Puebla",
+        "code": "PUE",
+        "label": "Puebla"
+      },
+      {
+        "name": "Querétaro",
+        "code": "QRO",
+        "label": "Querétaro"
+      },
+      {
+        "name": "Quintana Roo",
+        "code": "Q ROO",
+        "label": "Quintana Roo"
+      },
+      {
+        "name": "San Luis Potosí",
+        "code": "SLP",
+        "label": "San Luis Potosí"
+      },
+      {
+        "name": "Sinaloa",
+        "code": "SIN",
+        "label": "Sinaloa"
+      },
+      {
+        "name": "Sonora",
+        "code": "SON",
+        "label": "Sonora"
+      },
+      {
+        "name": "Tabasco",
+        "code": "TAB",
+        "label": "Tabasco"
+      },
+      {
+        "name": "Tamaulipas",
+        "code": "TAMPS",
+        "label": "Tamaulipas"
+      },
+      {
+        "name": "Tlaxcala",
+        "code": "TLAX",
+        "label": "Tlaxcala"
+      },
+      {
+        "name": "Veracruz",
+        "code": "VER",
+        "label": "Veracruz"
+      },
+      {
+        "name": "Yucatán",
+        "code": "YUC",
+        "label": "Yucatán"
+      },
+      {
+        "name": "Zacatecas",
+        "code": "ZAC",
+        "label": "Zacatecas"
+      }
+    ],
+    "group": "North American Countries",
+    "label": "Mexico"
+  },
+  {
+    "code": "MD",
+    "name": "Moldova, Republic of",
+    "group": "European Countries",
+    "label": "Moldova",
+    "zones": []
+  },
+  {
+    "code": "MC",
+    "name": "Monaco",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Monaco",
+    "zones": []
+  },
+  {
+    "code": "MN",
+    "name": "Mongolia",
+    "group": "Asian Countries",
+    "label": "Mongolia",
+    "zones": []
+  },
+  {
+    "code": "ME",
+    "name": "Montenegro",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Montenegro",
+    "zones": []
+  },
+  {
+    "code": "MS",
+    "name": "Montserrat",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Montserrat",
+    "zones": []
+  },
+  {
+    "code": "MA",
+    "name": "Morocco",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Morocco",
+    "zones": []
+  },
+  {
+    "code": "MZ",
+    "name": "Mozambique",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Mozambique",
+    "zones": []
+  },
+  {
+    "code": "MM",
+    "name": "Myanmar",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Myanmar (Burma)",
+    "zones": []
+  },
+  {
+    "code": "NA",
+    "name": "Namibia",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Namibia",
+    "zones": []
+  },
+  {
+    "code": "NR",
+    "name": "Nauru",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Nauru",
+    "zones": []
+  },
+  {
+    "code": "NP",
+    "name": "Nepal",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Nepal",
+    "zones": []
+  },
+  {
+    "code": "NL",
+    "name": "Netherlands",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Netherlands",
+    "zones": []
+  },
+  {
+    "code": "AN",
+    "name": "Netherlands Antilles",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "Netherlands Antilles",
+    "zones": []
+  },
+  {
+    "code": "NC",
+    "name": "New Caledonia",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "New Caledonia",
+    "zones": []
+  },
+  {
+    "code": "NZ",
+    "name": "New Zealand",
+    "zone_label": "Region",
+    "zones": [
+      {
+        "name": "Auckland",
+        "code": "AUK",
+        "label": "Auckland"
+      },
+      {
+        "name": "Bay of Plenty",
+        "code": "BOP",
+        "label": "Bay of Plenty"
+      },
+      {
+        "name": "Canterbury",
+        "code": "CAN",
+        "label": "Canterbury"
+      },
+      {
+        "name": "Gisborne",
+        "code": "GIS",
+        "label": "Gisborne"
+      },
+      {
+        "name": "Hawke's Bay",
+        "code": "HKB",
+        "label": "Hawke's Bay"
+      },
+      {
+        "name": "Manawatu-Wanganui",
+        "code": "MWT",
+        "label": "Manawatu-Wanganui"
+      },
+      {
+        "name": "Marlborough",
+        "code": "MBH",
+        "label": "Marlborough"
+      },
+      {
+        "name": "Nelson",
+        "code": "NSN",
+        "label": "Nelson"
+      },
+      {
+        "name": "Northland",
+        "code": "NTL",
+        "label": "Northland"
+      },
+      {
+        "name": "Otago",
+        "code": "OTA",
+        "label": "Otago"
+      },
+      {
+        "name": "Southland",
+        "code": "STL",
+        "label": "Southland"
+      },
+      {
+        "name": "Taranaki",
+        "code": "TKI",
+        "label": "Taranaki"
+      },
+      {
+        "name": "Tasman",
+        "code": "TAS",
+        "label": "Tasman"
+      },
+      {
+        "name": "Waikato",
+        "code": "WKO",
+        "label": "Waikato"
+      },
+      {
+        "name": "Wellington",
+        "code": "WGN",
+        "label": "Wellington"
+      },
+      {
+        "name": "West Coast",
+        "code": "WTC",
+        "label": "West Coast"
+      }
+    ],
+    "group": "Oceanian Countries",
+    "label": "New Zealand"
+  },
+  {
+    "code": "NI",
+    "name": "Nicaragua",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Nicaragua",
+    "zones": []
+  },
+  {
+    "code": "NE",
+    "name": "Niger",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Niger",
+    "zones": []
+  },
+  {
+    "code": "NG",
+    "name": "Nigeria",
+    "zone_label": "State",
+    "zones": [
+      {
+        "name": "Abia",
+        "code": "AB",
+        "label": "Abia"
+      },
+      {
+        "name": "Abuja Federal Capital Territory",
+        "code": "FC",
+        "label": "Abuja Federal Capital Territory"
+      },
+      {
+        "name": "Adamawa",
+        "code": "AD",
+        "label": "Adamawa"
+      },
+      {
+        "name": "Akwa Ibom",
+        "code": "AK",
+        "label": "Akwa Ibom"
+      },
+      {
+        "name": "Anambra",
+        "code": "AN",
+        "label": "Anambra"
+      },
+      {
+        "name": "Bauchi",
+        "code": "BA",
+        "label": "Bauchi"
+      },
+      {
+        "name": "Bayelsa",
+        "code": "BY",
+        "label": "Bayelsa"
+      },
+      {
+        "name": "Benue",
+        "code": "BE",
+        "label": "Benue"
+      },
+      {
+        "name": "Borno",
+        "code": "BO",
+        "label": "Borno"
+      },
+      {
+        "name": "Cross River",
+        "code": "CR",
+        "label": "Cross River"
+      },
+      {
+        "name": "Delta",
+        "code": "DE",
+        "label": "Delta"
+      },
+      {
+        "name": "Ebonyi",
+        "code": "EB",
+        "label": "Ebonyi"
+      },
+      {
+        "name": "Edo",
+        "code": "ED",
+        "label": "Edo"
+      },
+      {
+        "name": "Ekiti",
+        "code": "EK",
+        "label": "Ekiti"
+      },
+      {
+        "name": "Enugu",
+        "code": "EN",
+        "label": "Enugu"
+      },
+      {
+        "name": "Gombe",
+        "code": "GO",
+        "label": "Gombe"
+      },
+      {
+        "name": "Imo",
+        "code": "IM",
+        "label": "Imo"
+      },
+      {
+        "name": "Jigawa",
+        "code": "JI",
+        "label": "Jigawa"
+      },
+      {
+        "name": "Kaduna",
+        "code": "KD",
+        "label": "Kaduna"
+      },
+      {
+        "name": "Kano",
+        "code": "KN",
+        "label": "Kano"
+      },
+      {
+        "name": "Katsina",
+        "code": "KT",
+        "label": "Katsina"
+      },
+      {
+        "name": "Kebbi",
+        "code": "KE",
+        "label": "Kebbi"
+      },
+      {
+        "name": "Kogi",
+        "code": "KO",
+        "label": "Kogi"
+      },
+      {
+        "name": "Kwara",
+        "code": "KW",
+        "label": "Kwara"
+      },
+      {
+        "name": "Lagos",
+        "code": "LA",
+        "label": "Lagos"
+      },
+      {
+        "name": "Nasarawa",
+        "code": "NA",
+        "label": "Nasarawa"
+      },
+      {
+        "name": "Niger",
+        "code": "NI",
+        "label": "Niger"
+      },
+      {
+        "name": "Ogun",
+        "code": "OG",
+        "label": "Ogun"
+      },
+      {
+        "name": "Ondo",
+        "code": "ON",
+        "label": "Ondo"
+      },
+      {
+        "name": "Osun",
+        "code": "OS",
+        "label": "Osun"
+      },
+      {
+        "name": "Oyo",
+        "code": "OY",
+        "label": "Oyo"
+      },
+      {
+        "name": "Plateau",
+        "code": "PL",
+        "label": "Plateau"
+      },
+      {
+        "name": "Rivers",
+        "code": "RI",
+        "label": "Rivers"
+      },
+      {
+        "name": "Sokoto",
+        "code": "SO",
+        "label": "Sokoto"
+      },
+      {
+        "name": "Taraba",
+        "code": "TA",
+        "label": "Taraba"
+      },
+      {
+        "name": "Yobe",
+        "code": "YO",
+        "label": "Yobe"
+      },
+      {
+        "name": "Zamfara",
+        "code": "ZA",
+        "label": "Zamfara"
+      }
+    ],
+    "group": "African Countries",
+    "label": "Nigeria"
+  },
+  {
+    "code": "NU",
+    "name": "Niue",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Niue",
+    "zones": []
+  },
+  {
+    "code": "NF",
+    "name": "Norfolk Island",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Norfolk Island",
+    "zones": []
+  },
+  {
+    "code": "NO",
+    "name": "Norway",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Norway",
+    "zones": []
+  },
+  {
+    "code": "OM",
+    "name": "Oman",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Oman",
+    "zones": []
+  },
+  {
+    "code": "PK",
+    "name": "Pakistan",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Pakistan",
+    "zones": []
+  },
+  {
+    "code": "PS",
+    "name": "Palestinian Territory, Occupied",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Palestinian Territories",
+    "zones": []
+  },
+  {
+    "code": "PA",
+    "name": "Panama",
+    "zone_label": "Region",
+    "zones": [
+      {
+        "name": "Bocas del Toro",
+        "code": "PA-1",
+        "label": "Bocas del Toro"
+      },
+      {
+        "name": "Chiriquí",
+        "code": "PA-4",
+        "label": "Chiriquí"
+      },
+      {
+        "name": "Coclé",
+        "code": "PA-2",
+        "label": "Coclé"
+      },
+      {
+        "name": "Colón",
+        "code": "PA-3",
+        "label": "Colón"
+      },
+      {
+        "name": "Darién",
+        "code": "PA-5",
+        "label": "Darién"
+      },
+      {
+        "name": "Emberá",
+        "code": "PA-EM",
+        "label": "Emberá"
+      },
+      {
+        "name": "Herrera",
+        "code": "PA-6",
+        "label": "Herrera"
+      },
+      {
+        "name": "Kuna Yala",
+        "code": "PA-KY",
+        "label": "Kuna Yala"
+      },
+      {
+        "name": "Los Santos",
+        "code": "PA-7",
+        "label": "Los Santos"
+      },
+      {
+        "name": "Ngöbe-Buglé",
+        "code": "PA-NB",
+        "label": "Ngöbe-Buglé"
+      },
+      {
+        "name": "Panamá",
+        "code": "PA-8",
+        "label": "Panamá"
+      },
+      {
+        "name": "Panamá Oeste",
+        "code": "PA-10",
+        "label": "Panamá Oeste"
+      },
+      {
+        "name": "Veraguas",
+        "code": "PA-9",
+        "label": "Veraguas"
+      }
+    ],
+    "group": "Central American Countries",
+    "label": "Panama"
+  },
+  {
+    "code": "PG",
+    "name": "Papua New Guinea",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Papua New Guinea",
+    "zones": []
+  },
+  {
+    "code": "PY",
+    "name": "Paraguay",
+    "group": "South American Countries",
+    "label": "Paraguay",
+    "zones": []
+  },
+  {
+    "code": "PE",
+    "name": "Peru",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "Peru",
+    "zones": []
+  },
+  {
+    "code": "PH",
+    "name": "Philippines",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Philippines",
+    "zones": []
+  },
+  {
+    "code": "PN",
+    "name": "Pitcairn",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Pitcairn Islands",
+    "zones": []
+  },
+  {
+    "code": "PL",
+    "name": "Poland",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Poland",
+    "zones": []
+  },
+  {
+    "code": "PT",
+    "name": "Portugal",
+    "zone_label": "Region",
+    "zones": [
+      {
+        "name": "Açores",
+        "code": "PT-20",
+        "label": "Açores"
+      },
+      {
+        "name": "Aveiro",
+        "code": "PT-01",
+        "label": "Aveiro"
+      },
+      {
+        "name": "Beja",
+        "code": "PT-02",
+        "label": "Beja"
+      },
+      {
+        "name": "Braga",
+        "code": "PT-03",
+        "label": "Braga"
+      },
+      {
+        "name": "Bragança",
+        "code": "PT-04",
+        "label": "Bragança"
+      },
+      {
+        "name": "Castelo Branco",
+        "code": "PT-05",
+        "label": "Castelo Branco"
+      },
+      {
+        "name": "Coimbra",
+        "code": "PT-06",
+        "label": "Coimbra"
+      },
+      {
+        "name": "Évora",
+        "code": "PT-07",
+        "label": "Évora"
+      },
+      {
+        "name": "Faro",
+        "code": "PT-08",
+        "label": "Faro"
+      },
+      {
+        "name": "Guarda",
+        "code": "PT-09",
+        "label": "Guarda"
+      },
+      {
+        "name": "Leiria",
+        "code": "PT-10",
+        "label": "Leiria"
+      },
+      {
+        "name": "Lisboa",
+        "code": "PT-11",
+        "label": "Lisboa"
+      },
+      {
+        "name": "Madeira",
+        "code": "PT-30",
+        "label": "Madeira"
+      },
+      {
+        "name": "Portalegre",
+        "code": "PT-12",
+        "label": "Portalegre"
+      },
+      {
+        "name": "Porto",
+        "code": "PT-13",
+        "label": "Porto"
+      },
+      {
+        "name": "Santarém",
+        "code": "PT-14",
+        "label": "Santarém"
+      },
+      {
+        "name": "Setúbal",
+        "code": "PT-15",
+        "label": "Setúbal"
+      },
+      {
+        "name": "Viana do Castelo",
+        "code": "PT-16",
+        "label": "Viana do Castelo"
+      },
+      {
+        "name": "Vila Real",
+        "code": "PT-17",
+        "label": "Vila Real"
+      },
+      {
+        "name": "Viseu",
+        "code": "PT-18",
+        "label": "Viseu"
+      }
+    ],
+    "group": "European Countries",
+    "label": "Portugal"
+  },
+  {
+    "code": "QA",
+    "name": "Qatar",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Qatar",
+    "zones": []
+  },
+  {
+    "code": "CM",
+    "name": "Republic of Cameroon",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Cameroon",
+    "zones": []
+  },
+  {
+    "code": "RE",
+    "name": "Reunion",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Réunion",
+    "zones": []
+  },
+  {
+    "code": "RO",
+    "name": "Romania",
+    "zone_label": "County",
+    "zones": [
+      {
+        "name": "Alba",
+        "code": "AB",
+        "label": "Alba"
+      },
+      {
+        "name": "Arad",
+        "code": "AR",
+        "label": "Arad"
+      },
+      {
+        "name": "Argeș",
+        "code": "AG",
+        "label": "Argeș"
+      },
+      {
+        "name": "Bacău",
+        "code": "BC",
+        "label": "Bacău"
+      },
+      {
+        "name": "Bihor",
+        "code": "BH",
+        "label": "Bihor"
+      },
+      {
+        "name": "Bistrița-Năsăud",
+        "code": "BN",
+        "label": "Bistrița-Năsăud"
+      },
+      {
+        "name": "Botoșani",
+        "code": "BT",
+        "label": "Botoșani"
+      },
+      {
+        "name": "Brașov",
+        "code": "BV",
+        "label": "Brașov"
+      },
+      {
+        "name": "Brăila",
+        "code": "BR",
+        "label": "Brăila"
+      },
+      {
+        "name": "București",
+        "code": "B",
+        "label": "București"
+      },
+      {
+        "name": "Buzău",
+        "code": "BZ",
+        "label": "Buzău"
+      },
+      {
+        "name": "Călărași",
+        "code": "CL",
+        "label": "Călărași"
+      },
+      {
+        "name": "Caraș-Severin",
+        "code": "CS",
+        "label": "Caraș-Severin"
+      },
+      {
+        "name": "Cluj",
+        "code": "CJ",
+        "label": "Cluj"
+      },
+      {
+        "name": "Constanța",
+        "code": "CT",
+        "label": "Constanța"
+      },
+      {
+        "name": "Covasna",
+        "code": "CV",
+        "label": "Covasna"
+      },
+      {
+        "name": "Dâmbovița",
+        "code": "DB",
+        "label": "Dâmbovița"
+      },
+      {
+        "name": "Dolj",
+        "code": "DJ",
+        "label": "Dolj"
+      },
+      {
+        "name": "Galați",
+        "code": "GL",
+        "label": "Galați"
+      },
+      {
+        "name": "Giurgiu",
+        "code": "GR",
+        "label": "Giurgiu"
+      },
+      {
+        "name": "Gorj",
+        "code": "GJ",
+        "label": "Gorj"
+      },
+      {
+        "name": "Harghita",
+        "code": "HR",
+        "label": "Harghita"
+      },
+      {
+        "name": "Hunedoara",
+        "code": "HD",
+        "label": "Hunedoara"
+      },
+      {
+        "name": "Iași",
+        "code": "IS",
+        "label": "Iași"
+      },
+      {
+        "name": "Ialomița",
+        "code": "IL",
+        "label": "Ialomița"
+      },
+      {
+        "name": "Ilfov",
+        "code": "IF",
+        "label": "Ilfov"
+      },
+      {
+        "name": "Maramureș",
+        "code": "MM",
+        "label": "Maramureș"
+      },
+      {
+        "name": "Mehedinți",
+        "code": "MH",
+        "label": "Mehedinți"
+      },
+      {
+        "name": "Mureș",
+        "code": "MS",
+        "label": "Mureș"
+      },
+      {
+        "name": "Neamț",
+        "code": "NT",
+        "label": "Neamț"
+      },
+      {
+        "name": "Olt",
+        "code": "OT",
+        "label": "Olt"
+      },
+      {
+        "name": "Prahova",
+        "code": "PH",
+        "label": "Prahova"
+      },
+      {
+        "name": "Sălaj",
+        "code": "SJ",
+        "label": "Sălaj"
+      },
+      {
+        "name": "Satu Mare",
+        "code": "SM",
+        "label": "Satu Mare"
+      },
+      {
+        "name": "Sibiu",
+        "code": "SB",
+        "label": "Sibiu"
+      },
+      {
+        "name": "Suceava",
+        "code": "SV",
+        "label": "Suceava"
+      },
+      {
+        "name": "Teleorman",
+        "code": "TR",
+        "label": "Teleorman"
+      },
+      {
+        "name": "Timiș",
+        "code": "TM",
+        "label": "Timiș"
+      },
+      {
+        "name": "Tulcea",
+        "code": "TL",
+        "label": "Tulcea"
+      },
+      {
+        "name": "Vâlcea",
+        "code": "VL",
+        "label": "Vâlcea"
+      },
+      {
+        "name": "Vaslui",
+        "code": "VS",
+        "label": "Vaslui"
+      },
+      {
+        "name": "Vrancea",
+        "code": "VN",
+        "label": "Vrancea"
+      }
+    ],
+    "group": "European Countries",
+    "label": "Romania"
+  },
+  {
+    "code": "RU",
+    "name": "Russia",
+    "zone_label": "Region",
+    "zones": [
+      {
+        "name": "Republic of Adygeya",
+        "code": "AD",
+        "label": "Republic of Adygeya"
+      },
+      {
+        "name": "Altai Republic",
+        "code": "AL",
+        "label": "Altai Republic"
+      },
+      {
+        "name": "Altai Krai",
+        "code": "ALT",
+        "label": "Altai Krai"
+      },
+      {
+        "name": "Amur Oblast",
+        "code": "AMU",
+        "label": "Amur Oblast"
+      },
+      {
+        "name": "Arkhangelsk Oblast",
+        "code": "ARK",
+        "label": "Arkhangelsk Oblast"
+      },
+      {
+        "name": "Astrakhan Oblast",
+        "code": "AST",
+        "label": "Astrakhan Oblast"
+      },
+      {
+        "name": "Republic of Bashkortostan",
+        "code": "BA",
+        "label": "Republic of Bashkortostan"
+      },
+      {
+        "name": "Belgorod Oblast",
+        "code": "BEL",
+        "label": "Belgorod Oblast"
+      },
+      {
+        "name": "Bryansk Oblast",
+        "code": "BRY",
+        "label": "Bryansk Oblast"
+      },
+      {
+        "name": "Republic of Buryatia",
+        "code": "BU",
+        "label": "Republic of Buryatia"
+      },
+      {
+        "name": "Chechen Republic",
+        "code": "CE",
+        "label": "Chechen Republic"
+      },
+      {
+        "name": "Chelyabinsk Oblast",
+        "code": "CHE",
+        "label": "Chelyabinsk Oblast"
+      },
+      {
+        "name": "Chukotka Autonomous Okrug",
+        "code": "CHU",
+        "label": "Chukotka Autonomous Okrug"
+      },
+      {
+        "name": "Chuvash Republic",
+        "code": "CU",
+        "label": "Chuvash Republic"
+      },
+      {
+        "name": "Republic of Dagestan",
+        "code": "DA",
+        "label": "Republic of Dagestan"
+      },
+      {
+        "name": "Republic of Ingushetia",
+        "code": "IN",
+        "label": "Republic of Ingushetia"
+      },
+      {
+        "name": "Irkutsk Oblast",
+        "code": "IRK",
+        "label": "Irkutsk Oblast"
+      },
+      {
+        "name": "Ivanovo Oblast",
+        "code": "IVA",
+        "label": "Ivanovo Oblast"
+      },
+      {
+        "name": "Jewish Autonomous Oblast",
+        "code": "YEV",
+        "label": "Jewish Autonomous Oblast"
+      },
+      {
+        "name": "Kabardino-Balkarian Republic",
+        "code": "KB",
+        "label": "Kabardino-Balkarian Republic"
+      },
+      {
+        "name": "Kaliningrad Oblast",
+        "code": "KGD",
+        "label": "Kaliningrad Oblast"
+      },
+      {
+        "name": "Republic of Kalmykia",
+        "code": "KL",
+        "label": "Republic of Kalmykia"
+      },
+      {
+        "name": "Kaluga Oblast",
+        "code": "KLU",
+        "label": "Kaluga Oblast"
+      },
+      {
+        "name": "Kamchatka Krai",
+        "code": "KAM",
+        "label": "Kamchatka Krai"
+      },
+      {
+        "name": "Karachay–Cherkess Republic",
+        "code": "KC",
+        "label": "Karachay–Cherkess Republic"
+      },
+      {
+        "name": "Republic of Karelia",
+        "code": "KR",
+        "label": "Republic of Karelia"
+      },
+      {
+        "name": "Kemerovo Oblast",
+        "code": "KEM",
+        "label": "Kemerovo Oblast"
+      },
+      {
+        "name": "Khabarovsk Krai",
+        "code": "KHA",
+        "label": "Khabarovsk Krai"
+      },
+      {
+        "name": "Republic of Khakassia",
+        "code": "KK",
+        "label": "Republic of Khakassia"
+      },
+      {
+        "name": "Khanty-Mansi Autonomous Okrug",
+        "code": "KHM",
+        "label": "Khanty-Mansi Autonomous Okrug"
+      },
+      {
+        "name": "Kirov Oblast",
+        "code": "KIR",
+        "label": "Kirov Oblast"
+      },
+      {
+        "name": "Komi Republic",
+        "code": "KO",
+        "label": "Komi Republic"
+      },
+      {
+        "name": "Kostroma Oblast",
+        "code": "KOS",
+        "label": "Kostroma Oblast"
+      },
+      {
+        "name": "Krasnodar Krai",
+        "code": "KDA",
+        "label": "Krasnodar Krai"
+      },
+      {
+        "name": "Krasnoyarsk Krai",
+        "code": "KYA",
+        "label": "Krasnoyarsk Krai"
+      },
+      {
+        "name": "Kurgan Oblast",
+        "code": "KGN",
+        "label": "Kurgan Oblast"
+      },
+      {
+        "name": "Kursk Oblast",
+        "code": "KRS",
+        "label": "Kursk Oblast"
+      },
+      {
+        "name": "Leningrad Oblast",
+        "code": "LEN",
+        "label": "Leningrad Oblast"
+      },
+      {
+        "name": "Lipetsk Oblast",
+        "code": "LIP",
+        "label": "Lipetsk Oblast"
+      },
+      {
+        "name": "Magadan Oblast",
+        "code": "MAG",
+        "label": "Magadan Oblast"
+      },
+      {
+        "name": "Mari El Republic",
+        "code": "ME",
+        "label": "Mari El Republic"
+      },
+      {
+        "name": "Republic of Mordovia",
+        "code": "MO",
+        "label": "Republic of Mordovia"
+      },
+      {
+        "name": "Moscow",
+        "code": "MOW",
+        "label": "Moscow"
+      },
+      {
+        "name": "Moscow Oblast",
+        "code": "MOS",
+        "label": "Moscow Oblast"
+      },
+      {
+        "name": "Murmansk Oblast",
+        "code": "MUR",
+        "label": "Murmansk Oblast"
+      },
+      {
+        "name": "Nizhny Novgorod Oblast",
+        "code": "NIZ",
+        "label": "Nizhny Novgorod Oblast"
+      },
+      {
+        "name": "Novgorod Oblast",
+        "code": "NGR",
+        "label": "Novgorod Oblast"
+      },
+      {
+        "name": "Novosibirsk Oblast",
+        "code": "NVS",
+        "label": "Novosibirsk Oblast"
+      },
+      {
+        "name": "Omsk Oblast",
+        "code": "OMS",
+        "label": "Omsk Oblast"
+      },
+      {
+        "name": "Orenburg Oblast",
+        "code": "ORE",
+        "label": "Orenburg Oblast"
+      },
+      {
+        "name": "Oryol Oblast",
+        "code": "ORL",
+        "label": "Oryol Oblast"
+      },
+      {
+        "name": "Penza Oblast",
+        "code": "PNZ",
+        "label": "Penza Oblast"
+      },
+      {
+        "name": "Perm Krai",
+        "code": "PER",
+        "label": "Perm Krai"
+      },
+      {
+        "name": "Primorsky Krai",
+        "code": "PRI",
+        "label": "Primorsky Krai"
+      },
+      {
+        "name": "Pskov Oblast",
+        "code": "PSK",
+        "label": "Pskov Oblast"
+      },
+      {
+        "name": "Rostov Oblast",
+        "code": "ROS",
+        "label": "Rostov Oblast"
+      },
+      {
+        "name": "Ryazan Oblast",
+        "code": "RYA",
+        "label": "Ryazan Oblast"
+      },
+      {
+        "name": "Saint Petersburg",
+        "code": "SPE",
+        "label": "Saint Petersburg"
+      },
+      {
+        "name": "Sakha Republic (Yakutia)",
+        "code": "SA",
+        "label": "Sakha Republic (Yakutia)"
+      },
+      {
+        "name": "Sakhalin Oblast",
+        "code": "SAK",
+        "label": "Sakhalin Oblast"
+      },
+      {
+        "name": "Samara Oblast",
+        "code": "SAM",
+        "label": "Samara Oblast"
+      },
+      {
+        "name": "Saratov Oblast",
+        "code": "SAR",
+        "label": "Saratov Oblast"
+      },
+      {
+        "name": "Republic of North Ossetia–Alania",
+        "code": "SE",
+        "label": "Republic of North Ossetia–Alania"
+      },
+      {
+        "name": "Smolensk Oblast",
+        "code": "SMO",
+        "label": "Smolensk Oblast"
+      },
+      {
+        "name": "Stavropol Krai",
+        "code": "STA",
+        "label": "Stavropol Krai"
+      },
+      {
+        "name": "Sverdlovsk Oblast",
+        "code": "SVE",
+        "label": "Sverdlovsk Oblast"
+      },
+      {
+        "name": "Tambov Oblast",
+        "code": "TAM",
+        "label": "Tambov Oblast"
+      },
+      {
+        "name": "Republic of Tatarstan",
+        "code": "TA",
+        "label": "Republic of Tatarstan"
+      },
+      {
+        "name": "Tomsk Oblast",
+        "code": "TOM",
+        "label": "Tomsk Oblast"
+      },
+      {
+        "name": "Tula Oblast",
+        "code": "TUL",
+        "label": "Tula Oblast"
+      },
+      {
+        "name": "Tver Oblast",
+        "code": "TVE",
+        "label": "Tver Oblast"
+      },
+      {
+        "name": "Tyumen Oblast",
+        "code": "TYU",
+        "label": "Tyumen Oblast"
+      },
+      {
+        "name": "Tyva Republic",
+        "code": "TY",
+        "label": "Tyva Republic"
+      },
+      {
+        "name": "Udmurtia",
+        "code": "UD",
+        "label": "Udmurtia"
+      },
+      {
+        "name": "Ulyanovsk Oblast",
+        "code": "ULY",
+        "label": "Ulyanovsk Oblast"
+      },
+      {
+        "name": "Vladimir Oblast",
+        "code": "VLA",
+        "label": "Vladimir Oblast"
+      },
+      {
+        "name": "Volgograd Oblast",
+        "code": "VGG",
+        "label": "Volgograd Oblast"
+      },
+      {
+        "name": "Vologda Oblast",
+        "code": "VLG",
+        "label": "Vologda Oblast"
+      },
+      {
+        "name": "Voronezh Oblast",
+        "code": "VOR",
+        "label": "Voronezh Oblast"
+      },
+      {
+        "name": "Yamalo-Nenets Autonomous Okrug",
+        "code": "YAN",
+        "label": "Yamalo-Nenets Autonomous Okrug"
+      },
+      {
+        "name": "Yaroslavl Oblast",
+        "code": "YAR",
+        "label": "Yaroslavl Oblast"
+      },
+      {
+        "name": "Zabaykalsky Krai",
+        "code": "ZAB",
+        "label": "Zabaykalsky Krai"
+      }
+    ],
+    "group": "Asian Countries",
+    "label": "Russia"
+  },
+  {
+    "code": "RW",
+    "name": "Rwanda",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Rwanda",
+    "zones": []
+  },
+  {
+    "code": "BL",
+    "name": "Saint Barthélemy",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "St. Barthélemy",
+    "zones": []
+  },
+  {
+    "code": "SH",
+    "name": "Saint Helena",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "St. Helena",
+    "zones": []
+  },
+  {
+    "code": "KN",
+    "name": "Saint Kitts And Nevis",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "St. Kitts & Nevis",
+    "zones": []
+  },
+  {
+    "code": "LC",
+    "name": "Saint Lucia",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "St. Lucia",
+    "zones": []
+  },
+  {
+    "code": "MF",
+    "name": "Saint Martin",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "St. Martin",
+    "zones": []
+  },
+  {
+    "code": "PM",
+    "name": "Saint Pierre And Miquelon",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "St. Pierre & Miquelon",
+    "zones": []
+  },
+  {
+    "code": "WS",
+    "name": "Samoa",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Samoa",
+    "zones": []
+  },
+  {
+    "code": "SM",
+    "name": "San Marino",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "San Marino",
+    "zones": []
+  },
+  {
+    "code": "ST",
+    "name": "Sao Tome And Principe",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "São Tomé & Príncipe",
+    "zones": []
+  },
+  {
+    "code": "SA",
+    "name": "Saudi Arabia",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Saudi Arabia",
+    "zones": []
+  },
+  {
+    "code": "SN",
+    "name": "Senegal",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Senegal",
+    "zones": []
+  },
+  {
+    "code": "RS",
+    "name": "Serbia",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Serbia",
+    "zones": []
+  },
+  {
+    "code": "SC",
+    "name": "Seychelles",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Seychelles",
+    "zones": []
+  },
+  {
+    "code": "SL",
+    "name": "Sierra Leone",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Sierra Leone",
+    "zones": []
+  },
+  {
+    "code": "SG",
+    "name": "Singapore",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Singapore",
+    "zones": []
+  },
+  {
+    "code": "SX",
+    "name": "Sint Maarten",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Saint Martin",
+    "zones": []
+  },
+  {
+    "code": "SK",
+    "name": "Slovakia",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Slovakia",
+    "zones": []
+  },
+  {
+    "code": "SI",
+    "name": "Slovenia",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Slovenia",
+    "zones": []
+  },
+  {
+    "code": "SB",
+    "name": "Solomon Islands",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Solomon Islands",
+    "zones": []
+  },
+  {
+    "code": "SO",
+    "name": "Somalia",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Somalia",
+    "zones": []
+  },
+  {
+    "code": "ZA",
+    "name": "South Africa",
+    "zone_label": "Province",
+    "zones": [
+      {
+        "name": "Eastern Cape",
+        "code": "EC",
+        "label": "Eastern Cape"
+      },
+      {
+        "name": "Free State",
+        "code": "FS",
+        "label": "Free State"
+      },
+      {
+        "name": "Gauteng",
+        "code": "GT",
+        "label": "Gauteng"
+      },
+      {
+        "name": "KwaZulu-Natal",
+        "code": "NL",
+        "label": "KwaZulu-Natal"
+      },
+      {
+        "name": "Limpopo",
+        "code": "LP",
+        "label": "Limpopo"
+      },
+      {
+        "name": "Mpumalanga",
+        "code": "MP",
+        "label": "Mpumalanga"
+      },
+      {
+        "name": "North West",
+        "code": "NW",
+        "label": "North West"
+      },
+      {
+        "name": "Northern Cape",
+        "code": "NC",
+        "label": "Northern Cape"
+      },
+      {
+        "name": "Western Cape",
+        "code": "WC",
+        "label": "Western Cape"
+      }
+    ],
+    "group": "African Countries",
+    "label": "South Africa"
+  },
+  {
+    "code": "GS",
+    "name": "South Georgia And The South Sandwich Islands",
+    "zone_label": "Region",
+    "group": "Other Countries",
+    "label": "South Georgia & South Sandwich Islands",
+    "zones": []
+  },
+  {
+    "code": "KR",
+    "name": "South Korea",
+    "zone_label": "Province",
+    "zones": [
+      {
+        "name": "Busan",
+        "code": "KR-26",
+        "label": "Busan"
+      },
+      {
+        "name": "Chungbuk",
+        "code": "KR-43",
+        "label": "Chungbuk"
+      },
+      {
+        "name": "Chungnam",
+        "code": "KR-44",
+        "label": "Chungnam"
+      },
+      {
+        "name": "Daegu",
+        "code": "KR-27",
+        "label": "Daegu"
+      },
+      {
+        "name": "Daejeon",
+        "code": "KR-30",
+        "label": "Daejeon"
+      },
+      {
+        "name": "Gangwon",
+        "code": "KR-42",
+        "label": "Gangwon"
+      },
+      {
+        "name": "Gwangju",
+        "code": "KR-29",
+        "label": "Gwangju"
+      },
+      {
+        "name": "Gyeongbuk",
+        "code": "KR-47",
+        "label": "Gyeongbuk"
+      },
+      {
+        "name": "Gyeonggi",
+        "code": "KR-41",
+        "label": "Gyeonggi"
+      },
+      {
+        "name": "Gyeongnam",
+        "code": "KR-48",
+        "label": "Gyeongnam"
+      },
+      {
+        "name": "Incheon",
+        "code": "KR-28",
+        "label": "Incheon"
+      },
+      {
+        "name": "Jeju",
+        "code": "KR-49",
+        "label": "Jeju"
+      },
+      {
+        "name": "Jeonbuk",
+        "code": "KR-45",
+        "label": "Jeonbuk"
+      },
+      {
+        "name": "Jeonnam",
+        "code": "KR-46",
+        "label": "Jeonnam"
+      },
+      {
+        "name": "Sejong",
+        "code": "KR-50",
+        "label": "Sejong"
+      },
+      {
+        "name": "Seoul",
+        "code": "KR-11",
+        "label": "Seoul"
+      },
+      {
+        "name": "Ulsan",
+        "code": "KR-31",
+        "label": "Ulsan"
+      }
+    ],
+    "group": "Asian Countries",
+    "label": "South Korea"
+  },
+  {
+    "code": "SS",
+    "name": "South Sudan",
+    "group": "African Countries",
+    "label": "South Sudan",
+    "zones": []
+  },
+  {
+    "code": "ES",
+    "name": "Spain",
+    "zone_label": "Province",
+    "zones": [
+      {
+        "name": "A Coruña",
+        "code": "C",
+        "label": "A Coruña"
+      },
+      {
+        "name": "Álava",
+        "code": "VI",
+        "label": "Álava"
+      },
+      {
+        "name": "Albacete",
+        "code": "AB",
+        "label": "Albacete"
+      },
+      {
+        "name": "Alicante",
+        "code": "A",
+        "label": "Alicante"
+      },
+      {
+        "name": "Almería",
+        "code": "AL",
+        "label": "Almería"
+      },
+      {
+        "name": "Asturias",
+        "code": "O",
+        "label": "Asturias"
+      },
+      {
+        "name": "Ávila",
+        "code": "AV",
+        "label": "Ávila"
+      },
+      {
+        "name": "Badajoz",
+        "code": "BA",
+        "label": "Badajoz"
+      },
+      {
+        "name": "Balears",
+        "code": "PM",
+        "label": "Balears"
+      },
+      {
+        "name": "Barcelona",
+        "code": "B",
+        "label": "Barcelona"
+      },
+      {
+        "name": "Burgos",
+        "code": "BU",
+        "label": "Burgos"
+      },
+      {
+        "name": "Cáceres",
+        "code": "CC",
+        "label": "Cáceres"
+      },
+      {
+        "name": "Cádiz",
+        "code": "CA",
+        "label": "Cádiz"
+      },
+      {
+        "name": "Cantabria",
+        "code": "S",
+        "label": "Cantabria"
+      },
+      {
+        "name": "Castellón",
+        "code": "CS",
+        "label": "Castellón"
+      },
+      {
+        "name": "Ceuta",
+        "code": "CE",
+        "label": "Ceuta"
+      },
+      {
+        "name": "Ciudad Real",
+        "code": "CR",
+        "label": "Ciudad Real"
+      },
+      {
+        "name": "Córdoba",
+        "code": "CO",
+        "label": "Córdoba"
+      },
+      {
+        "name": "Cuenca",
+        "code": "CU",
+        "label": "Cuenca"
+      },
+      {
+        "name": "Girona",
+        "code": "GI",
+        "label": "Girona"
+      },
+      {
+        "name": "Granada",
+        "code": "GR",
+        "label": "Granada"
+      },
+      {
+        "name": "Guadalajara",
+        "code": "GU",
+        "label": "Guadalajara"
+      },
+      {
+        "name": "Guipúzcoa",
+        "code": "SS",
+        "label": "Guipúzcoa"
+      },
+      {
+        "name": "Huelva",
+        "code": "H",
+        "label": "Huelva"
+      },
+      {
+        "name": "Huesca",
+        "code": "HU",
+        "label": "Huesca"
+      },
+      {
+        "name": "Jaén",
+        "code": "J",
+        "label": "Jaén"
+      },
+      {
+        "name": "La Rioja",
+        "code": "LO",
+        "label": "La Rioja"
+      },
+      {
+        "name": "Las Palmas",
+        "code": "GC",
+        "label": "Las Palmas"
+      },
+      {
+        "name": "León",
+        "code": "LE",
+        "label": "León"
+      },
+      {
+        "name": "Lleida",
+        "code": "L",
+        "label": "Lleida"
+      },
+      {
+        "name": "Lugo",
+        "code": "LU",
+        "label": "Lugo"
+      },
+      {
+        "name": "Madrid",
+        "code": "M",
+        "label": "Madrid"
+      },
+      {
+        "name": "Málaga",
+        "code": "MA",
+        "label": "Málaga"
+      },
+      {
+        "name": "Melilla",
+        "code": "ML",
+        "label": "Melilla"
+      },
+      {
+        "name": "Murcia",
+        "code": "MU",
+        "label": "Murcia"
+      },
+      {
+        "name": "Navarra",
+        "code": "NA",
+        "label": "Navarra"
+      },
+      {
+        "name": "Ourense",
+        "code": "OR",
+        "label": "Ourense"
+      },
+      {
+        "name": "Palencia",
+        "code": "P",
+        "label": "Palencia"
+      },
+      {
+        "name": "Pontevedra",
+        "code": "PO",
+        "label": "Pontevedra"
+      },
+      {
+        "name": "Salamanca",
+        "code": "SA",
+        "label": "Salamanca"
+      },
+      {
+        "name": "Santa Cruz de Tenerife",
+        "code": "TF",
+        "label": "Santa Cruz de Tenerife"
+      },
+      {
+        "name": "Segovia",
+        "code": "SG",
+        "label": "Segovia"
+      },
+      {
+        "name": "Sevilla",
+        "code": "SE",
+        "label": "Sevilla"
+      },
+      {
+        "name": "Soria",
+        "code": "SO",
+        "label": "Soria"
+      },
+      {
+        "name": "Tarragona",
+        "code": "T",
+        "label": "Tarragona"
+      },
+      {
+        "name": "Teruel",
+        "code": "TE",
+        "label": "Teruel"
+      },
+      {
+        "name": "Toledo",
+        "code": "TO",
+        "label": "Toledo"
+      },
+      {
+        "name": "Valencia",
+        "code": "V",
+        "label": "Valencia"
+      },
+      {
+        "name": "Valladolid",
+        "code": "VA",
+        "label": "Valladolid"
+      },
+      {
+        "name": "Vizcaya",
+        "code": "BI",
+        "label": "Vizcaya"
+      },
+      {
+        "name": "Zamora",
+        "code": "ZA",
+        "label": "Zamora"
+      },
+      {
+        "name": "Zaragoza",
+        "code": "Z",
+        "label": "Zaragoza"
+      }
+    ],
+    "group": "European Countries",
+    "label": "Spain"
+  },
+  {
+    "code": "LK",
+    "name": "Sri Lanka",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Sri Lanka",
+    "zones": []
+  },
+  {
+    "code": "VC",
+    "name": "St. Vincent",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "St. Vincent & Grenadines",
+    "zones": []
+  },
+  {
+    "code": "SD",
+    "name": "Sudan",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Sudan",
+    "zones": []
+  },
+  {
+    "code": "SR",
+    "name": "Suriname",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "Suriname",
+    "zones": []
+  },
+  {
+    "code": "SJ",
+    "name": "Svalbard And Jan Mayen",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Svalbard & Jan Mayen",
+    "zones": []
+  },
+  {
+    "code": "SZ",
+    "name": "Swaziland",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Swaziland",
+    "zones": []
+  },
+  {
+    "code": "SE",
+    "name": "Sweden",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Sweden",
+    "zones": []
+  },
+  {
+    "code": "CH",
+    "name": "Switzerland",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Switzerland",
+    "zones": []
+  },
+  {
+    "code": "SY",
+    "name": "Syria",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Syria",
+    "zones": []
+  },
+  {
+    "code": "TW",
+    "name": "Taiwan",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Taiwan",
+    "zones": []
+  },
+  {
+    "code": "TJ",
+    "name": "Tajikistan",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Tajikistan",
+    "zones": []
+  },
+  {
+    "code": "TZ",
+    "name": "Tanzania, United Republic Of",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Tanzania",
+    "zones": []
+  },
+  {
+    "code": "TH",
+    "name": "Thailand",
+    "zone_label": "Region",
+    "zones": [
+      {
+        "name": "Amnat Charoen",
+        "code": "TH-37",
+        "label": "Amnat Charoen"
+      },
+      {
+        "name": "Ang Thong",
+        "code": "TH-15",
+        "label": "Ang Thong"
+      },
+      {
+        "name": "Bangkok",
+        "code": "TH-10",
+        "label": "Bangkok"
+      },
+      {
+        "name": "Bueng Kan",
+        "code": "TH-38",
+        "label": "Bueng Kan"
+      },
+      {
+        "name": "Buriram",
+        "code": "TH-31",
+        "label": "Buriram"
+      },
+      {
+        "name": "Chachoengsao",
+        "code": "TH-24",
+        "label": "Chachoengsao"
+      },
+      {
+        "name": "Chai Nat",
+        "code": "TH-18",
+        "label": "Chai Nat"
+      },
+      {
+        "name": "Chaiyaphum",
+        "code": "TH-36",
+        "label": "Chaiyaphum"
+      },
+      {
+        "name": "Chanthaburi",
+        "code": "TH-22",
+        "label": "Chanthaburi"
+      },
+      {
+        "name": "Chiang Mai",
+        "code": "TH-50",
+        "label": "Chiang Mai"
+      },
+      {
+        "name": "Chiang Rai",
+        "code": "TH-57",
+        "label": "Chiang Rai"
+      },
+      {
+        "name": "Chon Buri",
+        "code": "TH-20",
+        "label": "Chon Buri"
+      },
+      {
+        "name": "Chumphon",
+        "code": "TH-86",
+        "label": "Chumphon"
+      },
+      {
+        "name": "Kalasin",
+        "code": "TH-46",
+        "label": "Kalasin"
+      },
+      {
+        "name": "Kamphaeng Phet",
+        "code": "TH-62",
+        "label": "Kamphaeng Phet"
+      },
+      {
+        "name": "Kanchanaburi",
+        "code": "TH-71",
+        "label": "Kanchanaburi"
+      },
+      {
+        "name": "Khon Kaen",
+        "code": "TH-40",
+        "label": "Khon Kaen"
+      },
+      {
+        "name": "Krabi",
+        "code": "TH-81",
+        "label": "Krabi"
+      },
+      {
+        "name": "Lampang",
+        "code": "TH-52",
+        "label": "Lampang"
+      },
+      {
+        "name": "Lamphun",
+        "code": "TH-51",
+        "label": "Lamphun"
+      },
+      {
+        "name": "Loei",
+        "code": "TH-42",
+        "label": "Loei"
+      },
+      {
+        "name": "Lopburi",
+        "code": "TH-16",
+        "label": "Lopburi"
+      },
+      {
+        "name": "Mae Hong Son",
+        "code": "TH-58",
+        "label": "Mae Hong Son"
+      },
+      {
+        "name": "Maha Sarakham",
+        "code": "TH-44",
+        "label": "Maha Sarakham"
+      },
+      {
+        "name": "Mukdahan",
+        "code": "TH-49",
+        "label": "Mukdahan"
+      },
+      {
+        "name": "Nakhon Nayok",
+        "code": "TH-26",
+        "label": "Nakhon Nayok"
+      },
+      {
+        "name": "Nakhon Pathom",
+        "code": "TH-73",
+        "label": "Nakhon Pathom"
+      },
+      {
+        "name": "Nakhon Phanom",
+        "code": "TH-48",
+        "label": "Nakhon Phanom"
+      },
+      {
+        "name": "Nakhon Ratchasima",
+        "code": "TH-30",
+        "label": "Nakhon Ratchasima"
+      },
+      {
+        "name": "Nakhon Sawan",
+        "code": "TH-60",
+        "label": "Nakhon Sawan"
+      },
+      {
+        "name": "Nakhon Si Thammarat",
+        "code": "TH-80",
+        "label": "Nakhon Si Thammarat"
+      },
+      {
+        "name": "Nan",
+        "code": "TH-55",
+        "label": "Nan"
+      },
+      {
+        "name": "Narathiwat",
+        "code": "TH-96",
+        "label": "Narathiwat"
+      },
+      {
+        "name": "Nong Bua Lam Phu",
+        "code": "TH-39",
+        "label": "Nong Bua Lam Phu"
+      },
+      {
+        "name": "Nong Khai",
+        "code": "TH-43",
+        "label": "Nong Khai"
+      },
+      {
+        "name": "Nonthaburi",
+        "code": "TH-12",
+        "label": "Nonthaburi"
+      },
+      {
+        "name": "Pathum Thani",
+        "code": "TH-13",
+        "label": "Pathum Thani"
+      },
+      {
+        "name": "Pattani",
+        "code": "TH-94",
+        "label": "Pattani"
+      },
+      {
+        "name": "Pattaya",
+        "code": "TH-S",
+        "label": "Pattaya"
+      },
+      {
+        "name": "Phangnga",
+        "code": "TH-82",
+        "label": "Phangnga"
+      },
+      {
+        "name": "Phatthalung",
+        "code": "TH-93",
+        "label": "Phatthalung"
+      },
+      {
+        "name": "Phayao",
+        "code": "TH-56",
+        "label": "Phayao"
+      },
+      {
+        "name": "Phetchabun",
+        "code": "TH-67",
+        "label": "Phetchabun"
+      },
+      {
+        "name": "Phetchaburi",
+        "code": "TH-76",
+        "label": "Phetchaburi"
+      },
+      {
+        "name": "Phichit",
+        "code": "TH-66",
+        "label": "Phichit"
+      },
+      {
+        "name": "Phitsanulok",
+        "code": "TH-65",
+        "label": "Phitsanulok"
+      },
+      {
+        "name": "Phra Nakhon Si Ayutthaya",
+        "code": "TH-14",
+        "label": "Phra Nakhon Si Ayutthaya"
+      },
+      {
+        "name": "Phrae",
+        "code": "TH-54",
+        "label": "Phrae"
+      },
+      {
+        "name": "Phuket",
+        "code": "TH-83",
+        "label": "Phuket"
+      },
+      {
+        "name": "Prachin Buri",
+        "code": "TH-25",
+        "label": "Prachin Buri"
+      },
+      {
+        "name": "Prachuap Khiri Khan",
+        "code": "TH-77",
+        "label": "Prachuap Khiri Khan"
+      },
+      {
+        "name": "Ranong",
+        "code": "TH-85",
+        "label": "Ranong"
+      },
+      {
+        "name": "Ratchaburi",
+        "code": "TH-70",
+        "label": "Ratchaburi"
+      },
+      {
+        "name": "Rayong",
+        "code": "TH-21",
+        "label": "Rayong"
+      },
+      {
+        "name": "Roi Et",
+        "code": "TH-45",
+        "label": "Roi Et"
+      },
+      {
+        "name": "Sa Kaeo",
+        "code": "TH-27",
+        "label": "Sa Kaeo"
+      },
+      {
+        "name": "Sakon Nakhon",
+        "code": "TH-47",
+        "label": "Sakon Nakhon"
+      },
+      {
+        "name": "Samut Prakan",
+        "code": "TH-11",
+        "label": "Samut Prakan"
+      },
+      {
+        "name": "Samut Sakhon",
+        "code": "TH-74",
+        "label": "Samut Sakhon"
+      },
+      {
+        "name": "Samut Songkhram",
+        "code": "TH-75",
+        "label": "Samut Songkhram"
+      },
+      {
+        "name": "Saraburi",
+        "code": "TH-19",
+        "label": "Saraburi"
+      },
+      {
+        "name": "Satun",
+        "code": "TH-91",
+        "label": "Satun"
+      },
+      {
+        "name": "Sing Buri",
+        "code": "TH-17",
+        "label": "Sing Buri"
+      },
+      {
+        "name": "Sisaket",
+        "code": "TH-33",
+        "label": "Sisaket"
+      },
+      {
+        "name": "Songkhla",
+        "code": "TH-90",
+        "label": "Songkhla"
+      },
+      {
+        "name": "Sukhothai",
+        "code": "TH-64",
+        "label": "Sukhothai"
+      },
+      {
+        "name": "Suphan Buri",
+        "code": "TH-72",
+        "label": "Suphan Buri"
+      },
+      {
+        "name": "Surat Thani",
+        "code": "TH-84",
+        "label": "Surat Thani"
+      },
+      {
+        "name": "Surin",
+        "code": "TH-32",
+        "label": "Surin"
+      },
+      {
+        "name": "Tak",
+        "code": "TH-63",
+        "label": "Tak"
+      },
+      {
+        "name": "Trang",
+        "code": "TH-92",
+        "label": "Trang"
+      },
+      {
+        "name": "Trat",
+        "code": "TH-23",
+        "label": "Trat"
+      },
+      {
+        "name": "Ubon Ratchathani",
+        "code": "TH-34",
+        "label": "Ubon Ratchathani"
+      },
+      {
+        "name": "Udon Thani",
+        "code": "TH-41",
+        "label": "Udon Thani"
+      },
+      {
+        "name": "Uthai Thani",
+        "code": "TH-61",
+        "label": "Uthai Thani"
+      },
+      {
+        "name": "Uttaradit",
+        "code": "TH-53",
+        "label": "Uttaradit"
+      },
+      {
+        "name": "Yala",
+        "code": "TH-95",
+        "label": "Yala"
+      },
+      {
+        "name": "Yasothon",
+        "code": "TH-35",
+        "label": "Yasothon"
+      }
+    ],
+    "group": "Asian Countries",
+    "label": "Thailand"
+  },
+  {
+    "code": "TL",
+    "name": "Timor Leste",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Timor-Leste",
+    "zones": []
+  },
+  {
+    "code": "TG",
+    "name": "Togo",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Togo",
+    "zones": []
+  },
+  {
+    "code": "TK",
+    "name": "Tokelau",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Tokelau",
+    "zones": []
+  },
+  {
+    "code": "TO",
+    "name": "Tonga",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Tonga",
+    "zones": []
+  },
+  {
+    "code": "TT",
+    "name": "Trinidad and Tobago",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Trinidad & Tobago",
+    "zones": []
+  },
+  {
+    "code": "TN",
+    "name": "Tunisia",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Tunisia",
+    "zones": []
+  },
+  {
+    "code": "TR",
+    "name": "Turkey",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Turkey",
+    "zones": []
+  },
+  {
+    "code": "TM",
+    "name": "Turkmenistan",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Turkmenistan",
+    "zones": []
+  },
+  {
+    "code": "TC",
+    "name": "Turks and Caicos Islands",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "Turks & Caicos Islands",
+    "zones": []
+  },
+  {
+    "code": "TV",
+    "name": "Tuvalu",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Tuvalu",
+    "zones": []
+  },
+  {
+    "code": "UG",
+    "name": "Uganda",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Uganda",
+    "zones": []
+  },
+  {
+    "code": "UA",
+    "name": "Ukraine",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "Ukraine",
+    "zones": []
+  },
+  {
+    "code": "AE",
+    "name": "United Arab Emirates",
+    "zone_label": "Emirate",
+    "zones": [
+      {
+        "name": "Abu Dhabi",
+        "code": "AZ",
+        "label": "Abu Dhabi"
+      },
+      {
+        "name": "Ajman",
+        "code": "AJ",
+        "label": "Ajman"
+      },
+      {
+        "name": "Dubai",
+        "code": "DU",
+        "label": "Dubai"
+      },
+      {
+        "name": "Fujairah",
+        "code": "FU",
+        "label": "Fujairah"
+      },
+      {
+        "name": "Ras al-Khaimah",
+        "code": "RK",
+        "label": "Ras al-Khaimah"
+      },
+      {
+        "name": "Sharjah",
+        "code": "SH",
+        "label": "Sharjah"
+      },
+      {
+        "name": "Umm al-Quwain",
+        "code": "UQ",
+        "label": "Umm al-Quwain"
+      }
+    ],
+    "group": "Asian Countries",
+    "label": "United Arab Emirates"
+  },
+  {
+    "code": "GB",
+    "name": "United Kingdom",
+    "zone_label": "Region",
+    "group": "European Countries",
+    "label": "United Kingdom",
+    "zones": []
+  },
+  {
+    "code": "US",
+    "name": "United States",
+    "zone_label": "State",
+    "zones": [
+      {
+        "name": "Alabama",
+        "code": "AL"
+      },
+      {
+        "name": "Alaska",
+        "code": "AK",
+        "label": "Alaska"
+      },
+      {
+        "name": "American Samoa",
+        "code": "AS",
+        "label": "American Samoa"
+      },
+      {
+        "name": "Arizona",
+        "code": "AZ",
+        "label": "Arizona"
+      },
+      {
+        "name": "Arkansas",
+        "code": "AR",
+        "label": "Arkansas"
+      },
+      {
+        "name": "California",
+        "code": "CA",
+        "label": "California"
+      },
+      {
+        "name": "Colorado",
+        "code": "CO",
+        "label": "Colorado"
+      },
+      {
+        "name": "Connecticut",
+        "code": "CT",
+        "label": "Connecticut"
+      },
+      {
+        "name": "Delaware",
+        "code": "DE",
+        "label": "Delaware"
+      },
+      {
+        "name": "District of Columbia",
+        "code": "DC",
+        "label": "District of Columbia"
+      },
+      {
+        "name": "Federated States of Micronesia",
+        "code": "FM",
+        "label": "Federated States of Micronesia"
+      },
+      {
+        "name": "Florida",
+        "code": "FL",
+        "label": "Florida"
+      },
+      {
+        "name": "Georgia",
+        "code": "GA",
+        "label": "Georgia"
+      },
+      {
+        "name": "Guam",
+        "code": "GU",
+        "label": "Guam"
+      },
+      {
+        "name": "Hawaii",
+        "code": "HI",
+        "label": "Hawaii"
+      },
+      {
+        "name": "Idaho",
+        "code": "ID",
+        "label": "Idaho"
+      },
+      {
+        "name": "Illinois",
+        "code": "IL",
+        "label": "Illinois"
+      },
+      {
+        "name": "Indiana",
+        "code": "IN",
+        "label": "Indiana"
+      },
+      {
+        "name": "Iowa",
+        "code": "IA",
+        "label": "Iowa"
+      },
+      {
+        "name": "Kansas",
+        "code": "KS",
+        "label": "Kansas"
+      },
+      {
+        "name": "Kentucky",
+        "code": "KY",
+        "label": "Kentucky"
+      },
+      {
+        "name": "Louisiana",
+        "code": "LA",
+        "label": "Louisiana"
+      },
+      {
+        "name": "Maine",
+        "code": "ME",
+        "label": "Maine"
+      },
+      {
+        "name": "Marshall Islands",
+        "code": "MH",
+        "label": "Marshall Islands"
+      },
+      {
+        "name": "Maryland",
+        "code": "MD",
+        "label": "Maryland"
+      },
+      {
+        "name": "Massachusetts",
+        "code": "MA",
+        "label": "Massachusetts"
+      },
+      {
+        "name": "Michigan",
+        "code": "MI",
+        "label": "Michigan"
+      },
+      {
+        "name": "Minnesota",
+        "code": "MN",
+        "label": "Minnesota"
+      },
+      {
+        "name": "Mississippi",
+        "code": "MS",
+        "label": "Mississippi"
+      },
+      {
+        "name": "Missouri",
+        "code": "MO",
+        "label": "Missouri"
+      },
+      {
+        "name": "Montana",
+        "code": "MT",
+        "label": "Montana"
+      },
+      {
+        "name": "Nebraska",
+        "code": "NE",
+        "label": "Nebraska"
+      },
+      {
+        "name": "Nevada",
+        "code": "NV",
+        "label": "Nevada"
+      },
+      {
+        "name": "New Hampshire",
+        "code": "NH",
+        "label": "New Hampshire"
+      },
+      {
+        "name": "New Jersey",
+        "code": "NJ",
+        "label": "New Jersey"
+      },
+      {
+        "name": "New Mexico",
+        "code": "NM",
+        "label": "New Mexico"
+      },
+      {
+        "name": "New York",
+        "code": "NY",
+        "label": "New York"
+      },
+      {
+        "name": "North Carolina",
+        "code": "NC",
+        "label": "North Carolina"
+      },
+      {
+        "name": "North Dakota",
+        "code": "ND",
+        "label": "North Dakota"
+      },
+      {
+        "name": "Northern Mariana Islands",
+        "code": "MP",
+        "label": "Northern Mariana Islands"
+      },
+      {
+        "name": "Ohio",
+        "code": "OH",
+        "label": "Ohio"
+      },
+      {
+        "name": "Oklahoma",
+        "code": "OK",
+        "label": "Oklahoma"
+      },
+      {
+        "name": "Oregon",
+        "code": "OR",
+        "label": "Oregon"
+      },
+      {
+        "name": "Palau",
+        "code": "PW",
+        "label": "Palau"
+      },
+      {
+        "name": "Pennsylvania",
+        "code": "PA",
+        "label": "Pennsylvania"
+      },
+      {
+        "name": "Puerto Rico",
+        "code": "PR",
+        "label": "Puerto Rico"
+      },
+      {
+        "name": "Rhode Island",
+        "code": "RI",
+        "label": "Rhode Island"
+      },
+      {
+        "name": "South Carolina",
+        "code": "SC",
+        "label": "South Carolina"
+      },
+      {
+        "name": "South Dakota",
+        "code": "SD",
+        "label": "South Dakota"
+      },
+      {
+        "name": "Tennessee",
+        "code": "TN",
+        "label": "Tennessee"
+      },
+      {
+        "name": "Texas",
+        "code": "TX",
+        "label": "Texas"
+      },
+      {
+        "name": "Utah",
+        "code": "UT",
+        "label": "Utah"
+      },
+      {
+        "name": "Vermont",
+        "code": "VT",
+        "label": "Vermont"
+      },
+      {
+        "name": "Virginia",
+        "code": "VA",
+        "label": "Virginia"
+      },
+      {
+        "name": "Washington",
+        "code": "WA",
+        "label": "Washington"
+      },
+      {
+        "name": "West Virginia",
+        "code": "WV",
+        "label": "West Virginia"
+      },
+      {
+        "name": "Wisconsin",
+        "code": "WI",
+        "label": "Wisconsin"
+      },
+      {
+        "name": "Wyoming",
+        "code": "WY",
+        "label": "Wyoming"
+      },
+      {
+        "name": "Virgin Islands",
+        "code": "VI",
+        "label": "Virgin Islands"
+      },
+      {
+        "name": "Armed Forces Americas",
+        "code": "AA",
+        "label": "Armed Forces Americas"
+      },
+      {
+        "name": "Armed Forces Europe",
+        "code": "AE",
+        "label": "Armed Forces Europe"
+      },
+      {
+        "name": "Armed Forces Pacific",
+        "code": "AP",
+        "label": "Armed Forces Pacific"
+      }
+    ],
+    "group": "North American Countries",
+    "label": "United States"
+  },
+  {
+    "code": "UM",
+    "name": "United States Minor Outlying Islands",
+    "zone_label": "State",
+    "group": "Central American Countries",
+    "label": "U.S. Outlying Islands",
+    "zones": []
+  },
+  {
+    "code": "UY",
+    "name": "Uruguay",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "Uruguay",
+    "zones": []
+  },
+  {
+    "code": "UZ",
+    "name": "Uzbekistan",
+    "zone_label": "Province",
+    "group": "Asian Countries",
+    "label": "Uzbekistan",
+    "zones": []
+  },
+  {
+    "code": "VU",
+    "name": "Vanuatu",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Vanuatu",
+    "zones": []
+  },
+  {
+    "code": "VE",
+    "name": "Venezuela",
+    "zone_label": "Region",
+    "group": "South American Countries",
+    "label": "Venezuela",
+    "zones": []
+  },
+  {
+    "code": "VN",
+    "name": "Vietnam",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Vietnam",
+    "zones": []
+  },
+  {
+    "code": "VG",
+    "name": "Virgin Islands, British",
+    "zone_label": "Region",
+    "group": "Central American Countries",
+    "label": "British Virgin Islands",
+    "zones": []
+  },
+  {
+    "code": "WF",
+    "name": "Wallis And Futuna",
+    "zone_label": "Region",
+    "group": "Oceanian Countries",
+    "label": "Wallis & Futuna",
+    "zones": []
+  },
+  {
+    "code": "EH",
+    "name": "Western Sahara",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Western Sahara",
+    "zones": []
+  },
+  {
+    "code": "YE",
+    "name": "Yemen",
+    "zone_label": "Region",
+    "group": "Asian Countries",
+    "label": "Yemen",
+    "zones": []
+  },
+  {
+    "code": "ZM",
+    "name": "Zambia",
+    "group": "African Countries",
+    "label": "Zambia",
+    "zones": []
+  },
+  {
+    "code": "ZW",
+    "name": "Zimbabwe",
+    "zone_label": "Region",
+    "group": "African Countries",
+    "label": "Zimbabwe",
+    "zones": []
+  }
+]

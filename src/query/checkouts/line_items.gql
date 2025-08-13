@@ -1,0 +1,6 @@
+query CartLineItems($cartId : ID!,$first : Int = 10,$cursor : String){
+    cart(id: $cartId){
+        id
+        ...LineItems
+    }
+}

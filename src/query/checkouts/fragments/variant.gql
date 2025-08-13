@@ -1,0 +1,37 @@
+fragment Variant on ProductVariant{
+    id
+    title
+    taxable
+    weight
+    weightUnit
+    sku
+    barcode
+    unitPrice {
+        amount
+        currencyCode
+    }
+    price{
+        currencyCode
+        amount
+    }
+    product {
+        id
+        title
+        handle
+        onlineStoreUrl
+        featuredImage {
+            ...Image
+        }
+    }
+    compareAtPrice{
+        currencyCode
+        amount
+    }
+    image {
+        ...Image,
+    }
+    selectedOptions{
+        name
+        value
+    }
+}

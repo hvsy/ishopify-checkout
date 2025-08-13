@@ -1,0 +1,46 @@
+query Summary($cartId :ID!){
+    shop {
+        id
+        moneyFormat
+        name
+        brand {
+            logo {
+                id
+                image {
+                    ...Image
+                }
+            }
+            coverImage {
+                id
+                image {
+                    ...Image
+                }
+            }
+            shortDescription
+            slogan
+        }
+    }
+    localization {
+        availableCountries {
+            currency {
+                isoCode
+                name
+                symbol
+            }
+            name
+            unitSystem
+            isoCode
+        }
+        #        country {
+        #            isoCode
+        #            unitSystem
+        #            name
+        #            currency {
+        #
+        #            }
+        #        }
+    }
+    cart(id : $cartId){
+        ...CartFields
+    }
+}
