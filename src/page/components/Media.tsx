@@ -2,7 +2,7 @@ import {FC, useMemo} from "react";
 import {cn} from "@lib/cn.ts";
 
 export type MediaProps = {
-    media?: DB.Image | DB.Video;
+    media?: DB.Image | DB.Video | null;
     className?: string;
     sizes ?: string|null;
     imageClassName ?:string;

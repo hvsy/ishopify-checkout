@@ -35,11 +35,11 @@ export const LineItem: FC<LineItemProps> = (props) => {
     const discountedAmount = _get(discountAllocations, '0.discountedAmount')
     return <Line
         title={title}
-        media={{
+        media={image ? {
             url: image.src,
             width: image.width,
             height: image.height,
-        }}
+        } : null}
         discounted={<LineDiscount discounted={discountedAmount} code={code}/>}
         price={price.amount}
         quantity={quantity}
