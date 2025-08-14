@@ -3,7 +3,7 @@ import {Media} from "../../page/components/Media.tsx";
 import {useMoneyFormat} from "../../shopify/context/ShopifyContext.ts";
 
 export type LineProps = {
-    media ?: DB.Media;
+    media ?: DB.Media|null;
     free ?: boolean;
     quantity : number;
     title : string;
