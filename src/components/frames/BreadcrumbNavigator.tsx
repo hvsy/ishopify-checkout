@@ -5,7 +5,7 @@ import {
     BreadcrumbLink,
     BreadcrumbList,
     BreadcrumbSeparator
-} from "@components/ui/breadcrumb.tsx";
+} from "../ui/breadcrumb.tsx";
 import {useParams} from "react-router-dom";
 
 export type BreadcrumbNavigatorProps = {

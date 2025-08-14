@@ -32,6 +32,9 @@ export class CartStorage{
     getStorageKey(){
         return `cart:${this._token}`;
     }
+    get basename(){
+        return `/a/s/checkouts/${this.token}`;
+    }
 }
 
 

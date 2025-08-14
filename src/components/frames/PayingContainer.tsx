@@ -1,6 +1,6 @@
 import {FC, ReactNode, useEffect, useState} from "react";
 import {useEventListener} from "usehooks-ts";
-import {Loading} from "@components/fragments/Loading.tsx";
+import {Loading} from "../fragments/Loading.tsx";
 
 export type PayingContainerProps = {
     children ?: ReactNode;
