@@ -1,7 +1,7 @@
 import {FC, ReactNode} from "react";
 import {Mobile} from "@hooks/client.ts";
 import {DesktopCheckoutBoard} from "../../plugins/DesktopCheckoutBoard.tsx";
-import {Frame} from "../../page/fragments/Frame.tsx";
+import {Frame} from "./Frame.tsx";
 
 export type PageFrameProps = {
     renderRight?: () => ReactNode;

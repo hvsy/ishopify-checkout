@@ -15,6 +15,7 @@ import {getBasename} from "@lib/checkout.ts";
 import {ValidatorException} from "../../exceptions/ValidatorException.ts";
 import {useDeliveryGroups} from "../../shopify/context/DeliveryGroupContext.tsx";
 import {cn} from "@lib/cn.ts";
+import {useCartStorage} from "@hooks/useCartStorage.ts";
 
 export type Actions = 'information'|'shipping'|'payment';
 export type NextActions = { [index in Actions] : StandardNextAction};
@@ -39,7 +40,9 @@ export const StandardFooterNavFrame: FC<StandardFooterNavFrameProps> = (props) =
     const method = usePaymentMethod();
     const nav = NavConfig[action];
     // const basename = `/checkouts/${checkout?.token}`;
-    const basename = getBasename();
+    const cart = useCartStorage();
+    const basename = cart.basename;
+
     let back = '/';
 
     const ctx = FormContext.use();
