@@ -7,9 +7,8 @@ export class CartStorage{
         this._token = token;
         const cart = Cookies.get('cart') || '';
         if(cart?.indexOf(token) === 0){
-            const segments=  decodeURIComponent(cart).split('?');
-            const segment = segments[1];
-            this.key = segment?.replace('key=','');
+            const segments=  decodeURIComponent(cart).split('?key=');
+            this.key = segments[1];
         }
     }
     get token(){

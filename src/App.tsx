@@ -8,7 +8,7 @@ import {getOrder} from "@lib/payment.ts";
 import {lazy} from "react";
 import {
     ApolloPreloader,
-    GetCartGid,
+    GetCartGid, storefront,
 } from "@lib/checkout.ts";
 import {MethodValidators} from "@lib/MethodValidators.ts";
 import {gql,} from "@apollo/client";
@@ -76,6 +76,18 @@ let router = createBrowserRouter([
             const storage = new CartStorage(token!);
             if(action === 'recover' && !!key){
                 storage.key = key;
+            }else{
+                const direct = url.searchParams.get('direct');
+                if(!!direct){
+                    storage.key = direct;
+                    return redirect(`/a/s/checkouts/${token}`);
+                }
+            }
+            if(!storage.key){
+                storage.key = await api({
+                    method : "post",
+                    url : `./${token}/key`,
+                });
             }
             const discount_code = url.searchParams.get('discount_code');
             if(!!discount_code){
