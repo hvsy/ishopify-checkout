@@ -3,7 +3,6 @@ import {Left} from "./fragments/Left.tsx";
 import {PageFrame} from "@components/frames/PageFrame.tsx";
 import {Image} from "./fragments/Image.tsx";
 import {BreadcrumbNavigator} from "@components/frames/BreadcrumbNavigator.tsx";
-import {getBasename} from "@lib/checkout.ts";
 import {NavFrame} from "@components/frames/NavFrame.tsx";
 import {useShopify} from "../context/ShopifyContext.ts";
 import {useCallback} from "react";

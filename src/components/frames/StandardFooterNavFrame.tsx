@@ -11,7 +11,6 @@ import {Preloader} from "@lib/Cache.ts";
 import {FormContext, useCurrentForm} from "../../container/FormContext.ts";
 import {usePaymentMethod} from "../../container/PaymentContext.tsx";
 import {NavConfig} from "../../page/contants.ts";
-import {getBasename} from "@lib/checkout.ts";
 import {ValidatorException} from "../../exceptions/ValidatorException.ts";
 import {useDeliveryGroups} from "../../shopify/context/DeliveryGroupContext.tsx";
 import {cn} from "@lib/cn.ts";
