@@ -4,7 +4,6 @@ import {Input} from "../../../components/Input.tsx";
 import {debounce as _debounce,get as _get} from "lodash-es";
 import {EmailRegex} from "@lib/regex.ts";
 import {FormItem} from "@components/fragments/FormItem.tsx";
-import {getBasename, GetCartGid, storefront} from "@lib/checkout.ts";
 
 export type ContactInformationFormProps = {};
 

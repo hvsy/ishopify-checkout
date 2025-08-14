@@ -2,11 +2,17 @@ import {FC} from "react";
 import {CheckCircleIcon, CreditCardIcon, HelpCircle} from "lucide-react";
 import {isString as _isString, startCase as _startCase} from "lodash-es";
 import Big from "big.js";
-import {formatAddress} from "../../../page/order";
 import {useLoaderData, useParams} from "react-router-dom";
 import {useMoneyFormat} from "../../context/ShopifyContext.ts";
 import {get as _get} from "lodash-es";
 
+export function formatAddress(address : DB.Address) {
+    return [address.line1,address.line2,address.city,
+        address.state?.en_name,
+        address.region?.en_name,
+        address.zip,
+    ].filter(Boolean).join(',');
+}
 export type OrderMainProps = {};
 
 export const OrderMain: FC<OrderMainProps> = (props) => {
