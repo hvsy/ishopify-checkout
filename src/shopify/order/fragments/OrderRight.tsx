@@ -4,7 +4,6 @@ import {useMoneyFormat} from "../../context/ShopifyContext.ts";
 import {RightFrame} from "@components/frames/RightFrame.tsx";
 import {Line} from "@components/cart/Line.tsx";
 import {LineDiscount} from "../../checkouts/fragments/LineItem.tsx";
-import {Summary} from "../../checkouts/fragments/Summary.tsx";
 import {SummaryFrame} from "../../fragments/SummaryFrame.tsx";
 import Big from "big.js";
 

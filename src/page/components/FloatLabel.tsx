@@ -3,6 +3,8 @@ import {clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
 
 export type FloatLabelProps = {
+    autoComplete ?: string;
+    name ?: string;
     placeholder ?: string;
     prefix ?: ReactNode;
     suffix ?: ReactNode;
@@ -17,6 +19,7 @@ export type FloatLabelProps = {
     onBlur ?: React.MouseEventHandler,
     errors ?: string[],
     warnings?: string[],
+    autoFocus ?: boolean;
 };
 
 export const FloatLabel: FC<FloatLabelProps> = (props) => {
@@ -24,7 +27,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
         suffixClassName,
         element : Element = 'input',className,size='default',float = true,
         onChange,value,onBlur,
-        errors,warnings,
+        errors,warnings,...others
     } = props;
     const h : any = {
         'sm' : 'h-[40px]',
@@ -39,7 +42,8 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
                 {prefix}
             </div>}
             <div className={'relative flex-1 flex flex-row items-stretch overflow-hidden'}>
-                <Element placeholder={ph}
+                <Element {...others}
+                         placeholder={ph}
                          value={onChange ? (value || '') : value}
                          onBlur={onBlur}
                          onChange={onChange}

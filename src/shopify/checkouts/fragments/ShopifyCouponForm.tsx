@@ -6,7 +6,7 @@ import {uniq as _uniq, get as _get} from "lodash-es";
 
 export type ShopifyCouponFormProps = {};
 
-import {useSummary} from "../hooks/useSummary.ts";
+import {useSummary} from "../hooks/useSummary.tsx";
 import {
     QueryDiscountsFragment,
     QueryErrorsFragment

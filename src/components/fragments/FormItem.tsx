@@ -1,6 +1,7 @@
 import Form from "rc-field-form";
 import type { Meta } from 'rc-field-form/lib/interface';
 import useState from 'rc-util/lib/hooks/useState';
+import {isArray as _isArray} from "lodash-es";
 
 
 const FormField = Form.Field;
@@ -10,7 +11,7 @@ import {cloneElement, FC, } from "react";
 import {isFunction as _isFunction} from "lodash-es";
 
 export type FormItemProps = Omit<FieldProps,'children'> & {
-    children : React.ReactElement<{warnings ?: string[],errors ?: string[]}>;
+    children : React.ReactElement<{warnings ?: string[],errors ?: string[],name ?: string}>;
 };
 function genEmptyMeta(): Meta {
     return {
@@ -23,13 +24,15 @@ function genEmptyMeta(): Meta {
     };
 }
 export const FormItem: FC<FormItemProps> = (props) => {
-    const {children} = props;
+    const {children,name} = props;
     const [meta,setMeta] = useState(()=>genEmptyMeta());
     if(!children) return null;
-    return <FormField {...props} onMetaChange={(nextMeta: Meta & { destroy?: boolean }) => {
+    let full= _isArray(name) ? name.join('][') : name;
+    return <FormField name={name} {...props} onMetaChange={(nextMeta: Meta & { destroy?: boolean }) => {
         setMeta(nextMeta.destroy ? genEmptyMeta() : nextMeta, true);
     }}>
         {_isFunction(children) ? children :cloneElement(children,{
+            name : `[${full}]`,
             warnings: meta.warnings,
             errors : meta.errors,
         })}

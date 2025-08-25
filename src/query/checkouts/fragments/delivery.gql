@@ -4,6 +4,7 @@ fragment Delivery on Cart{
             id
             selected
             oneTimeUse
+            __typename
             address {
                 ... on CartDeliveryAddress{
                     firstName

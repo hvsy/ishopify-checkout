@@ -8,6 +8,12 @@ export function getUrlFrom(token : string){
     const cart_token = token.split('?')[0] ?? '';
     return `/a/s/api/checkouts/${cart_token}`;
 }
+export function PromiseLocation(location : string){
+    return new Promise((resolve, reject) => {
+        setTimeout(reject,15000);
+        window.location.href = location;
+    });
+}
 export async function shopify_payment(options : {
                                           summary : any,
                                           // url : string,
@@ -50,8 +56,9 @@ export async function shopify_payment(options : {
             url: target,
         });
         const href= `/a/s/api/transactions/${res}/redirect`;
-        window.location.href = href;
-        return false;
+        return PromiseLocation(href);
+        // window.location.href = href;
+        // return false;
     }else{
         const frame = document.getElementById(method.channel) as HTMLIFrameElement;
         const window = frame?.contentWindow

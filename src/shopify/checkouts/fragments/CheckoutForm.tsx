@@ -15,7 +15,7 @@ const ChildrenComponents : any = {
 import {NavBar} from "@components/frames/StandardNavigationBarFrame.tsx";
 import {useMoneyFormat} from "../../context/ShopifyContext.ts";
 import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
-import {useSummary} from "../hooks/useSummary.ts";
+import {useSummary} from "../hooks/useSummary.tsx";
 import {CheckoutFooter} from "./CheckoutFooter.tsx";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
 

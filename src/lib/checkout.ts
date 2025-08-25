@@ -134,9 +134,11 @@ export function transform_address(data : any,prefix : string = "data.cart"){
     const delivery = _get(data, `${prefix}.delivery.addresses.0`, {})
     const address = delivery?.address || {};
     const areas = Array.from(address.formatted || []).reverse();
+    const id = delivery.id === 'gid://shopify/CartSelectableAddress/0' ? null : delivery.id;
     return {
-        shipping_address_id: delivery.id === 'gid://shopify/CartSelectableAddress/0' ? null : delivery.id,
+        shipping_address_id: id,
         shipping_address: {
+            id,
             first_name: address.firstName,
             last_name: address.lastName,
             city: address.city,

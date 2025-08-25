@@ -1,0 +1,92 @@
+mutation Checkout($cartId : ID!,
+    $delivery : CartDeliveryAddressInput!,
+    $addressId : ID!,
+    $deliveryGroupId : ID!,
+    $deliveryOptionHandle : String!,
+    $buyerIdentity : CartBuyerIdentityInput!,
+    $createAddress : Boolean = false,
+    $updateAddress : Boolean = false,
+    $updateBuyer : Boolean = false,
+    $updateSelectedDelivery : Boolean = false,
+    $withCarrierRates : Boolean = false,
+){
+    cartBuyerIdentityUpdate(cartId: $cartId,
+        buyerIdentity:$buyerIdentity) @include(if: $updateBuyer){
+        userErrors {
+            code
+            field
+            message
+        }
+        warnings {
+            code
+            message
+            target
+        }
+    }
+    cartDeliveryAddressesUpdate (cartId: $cartId,addresses: [{
+        id: $addressId
+        selected: true
+        address: {
+            deliveryAddress: $delivery
+        }
+        validationStrategy: COUNTRY_CODE_ONLY
+    }]) @include(if: $updateAddress){
+        cart {
+            ...CartFields @skip(if: $updateSelectedDelivery)
+            ...DeliveryGroups @defer @skip(if: $updateSelectedDelivery)
+        }
+        userErrors {
+            code
+            field
+            message
+        }
+        warnings {
+            code
+            message
+            target
+        }
+    }
+
+    cartDeliveryAddressesAdd(cartId: $cartId,addresses: [{
+        selected: true
+        address: {
+            deliveryAddress: $delivery
+        }
+        validationStrategy: COUNTRY_CODE_ONLY
+    }]) @include(if: $createAddress){
+        cart {
+            ...CartFields   @skip(if: $updateSelectedDelivery)
+            ...DeliveryGroups @defer @skip(if: $updateSelectedDelivery)
+        }
+        userErrors {
+            code
+            field
+            message
+        }
+        warnings {
+            code
+            message
+            target
+        }
+    }
+
+    cartSelectedDeliveryOptionsUpdate(cartId: $cartId,selectedDeliveryOptions: {
+        deliveryGroupId: $deliveryGroupId,
+        deliveryOptionHandle: $deliveryOptionHandle,
+    })@include(if: $updateSelectedDelivery)  {
+        cart {
+            ...CartFields
+            ...DeliveryGroups @defer
+        }
+        userErrors {
+            code
+            field
+            message
+        }
+        warnings {
+            code
+            message
+            target
+        }
+    }
+}

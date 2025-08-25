@@ -66,15 +66,7 @@ export const SummaryFrame: FC<SummaryFrameProps> = (props) => {
             <div>
                 Total
             </div>
-            {!!total_saved?.amount && <div className={'text-sm uppercase flex flex-row space-x-2 items-center'}>
-                <TagsIcon className={'size-4 scale-x-[-1]'}/>
-                <span>
-                    Total Savings
-                </span>
-                <span>
-                    {format(total_saved)}
-                </span>
-            </div>}
+
         </div>
         <div className={'flex flex-row justify-end items-baseline space-x-2 mt-3'}>
             <div className={'text-sm text-gray-400'}>
@@ -84,5 +76,15 @@ export const SummaryFrame: FC<SummaryFrameProps> = (props) => {
                 {format(total)}
             </div>
         </div>
+        {!!total_saved?.amount &&
+        <div className={'text-sm font-bold uppercase flex flex-row space-x-2 items-center col-span-2'}>
+            <TagsIcon className={'size-4 scale-x-[-1]'}/>
+            <span>
+                    Total Savings
+                </span>
+            <span>
+                    {format(total_saved)}
+                </span>
+        </div>}
     </div>;
 };

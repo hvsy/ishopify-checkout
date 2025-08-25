@@ -3,18 +3,14 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {ChevronLeft} from "lucide-react";
 import {MobileCheckoutBoard} from "../../plugins/DesktopCheckoutBoard.tsx";
 import {AsyncButton} from "../fragments/AsyncButton.tsx";
-import {update} from "@lib/payment.ts";
 import {PaymentError} from "../../exceptions/PaymentError.ts";
 import {get as _get, startsWith as _startsWith} from "lodash-es";
-import {mutate} from "swr";
-import {Preloader} from "@lib/Cache.ts";
 import {FormContext, useCurrentForm} from "../../container/FormContext.ts";
 import {usePaymentMethod} from "../../container/PaymentContext.tsx";
 import {NavConfig} from "../../page/contants.ts";
 import {ValidatorException} from "../../exceptions/ValidatorException.ts";
-import {useDeliveryGroups} from "../../shopify/context/DeliveryGroupContext.tsx";
-import {cn} from "@lib/cn.ts";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {useSummary} from "../../shopify/checkouts/hooks/useSummary.tsx";
 
 export type Actions = 'information'|'shipping'|'payment';
 export type NextActions = { [index in Actions] : StandardNextAction};
@@ -54,7 +50,7 @@ export const StandardFooterNavFrame: FC<StandardFooterNavFrameProps> = (props) =
         }
     }
     const show_button = !method?.standalone?.payment;
-    const {loading,changing} = useDeliveryGroups();
+    const {ing} = useSummary();
     return <div className={'flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center'}>
         <Link className={'text-sm space-x-2 flex flex-row mt-8 sm:mt-0 justify-center items-center cursor-pointer'}
               to={back}
@@ -64,9 +60,7 @@ export const StandardFooterNavFrame: FC<StandardFooterNavFrameProps> = (props) =
             <div>Return to {nav?.back?.label}</div>
         </Link>
         {action === 'payment' && <MobileCheckoutBoard className={'mt-5'}/>}
-        {show_button && <AsyncButton className={cn({
-            "animate-pulse" : loading || changing,
-        },`py-3`)} onClick={async () => {
+        {show_button && <AsyncButton pulsing={ing} className={`py-3`} onClick={async () => {
             try {
                 const values = await form.validateFields();
                 import.meta.env.DEV && console.log('validate:',values);
