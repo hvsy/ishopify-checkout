@@ -3,9 +3,10 @@ mutation ContactAddressUpdate($cartId : ID!,
     $id : ID!,
     $buyerIdentity : CartBuyerIdentityInput!,
     $create : Boolean = false,
+    $updateBuyer : Boolean = true,
 ){
     cartBuyerIdentityUpdate(cartId: $cartId,
-        buyerIdentity:$buyerIdentity){
+        buyerIdentity:$buyerIdentity) @include(if: $updateBuyer){
         userErrors {
             code
             field

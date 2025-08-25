@@ -5,14 +5,13 @@ import {useMoneyFormat} from "../../context/ShopifyContext.ts";
 export type SummaryProps = {};
 
 import Big from "big.js";
-import {useSummary} from "../hooks/useSummary.ts";
-import {useDeliveryGroups} from "../../context/DeliveryGroupContext.tsx";
+import {useSummary} from "../hooks/useSummary.tsx";
 import {LoadingContainer} from "@components/fragments/LoadingContainer.tsx";
 import {SummaryFrame} from "../../fragments/SummaryFrame.tsx";
 
 export const Summary: FC<SummaryProps> = (props) => {
     const {} = props;
-    const {checkout: getCheckout, json} = useSummary();
+    const {checkout: getCheckout, json,groups,loading} = useSummary();
     const checkout = getCheckout();
     const format = useMoneyFormat();
     const allocations = _get(json, 'cart.discountAllocations', []);
@@ -24,7 +23,7 @@ export const Summary: FC<SummaryProps> = (props) => {
         return pv + parseFloat(cv.discountedAmount.amount);
     }, 0));
     // const code = _get(json, 'cart.discountCodes', []).filter((d: any) => d.applicable)?.[0]?.code;
-    const {groups, changing} = useDeliveryGroups();
+    // const {groups, changing} = useDeliveryGroups();
     const shipping_cost = _get(groups, '0.selectedDeliveryOption.estimatedCost')
 
     const codes = _get(json, 'cart.discountCodes', []).filter((discount: any) => {
@@ -52,7 +51,7 @@ export const Summary: FC<SummaryProps> = (props) => {
                              currencyCode: total.currencyCode,
                          } : undefined}
                          renderShipping={() => {
-                             return <LoadingContainer loading={changing}
+                             return <LoadingContainer loading={loading.shipping_methods || loading.updatingSelectedDelivery}
                                                       loadingClassName={'w-20 h-5 rounded-xl'}
                              >
                                  {freeShipping ?

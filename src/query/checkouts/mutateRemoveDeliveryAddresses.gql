@@ -1,0 +1,16 @@
+mutation RemoveDeliveryAddresses($cartId : ID!,$ids : [ID!]!){
+    cartDeliveryAddressesRemove(cartId: $cartId,
+        addressIds: $ids,
+    ){
+        userErrors {
+            code
+            field
+            message
+        }
+        warnings {
+            message
+            code
+            target
+        }
+    }
+}

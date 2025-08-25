@@ -8,7 +8,7 @@ export function createSimpleContainer<T>(){
         Context : context,
         Provider : context.Provider,
         use(){
-            return use(context);
+            return use(context) as T;
         },
         useContainer(){
             return useContext(context);

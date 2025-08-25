@@ -4,26 +4,35 @@ import {Loading} from "./Loading";
 import {cn} from "@lib/cn";
 import {isString as _isString} from "lodash-es";
 import {Button} from "../ui/button.tsx";
+import Big from "big.js";
 
 export type AsyncButtonProps =  {
     onClick ?: ()=>(Promise<any>|void);
     children ?: ReactNode,
     className ?: string;
     loadingClassName ?: string;
+    pulsing ?: boolean;
 } ;
 
 export const AsyncButton : FC<AsyncButtonProps> = (props)=>{
-    const {children,className = '',loadingClassName = '',onClick,...others} = props;
-    const [{loading},click]  = useAsyncClick(onClick);
+    const {children,pulsing = false,className = '',loadingClassName = '',onClick,...others} = props;
+    const [{loading : actionLoading},click]  = useAsyncClick(onClick);
+    const finalLoading = pulsing || actionLoading;
     const final = cn("relative cursor-pointer select-none",{
         "max-w-104" : !(className?.includes('max-w-')),
         "lab" : true,
-        "*:invisible [&>*:last-child]:visible":loading,
+        "*:invisible [&>*:last-child]:visible":finalLoading,
     },className);
-    return <Button className={final} {...others} onClick={click}>
+    return <Button className={final} {...others} onClick={async (...args) => {
+        if(pulsing) return;
+        return click?.(...args);
+    }}>
         {_isString(children) ? <span>{children}</span> : children}
-        {loading && <div className={'flex visible flex-col justify-center items-center absolute inset-0'}>
+        {actionLoading && <div className={'flex visible flex-col justify-center items-center absolute inset-0'}>
             <Loading className={loadingClassName}/>
+        </div>}
+        {pulsing && <div className={'animate-pulse absolute inset-0 flex visible items-stretch'}>
+            <div className={"flex-1 bg-white opacity-75"} />
         </div>}
     </Button>;
 };

@@ -10,18 +10,40 @@ export type RegionSelectorProps = {
     onChange?: (value: any) => void;
     placeholder?: string;
     className?: string;
-    name: string;
+    field: string;
+    autocomplete ?: string;
 };
 
-export const RegionSelector: FC<RegionSelectorProps> = (props) => {
-    const {placeholder, name, className, value, onChange} = props;
+export const NewRegionSelector : FC<any> = (props) => {
     const {data: zones} = useSWR('/a/s/api/zones');
-    const id = name + "_code";
+    return <Selector {...props}>
+        {(zones || []).map((zone: any) => {
+            return <option value={zone.code} key={zone.code}>
+                {zone.flag} {zone.en_name}
+            </option>
+        })}
+    </Selector>;
+};
+export const NewStateSelector : FC<any> = (props)=>{
+    const {zones,...others} = props;
+    if ((zones || []).length === 0) return null;
+    return <Selector {...others}>
+        {(zones || []).map((zone: any) => {
+            return <option key={zone.id} value={zone.code}>{zone.en_name}</option>
+        })}
+    </Selector>;
+}
+
+export const RegionSelector: FC<RegionSelectorProps> = (props) => {
+    const {placeholder, autocomplete,field, className, value, onChange} = props;
+    const {data: zones} = useSWR('/a/s/api/zones');
+    const id = field + "_code";
     return <Selector placeholder={placeholder} className={className}
+                     autoComplete={autocomplete}
                      value={value?.[id]} onChange={(zone_code) => {
         const after = {
             ...value,
-            [name]: _find(zones, (z) => {
+            [field]: _find(zones, (z) => {
                 return z.code === zone_code;
             }),
             [id]: zone_code,
@@ -38,15 +60,16 @@ export const RegionSelector: FC<RegionSelectorProps> = (props) => {
 };
 
 export const StateSelector: FC<RegionSelectorProps & { zones?: any[] }> = (props) => {
-    const {placeholder, name, className, value, onChange, zones} = props;
+    const {placeholder, field, className, value, onChange, zones,autocomplete} = props;
     if ((zones || []).length === 0) return null;
-    const id = name + '_code';
+    const id = field + '_code';
     return <Selector placeholder={placeholder}
+                     autoComplete={autocomplete}
                      className={className}
                      value={value?.[id]} onChange={(zone_code) => {
         const after = {
             ...value,
-            [name]: _find(zones, (z) => {
+            [field]: _find(zones, (z) => {
                 return z.code === zone_code;
             }),
             [id]: zone_code,

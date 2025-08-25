@@ -6,7 +6,7 @@ import {Methods} from "../../page/fragments/Checkout/Steps/PaymentMethodStep/Met
 import {PaymentError} from "../../page/fragments/Checkout/Steps/PaymentMethodStep/PaymentError.tsx";
 import {LimitAlert} from "../../container/LimitAlert.tsx";
 import {NoActivePaymentMethod} from "../../page/fragments/Checkout/Steps/PaymentMethodStep/NoActivePaymentMethod.tsx";
-import {useLoaderData, useParams} from "react-router-dom";
+import {useLoaderData, useParams, useRouteLoaderData} from "react-router-dom";
 import {useReadQuery} from "@apollo/client";
 import {get as _get} from "lodash-es";
 import {StepFrame} from "./StepFrame.tsx";
@@ -16,7 +16,8 @@ export type PaymentMethodFrameProps = {};
 export const PaymentMethodFrame: FC<PaymentMethodFrameProps> = (props) => {
     const {} = props;
     const {token} = useParams();
-    const {ref} = useLoaderData() as any;
+    // const {ref} = useLoaderData() as any;
+    const {ref} = useRouteLoaderData('checkout') as any;
     const data = useReadQuery(ref) as any;
     const total = _get(data,'data.cart.cost.totalAmount.amount',0);
     // const {limit,alert,total} =usePaymentLimit();

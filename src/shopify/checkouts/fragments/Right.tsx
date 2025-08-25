@@ -10,7 +10,7 @@ import {ShopifyCouponForm} from "./ShopifyCouponForm.tsx";
 import {get as _get} from "lodash-es";
 import {Summary} from "./Summary.tsx";
 import {useMoneyFormat} from "../../context/ShopifyContext.ts";
-import {useSummary} from "../hooks/useSummary.ts";
+import {useSummary} from "../hooks/useSummary.tsx";
 import {gql, useApolloClient} from "@apollo/client";
 import {
     QueryDeliveryFragment, QueryImageFragment,

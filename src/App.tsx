@@ -1,6 +1,6 @@
-import {createBrowserRouter, redirect, RouterProvider,} from "react-router-dom";
+import {createBrowserRouter, Params, redirect, RouterProvider,} from "react-router-dom";
 import {api} from "@lib/api.ts";
-import Checkout from "./shopify/checkouts/index.tsx";
+import Checkout from "./shopify/checkouts";
 import {preload} from "swr";
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
@@ -54,10 +54,103 @@ import {QuerySummary} from "@query/checkouts/queries.ts";
 import {
     QueryBuyerIdentityFragment,
     QueryCartFieldsFragment,
-    QueryDeliveryFragment,
+    QueryDeliveryFragment, QueryDeliveryGroupsFragment,
     QueryImageFragment
 } from "@query/checkouts/fragments/fragments.ts";
 import {CartStorage} from "./shopify/context/CartStorage.ts";
+import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
+export const SummaryQuery = gql([
+    QuerySummary,
+    QueryImageFragment,
+    QueryCartFieldsFragment,
+    QueryDeliveryFragment,
+    QueryBuyerIdentityFragment,
+    QueryDeliveryGroupsFragment,
+].join("\n"));
+
+
+async function getCheckout(request : Request,params : Params<string>,context : any){
+    const url = new URL(request.url)
+    const key = url.searchParams.get('key');
+    let {token, action = 'information'} = params;
+    console.log('params:',params);
+    const storage = new CartStorage(token!);
+    if(action === 'recover' && !!key){
+        storage.key = key;
+    }else{
+        const direct = url.searchParams.get('direct');
+        if(!!direct){
+            storage.key = direct;
+            return redirect(`/a/s/checkouts/${token}`);
+        }
+    }
+    if(!storage.key){
+        storage.key = await api({
+            method : "post",
+            url : `/a/s/checkouts/${token}/key`,
+        });
+    }
+    const discount_code = url.searchParams.get('discount_code');
+    if(!!discount_code){
+        Cookies.set('discount_code',discount_code,{
+            expires : dayjs().add(2,'weeks').toDate(),
+        });
+    }
+    let ref = null;
+    const cart = await new Promise((resolve,reject) => {
+        ref = ApolloPreloader(SummaryQuery,{
+            variables : {
+                cartId : storage.gid,
+                withCarrierRates : true,
+            }
+        });
+        ref.toPromise().then((result) => {
+            const unwrap = unwrapQueryRef(result);
+            // console.log('then:',result,unwrap?.promise);
+            resolve(unwrap?.promise);
+            return result;
+        }, (error) => {
+            console.error('error:',error);
+            reject(error);
+        })
+    });
+    let checkout : any = null;
+    if(cart){
+        checkout = getCheckoutFromSummary(cart);
+        console.log('preload cart:',cart,checkout);
+    }
+
+    if(!checkout){
+        return go2home();
+    }
+    if(action === 'recover' && !!key){
+        Cookies.set('recovery_key', key,{
+            expires : dayjs().add(1,'day').toDate(),
+        });
+        if(checkout?.shop?.preference?.checkout?.page_style !== 'single'){
+            const steps = Object.keys(MethodValidators);
+            let next = "information"
+            for(let i=0; i < steps.length; i++){
+                const step = steps[i] as any;
+                if(!!MethodValidators[step]?.validator(checkout)){
+                    next = step;
+                }
+            }
+            return redirect(`/a/s/checkouts/${token}/${next}`);
+        }
+        return {checkout,ref,storage};
+    }else{
+        //TODO 三步模式需要开启
+        // const method = MethodValidators[action];
+        // if(method){
+        //     if(!method.validator(checkout)){
+        //         return redirect(`/a/s/checkouts/${token}/${method.prev}`);
+        //     }
+        // }
+        return {checkout,ref,storage};
+    }
+}
+
 let router = createBrowserRouter([
     {
         path: `${prefix}/orders/:token/:action?`,
@@ -67,102 +160,41 @@ let router = createBrowserRouter([
             return await getOrder(token!,action === 'thank-you');
         },
         Component: OrderPage,
-    }, {
-        path: `${prefix}/checkouts/:token/:action?`,
+    },{
+        path : prefix + '/',
+        id : 'checkout',
+        Component : ShopifyCheckoutFrame,
         async loader({request,params,context}) {
-            const url = new URL(request.url)
-            const key = url.searchParams.get('key');
-            let {token, action = 'information'} = params;
-            const storage = new CartStorage(token!);
-            if(action === 'recover' && !!key){
-                storage.key = key;
-            }else{
-                const direct = url.searchParams.get('direct');
-                if(!!direct){
-                    storage.key = direct;
-                    return redirect(`/a/s/checkouts/${token}`);
-                }
-            }
-            if(!storage.key){
-                storage.key = await api({
-                    method : "post",
-                    url : `./${token}/key`,
-                });
-            }
-            const discount_code = url.searchParams.get('discount_code');
-            if(!!discount_code){
-                Cookies.set('discount_code',discount_code,{
-                    expires : dayjs().add(2,'weeks').toDate(),
-                });
-            }
-            let ref = null;
-            const cart = await new Promise((resolve,reject) => {
-                ref = ApolloPreloader(gql([
-                    QuerySummary,
-                    QueryImageFragment,
-                    QueryCartFieldsFragment,
-                    QueryDeliveryFragment,
-                    QueryBuyerIdentityFragment,
-                ].join("\n")),{
-                    variables : {
-                        cartId : storage.gid,
-                    }
-                });
-                ref.toPromise().then((result) => {
-                    const unwrap = unwrapQueryRef(result);
-                    // console.log('then:',result,unwrap?.promise);
-                    resolve(unwrap?.promise);
-                    return result;
-                }, (error) => {
-                    console.error('error:',error);
-                    reject(error);
-                })
-            });
-            let checkout : any = null;
-            if(cart){
-                checkout = getCheckoutFromSummary(cart);
-                console.log('preload cart:',cart,checkout);
-            }
-
-            if(!checkout){
-                return go2home();
-            }
-            if(action === 'recover' && !!key){
-                Cookies.set('recovery_key', key,{
-                    expires : dayjs().add(1,'day').toDate(),
-                });
-                if(checkout?.shop?.preference?.checkout?.page_style !== 'single'){
-                    const steps = Object.keys(MethodValidators);
-                    let next = "information"
-                    for(let i=0; i < steps.length; i++){
-                        const step = steps[i] as any;
-                        if(!!MethodValidators[step]?.validator(checkout)){
-                            next = step;
-                        }
-                    }
-                    return redirect(`/a/s/checkouts/${token}/${next}`);
-                }
-                return {checkout,ref,storage};
-            }else{
-                const method = MethodValidators[action];
-                if(method){
-                    if(!method.validator(checkout)){
-                        return redirect(`/a/s/checkouts/${token}/${method.prev}`);
-                    }
-                }
-                return {checkout,ref,storage};
-            }
-
-
-            // const api_url = `/checkouts/${token}`;
-            // // await prefetch(`/zones`);
-            // // const checkout = await prefetch<DB.Checkout>(api_url);
-            // const checkout = await prefetch_checkout<DB.Checkout>(api_url);
-            // console.log('checkout:',checkout);
-
+            return await getCheckout(request,params,context)
         },
-        Component: Checkout,
-    }
+        children : [
+            {
+                path : `approve/:token`,
+                'id' : 'approve',
+                Component : Checkout,
+            },{
+                path : 'checkouts/:token/:action?',
+                // async loader({request,params,context}) {
+                //     return await getCheckout(request,params,context)
+                // },
+                Component: Checkout,
+            }
+        ]
+    },
+    // {
+    //     path : `${prefix}/approve/:token`,
+    //     Component : Checkout,
+    //     async loader({request,params,context}) {
+    //         return await getCheckout(request,params,context)
+    //     },
+    // },
+    // {
+    //     path: `${prefix}/checkouts/:token/:action?`,
+    //     async loader({request,params,context}) {
+    //         return await getCheckout(request,params,context)
+    //     },
+    //     Component: Checkout,
+    // }
 ], {
 });
 

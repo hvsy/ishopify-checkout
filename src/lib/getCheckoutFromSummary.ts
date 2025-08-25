@@ -6,15 +6,18 @@ export function getCheckoutFromSummary(summary : any,path : string = 'data.cart'
     .filter((discount : any) => {
         return discount.targetType === 'SHIPPING_LINE'
     });
+    const groupId = _get(summary,`${path}.deliveryGroups.edges[0].node.id`,null) as any;
     const selected  = _get(summary,`${path}.deliveryGroups.edges[0].node.selectedDeliveryOption`,{}) as any;
     const formatted = _get(summary,`${path}.delivery.addresses.0.address.formatted`,[]);
-    const code = _get(summary,`${path}.delivery.addresses.0.address.countryCode`,[]);
+    const code = _get(summary,`${path}.delivery.addresses.0.address.countryCode`,null);
+    const  countryCode = _get(summary,`${path}.buyerIdentity.countryCode`,null);
     return {
         email : _get(summary,`${path}.buyerIdentity.email`),
         ship_to : formatted.join(', '),
         shipping_line_id : selected.handle,
+        shipping_group_id : groupId,
         shipping_line : selected,
-        countryCode : code,
+        countryCode : code || countryCode,
         ...transform_address(summary,path),
         shipping_discount : discounts?.[0] || null,
     }

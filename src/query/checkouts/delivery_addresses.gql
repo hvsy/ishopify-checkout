@@ -1,0 +1,9 @@
+query DeliveryAddresses($cartId : ID!){
+    cart(id: $cartId){
+        delivery {
+            addresses{
+                id
+            }
+        }
+    }
+}

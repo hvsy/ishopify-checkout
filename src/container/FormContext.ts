@@ -4,6 +4,7 @@ import {useEffect} from "react";
 
 export const FormContext = createSimpleContainer<{
     form: FormInstance,
+    onValuesChanged : (changed : any)=>void;
     setErrors: (errors: any) => void;
     error: (name: string | ((string | number)[])) => {
         validateStatus?: string;
@@ -11,8 +12,9 @@ export const FormContext = createSimpleContainer<{
     }
 }>();
 
+
 export function useCurrentForm() {
-    return FormContext.use()!.form;
+    return FormContext.use()?.form!;
 }
 
 export function useFormError() {

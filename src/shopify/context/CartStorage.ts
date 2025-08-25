@@ -35,6 +35,9 @@ export class CartStorage{
     get basename(){
         return `/a/s/checkouts/${this.token}`;
     }
+    get api(){
+        return `/a/s/api/checkouts/${this.token}`;
+    }
 }
 
 

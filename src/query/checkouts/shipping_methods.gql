@@ -1,4 +1,4 @@
-query ShippingMethods($cartId : ID!,$countryCode : String,$withCarrierRates : Boolean){
+query ShippingMethods($cartId : ID!,$withCarrierRates : Boolean){
     cart(id:  $cartId){
         discountAllocations {
             ... on CartCodeDiscountAllocation{
@@ -30,6 +30,6 @@ query ShippingMethods($cartId : ID!,$countryCode : String,$withCarrierRates : Bo
                 }
             }
         }
-        ... DeliveryGroups @defer(label : $countryCode)
+        ... DeliveryGroups @defer
     }
 }

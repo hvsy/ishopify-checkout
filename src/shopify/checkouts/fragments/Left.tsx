@@ -2,6 +2,7 @@ import {FC, ReactNode} from "react";
 import {Default} from "@hooks/client.ts";
 import {useShopify} from "../../context/ShopifyContext.ts";
 import {CheckoutForm} from "./CheckoutForm.tsx";
+import {SingleCheckoutForm} from "./SingleCheckoutForm.tsx";
 
 export type LeftProps = {
     className ?: string;
@@ -17,7 +18,8 @@ export const Left: FC<LeftProps> = (props) => {
             {renderNav("hidden sm:flex")}
         </Default>}
         <div className={'flex flex-col space-y-10 flex-1'}>
-            <CheckoutForm />
+            <SingleCheckoutForm />
+            {/*<CheckoutForm />*/}
         </div>
         <div className={'pb-10 text-default-500 text-sm'}>
             All rights reserved {title}

@@ -12,7 +12,8 @@ import {NoActivePaymentMethod} from "./NoActivePaymentMethod.tsx";
 export const Methods: FC<{ token: string }> = (props) => {
     const {token} = props;
     const [search, setSearchParams] = useSearchParams();
-    const {data: methods,isLoading} = useSWR<DB.PaymentMethod[]>(('/a/s/api/payments'));
+    // const {data: methods,isLoading} = useSWR<DB.PaymentMethod[]>(('/a/s/api/payments'));
+    const {methods,loading : isLoading} = usePaymentContext() || {};
     const form = useCurrentForm();
     const method_id = Form.useWatch(['payment_method_id'], {
         form,
@@ -49,7 +50,7 @@ export const Methods: FC<{ token: string }> = (props) => {
                 return <NoActivePaymentMethod />
             }}
             renderItem={(method, checked, radio) => {
-                console.log('render method item',method,checked,radio);
+                // console.log('render method item',method,checked,radio);
                 return <Payment
                     token={token}
                     method={method} checked={checked}>
