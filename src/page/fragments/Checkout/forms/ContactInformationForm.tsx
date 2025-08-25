@@ -6,8 +6,10 @@ import {FormItem} from "@components/fragments/FormItem.tsx";
 
 export type ContactInformationFormProps = {};
 import {StepBlock} from "@components/frames/StepBlock.tsx";
+import {useFormError} from "../../../../container/FormContext.ts";
 
 export const ContactInformationForm: FC<ContactInformationFormProps> = (props) => {
+    const error = useFormError();
     return <StepBlock label={"Contact Information"} name={'contact-information'}>
         <FormItem name={['email']} rules={[{
             async validator(rule, value) {
@@ -15,7 +17,7 @@ export const ContactInformationForm: FC<ContactInformationFormProps> = (props) =
                     throw new Error("Please enter a valid email");
                 }
             }
-        }]}>
+        }]} {...error('email')}>
             <Input placeholder={'Email (For order confirmation)'}
                    autoFocus
                    autoComplete={'shipping email'}

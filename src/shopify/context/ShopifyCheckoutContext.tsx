@@ -117,6 +117,14 @@ function formatInput(input : CheckoutInput){
 function updateContactInformation(input : CheckoutInput){
 
 }
+
+function getAllArray(data : any , path : string,keys : string[]){
+    const all : any[] = []    ;
+    keys.forEach((key) => {
+        all.push(... (_get(data,key + '.' + path,[])))
+    });
+    return all;
+}
 export const ShopifyCheckoutProvider :FC<{
     children ?: ReactNode;
     form :FormInstance;
@@ -156,18 +164,36 @@ export const ShopifyCheckoutProvider :FC<{
             })
             // data = Object.assign(data,incremental?.data || {});
         })
-        return getBy(data,
+        const json = getBy(data,
             'cartSelectedDeliveryOptionsUpdate',
             'cartDeliveryAddressesAdd',
             'cartDeliveryAddressesUpdate',
         );
+        return {
+            userErrors : getAllArray(data,'userErrors',[
+                'cartBuyerIdentityUpdate',
+                'cartSelectedDeliveryOptionsUpdate',
+                'cartDeliveryAddressesAdd',
+                'cartDeliveryAddressesUpdate',
+            ]),
+            warnings : getAllArray(data,'warnings',[
+                'cartBuyerIdentityUpdate',
+                'cartSelectedDeliveryOptionsUpdate',
+                'cartDeliveryAddressesAdd',
+                'cartDeliveryAddressesUpdate',
+            ]),
+            cart : {
+                ...(json?.cart || {}),
+                ... (data?.cartBuyerIdentityUpdate?.cart || {}),
+            }
+        }
     }, [fn]);
     return <ShopifyCheckoutContext value={{
         update : async(input : CheckoutInput)=>{
             let vars = formatInput(input);
-            let result = await update(vars);
+            let result= await update(vars);
             let cart = result?.cart;
-            const warningCode =result.warnings?.[0]?.code;
+            const warningCode =result ?.warnings?.[0]?.code;
             if(warningCode === 'DUPLICATE_DELIVERY_ADDRESS'){
                     await removeOtherAddresses(client,storage.gid,vars.addressId)
                     result = await update(vars);
@@ -201,7 +227,7 @@ export const ShopifyCheckoutProvider :FC<{
                     resolve(true);
                 },0);
             })
-            return cart;
+            return result;
         }
     }}>
         {children}

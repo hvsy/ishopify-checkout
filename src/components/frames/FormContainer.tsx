@@ -1,13 +1,14 @@
 import {FC, ReactNode, useCallback, useRef, useState} from "react";
 import Form, {FormInstance} from "rc-field-form";
 import {FormContext,} from "../../container/FormContext.ts";
-import {isArray as _isArray, get as _get, has as _has, add,startsWith} from "lodash-es";
+import {isArray as _isArray, get as _get, has as _has, add,startsWith,isEmpty} from "lodash-es";
 import {useDebounceCallback} from "usehooks-ts";
 import {CheckoutInput, map2, useMutationCheckout} from "../../shopify/context/ShopifyCheckoutContext.tsx";
 import {useDeliveryGroupMutation, useSummary} from "../../shopify/checkouts/hooks/useSummary.tsx";
 import {EmailRegex} from "@lib/regex.ts";
 import {api} from "@lib/api.ts";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
+import {FeatherIcon} from "lucide-react";
 
 
 export type FormContainerProps = {
@@ -43,6 +44,9 @@ export function scrollToError(e : any){
 
 export async function submit(form : FormInstance){
     try {
+        if(form.isFieldsValidating(['email'])){
+            return null;
+        }
         const values =  await form.validateFields();
         const address = buildAddress(values?.shipping_address || {});
         const input : CheckoutInput =  map2(values,{
@@ -112,12 +116,15 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         const shippingMethodChanged = _has(changedValues,'shipping_line_id');
 
         const emailChanged = _has(changedValues,'email');
-        if(emailChanged){
-            if(EmailRegex.test(changedValues['email'])){
-                await checkoutSync()
-            }
+        if(emailChanged && !!changedValues.email){
+            form.setFields([{
+                name : ['email'],
+                validated :false,
+                validating : true,
+            }])
         }
-        if(!countryChanged && !shippingMethodChanged){
+
+        if(!countryChanged && !shippingMethodChanged && !emailChanged){
             return;
         }
         if(countryChanged){
@@ -134,11 +141,33 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             input.deliveryHandle = undefined;
         }
         input.shipping_address = address;
-        console.log('form values:',changedValues,values,input);
         mutation(input).then((response) => {
-            // console.log('mutation checkout:',response);
+            (_get(response,'userErrors',[]) || []).forEach((error : any) => {
+                let {field,code,message} = error || {};
+                if(!isEmpty(field) && _isArray(field) && field.join('.') === 'buyerIdentity.email'){
+                    message = message === 'Email is invalid' ? 'is invalid':message;
+                    form.setFields([{
+                        name : ['email'],
+                        errors : [input.email +' ' + message],
+                        validated : true,
+                        validating : false,
+                        value : _get(response,'cart.buyerIdentity.email'),
+                    }]);
+                }
+            })
+            if(emailChanged){
+                const email = form.getFieldValue('email');
+                if(EmailRegex.test(email)){
+                    return checkoutSync()
+                }
+            }
         }).finally(() => {
-                setSelectedDeliveryStatus?.(false);
+            form.setFields([{
+                name : ['email'],
+                validated : true,
+                validating : false,
+            }]);
+            setSelectedDeliveryStatus?.(false);
         });
         //TODO 单页模式同步数据
         // console.log('sync:',values);
