@@ -1,6 +1,7 @@
 import {DetailedHTMLProps, FC, ReactNode} from "react";
 import {clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
+import {Loading} from "@components/fragments/Loading.tsx";
 
 export type FloatLabelProps = {
     autoComplete ?: string;
@@ -20,6 +21,9 @@ export type FloatLabelProps = {
     errors ?: string[],
     warnings?: string[],
     autoFocus ?: boolean;
+    touched ?: boolean;
+    validating ?: boolean;
+    validated ?: boolean;
 };
 
 export const FloatLabel: FC<FloatLabelProps> = (props) => {
@@ -27,6 +31,9 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
         suffixClassName,
         element : Element = 'input',className,size='default',float = true,
         onChange,value,onBlur,
+        touched,
+        validating,
+        validated,
         errors,warnings,...others
     } = props;
     const h : any = {
@@ -55,12 +62,15 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
                     {ph}
                 </div>}
             </div>
-            <div
-                className={`flex flex-col justify-center items-center px-3 flex-shrink-0 box-border ${suffixClassName}`}>
+            {suffix && <div
+                className={`flex flex-col justify-center items-center px-3 flex-shrink-0 box-border ${suffixClassName||''}`}>
                 {suffix}
-            </div>
+            </div>}
+            {validating && <div className={'absolute inset-y-0 right-1.5 flex flex-col justify-center items-center bg-transparent'}>
+                <Loading />
+            </div>}
         </div>
-        {hasError && <div className={'p-1 text-sm'}>
+        {hasError && <div className={'flex flex-col p-1 text-sm'}>
             {errors.map((error,i) => {
                 return <div className={'text-red-500'} key={`error-${i}`}>{error}</div>
             })}
