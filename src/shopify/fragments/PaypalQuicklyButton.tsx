@@ -5,6 +5,7 @@ import {AsyncButton} from "@components/fragments/AsyncButton.tsx";
 import {api} from "@lib/api.ts";
 import {useSummary} from "../checkouts/hooks/useSummary.tsx";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
+import {PromiseLocation} from "../lib/payment.ts";
 
 export type PaypalQuicklyButtonProps = {};
 
@@ -26,12 +27,12 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
                 await sync(false);
                 const res = await api({
                     method : "post",
-                    'url' : storage.api + '/quickly'
+                    'url' : storage!.api + '/quickly'
                 });
                 if(!res['error']) {
                     const id = res.id;
                     if(!!id) {
-                        window.location.href = `/a/s/api/transactions/${id}/redirect?quickly=1`;
+                        await PromiseLocation(`/a/s/api/transactions/${id}/redirect?quickly=1`);
                     }
                 }
             }}
