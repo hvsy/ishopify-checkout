@@ -1,4 +1,4 @@
-import {FC, ReactNode} from "react";
+import {FC, ReactNode, useEffect} from "react";
 import {FlagImage, usePhoneInput} from "react-international-phone";
 import {Input} from "../../page/components/Input";
 
@@ -15,9 +15,12 @@ export type PhoneInputProps = {
 
 export const PhoneInput: FC<PhoneInputProps> = (props) => {
     const {countryCode,value,suffix,onChange,...others} = props;
-    const {inputValue,handlePhoneValueChange,inputRef,country} = usePhoneInput({
-        // defaultCountry : countryCode,
+
+    const {inputValue,handlePhoneValueChange,inputRef,country,setCountry} = usePhoneInput({
+        // defaultCountry : countryCode?.toLocaleLowerCase(),
         value  : value || '',
+        disableDialCodePrefill : true,
+        // disableCountryGuess : true,
         onChange(data){
             onChange?.(data.phone);
         }

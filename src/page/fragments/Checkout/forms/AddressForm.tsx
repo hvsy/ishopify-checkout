@@ -188,7 +188,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 },
                 // message: 'Enter a valid phone number',
             }]}>
-                <PhoneInput placeholder={`Phone (For shipping updates) ${phonePrefix?'+' + phonePrefix:''}`} className={'col-span-6'}
+               <PhoneInput placeholder={`Phone (For shipping updates) ${phonePrefix?'+' + phonePrefix:''}`} className={'col-span-6'}
                        countryCode={hitRegion?.code}
                        autoComplete={'tel'}
                        // prefix={phonePrefix ? <div>+{phonePrefix}</div> : undefined}
@@ -198,7 +198,6 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        </Tooltip>}
 
                 />
-
             </FormItem>
         </div>
     </StepBlock>

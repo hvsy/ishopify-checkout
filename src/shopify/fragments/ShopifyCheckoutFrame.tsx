@@ -1,9 +1,4 @@
 import {FC} from "react";
-import {ShopifyFrame} from "../ShopifyFrame.tsx";
-import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
-import {FormContainer} from "@components/frames/FormContainer.tsx";
-import { ShopifyCheckoutProvider } from "../context/ShopifyCheckoutContext.tsx";
-import Form from "rc-field-form";
 import {SummaryContextProvider, useSummary} from "../checkouts/hooks/useSummary.tsx";
 import {Outlet} from "react-router-dom";
 
