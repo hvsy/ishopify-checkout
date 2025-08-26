@@ -9,6 +9,7 @@ mutation Checkout($cartId : ID!,
     $updateBuyer : Boolean = false,
     $updateSelectedDelivery : Boolean = false,
     $withCarrierRates : Boolean = false,
+    $validationStrategy  : DeliveryAddressValidationStrategy = COUNTRY_CODE_ONLY
 ){
     cartBuyerIdentityUpdate(cartId: $cartId,
         buyerIdentity:$buyerIdentity) @include(if: $updateBuyer){
@@ -29,7 +30,7 @@ mutation Checkout($cartId : ID!,
         address: {
             deliveryAddress: $delivery
         }
-        validationStrategy: COUNTRY_CODE_ONLY
+        validationStrategy: $validationStrategy
     }]) @include(if: $updateAddress){
         cart {
             ...CartFields @skip(if: $updateSelectedDelivery)
@@ -52,7 +53,7 @@ mutation Checkout($cartId : ID!,
         address: {
             deliveryAddress: $delivery
         }
-        validationStrategy: COUNTRY_CODE_ONLY
+        validationStrategy: $validationStrategy
     }]) @include(if: $createAddress){
         cart {
             ...CartFields   @skip(if: $updateSelectedDelivery)

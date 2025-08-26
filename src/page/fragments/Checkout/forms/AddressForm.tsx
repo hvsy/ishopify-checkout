@@ -1,5 +1,5 @@
 import {FC, useEffect, useMemo} from "react";
-import {find as _find,capitalize as _capitalize} from "lodash-es";
+import {find as _find,capitalize as _capitalize,startsWith} from "lodash-es";
 import {Input} from "../../../components/Input.tsx";
 import {CircleHelp} from "lucide-react";
 import {Tooltip} from "@components/fragments/Tooltip.tsx";
@@ -16,6 +16,7 @@ import useSWR from "swr";
 import Validators from "validator";
 import {startsWith as _startsWith } from "lodash-es";
 import {StepBlock} from "@components/frames/StepBlock.tsx";
+import {PhoneInput} from "@components/ui/PhoneInput.tsx";
 
 export type AddressFormProps = {
     title: string;
@@ -167,27 +168,35 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             </FormItem>
             <FormItem name={[...prefix, 'phone']} rules={[{
                 required: true,
-                // async validator(rules, value) {
-                //     let full = value;
-                //     if(!_startsWith(full,'+')){
-                //         full = `+${phonePrefix}${full}`;
-                //     }
-                //     // console.log('full:',full);
-                //     if (!Validators.isMobilePhone(full)) {
-                //         throw new Error('Enter a valid phone number');
-                //     }
-                // },
-                message: 'Enter a valid phone number',
+                async validator(rules, value) {
+                    if(!value){
+                        throw new Error("Enter a valid phone number");
+                    }
+                    if(!startsWith(value,'+')){
+                        throw new Error("please input the country calling code , for example : +" + phonePrefix);
+                    }
+                    // let full = value;
+                    // if(!_startsWith(full,'+')){
+                    //     full = `+${phonePrefix}${full}`;
+                    // }
+                    // console.log('full:',full);
+                    if (!Validators.isMobilePhone(value,"any",{
+                        strictMode : true,
+                    })) {
+                        throw new Error('Enter a valid phone number');
+                    }
+                },
+                // message: 'Enter a valid phone number',
             }]}>
-                <Input placeholder={'Phone (For shipping updates)'} className={'col-span-6'}
+                <PhoneInput placeholder={`Phone (For shipping updates) ${phonePrefix?'+' + phonePrefix:''}`} className={'col-span-6'}
+                       countryCode={hitRegion?.code}
                        autoComplete={'tel'}
-                       prefix={phonePrefix ? <div>+{phonePrefix}</div> : undefined}
+                       // prefix={phonePrefix ? <div>+{phonePrefix}</div> : undefined}
                        suffix={<Tooltip icon={<CircleHelp size={16}/>}>
                            <p>In case we need to contact</p>
                            <p>you for delivery</p>
                        </Tooltip>}
-                       onBlur={(event) => {
-                       }}
+
                 />
 
             </FormItem>
