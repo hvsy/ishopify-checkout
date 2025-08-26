@@ -12,7 +12,7 @@ export function getCheckoutFromSummary(summary : any,path : string = 'data.cart'
     const code = _get(summary,`${path}.delivery.addresses.0.address.countryCode`,null);
     const  countryCode = _get(summary,`${path}.buyerIdentity.countryCode`,null);
     return {
-        email : _get(summary,`${path}.buyerIdentity.email`),
+        email : _get(summary,`${path}.buyerIdentity.email`) || "",
         ship_to : formatted.join(', '),
         shipping_line_id : selected.handle,
         shipping_group_id : groupId,
