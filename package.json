@@ -34,6 +34,7 @@
     "react-dom": "^19.0.0",
     "react-error-boundary": "^6.0.0",
     "react-frame-component": "^5.2.7",
+    "react-international-phone": "^4.6.0",
     "react-responsive": "^10.0.0",
     "react-router-dom": "^6.22.3",
     "rimraf": "^5.0.7",

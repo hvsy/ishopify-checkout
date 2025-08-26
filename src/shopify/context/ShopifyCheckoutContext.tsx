@@ -60,6 +60,7 @@ export type CheckoutInput = {
     },
     deliveryHandle ?: string;
     deliveryGroupId ?: string;
+    validationStrategy?: 'COUNTRY_CODE_ONLY' | 'STRICT'
 };
 export const ShopifyCheckoutContext = createContext<{
 
@@ -85,7 +86,11 @@ function formatInput(input : CheckoutInput){
         buyerIdentity : {},
         delivery : {},
         withCarrierRates : true,
+
     };
+    if(!!input.validationStrategy){
+        vars.validationStrategy = input.validationStrategy;
+    }
     if(!!input.email){
         vars.updateBuyer = true;
         vars.buyerIdentity.email = input.email;
@@ -114,9 +119,7 @@ function formatInput(input : CheckoutInput){
     }
     return vars;
 }
-function updateContactInformation(input : CheckoutInput){
 
-}
 
 function getAllArray(data : any , path : string,keys : string[]){
     const all : any[] = []    ;
@@ -147,6 +150,7 @@ export const ShopifyCheckoutProvider :FC<{
     });
     const groupsMutation = useDeliveryGroupMutation();
     const update = useCallback(async (variables : any) => {
+        console.log('mutation checkout:',variables);
         const response = await fn({
             variables,
             awaitRefetchQueries : true,

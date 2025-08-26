@@ -2927,6 +2927,11 @@ react-frame-component@^5.2.7:
   resolved "https://registry.yarnpkg.com/react-frame-component/-/react-frame-component-5.2.7.tgz#e31c0943be95fdf667c59d6d7fcf18c1dda4d4b2"
   integrity sha512-ROjHtSLoSVYUBfTieazj/nL8jIX9rZFmHC0yXEU+dx6Y82OcBEGgU9o7VyHMrBFUN9FuQ849MtIPNNLsb4krbg==
 
+react-international-phone@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/react-international-phone/-/react-international-phone-4.6.0.tgz#b6627a1771c1050cfddfcb9f7c6bc5260b3906c6"
+  integrity sha512-lzj5fLfACRKeaitggFIHWl6LM69aO2uivJbEVyVBjAe0+kkvZjToduqnK2/dm9Zu+l8XfVjd+Fn1ZAyG/t8XAg==
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmmirror.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"

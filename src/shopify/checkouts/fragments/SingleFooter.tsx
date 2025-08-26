@@ -33,21 +33,40 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
                 if(!values){
                     return;
                 }
+                values.validationStrategy = 'STRICT';
                 const response = await mutation(values);
                 const errors = _get(response,'userErrors',[]) || [];
-                (errors).forEach((error : any) => {
+                const fields = (errors).map((error : any) => {
                     let {field,code,message} = error || {};
-                    if(!isEmpty(field) && _isArray(field) && field.join('.') === 'buyerIdentity.email'){
-                        message = message === 'Email is invalid' ? 'is invalid':message;
-                        form.setFields([{
-                            name : ['email'],
-                            errors : [values.email +' ' + message],
-                            validated : true,
-                            validating : false,
-                            value : _get(response,'cart.buyerIdentity.email'),
-                        }]);
+                    if(!isEmpty(field) && _isArray(field)){
+                        const path = field.join('.');
+                        switch(path){
+                            case 'buyerIdentity.email':{
+                                message = message === 'Email is invalid' ? 'is invalid':message;
+                                return ({
+                                    name : ['email'],
+                                    errors : [values.email +' ' + message],
+                                    validated : true,
+                                    validating : false,
+                                    value : _get(response,'cart.buyerIdentity.email'),
+                                });
+                            }
+                            break;
+                            case 'addresses.0.address.deliveryAddress.phone':{
+                                return ({
+                                    name : ['shipping_address','phone'],
+                                    errors : [message],
+                                    validated : true,
+                                    validating : false,
+                                });
+                            }
+                        }
                     }
-                });
+                    return null;
+                }).filter(Boolean);
+                if(fields.length > 0){
+                    form.setFields(fields);
+                }
                 if(errors.length > 0){
                     return;
                 }
