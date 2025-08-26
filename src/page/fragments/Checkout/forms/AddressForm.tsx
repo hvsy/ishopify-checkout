@@ -38,7 +38,13 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
     }, [region_id, Regions]);
     useEffect(() => {
         if (!region_id) {
-            const firstRegion = Regions?.[0];
+            let firstRegion = Regions?.[0];
+            const countryCode = formInstance.getFieldValue('countryCode');
+            if(!!countryCode){
+                firstRegion  = _find(Regions, (r) => {
+                    return (r.code) === countryCode;
+                });
+            }
             if (!!(firstRegion?.code)) {
                 formInstance.setFields([
                     {
@@ -162,16 +168,16 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             </FormItem>
             <FormItem name={[...prefix, 'phone']} rules={[{
                 required: true,
-                async validator(rules, value) {
-                    let full = value;
-                    if(!_startsWith(full,'+')){
-                        full = `+${phonePrefix}${full}`;
-                    }
-                    // console.log('full:',full);
-                    if (!Validators.isMobilePhone(full)) {
-                        throw new Error('Enter a valid phone number');
-                    }
-                },
+                // async validator(rules, value) {
+                //     let full = value;
+                //     if(!_startsWith(full,'+')){
+                //         full = `+${phonePrefix}${full}`;
+                //     }
+                //     // console.log('full:',full);
+                //     if (!Validators.isMobilePhone(full)) {
+                //         throw new Error('Enter a valid phone number');
+                //     }
+                // },
                 message: 'Enter a valid phone number',
             }]}>
                 <Input placeholder={'Phone (For shipping updates)'} className={'col-span-6'}

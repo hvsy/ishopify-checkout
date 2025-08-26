@@ -18,7 +18,7 @@ export function getCheckoutFromSummary(summary : any,path : string = 'data.cart'
         shipping_group_id : groupId,
         shipping_line : selected,
         countryCode : code || countryCode,
-        ...transform_address(summary,path),
+        ...transform_address(summary,path,),
         shipping_discount : discounts?.[0] || null,
     }
 }

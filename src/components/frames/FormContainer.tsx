@@ -205,6 +205,7 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
                       sync(changedValues);
                   }} >
                 <Form.Field name={'email'} preserve={true}><div className={'hidden'}/></Form.Field>
+                <Form.Field name={'countryCode'} preserve={true}><div className={'hidden'} /></Form.Field>
                 <Form.Field name={'shipping_line_id'} preserve={true}><div className={'hidden'}/></Form.Field>
                 <Form.Field name={['shipping_address','id']} preserve={true}><div className={'hidden'}/></Form.Field>
                 {/*<Form.Field name={['shipping_address','state_code']} preserve={true}><div className={'hidden'}/></Form.Field>*/}
