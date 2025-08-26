@@ -17,7 +17,7 @@ export const PhoneInput: FC<PhoneInputProps> = (props) => {
     const {countryCode,value,suffix,onChange,...others} = props;
     const {inputValue,handlePhoneValueChange,inputRef,country} = usePhoneInput({
         // defaultCountry : countryCode,
-        value,
+        value  : value || '',
         onChange(data){
             onChange?.(data.phone);
         }
