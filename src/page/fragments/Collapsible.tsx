@@ -13,15 +13,22 @@ export const Collapsible: FC<CollapsibleProps> = (props) => {
     useLayoutEffect(() => {
         setOpen(window.screen.availWidth >= 640);
     }, []);
-    return <details className={`sm:max-w-[478px] appearance-none flex flex-col items-stretch ${className} group`}
+    return <details id={'summary-details'} className={`sm:max-w-[478px] appearance-none flex flex-col items-stretch ${className} group`}
                     open={open}>
+        {import.meta.env.VITE_SKELETON && <script dangerouslySetInnerHTML={{
+            __html : `if(window.screen.availWidth >= 640){
+            document.getElementById('summary-details').setAttribute('open',true);
+        }else{
+            document.getElementById('summary-details').removeAttribute('open');
+        }`
+        }} />}
         <summary
             onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 setOpen(!open)
             }}
-            className={'appearance-none list-none [&::-webkit-details-marker]:hidden flex flex-row justify-between sm:hidden border-y border-neutral-300 p-6 relative'}>
+            className={'appearance-none list-none [&::-webkit-details-marker]:hidden flex items-center flex-row justify-between sm:hidden border-y border-neutral-300 p-6 relative'}>
             {header}
         </summary>
         <div
@@ -42,7 +49,7 @@ export const Collapsible: FC<CollapsibleProps> = (props) => {
             `} style={{
             transitionProperty: 'max-height'
         }}>
-            {open ? (render ? render() :children) : null}
+            {(open || import.meta.env.VITE_SKELETON) ? (render ? render() :children) : null}
         </div>
     </details>;
 };

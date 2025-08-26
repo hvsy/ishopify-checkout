@@ -74,7 +74,7 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
                         cost: method.estimatedCost,
                     };
                 })} renderPrice={(line: any) => {
-                return format(line.cost);
+                return format(line.cost,'Free');
             }}/>
         </Form.Field>:  <NoShippingMethod /> }
     </StepFrame>;

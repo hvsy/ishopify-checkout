@@ -3,6 +3,7 @@ import {Input} from "../../page/components/Input.tsx";
 import {AsyncButton} from "../fragments/AsyncButton.tsx";
 import {get as _get, isString as _isString} from "lodash-es";
 import {TagIcon, XIcon} from "lucide-react";
+import {StepBlock} from "./StepBlock.tsx";
 
 export type CouponFormFrameProps = {
     onClick ?: (code : string,codes : string[])=>Promise<any>;
@@ -14,10 +15,8 @@ export const CouponFormFrame: FC<CouponFormFrameProps> = (props) => {
     const {onClick,discounts,onRemove} = props;
     const [code, setCode] = useState<string>('');
     const [error, setError] = useState<any>(false);
-    return <div className={'py-3 space-y-3 flex-shrink-0 flex flex-col items-stretch'}>
-        <div className={'text-sm'}>
-            Sign in Coupon code applied will be stored on your account
-        </div>
+    return <StepBlock label={'Sign in Coupon code applied will be stored on your account'} name={'coupon'}
+                      className={'py-3 space-y-3 flex-shrink-0 flex flex-col items-stretch'}>
         <div className={'flex flex-row items-center space-x-2'}>
             <Input size={'sm'} placeholder={'Coupon code'}
                    className={'flex-1'} float={false}
@@ -60,5 +59,5 @@ export const CouponFormFrame: FC<CouponFormFrameProps> = (props) => {
             {_isString(error) ? error:
                 'This code did not match any active gift card or discount. Was it entered correctly?' }
         </div>}
-    </div>;
+    </StepBlock>;
 };

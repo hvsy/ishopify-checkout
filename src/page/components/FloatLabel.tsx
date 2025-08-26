@@ -2,6 +2,7 @@ import {DetailedHTMLProps, FC, ReactNode} from "react";
 import {clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
 import {Loading} from "@components/fragments/Loading.tsx";
+import {Skeleton} from "@components/ui/Skeleton.tsx";
 
 export type FloatLabelProps = {
     autoComplete ?: string;
@@ -43,6 +44,11 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
     }[size];
     const hasError = errors && errors.length > 0;
     const border :any = hasError ? ['border-red-300'] : ['border-slate-300','focus-within:border-indigo-500'];
+    if(import.meta.env.VITE_SKELETON){
+        return <div className={`flex flex-col ${className || ''}`}>
+            <Skeleton className={'h-8 w-full'}/>
+        </div>
+    }
     return <div className={`flex flex-col ${className || ''}`}>
         <div className={twMerge(clsx(`border rounded-md relative flex flex-row justify-between items-stretch box-border overflow-hidden`,border,h))}>
             {prefix && <div className={'flex flex-col justify-center px-3 bg-gray-100 flex-shrink-0'}>

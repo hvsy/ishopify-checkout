@@ -2,6 +2,7 @@ import {createContext, use} from "react";
 import {Currency} from "lucide-react";
 import {useParams} from "react-router-dom";
 import {gql, useApolloClient} from "@apollo/client";
+import Big from "big.js";
 
 export const ShopifyContext = createContext<any>({
     shop :null
@@ -21,9 +22,12 @@ export function useMoneyComplied(variables : any = {}){
 
 export function useMoneyFormat(){
     const ctx = use(ShopifyContext);
-    return (data : any)=>{
-        if(data?.amount === undefined) return null;
-        const currencyCode = data.currencyCode;
+    return (data : any,free : string|null = null)=>{
+        const {amount,currencyCode} = data || {};
+        if(amount === undefined) return null;
+        if(!!free && Big(amount).cmp(0) === 0){
+            return free;
+        }
         if(currencyCode){
             return new Intl.NumberFormat(navigator.languages, {
                 style: "currency", currency: currencyCode,

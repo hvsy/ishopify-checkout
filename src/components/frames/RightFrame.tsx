@@ -1,6 +1,7 @@
 import React, {FC, ReactNode} from "react";
 import {Collapsible} from "../../page/fragments/Collapsible.tsx";
 import {ChevronDown, ShoppingCart} from "lucide-react";
+import {Skeleton} from "../ui/Skeleton.tsx";
 
 export type RightFrameProps = {
     className?: string;
@@ -15,7 +16,7 @@ export const RightFrame: FC<RightFrameProps> = (props) => {
         className={className}
         header={
             <>
-                <div className={'flex flex-row items-center space-x-2 text-blue-500'}>
+            {import.meta.env.VITE_SKELETON ? <Skeleton className={'min-h-8 min-w-36'} /> :<div className={'flex flex-row items-center space-x-2 text-blue-500'}>
                     <div>
                         <ShoppingCart size={18}/>
                     </div>
@@ -28,10 +29,10 @@ export const RightFrame: FC<RightFrameProps> = (props) => {
                             <ChevronDown size={16}/>
                         </div>
                     </div>
-                </div>
-                <div className={'font-bold'}>
+                </div>}
+                {import.meta.env.VITE_SKELETON ? <Skeleton className={'min-w-18 min-h-5 max-h-5'}/>:<div className={'font-bold'}>
                     {totalPrice}
-                </div>
+                </div>}
             </>
         } render={() => {
         return <div

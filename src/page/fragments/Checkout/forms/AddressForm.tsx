@@ -15,6 +15,7 @@ import {FormContext, useCurrentForm} from "../../../../container/FormContext.ts"
 import useSWR from "swr";
 import Validators from "validator";
 import {startsWith as _startsWith } from "lodash-es";
+import {StepBlock} from "@components/frames/StepBlock.tsx";
 
 export type AddressFormProps = {
     title: string;
@@ -38,7 +39,13 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
     }, [region_id, Regions]);
     useEffect(() => {
         if (!region_id) {
-            const firstRegion = Regions?.[0];
+            let firstRegion = Regions?.[0];
+            const countryCode = formInstance.getFieldValue('countryCode');
+            if(!!countryCode){
+                firstRegion  = _find(Regions, (r) => {
+                    return (r.code) === countryCode;
+                });
+            }
             if (!!(firstRegion?.code)) {
                 formInstance.setFields([
                     {
@@ -83,10 +90,8 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
     }, [region_id, firstZone?.id,isLoading]);
     const phonePrefix = hitRegion?.data?.phoneNumberPrefix;
     const zipHolder = hitRegion?.data?.postalCodeExample;
-    return <div className={'flex flex-col space-y-4'}>
-        <div>
-            {_capitalize(title || '')} address
-        </div>
+    const label = _capitalize(title || '');
+    return <StepBlock className={'flex flex-col space-y-4'} label={`${label} address`} name={`${label}-address`}>
         <div className={'grid grid-cols-6 gap-y-3 gap-x-2'}>
             <FormItem name={[...prefix, 'first_name']} rules={[{
                 // required : true,
@@ -162,16 +167,16 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             </FormItem>
             <FormItem name={[...prefix, 'phone']} rules={[{
                 required: true,
-                async validator(rules, value) {
-                    let full = value;
-                    if(!_startsWith(full,'+')){
-                        full = `+${phonePrefix}${full}`;
-                    }
-                    // console.log('full:',full);
-                    if (!Validators.isMobilePhone(full)) {
-                        throw new Error('Enter a valid phone number');
-                    }
-                },
+                // async validator(rules, value) {
+                //     let full = value;
+                //     if(!_startsWith(full,'+')){
+                //         full = `+${phonePrefix}${full}`;
+                //     }
+                //     // console.log('full:',full);
+                //     if (!Validators.isMobilePhone(full)) {
+                //         throw new Error('Enter a valid phone number');
+                //     }
+                // },
                 message: 'Enter a valid phone number',
             }]}>
                 <Input placeholder={'Phone (For shipping updates)'} className={'col-span-6'}
@@ -187,5 +192,5 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
 
             </FormItem>
         </div>
-    </div>
+    </StepBlock>
 };
