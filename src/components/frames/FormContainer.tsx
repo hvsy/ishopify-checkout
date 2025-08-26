@@ -9,6 +9,7 @@ import {EmailRegex} from "@lib/regex.ts";
 import {api} from "@lib/api.ts";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
 import {FeatherIcon} from "lucide-react";
+import Validators from "validator";
 
 
 export type FormContainerProps = {
@@ -117,11 +118,15 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
 
         const emailChanged = _has(changedValues,'email');
         if(emailChanged && !!changedValues.email){
-            form.setFields([{
-                name : ['email'],
-                validated :false,
-                validating : true,
-            }])
+                const email = form.getFieldValue('email');
+                if(Validators.isEmail(email)){
+                    return checkoutSync()
+                }
+            // form.setFields([{
+            //     name : ['email'],
+            //     validated :false,
+            //     validating : true,
+            // }])
         }
 
         if(!countryChanged && !shippingMethodChanged && !emailChanged){
@@ -142,25 +147,25 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         }
         input.shipping_address = address;
         mutation(input).then((response) => {
-            (_get(response,'userErrors',[]) || []).forEach((error : any) => {
-                let {field,code,message} = error || {};
-                if(!isEmpty(field) && _isArray(field) && field.join('.') === 'buyerIdentity.email'){
-                    message = message === 'Email is invalid' ? 'is invalid':message;
-                    form.setFields([{
-                        name : ['email'],
-                        errors : [input.email +' ' + message],
-                        validated : true,
-                        validating : false,
-                        value : _get(response,'cart.buyerIdentity.email'),
-                    }]);
-                }
-            })
-            if(emailChanged){
-                const email = form.getFieldValue('email');
-                if(EmailRegex.test(email)){
-                    return checkoutSync()
-                }
-            }
+            // (_get(response,'userErrors',[]) || []).forEach((error : any) => {
+            //     let {field,code,message} = error || {};
+            //     if(!isEmpty(field) && _isArray(field) && field.join('.') === 'buyerIdentity.email'){
+            //         message = message === 'Email is invalid' ? 'is invalid':message;
+            //         form.setFields([{
+            //             name : ['email'],
+            //             errors : [input.email +' ' + message],
+            //             validated : true,
+            //             validating : false,
+            //             value : _get(response,'cart.buyerIdentity.email'),
+            //         }]);
+            //     }
+            // })
+            // if(emailChanged){
+            //     const email = form.getFieldValue('email');
+            //     if(EmailRegex.test(email)){
+            //         return checkoutSync()
+            //     }
+            // }
         }).finally(() => {
             form.setFields([{
                 name : ['email'],
