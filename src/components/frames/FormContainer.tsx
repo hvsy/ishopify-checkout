@@ -65,30 +65,24 @@ export async function submit(form : FormInstance){
 
 
 function buildAddress(address : any){
-    return map2(address,{
+    const after = map2(address,{
         id : 'id',
         city : 'city',
         firstName: 'first_name',
         lastName : 'last_name',
         address1: 'line1',
         address2: 'line2',
-        phone: (address : any,key : string) => {
-            let phone = address['phone'];
-            if(!!phone){
-                if(!startsWith(phone,'+')){
-                    let prefix =  _get(address,'region.data.phoneNumberPrefix');
-                    if(!!prefix){
-                        prefix = '+' + prefix;
-                    }
-                    phone = prefix +phone;
-                }
-            }
-            return phone;
-        },
+        phone : 'phone',
         countryCode: 'region_code',
         provinceCode: 'state_code',
         zip : 'zip',
     },true)
+    if(!Validators.isMobilePhone(after.phone || '',"any",{
+        strictMode : true,
+    })){
+        after.phone = "";
+    }
+    return after;
 }
 export const FormContainer: FC<FormContainerProps> = (props) => {
     const {form,children,initialValues,page_style = 'standard'} = props;
@@ -167,11 +161,16 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             //     }
             // }
         }).finally(() => {
-            form.setFields([{
-                name : ['email'],
-                validated : true,
-                validating : false,
-            }]);
+            // form.setFields([{
+            //     name : ['email'],
+            //     validated : true,
+            //     validating : false,
+            // }]);
+            if(!!form.getFieldValue(['shipping_address','phone'])){
+                form.validateFields([
+                    ['shipping_address','phone']
+                ]);
+            }
             setSelectedDeliveryStatus?.(false);
         });
         //TODO 单页模式同步数据

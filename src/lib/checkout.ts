@@ -153,7 +153,7 @@ export function transform_address(data : any,prefix : string = "data.cart"){
             line1: address.address1,
             line2: address.address2,
             zip: address.zip,
-            phone: address.phone,
+            phone: address.phone || '',
         }
     }
 }
