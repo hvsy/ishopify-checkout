@@ -11,11 +11,17 @@ export type PageFrameProps = {
 
 export const PageFrame: FC<PageFrameProps> = (props) => {
     const {renderRight, renderLeft,renderNav} = props;
-    return <Frame header={
-        renderNav? <Mobile>
-            {renderNav("flex sm:hidden mb-3")}
-        </Mobile> :null
+    let top = null;
+    if(renderNav){
+        if(import.meta.env.VITE_SKELETON){
+            top = renderNav("flex sm:hidden mb-3");
+        }else{
+            top = <Mobile>
+                {renderNav?.("flex sm:hidden mb-3")}
+            </Mobile>;
+        }
     }
+    return <Frame header={top}
                   right={renderRight?.()}
                   rightBottom={<DesktopCheckoutBoard/>}
     >

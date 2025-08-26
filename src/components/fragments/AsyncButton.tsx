@@ -5,6 +5,7 @@ import {cn} from "@lib/cn";
 import {isString as _isString} from "lodash-es";
 import {Button} from "../ui/button.tsx";
 import Big from "big.js";
+import {Skeleton} from "../ui/Skeleton.tsx";
 
 export type AsyncButtonProps =  {
     onClick ?: ()=>(Promise<any>|void);
@@ -22,7 +23,12 @@ export const AsyncButton : FC<AsyncButtonProps> = (props)=>{
         "max-w-104" : !(className?.includes('max-w-')),
         "lab" : true,
         "*:invisible [&>*:last-child]:visible":finalLoading,
+        "min-w-24" : import.meta.env.VITE_SKELETON,
+        "min-h-8" : import.meta.env.VITE_SKELETON,
     },className);
+    if(import.meta.env.VITE_SKELETON){
+        return <Skeleton className={final}/>
+    }
     return <Button className={final} {...others} onClick={async (...args) => {
         if(pulsing) return;
         return click?.(...args);

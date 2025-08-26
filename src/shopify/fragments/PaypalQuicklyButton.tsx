@@ -20,6 +20,9 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
     if (!method) {
         return null;
     }
+    if(import.meta.env.VITE_SKELETON){
+        return null;
+    }
     return <div className={'flex flex-col items-stretch space-y-5'}>
         <AsyncButton
             pulsing={ing}

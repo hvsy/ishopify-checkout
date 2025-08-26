@@ -1,6 +1,7 @@
 import React, {FC, Fragment, ReactNode} from "react";
 import {TagIcon, TagsIcon} from "lucide-react";
 import {useMoneyFormat} from "../context/ShopifyContext.ts";
+import {Skeleton} from "@components/ui/Skeleton.tsx";
 
 export type SummaryFrameProps = {
     subtotal : Shopify.Money,
@@ -20,6 +21,22 @@ export const SummaryFrame: FC<SummaryFrameProps> = (props) => {
         shipping_discounts,
     } = props;
     const format = useMoneyFormat();
+    if(import.meta.env.VITE_SKELETON){
+        return <div className={'grid grid-cols-2 gap-y-2 text-sm pt-2 justify-between'}>
+            <Skeleton className={'min-w-12 min-h-5 max-w-12'}/>
+            <div className={'flex flex-row justify-end'}>
+                <Skeleton className={'min-w-12 min-h-5 max-w-12'}/>
+            </div>
+            <Skeleton className={'min-w-12 min-h-5 max-w-12'}/>
+            <div className={'flex flex-row justify-end'}>
+                <Skeleton className={'min-w-12 min-h-5 max-w-12'}/>
+            </div>
+            <Skeleton className={'min-w-12 min-h-5 max-w-12'}/>
+            <div className={'flex flex-row justify-end'}>
+                <Skeleton className={'min-w-12 min-h-5 max-w-12'}/>
+            </div>
+        </div>
+    }
     return <div className={'grid grid-cols-2 gap-y-2 text-sm pt-2'}>
         <div className={'flex flex-row items-center'}>
             Subtotal · {total_quantity} items

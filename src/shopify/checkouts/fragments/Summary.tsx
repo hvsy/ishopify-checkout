@@ -63,7 +63,7 @@ export const Summary: FC<SummaryProps> = (props) => {
                                          <span className={'font-bold'}>FREE</span>
                                      </div>
                                      : <div className={''}>
-                                         <span>{format(shipping_cost)}</span>
+                                         <span>{format(shipping_cost,'Free')}</span>
                                      </div>}
                              </LoadingContainer>;
                          }}/>;
