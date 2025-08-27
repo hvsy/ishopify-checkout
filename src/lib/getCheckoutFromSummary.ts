@@ -14,7 +14,7 @@ export function getCheckoutFromSummary(summary : any,path : string = 'data.cart'
     return {
         email : _get(summary,`${path}.buyerIdentity.email`) || "",
         ship_to : formatted.join(', '),
-        shipping_line_id : selected.handle,
+        shipping_line_id : selected?.handle,
         shipping_group_id : groupId,
         shipping_line : selected,
         countryCode : code || countryCode,
