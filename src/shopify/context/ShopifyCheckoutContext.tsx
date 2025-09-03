@@ -1,4 +1,4 @@
-import {createContext, FC, ReactNode, use, useCallback} from "react";
+import {createContext, FC, ReactNode, use, useCallback, useRef} from "react";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
 import {ApolloClient, gql, useApolloClient, useMutation, useQueryRefHandlers, useReadQuery} from "@apollo/client";
 import {MutateCheckout, MutateRemoveAddresses} from "@query/checkouts/mutations.ts";
@@ -13,6 +13,7 @@ import {SummaryQuery} from "../../App.tsx";
 import {useDeliveryGroupMutation} from "../checkouts/hooks/useSummary.tsx";
 import {getBy} from "../lib/helper.ts";
 import {QueryDeliveryAddresses} from "@query/checkouts/queries.ts";
+import {boolean} from "zod";
 
 
 export async function removeOtherAddresses(client : ApolloClient<any>,cartId : string,id : string){
@@ -64,7 +65,7 @@ export type CheckoutInput = {
 };
 export const ShopifyCheckoutContext = createContext<{
 
-    update ?: (data : CheckoutInput)=>Promise<any>,
+    update ?: (data : CheckoutInput,partialUpdate ?: boolean)=>Promise<any>,
 }>({
 
 });
@@ -134,7 +135,7 @@ export const ShopifyCheckoutProvider :FC<{
 }> = (props) => {
     const {children,form} = props;
     const storage = useCartStorage();
-    const [fn,{client}] = useMutation(gql([
+    const [fn,{client,error,loading}] = useMutation(gql([
         MutateCheckout,
         QueryCartFieldsFragment,
         QueryDeliveryFragment,
@@ -149,13 +150,22 @@ export const ShopifyCheckoutProvider :FC<{
         }
     });
     const groupsMutation = useDeliveryGroupMutation();
-    const update = useCallback(async (variables : any) => {
-        console.log('mutation checkout:',variables);
-        const response = await fn({
-            variables,
-            awaitRefetchQueries : true,
+    const mutationLoading = useRef(false);
+    mutationLoading.current = loading;
+
+    const update = useCallback(async (variables : any,partialUpdate : boolean = true) => {
+        if(mutationLoading.current) return;
+        const config : any = {
+            // awaitRefetchQueries : true,
             refetchQueries: ['CartLineItems'],
-        });
+            variables,
+        };
+        if(!partialUpdate){
+            config.awaitRefetchQueries = true;
+            // config.refetchQueries= ['CartLineItems'];
+        }
+        console.log('mutation checkout:',config);
+        const response = await fn(config);
         let data = _cloneDeep(_get(response,'data'));
 
         const increments = _get(response,'incremental',[]);
@@ -193,25 +203,16 @@ export const ShopifyCheckoutProvider :FC<{
         }
     }, [fn]);
     return <ShopifyCheckoutContext value={{
-        update : async(input : CheckoutInput)=>{
+        update : async(input : CheckoutInput,partialUpdate : boolean = true)=>{
             let vars = formatInput(input);
-            let result= await update(vars);
+            let result= await update(vars,partialUpdate);
             let cart = result?.cart;
             const warningCode =result ?.warnings?.[0]?.code;
             if(warningCode === 'DUPLICATE_DELIVERY_ADDRESS'){
                     await removeOtherAddresses(client,storage.gid,vars.addressId)
-                    result = await update(vars);
+                    result = await update(vars,partialUpdate);
                     cart = result?.cart;
             }
-            // if(data.hasOwnProperty('cartSelectedDeliveryOptionsUpdate')){
-            //     cart = data.cartSelectedDeliveryOptionsUpdate.cart;
-            // } else if(data.hasOwnProperty('cartDeliveryAddressesAdd')){
-            //     cart = data.cartDeliveryAddressesAdd.cart;
-            // }else if(data.hasOwnProperty('cartDeliveryAddressesUpdate')){
-            //     cart = data.cartDeliveryAddressesUpdate.cart;
-            // }
-
-
             groupsMutation(cart?.deliveryGroups || null);
             const group = _get(cart,'deliveryGroups.edges.0.node');
             const groupId = group?.id;

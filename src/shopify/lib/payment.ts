@@ -2,7 +2,7 @@ import Big from "big.js";
 import {PaymentError} from "../../exceptions/PaymentError.ts";
 import {api} from "@lib/api.ts";
 import {free} from "@lib/payment.ts";
-import {get as _get} from "lodash-es";
+import {get as _get,} from "lodash-es";
 
 export function getUrlFrom(token : string){
     const cart_token = token.split('?')[0] ?? '';
@@ -66,6 +66,7 @@ export async function shopify_payment(options : {
             console.log(values,url,method);
             return;
         }
+        console.log('payment method submit:',values);
         window.postMessage({
             event : 'submit',
             checkout : values,

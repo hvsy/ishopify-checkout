@@ -34,7 +34,10 @@ function formatTime(time: number) {
 export const REGEX_FORMAT = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|S{1,2}/g
 
 export const CountDown :FC<CountDownProps> =  (props) => {
-    const {milliseconds,prefix = null,suffix = null,containerClassName = '', loop = false, auto = false, format = 'mm:ss.S', expired, className = ''} = props;
+    const {milliseconds,prefix = null,suffix = null,containerClassName = '',
+        loop = false, auto = false, format = 'mm:ss.S' +
+            '', expired, className = ''
+    } = props;
     const precision = format.indexOf('S') === -1 ? 0 : (format.indexOf('SS') === -1 ? 1 : 2);
     const {countdown} = useCountdown(milliseconds, {precision, auto, loop});
     if (expired && countdown == 0) return expired;

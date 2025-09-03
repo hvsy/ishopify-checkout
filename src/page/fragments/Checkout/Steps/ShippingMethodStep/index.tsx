@@ -9,11 +9,25 @@ import {useCurrentForm, useFormField} from "../../../../../container/FormContext
 import {ShippingLines} from "../../forms/ShippingLines.tsx";
 
 import {AutoSetShippingMethod} from "./AutoSetShippingMethod.tsx";
-import {ApolloStoreFrontClient, GetCartGid, getShippingRateUrl, storefront, storefront_stream} from "@lib/checkout.ts";
+export function getShippingRateUrl(address ?: DB.Address){
+    if(!address) return null;
+    const qs : string[] = [];
+    Object.keys(Maps).map((from) => {
+        const to = _get(address,from,null);
+        const key = Maps[from];
+        if(!!to){
+            qs.push(`shipping_address[${key}]=${to}`);
+        }
+    });
+    if(qs.length === 0) return null;
+    return `/cart/prepare_shipping_rates.json?${qs.join('&')}`;
+}
+
 
 export type ShippingMethodStepProps = {};
 
 import {InsuranceFrame} from "@components/frames/InsuranceFrame.tsx";
+import {get as _get} from "lodash-es";
 export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
     const shop = useShop();
     const checkout = CheckoutContainer.use();

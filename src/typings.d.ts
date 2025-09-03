@@ -214,6 +214,8 @@ namespace DB {
         },
         mode: import("./page/contants").PaymentMethodType;
         channel : string;
+        embed ?: string;
+        height : number;
     };
     type DiscountType = 'percent' | 'cutoff' | 'free_shipping';
 
@@ -341,6 +343,14 @@ namespace Shopify{
         gateway_type : string;
         shipping_address : Address,
         billing_address ?: Address,
+        upsell ?: {
+            title : string;
+            quantity : number;
+            paid_total_price : string;
+            data : {
+
+            }
+        }
         shipping_line : {
             id : string;
             title : string;

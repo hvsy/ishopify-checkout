@@ -2,7 +2,6 @@ import {FC} from "react";
 
 
 
-import {GetCartGid} from "@lib/checkout.ts";
 import {useAllEdges} from "@hooks/useAllEdges.ts";
 import {LineItem} from "./LineItem.tsx";
 import {RightFrame} from "@components/frames/RightFrame.tsx";

@@ -143,3 +143,15 @@ img{
 /*input::-webkit-input-placeholder{*/
 /*    color:gray;*/
 /*}*/
+
+.thumbs .swiper-slide{
+    @apply border-2 border-transparent rounded overflow-hidden cursor-pointer box-border;
+}
+.thumbs .swiper-slide-thumb-active{
+    @apply border-black border-2 ;
+}
+
+.swiper.slide-h-full .swiper-wrapper .swiper-slide {
+    height: auto;
+}
+

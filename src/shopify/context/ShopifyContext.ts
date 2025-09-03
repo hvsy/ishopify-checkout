@@ -3,6 +3,7 @@ import {Currency} from "lucide-react";
 import {useParams} from "react-router-dom";
 import {gql, useApolloClient} from "@apollo/client";
 import Big from "big.js";
+import {moneyFormat} from "../lib/helper.ts";
 
 export const ShopifyContext = createContext<any>({
     shop :null
@@ -29,10 +30,14 @@ export function useMoneyFormat(){
             return free;
         }
         if(currencyCode){
-            return new Intl.NumberFormat(navigator.languages, {
-                style: "currency", currency: currencyCode,
-                currencyDisplay : 'narrowSymbol',
-            }).format(data.amount,);
+            return moneyFormat({
+                amount : data.amount,
+                currencyCode,
+            })
+            // return new Intl.NumberFormat(navigator.languages, {
+            //     style: "currency", currency: currencyCode,
+            //     currencyDisplay : 'narrowSymbol',
+            // }).format(data.amount,);
         }
         return ctx?.shop?.format?.(data);
     };

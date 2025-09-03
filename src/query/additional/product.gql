@@ -1,0 +1,102 @@
+fragment Money on MoneyV2{
+    amount
+    currencyCode
+}
+fragment Image on Image{
+    id
+    altText
+    height
+    width
+    url
+}
+fragment Variant on ProductVariant{
+    title
+    id
+    selectedOptions {
+        name
+        value
+    }
+    unitPrice {
+        ...Money
+    }
+    price {
+        ...Money
+    }
+    availableForSale
+    currentlyNotInStock
+    compareAtPrice {
+        ...Money
+    }
+    unitPrice {
+        ...Money
+    }
+    image {
+        ...Image
+    }
+}
+query Product($handle : String,$id : ID,$regionCode: CountryCode)@inContext(country: $regionCode){
+    product(handle: $handle,id : $id){
+        handle
+        id
+        title
+        options{
+            id
+            name
+            optionValues {
+                name
+                id
+                firstSelectableVariant {
+                    ...Variant
+                }
+                swatch {
+                    image {
+                        id
+                        alt
+                        mediaContentType
+                        presentation {
+                            id
+                            asJson(format: IMAGE)
+                        }
+                        previewImage {
+                            ...Image
+                        }
+                    }
+                    color
+                }
+            }
+        }
+        variants(first: 100){
+            edges {
+                node {
+                    ...Variant
+                }
+            }
+        }
+        featuredImage {
+            ...Image
+        }
+        media(first: 100){
+            edges {
+                node {
+                    id
+                    presentation {
+                        id
+                        asJson(format: IMAGE)
+                    }
+                    previewImage {
+                        ...Image
+                    }
+                    mediaContentType
+                }
+            }
+        }
+        images(first:100){
+            edges {
+                node {
+                    ...Image
+                }
+            }
+        }
+
+    }
+}

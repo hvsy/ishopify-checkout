@@ -1,6 +1,5 @@
-import {FC, useEffect} from "react";
+import {FC, memo, useEffect} from "react";
 import {useSearchParams} from "react-router-dom";
-import useSWR from "swr";
 import {useCurrentForm} from "../../../../../container/FormContext.ts";
 import Form from "rc-field-form";
 import {usePaymentContext} from "../../../../../container/PaymentContext.tsx";
@@ -9,7 +8,7 @@ import {RadioGroup} from "../../../../components/RadioGroup.tsx";
 import {Payment} from "./Payment.tsx";
 import {NoActivePaymentMethod} from "./NoActivePaymentMethod.tsx";
 
-export const Methods: FC<{ token: string }> = (props) => {
+export const Methods: FC<{ token: string }> = memo((props) => {
     const {token} = props;
     const [search, setSearchParams] = useSearchParams();
     // const {data: methods,isLoading} = useSWR<DB.PaymentMethod[]>(('/a/s/api/payments'));
@@ -59,4 +58,4 @@ export const Methods: FC<{ token: string }> = (props) => {
             }}
         />
     </Form.Field>
-}
+});

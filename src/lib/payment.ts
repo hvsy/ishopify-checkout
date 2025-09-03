@@ -2,10 +2,6 @@ import {api} from "./api.ts";
 import {CheckoutSummary} from "../container/SummaryContext.tsx";
 import Big from "big.js";
 import { PaymentError } from "../exceptions/PaymentError.ts";
-import {omit as _omit,get as _get,startsWith as _startsWith} from "lodash-es";
-import {GetCartGid, storefront, transform_address} from "./checkout.ts";
-import updateAddressCheckout from "@query/checkouts/mutateShippingAddress.gql?raw";
-import cartFields from "@query/checkouts/fragments/cart_fields.gql?raw";
 
 export async function getOrder(token : string,thankYou : boolean = false){
     return await api({
@@ -14,54 +10,7 @@ export async function getOrder(token : string,thankYou : boolean = false){
             `/a/s/api/orders/${token}`,
     });
 }
-export async function update(url : string,values : any,checkout : DB.Checkout){
-    const shipping = (values?.shipping_address || checkout.shipping_address) ;
-    let prefix = _get(shipping,'region.data.phoneNumberPrefix');
-    if(prefix && !_startsWith(prefix,'+')){
-        prefix =  `+${prefix}`;
-    }
-    const phone = _get(shipping,'phone');
-    const json = {
-        cartId : GetCartGid(),
-        id : checkout.shipping_address_id || "gid://shopify/CartSelectableAddress/0",
-        create : !checkout.shipping_address_id,
-        delivery  : {
-            address1 : _get(shipping,'line1'),
-            address2 : _get(shipping,'line2'),
-            city : _get(shipping,'city'),
-            countryCode: _get(shipping,'region_code'),
-            firstName: _get(shipping,'first_name'),
-            lastName: _get(shipping,'last_name'),
-            phone: phone ? (_startsWith(phone,prefix) ? phone: `${prefix}${phone}`) : null,
-            provinceCode: _get(shipping,'state_code',null),
-            zip : _get(shipping,'zip',null),
-        }
-    };
-    console.log('update original:',checkout,values,json);
-    return await storefront(`
-        ${updateAddressCheckout}
-        ${cartFields}
-    `,json).then((response) => {
-        const after =transform_address(response,
-            checkout.shipping_address_id ? 'data.cartDeliveryAddressesUpdate.cart' : 'data.cartDeliveryAddressesAdd.cart'
-        );
-        console.log('update checkout:',response,after);
-        return after;
-    });
-    // const data = _omit(values,
-    //     'shipping_line',
-    //     'shipping_address.state',
-    //     'shipping_address.region',
-    //     'shipping_address.longitude',
-    //     'shipping_address.latitude',
-    // );
-    // console.log('update:',data);
-    // return await api({
-    //     method : "put",
-    //     url,
-    //     data,
-    // })
-}
+
 export async function free(url : string){
     return await api({
         method : 'post',

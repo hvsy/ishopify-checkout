@@ -1,7 +1,6 @@
 import {FC} from "react";
 import {CouponFormFrame} from "@components/frames/CouponFormFrame.tsx";
 import {gql, useMutation, useQuery} from "@apollo/client";
-import {GetCartGid} from "@lib/checkout.ts";
 import {uniq as _uniq, get as _get} from "lodash-es";
 
 export type ShopifyCouponFormProps = {};
