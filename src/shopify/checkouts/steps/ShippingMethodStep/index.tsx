@@ -19,7 +19,7 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
 
     const group = groups?.[0] || null;
     const methods = _get(group,'deliveryOptions',[]);
-    const allocations= _get(json,'data.cart.discountAllocations',[]);
+    // const allocations= _get(json,'data.cart.discountAllocations',[]);
     const shipping_line_id = _get(group,'selectedDeliveryOption.handle',null);
     const shipping_group_id = _get(group,'id',null);
     const form = useCurrentForm();

@@ -76,11 +76,14 @@ export const Payment: FC<PaymentProps> = (props) => {
                         }
                         case 'embed-in':{
                             return <EmbedInFrame
+                                active={checked}
                                 id={method.channel}
-                                height={145}
+                                height={method.height || 145}
                                 width={'100%'}
                                 name={method.channel}
-                                src={`/a/s/api/checkouts/${token}/gateway/${method.id}/embed`} />
+                                src={method.embed || `/a/s/api/checkouts/${token}/gateway/${method.id}/embed`}
+                                 // src={`/a/s/api/gateway/${method.id}/embed`}
+                            />
                         }
                         default:
                             return mode;

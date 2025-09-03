@@ -1,12 +1,14 @@
-import {FC, IframeHTMLAttributes, useLayoutEffect, useRef, useState} from "react";
+import {FC, IframeHTMLAttributes, memo, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {useEventCallback, useEventListener} from "usehooks-ts";
 import {Loading} from "@components/fragments/Loading.tsx";
+import {useForm} from "rc-field-form";
 
 export type EmbedInFrameProps = IframeHTMLAttributes<any>&{
+    active : boolean;
 };
 
-export const EmbedInFrame: FC<EmbedInFrameProps> = (props) => {
-    const {src,...others} = props;
+export const EmbedInFrame: FC<EmbedInFrameProps> = memo((props) => {
+    const {src,active,...others} = props;
     const ref = useRef<HTMLIFrameElement>(null)
     const [loading,setLoading] = useState(true);
     const onMessage = useEventCallback((e : any) => {
@@ -27,6 +29,13 @@ export const EmbedInFrame: FC<EmbedInFrameProps> = (props) => {
           window.removeEventListener('message',onMessage);
       }
     },[]);
+    useEffect(() => {
+        if(active){
+            ref.current?.contentWindow?.postMessage({
+                event : 'setup',
+            })
+        }
+    }, [active]);
     return <div className={'relative'}>
         <iframe
             ref={ref}
@@ -38,4 +47,4 @@ export const EmbedInFrame: FC<EmbedInFrameProps> = (props) => {
             <Loading />
         </div>}
     </div>;
-};
+});

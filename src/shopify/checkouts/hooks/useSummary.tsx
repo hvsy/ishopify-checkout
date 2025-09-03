@@ -11,6 +11,8 @@ import {FormContainer} from "@components/frames/FormContainer.tsx";
 import {ShopifyFrame} from "../../ShopifyFrame.tsx";
 import {ShopifyCheckoutProvider} from "../../context/ShopifyCheckoutContext.tsx";
 import Form from "rc-field-form";
+import {PaymentContainer, PaymentContext} from "../../../container/PaymentContext.tsx";
+import {PayingContainer} from "@components/frames/PayingContainer.tsx";
 
 // export function useSummary() {
 //     // const {ref,} = useLoaderData() as any;
@@ -62,6 +64,7 @@ export const SummaryContext = createContext<{
         updatingSelectedDelivery : false,
     },
 });
+
 export const SummaryContextProvider :FC<any> = (props) => {
     const {children} = props;
     const [updatingSelectedDelivery,setSelectedDeliveryStatus] = useState<boolean>(false);
@@ -83,29 +86,39 @@ export const SummaryContextProvider :FC<any> = (props) => {
     const ing = loading.shipping_methods || loading.summary || loading.updatingSelectedDelivery;
     const checkout = getCheckoutFromSummary(json, 'cart');
     const [form] = Form.useForm();
+    console.log('form init:',checkout);
     return <SummaryContext value={{
-        json,
-        checkout(){
-            // return checkout;
-            return getCheckoutFromSummary(json, 'cart');
-        },
-        ing,
-        setSelectedDeliveryStatus,
-        loading,
-        groups : groups as any[],
-        storage : storage as CartStorage,
-    }}>
-        <ShopifyCheckoutProvider form={form}>
-            <FormContainer form={form} initialValues={checkout} key={checkout.countryCode}>
-                <ShopifyFrame>
-                    {children}
-                    {/*<Main/>*/}
-                </ShopifyFrame>
-            </FormContainer>
-        </ShopifyCheckoutProvider>
-    </SummaryContext>
+            json,
+            checkout() {
+                // return checkout;
+                return getCheckoutFromSummary(json, 'cart');
+            },
+            ing,
+            setSelectedDeliveryStatus,
+            loading,
+            groups: groups as any[],
+            storage: storage as CartStorage,
+        }}>
+            <ShopifyCheckoutProvider form={form}>
+                <FormContainer form={form} initialValues={checkout}>
+                    <ShopifyFrame>
+                        {children}
+                        {/*<Main/>*/}
+                    </ShopifyFrame>
+                </FormContainer>
+            </ShopifyCheckoutProvider>
+        </SummaryContext>
 };
-
+export const GlobalContextProvider : FC<any> = (props : any) => {
+    const {children} = props;
+    return <PayingContainer>
+        <PaymentContainer>
+            <SummaryContextProvider>
+                {children}
+            </SummaryContextProvider>
+        </PaymentContainer>
+    </PayingContainer>
+};
 export function useSummary(){
     return use(SummaryContext);
 }

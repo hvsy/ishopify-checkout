@@ -1,4 +1,4 @@
-import {createBrowserRouter, Params, redirect, RouterProvider,} from "react-router-dom";
+import {createBrowserRouter, Params, redirect, redirectDocument, RouterProvider,} from "react-router-dom";
 import {api} from "@lib/api.ts";
 import Checkout from "./shopify/checkouts";
 import {preload} from "swr";
@@ -8,7 +8,6 @@ import {getOrder} from "@lib/payment.ts";
 import {lazy} from "react";
 import {
     ApolloPreloader,
-    GetCartGid, storefront,
 } from "@lib/checkout.ts";
 import {MethodValidators} from "@lib/MethodValidators.ts";
 import {gql,} from "@apollo/client";
@@ -44,7 +43,7 @@ const OrderPage = lazy(async() => {
 })
 const prefix = '/a/s'
 function go2home(){
-    // return redirectDocument('/');
+    return redirectDocument('/');
 }
 
 
@@ -59,6 +58,7 @@ import {
 } from "@query/checkouts/fragments/fragments.ts";
 import {CartStorage} from "./shopify/context/CartStorage.ts";
 import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
+import {Additional} from "./shopify/additional/Additional.tsx";
 export const SummaryQuery = gql([
     QuerySummary,
     QueryImageFragment,
@@ -85,10 +85,14 @@ async function getCheckout(request : Request,params : Params<string>,context : a
         }
     }
     if(!storage.key){
-        storage.key = await api({
+        const res =  await api({
             method : "post",
             url : `/a/s/checkouts/${token}/key`,
         });
+        if(!res){
+            return go2home();
+        }
+        storage.key = res;
     }
     const discount_code = url.searchParams.get('discount_code');
     if(!!discount_code){
@@ -153,6 +157,22 @@ async function getCheckout(request : Request,params : Params<string>,context : a
 
 let router = createBrowserRouter([
     {
+        path : `${prefix}/additional/:token`,
+        id : 'additional',
+        Component : Additional,
+        async loader(request){
+            const {params} = request;
+            const {token} = params;
+            const res = await api({
+                method : "get",
+                url : `/a/s/api/upsell/${token}`,
+            });
+            if(res){
+               return res;
+            }
+            return go2home();
+        }
+    },{
         path: `${prefix}/orders/:token/:action?`,
         async loader(request) {
             const {params} = request;
@@ -181,20 +201,6 @@ let router = createBrowserRouter([
             }
         ]
     },
-    // {
-    //     path : `${prefix}/approve/:token`,
-    //     Component : Checkout,
-    //     async loader({request,params,context}) {
-    //         return await getCheckout(request,params,context)
-    //     },
-    // },
-    // {
-    //     path: `${prefix}/checkouts/:token/:action?`,
-    //     async loader({request,params,context}) {
-    //         return await getCheckout(request,params,context)
-    //     },
-    //     Component: Checkout,
-    // }
 ], {
 });
 

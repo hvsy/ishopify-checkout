@@ -92,8 +92,28 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
     const phonePrefix = hitRegion?.data?.phoneNumberPrefix;
     const zipHolder = hitRegion?.data?.postalCodeExample;
     const label = _capitalize(title || '');
+    const postalCodeRequired = !!hitRegion?.data?.postalCodeRequired;
+    let colSpan = 3;
+    if(!zones?.length){
+        colSpan--;
+    }
+    if(!postalCodeRequired){
+        colSpan--;
+    }
+    const colSpanClass = ['md:col-span-6','md:col-span-3' ,'md:col-span-2'][colSpan-1];
     return <StepBlock className={'flex flex-col space-y-4'} label={`${label} address`} name={`${label}-address`}>
         <div className={'grid grid-cols-6 gap-y-3 gap-x-2'}>
+            <FormItem name={[...prefix, 'region']} preserve={true}>
+                <div className={'hidden'}/>
+            </FormItem>
+            <FormItem name={[...prefix,'region_code']} >
+                <NewRegionSelector
+                    autoComplete={'country'}
+                    // field={'region'}
+                    placeholder={'Country/Region'}
+                    className={`col-span-6`}
+                />
+            </FormItem>
             <FormItem name={[...prefix, 'first_name']} rules={[{
                 // required : true,
                 // message  : 'Enter a first name'
@@ -133,39 +153,25 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             }]}>
                 <Input placeholder={'City'}
                        autoComplete={'address-level2'}
-                       className={'col-span-6'}/>
+                       className={`${colSpanClass} col-span-6`}/>
             </FormItem>
-            <FormItem name={[...prefix, 'region']} preserve={true}>
-                <div className={'hidden'}/>
-            </FormItem>
-            <FormItem name={[...prefix,'region_code']} >
-                <NewRegionSelector
-                    autoComplete={'country'}
-                    // field={'region'}
-                    placeholder={'Country/Region'}
-                    className={(zones?.length > 0) ? `md:col-span-2 col-span-6` : 'md:col-span-3 col-span-6'}
-                />
-            </FormItem>
-            {/*<FormItem name={[...prefix, 'state']} preserve={true}>*/}
-            {/*    <div className={'hidden'}/>*/}
-            {/*</FormItem>*/}
             <FormItem name={[...prefix,'state_code']}>
                 <NewStateSelector
                     autoComplete={'address-level1'}
                     // field={'state'}
                     zones={zones}
                     placeholder={'Province/State'}
-                    className={`md:col-span-2 col-span-6`}
+                    className={`${colSpanClass} col-span-6`}
                 />
             </FormItem>
-            <FormItem name={[...prefix, 'zip']} rules={[{
+            {postalCodeRequired  && <FormItem name={[...prefix, 'zip']} rules={[{
                 required: true,
                 message: 'Enter a ZIP / postal code',
             }]}>
-                <Input placeholder={zipHolder ? `Zip Code Like ${zipHolder}` : 'Zip Code'}
+                <Input placeholder={zipHolder ? `Postal Code Like ${zipHolder}` : 'Postal Code'}
                        autoComplete={'postal-code'}
-                       className={(zones?.length > 0) ? 'md:col-span-2 col-span-6' : 'md:col-span-3 col-span-6'}/>
-            </FormItem>
+                       className={`${colSpanClass} col-span-6`}/>
+            </FormItem>}
             <FormItem name={[...prefix, 'phone']} rules={[{
                 required: true,
                 async validator(rules, value) {

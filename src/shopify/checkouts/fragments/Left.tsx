@@ -1,7 +1,6 @@
 import {FC, ReactNode} from "react";
 import {Default} from "@hooks/client.ts";
 import {useShopify} from "../../context/ShopifyContext.ts";
-import {CheckoutForm} from "./CheckoutForm.tsx";
 import {SingleCheckoutForm} from "./SingleCheckoutForm.tsx";
 import {Skeleton} from "@components/ui/Skeleton.tsx";
 

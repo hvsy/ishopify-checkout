@@ -7,3 +7,14 @@ export function getBy(target : any,...paths : string[]){
     }
     return null;
 }
+
+export function moneyFormat(data : any,display :  Intl.NumberFormatOptions['currencyDisplay'] = 'narrowSymbol'){
+    if(!data || (data.amount === undefined) || (data.currencyCode === undefined)){
+        return null;
+    }
+    return new Intl.NumberFormat(navigator.languages, {
+        style: "currency", currency: data.currencyCode,
+        // currencyDisplay : 'narrowSymbol',
+        currencyDisplay : display
+    }).format(data.amount,);
+}

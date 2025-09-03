@@ -6,13 +6,14 @@ import {useSummary} from "../hooks/useSummary.tsx";
 import {useMutationCheckout} from "../../context/ShopifyCheckoutContext.tsx";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
 import {api} from "@lib/api.ts";
+import {useFormValidate} from "../../hooks/useFormValidate.tsx";
+import {PromiseLocation} from "../../lib/payment.ts";
 
 export type ApproveItProps = {};
 
 export const ApproveIt: FC<ApproveItProps> = (props) => {
     const {} = props;
     const {ing,storage} = useSummary();
-    console.log('approve it ing:',ing);
     const form = useCurrentForm();
     const mutation = useMutationCheckout();
     const sync = useCheckoutSync();
@@ -24,25 +25,21 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
             scrollToError(error);
         });
     }, []);
+    const submit = useFormValidate();
     return <AsyncButton
         pulsing={ing}
         onClick={async () => {
-            const values = await submit(form);
-            console.log('values:',values);
-            if(values){
-                await mutation(values);
-                await sync();
-                const res = await api({
-                    method : "post",
-                    'url' : storage!.api + `/approve`,
-                });
-                if(!res['error']){
-                    const url = res.url;
-                    if(!!url){
-                        window.location = url;
-                    }
+            const after = await submit();
+            if(!after) return;
+            const res = await api({
+                method : "post",
+                'url' : storage!.api + `/approve`,
+            });
+            if(!res['error']){
+                const url = res.url;
+                if(!!url){
+                    await PromiseLocation(url);
                 }
-
             }
         }}
         className={'max-w-full'}>Payment</AsyncButton> ;
