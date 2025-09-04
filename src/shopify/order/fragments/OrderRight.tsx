@@ -57,7 +57,12 @@ export const OrderRight: FC<OrderRightProps> = (props) => {
             total={data.total_amount}
             subtotal={data.subtotal_amount}
             total_saved={data.total_saved}
-            discount_codes={data.discount_codes}
+            discount_codes={Object.keys(data.discount_codes||{}).map((code) => {
+                return {
+                    code,
+                    amount : data.discount_codes[code],
+                }
+            })}
             shipping_discounts={data.shipping_discounts}
             total_quantity={data.line_items.reduce((a,c) => {
                 return a + c.quantity;
