@@ -1,7 +1,7 @@
 import {get as _get} from "lodash-es";
 
 
-const storefront_url = "/api/unstable/graphql.json";
+const storefront_url = "/api/2025-10/graphql.json";
 import {ApolloClient, createQueryPreloader, InMemoryCache} from "@apollo/client";
 
 export const ApolloStoreFrontClient = new ApolloClient({
