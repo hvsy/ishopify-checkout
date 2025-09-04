@@ -22,7 +22,9 @@ export const ProductContainer: FC<ProductProps> = (props) => {
         }
     });
     if(loading){
-        return <Loading />
+        return <div className={'flex flex-col justify-center items-center flex-1'}>
+            <Loading/>
+        </div>
     }
     const product = data?.product;
 
