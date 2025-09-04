@@ -2,6 +2,7 @@ import React, {FC, Fragment, ReactNode} from "react";
 import {TagIcon, TagsIcon} from "lucide-react";
 import {useMoneyFormat} from "../context/ShopifyContext.ts";
 import {Skeleton} from "@components/ui/Skeleton.tsx";
+import {isObject} from "lodash-es";
 
 export type SummaryFrameProps = {
     subtotal : Shopify.Money,
@@ -51,13 +52,14 @@ export const SummaryFrame: FC<SummaryFrameProps> = (props) => {
                 </div>
                 <div className={'grid grid-cols-2'}>
                     {(discount_codes.map((code: any) => {
+                        const value = isObject(code.amount) ? code.amount : {amount : code.amount};
                         return <Fragment key={code.code}>
                             <div className={'flex flex-row items-center space-x-2 text-gray-500'}>
                                 <TagIcon className={'size-4 scale-x-[-1]'}/>
                                 <span>{code.code}</span>
                             </div>
                             <div className={'flex flex-row justify-end'}>
-                                -{format({amount: code.amount})}
+                                -{format(value)}
                             </div>
                         </Fragment>
                     }))}
