@@ -32,12 +32,12 @@ export const VariantPrice : FC<any> = (props) => {
         <div className={'flex flex-row space-x-1 text-red-500'}>
             <div className={''}>
                 {moneyFormat({
-                    amount: Big(amount).mul(quantity).mul(Big(100).sub(percentage)).div(100).round(2),
+                    amount: Big(amount).mul(quantity).mul(Big(percentage)).div(100).round(2),
                     currencyCode: currencyCode,
                 },'code')}
             </div>
             <div>
-                ({percentage}% extra discount)
+                ({100 - percentage}% extra discount)
             </div>
         </div>
     </div>;

@@ -15,7 +15,7 @@ export const Additional: FC<AdditionalProps> = (props) => {
     // const {data,isLoading,error} = useSWR();
     useCleanCartCookie(data?.cart_gid);
     if(!data){
-        return <div className={'flex flex-col justify-center items-center flex-1'}>
+        return <div className={'flex flex-col justify-center items-center flex-1 min-w-[100vw] min-h-[100vh] p-0 sm:p-5'}>
             <Loading/>
         </div>
     }
