@@ -18,8 +18,12 @@ export const Summary: FC<SummaryProps> = (props) => {
     const allocateShippingLine = allocations.filter((line: any) => {
         return line?.targetType === 'SHIPPING_LINE';
     });
+    const shippingCodes : string[] = [];
     const totalSaved = Big(_get(json, 'cart.cost.checkoutChargeAmount.amount', 0))
     .minus(_get(json, 'cart.cost.subtotalAmount.amount', 0)).add(allocations.reduce((pv: number, cv: any) => {
+        if(cv.targetType === 'SHIPPING_LINE'){
+            shippingCodes.push(cv.code);
+        }
         return pv + parseFloat(cv.discountedAmount.amount);
     }, 0));
     // const code = _get(json, 'cart.discountCodes', []).filter((d: any) => d.applicable)?.[0]?.code;
@@ -27,7 +31,7 @@ export const Summary: FC<SummaryProps> = (props) => {
     const shipping_cost = _get(groups, '0.selectedDeliveryOption.estimatedCost')
 
     const codes = _get(json, 'cart.discountCodes', []).filter((discount: any) => {
-        return !!discount.applicable;
+        return !!discount.applicable && !shippingCodes.includes(discount.code);
     }).map((discount: any) => {
         const code = discount.code;
         const amount = allocations.filter((item: any) => {
