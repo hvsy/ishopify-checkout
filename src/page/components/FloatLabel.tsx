@@ -1,10 +1,11 @@
-import {DetailedHTMLProps, FC, ReactNode} from "react";
+import {DetailedHTMLProps, FC, ReactNode, RefObject} from "react";
 import {clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
 import {Loading} from "@components/fragments/Loading.tsx";
 import {Skeleton} from "@components/ui/Skeleton.tsx";
 
 export type FloatLabelProps = {
+    elementRef ?: RefObject<any>,
     autoComplete ?: string;
     name ?: string;
     placeholder ?: string;
@@ -25,10 +26,15 @@ export type FloatLabelProps = {
     touched ?: boolean;
     validating ?: boolean;
     validated ?: boolean;
+    label ?: string;
+    pattern ?:  string;
+    maxLength ?: number;
 };
 
 export const FloatLabel: FC<FloatLabelProps> = (props) => {
     const {placeholder : ph,children,prefix,suffix,
+        label,
+        elementRef,
         suffixClassName,
         element : Element = 'input',className,size='default',float = true,
         onChange,value,onBlur,
@@ -49,13 +55,15 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
             <Skeleton className={'h-8 w-full'}/>
         </div>
     }
-    return <div className={`flex flex-col ${className || ''}`}>
+    return <div className={`flex flex-col space-y-1 ${className || ''}`}>
+        {!!label && <div>{label}</div>}
         <div className={twMerge(clsx(`border rounded-md relative flex flex-row justify-between items-stretch box-border overflow-hidden`,border,h))}>
             {prefix && <div className={'flex flex-col justify-center px-3 bg-gray-100 flex-shrink-0'}>
                 {prefix}
             </div>}
             <div className={'relative flex-1 flex flex-row items-stretch overflow-hidden'}>
-                <Element {...others}
+                <Element ref={elementRef}
+                         {...others}
                          placeholder={ph}
                          value={onChange ? (value || '') : value}
                          onBlur={onBlur}

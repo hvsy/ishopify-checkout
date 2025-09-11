@@ -14,33 +14,7 @@ import Form from "rc-field-form";
 import {PaymentContainer, PaymentContext} from "../../../container/PaymentContext.tsx";
 import {PayingContainer} from "@components/frames/PayingContainer.tsx";
 
-// export function useSummary() {
-//     // const {ref,} = useLoaderData() as any;
-//     const {ref,storage} = useRouteLoaderData('checkout') as any;
-//     const {data : json ,error,networkStatus} = useReadQuery<any>(ref);
-//     const groups  =_get(json,'cart.deliveryGroups.edges',[]).map((group : any) => {
-//         return group.node;
-//     });
-//     const loading = {
-//             shipping_methods: !_has(json?.cart, 'deliveryGroups') ||
-//                 !_isArray(json?.cart?.deliveryGroups?.edges),
-//         summary : [NetworkStatus.loading,
-//             NetworkStatus.refetch,
-//             NetworkStatus.fetchMore,
-//             NetworkStatus.poll,
-//         ].includes(networkStatus)
-//     }
-//     return {
-//         json,
-//         storage  : storage as CartStorage,
-//         checkout() {
-//             return getCheckoutFromSummary(json, 'cart');
-//         },
-//         // ing : loading.shipping_methods || loading.summary || updatingDeliveryGroup,
-//         loading : loading,
-//         groups : groups,
-//     }
-// }
+
 
 export const SummaryContext = createContext<{
     setSelectedDeliveryStatus ?: (status : boolean)=>void,

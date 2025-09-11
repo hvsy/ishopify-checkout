@@ -5,6 +5,10 @@ import {ShopifyContext} from "../context/ShopifyContext.ts";
 import {OrderMain} from "./fragments/OrderMain.tsx";
 import {OrderRight} from "./fragments/OrderRight.tsx";
 import {useCleanCartCookie} from "../hooks/useCleanCartCookie.ts";
+import {Pixels} from "../fragments/Pixels.tsx";
+import {Report} from "../../page/components/Report.tsx";
+import Big from "big.js";
+import {md5} from "js-md5";
 
 export type OrderProps = {};
 
@@ -23,5 +27,23 @@ export const Order: FC<OrderProps> = (props) => {
             return <OrderMain/>
         }}>
         </PageFrame>
+        {data.shop.tracking && <Pixels tracking={data.shop.tracking} />}
+        {data.token && <Report name={'purchase'} data={{
+            eventId : md5(data.token),
+            currency : data.total_amount.currencyCode,
+            price : data.total_amount.amount + '',
+            token : data.token,
+            quantity : data.line_items.reduce((pv,cv) => {
+                return pv + cv.quantity;
+            },0),
+            contents : data.line_items.map((line) => {
+                return {
+                    id : (line.variant.id).replace('gid://shopify/ProductVariant/',''),
+                    quantity : line.quantity,
+                    price : Big(line.total.amount).div(line.quantity).toString(),
+                }
+            })
+            // quantity : datat.
+        }} token={data.token}/>}
     </ShopifyContext>;
 };

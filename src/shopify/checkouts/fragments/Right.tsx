@@ -12,7 +12,7 @@ import {useMoneyFormat} from "../../context/ShopifyContext.ts";
 import {useSummary} from "../hooks/useSummary.tsx";
 import {gql, useApolloClient} from "@apollo/client";
 import {
-    QueryDeliveryFragment, QueryImageFragment,
+    QueryImageFragment,
     QueryLineItemsFragment,
     QueryVariantFragment
 } from "@query/checkouts/fragments/fragments.ts";
@@ -59,7 +59,6 @@ export const Right: FC<RightProps> = (props) => {
     const discountCode = _get(discountData,'cart.discountCodes',[]).filter((d:any)=>d.applicable)?.[0]?.code;
 
     const {json : summary,} = useSummary();
-    // console.log('json:',json,discountCode);
     const format = useMoneyFormat();
     return <RightFrame totalPrice={format(_get(summary,'cart.cost.totalAmount'))}>
         <div className={'pb-5 w-full max-w-full space-y-5'}>
@@ -68,6 +67,6 @@ export const Right: FC<RightProps> = (props) => {
             })}
         </div>
         <ShopifyCouponForm />
-        <Summary />
+        <Summary lines={data}/>
     </RightFrame>;
 };
