@@ -8,6 +8,8 @@ import {useShopify} from "../context/ShopifyContext.ts";
 import {useCallback} from "react";
 import {ErrorBoundary} from "react-error-boundary";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {Report} from "../../page/components/Report.tsx";
+import {useParams} from "react-router-dom";
 
 export default () => {
     const shop = useShopify();

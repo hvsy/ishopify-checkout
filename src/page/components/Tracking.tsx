@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {FacebookPixel} from "./FacebookPixel.tsx";
+import {FacebookPixel} from "@components/pixels/FacebookPixel.tsx";
 
 export type TrackingProps = {
     tracking : DB.Tracking,

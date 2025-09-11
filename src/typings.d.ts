@@ -14,13 +14,20 @@ namespace Analytics{
         quantity : number;
         price ?: string;
         currency ?: string;
+        contents : {
+            id : string;
+            quantity : number;
+            price : number|string,
+        }[];
     };
     type Purchase = {
         price ?: string;
         currency ?: string;
+        quantity : number;
         contents : {
             id : string;
             quantity : number;
+            price : number|string,
         }[];
         token : string;
     };
@@ -43,6 +50,7 @@ namespace Analytics{
 
 interface Window {
     fbq: (fun : string,event : string,data ?: any,extra ?: any)=>void;
+    ttq ?: any;
     Analytics : import('mitt').Emitter<Analytics.Events>;
     report ?: <Key extends keyof Analytics.Events>(name : Key,
                                                    data : Omit<Analytics.Events[Key]['data'],"eventId">,
@@ -305,6 +313,7 @@ namespace Shopify{
     type Shop = {
         title : string;
         name : string;
+        tracking : any;
         config ?: {
             email ?: {
                 contact ?: string;
@@ -327,6 +336,7 @@ namespace Shopify{
         zip : string;
     };
     type Order = {
+        token : string
         cart_id : string;
         email : string;
         number : string;
