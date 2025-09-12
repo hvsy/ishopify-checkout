@@ -1,14 +1,10 @@
-import {FC, useEffect,} from "react";
-import {useLocation} from "react-router-dom";
-import {usePlainScript} from "@hooks/usePlainScript.tsx";
+import {FC,} from "react";
 import {md5} from "js-md5";
 import {usePlatformPixel} from "./usePlatformPixel.tsx";
 
 
 export const FacebookPixel: FC<{ pixels: string[] }> = (props) => {
     const {pixels} = props;
-    const location = useLocation();
-    const pathname = location.pathname;
     usePlatformPixel('facebook',{
         script : `!function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
