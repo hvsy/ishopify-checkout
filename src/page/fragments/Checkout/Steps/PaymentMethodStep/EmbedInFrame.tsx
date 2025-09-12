@@ -1,7 +1,6 @@
 import {FC, IframeHTMLAttributes, memo, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {useEventCallback, useEventListener} from "usehooks-ts";
+import {useEventCallback,} from "usehooks-ts";
 import {Loading} from "@components/fragments/Loading.tsx";
-import {useForm} from "rc-field-form";
 
 export type EmbedInFrameProps = IframeHTMLAttributes<any>&{
     active : boolean;

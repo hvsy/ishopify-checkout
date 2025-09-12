@@ -58,7 +58,7 @@ export const Payment: FC<PaymentProps> = (props) => {
                 <div className={'flex flex-row space-x-1'}>
                     {(icons || []).map((icon, i) => {
                         return <div className={'rounded flex flex-col justify-center items-center overflow-hidden'} key={i}>
-                            {_isString(icon) ? <img className="object-cover overflow-hidden" src={icon}/> : icon }
+                            {_isString(icon) ? <img width={38} height={24} className="object-cover overflow-hidden" src={icon}/> : icon }
                         </div>
                     })}
                 </div>

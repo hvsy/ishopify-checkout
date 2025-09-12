@@ -1,4 +1,4 @@
-import {FC, useEffect,} from "react";
+import {FC,} from "react";
 import {md5} from "js-md5";
 import {usePlatformPixel} from "./usePlatformPixel.tsx";
 import StartCheckout = Analytics.StartCheckout;
