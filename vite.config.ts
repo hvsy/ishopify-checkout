@@ -1,6 +1,6 @@
 import {defineConfig, loadEnv} from 'vite'
 import path from "path"
-import tailwindcss from '@tailwindcss/vite'
+// import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react-swc'
 import { rimraf } from 'rimraf';
 import {trimEnd as _trimEnd} from "lodash-es";
@@ -17,19 +17,29 @@ export default defineConfig(({mode}) => {
   const port = env.VITE_DEV_PORT || undefined;
   const remote_api = env.VITE_API_REMOTE_HOST || undefined;
   return {
-    plugins: [react(),tailwindcss(),removeMSW()],
+    plugins: [react(),
+      // tailwindcss(),
+      removeMSW(),],
     base : './',
     build : {
       manifest  : "manifest.json"
     },
+    content: ["./dist/**/*.{html,js}"],
     server : {
       host : '0.0.0.0',
       port : port ? parseInt(port) : undefined,
-      cors : {
-        "origin": "*",
-        "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-        "preflightContinue": false,
-        "optionsSuccessStatus": 204
+      // cors : {
+      //   "origin": "*",
+      //   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+      //   "preflightContinue": false,
+      //   "optionsSuccessStatus": 204
+      // },
+      cors: {
+        origin: ['http://ttt.local.vtoshop.com:3000', 'https://localshopfly.myshopify.com'],
+        credentials: true,
+          "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+          "preflightContinue": false,
+          "optionsSuccessStatus": 204
       },
       hmr  : {
         // clientPort : 5173

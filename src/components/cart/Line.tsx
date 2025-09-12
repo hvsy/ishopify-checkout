@@ -48,9 +48,9 @@ export const Line: FC<LineProps> = (props) => {
                 <SmartDiv className={'truncate'}>
                     {title}
                 </SmartDiv>
-                <div className={'text-neutral-500 text-sm'}>
+                <SmartDiv className={'text-neutral-500 text-sm'} loadingClassName={'mt-2 max-w-[50px]'}>
                     {(options).filter(t => !!t && t !== 'Default Title').join(" / ")}
-                </div>
+                </SmartDiv>
                 {discounted}
             </div>
         </div>

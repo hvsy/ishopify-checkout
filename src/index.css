@@ -1,8 +1,13 @@
-@import "tailwindcss";
+/*@import "tailwindcss";*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 @layer base {
     input::placeholder,
     textarea::placeholder {
-        color: theme(--color-gray-400);
+        color: theme(textColor);
     }
     :root {
         --background: 0 0% 100%;
