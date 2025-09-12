@@ -12,989 +12,1162 @@
 <body>
 <div id="root">
     <style>
-        /*! tailwindcss v4.1.12 | MIT License | https://tailwindcss.com */
-        @layer properties;
-        @layer theme, base, components, utilities;
-        @layer theme {
-            :root, :host {
-                --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-                'Noto Color Emoji';
-                --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-                monospace;
-                --color-gray-300: oklch(87.2% 0.01 258.338);
-                --color-neutral-50: oklch(98.5% 0 0);
-                --color-neutral-200: oklch(92.2% 0 0);
-                --color-neutral-300: oklch(87% 0 0);
-                --color-neutral-500: oklch(55.6% 0 0);
-                --spacing: 0.25rem;
-                --text-sm: 0.875rem;
-                --text-sm--line-height: calc(1.25 / 0.875);
-                --text-4xl: 2.25rem;
-                --text-4xl--line-height: calc(2.5 / 2.25);
-                --font-weight-bold: 700;
-                --radius-md: 0.375rem;
-                --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-                --default-transition-duration: 150ms;
-                --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                --default-font-family: var(--font-sans);
-                --default-mono-font-family: var(--font-mono);
-            }
-        }
-        @layer base {
-            *, ::after, ::before, ::backdrop, ::file-selector-button {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-                border: 0 solid;
-            }
-
-            html, :host {
-                line-height: 1.5;
-                -webkit-text-size-adjust: 100%;
-                tab-size: 4;
-                font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
-                font-feature-settings: var(--default-font-feature-settings, normal);
-                font-variation-settings: var(--default-font-variation-settings, normal);
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            hr {
-                height: 0;
-                color: inherit;
-                border-top-width: 1px;
-            }
-
-            abbr:where([title]) {
-                -webkit-text-decoration: underline dotted;
-                text-decoration: underline dotted;
-            }
-
-            h1, h2, h3, h4, h5, h6 {
-                font-size: inherit;
-                font-weight: inherit;
-            }
-
-            a {
-                color: inherit;
-                -webkit-text-decoration: inherit;
-                text-decoration: inherit;
-            }
-
-            b, strong {
-                font-weight: bolder;
-            }
-
-            code, kbd, samp, pre {
-                font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace);
-                font-feature-settings: var(--default-mono-font-feature-settings, normal);
-                font-variation-settings: var(--default-mono-font-variation-settings, normal);
-                font-size: 1em;
-            }
-
-            small {
-                font-size: 80%;
-            }
-
-            sub, sup {
-                font-size: 75%;
-                line-height: 0;
-                position: relative;
-                vertical-align: baseline;
-            }
-
-            sub {
-                bottom: -0.25em;
-            }
-
-            sup {
-                top: -0.5em;
-            }
-
-            table {
-                text-indent: 0;
-                border-color: inherit;
-                border-collapse: collapse;
-            }
-
-            :-moz-focusring {
-                outline: auto;
-            }
-
-            progress {
-                vertical-align: baseline;
-            }
-
-            summary {
-                display: list-item;
-            }
-
-            ol, ul, menu {
-                list-style: none;
-            }
-
-            img, svg, video, canvas, audio, iframe, embed, object {
-                display: block;
-                vertical-align: middle;
-            }
-
-            img, video {
-                max-width: 100%;
-                height: auto;
-            }
-
-            button, input, select, optgroup, textarea, ::file-selector-button {
-                font: inherit;
-                font-feature-settings: inherit;
-                font-variation-settings: inherit;
-                letter-spacing: inherit;
-                color: inherit;
-                border-radius: 0;
-                background-color: transparent;
-                opacity: 1;
-            }
-
-            :where(select:is([multiple], [size])) optgroup {
-                font-weight: bolder;
-            }
-
-            :where(select:is([multiple], [size])) optgroup option {
-                padding-inline-start: 20px;
-            }
-
-            ::file-selector-button {
-                margin-inline-end: 4px;
-            }
-
-            ::placeholder {
-                opacity: 1;
-            }
-
-            @supports (not (-webkit-appearance: -apple-pay-button)) or (contain-intrinsic-size: 1px) {
-                ::placeholder {
-                    color: currentcolor;
-                    @supports (color: color-mix(in lab, red, red)) {
-                        color: color-mix(in oklab, currentcolor 50%, transparent);
-                    }
-                }
-            }
-            textarea {
-                resize: vertical;
-            }
-
-            ::-webkit-search-decoration {
-                -webkit-appearance: none;
-            }
-
-            ::-webkit-date-and-time-value {
-                min-height: 1lh;
-                text-align: inherit;
-            }
-
-            ::-webkit-datetime-edit {
-                display: inline-flex;
-            }
-
-            ::-webkit-datetime-edit-fields-wrapper {
-                padding: 0;
-            }
-
-            ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
-                padding-block: 0;
-            }
-
-            ::-webkit-calendar-picker-indicator {
-                line-height: 1;
-            }
-
-            :-moz-ui-invalid {
-                box-shadow: none;
-            }
-
-            button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-button {
-                appearance: button;
-            }
-
-            ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
-                height: auto;
-            }
-
-            [hidden]:where(:not([hidden='until-found'])) {
-                display: none !important;
-            }
-        }
-        @layer utilities {
-            .relative {
-                position: relative;
-            }
-
-            .col-span-1 {
-                grid-column: span 1 / span 1;
-            }
-
-            .col-span-3 {
-                grid-column: span 3 / span 3;
-            }
-
-            .col-span-6 {
-                grid-column: span 6 / span 6;
-            }
-
-            .mt-8 {
-                margin-top: calc(var(--spacing) * 8);
-            }
-
-            .box-border {
-                box-sizing: border-box;
-            }
-
-            .flex {
-                display: flex;
-            }
-
-            .grid {
-                display: grid;
-            }
-
-            .hidden {
-                display: none;
-            }
-
-            .aspect-square {
-                aspect-ratio: 1 / 1;
-            }
-
-            .h-3 {
-                height: calc(var(--spacing) * 3);
-            }
-
-            .h-5 {
-                height: calc(var(--spacing) * 5);
-            }
-
-            .h-8 {
-                height: calc(var(--spacing) * 8);
-            }
-
-            .h-24 {
-                height: calc(var(--spacing) * 24);
-            }
-
-            .max-h-0 {
-                max-height: calc(var(--spacing) * 0);
-            }
-
-            .max-h-5 {
-                max-height: calc(var(--spacing) * 5);
-            }
-
-            .min-h-4 {
-                min-height: calc(var(--spacing) * 4);
-            }
-
-            .min-h-5 {
-                min-height: calc(var(--spacing) * 5);
-            }
-
-            .min-h-8 {
-                min-height: calc(var(--spacing) * 8);
-            }
-
-            .min-h-\[100vh\] {
-                min-height: 100vh;
-            }
-
-            .w-12 {
-                width: calc(var(--spacing) * 12);
-            }
-
-            .w-16 {
-                width: calc(var(--spacing) * 16);
-            }
-
-            .w-24 {
-                width: calc(var(--spacing) * 24);
-            }
-
-            .w-full {
-                width: 100%;
-            }
-
-            .max-w-12 {
-                max-width: calc(var(--spacing) * 12);
-            }
-
-            .max-w-32 {
-                max-width: calc(var(--spacing) * 32);
-            }
-
-            .max-w-104 {
-                max-width: calc(var(--spacing) * 104);
-            }
-
-            .max-w-full {
-                max-width: 100%;
-            }
-
-            .min-w-10 {
-                min-width: calc(var(--spacing) * 10);
-            }
-
-            .min-w-12 {
-                min-width: calc(var(--spacing) * 12);
-            }
-
-            .min-w-18 {
-                min-width: calc(var(--spacing) * 18);
-            }
-
-            .min-w-24 {
-                min-width: calc(var(--spacing) * 24);
-            }
-
-            .min-w-36 {
-                min-width: calc(var(--spacing) * 36);
-            }
-
-            .flex-1 {
-                flex: 1;
-            }
-
-            .flex-shrink-0 {
-                flex-shrink: 0;
-            }
-
-            .origin-top {
-                transform-origin: top;
-            }
-
-            .animate-pulse {
-                animation: var(--animate-pulse);
-            }
-
-            .cursor-pointer {
-                cursor: pointer;
-            }
-
-            .list-none {
-                list-style-type: none;
-            }
-
-            .appearance-none {
-                appearance: none;
-            }
-
-            .grid-cols-2 {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-
-            .grid-cols-6 {
-                grid-template-columns: repeat(6, minmax(0, 1fr));
-            }
-
-            .flex-col {
-                flex-direction: column;
-            }
-
-            .flex-col-reverse {
-                flex-direction: column-reverse;
-            }
-
-            .flex-row {
-                flex-direction: row;
-            }
-
-            .items-center {
-                align-items: center;
-            }
-
-            .items-stretch {
-                align-items: stretch;
-            }
-
-            .justify-between {
-                justify-content: space-between;
-            }
-
-            .justify-center {
-                justify-content: center;
-            }
-
-            .justify-end {
-                justify-content: flex-end;
-            }
-
-            .space-y-3 {
-                :where(& > :not(:last-child)) {
-                    --tw-space-y-reverse: 0;
-                    margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));
-                    margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)));
-                }
-            }
-
-            .space-y-4 {
-                :where(& > :not(:last-child)) {
-                    --tw-space-y-reverse: 0;
-                    margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));
-                    margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));
-                }
-            }
-
-            .space-y-5 {
-                :where(& > :not(:last-child)) {
-                    --tw-space-y-reverse: 0;
-                    margin-block-start: calc(calc(var(--spacing) * 5) * var(--tw-space-y-reverse));
-                    margin-block-end: calc(calc(var(--spacing) * 5) * calc(1 - var(--tw-space-y-reverse)));
-                }
-            }
-
-            .space-y-6 {
-                :where(& > :not(:last-child)) {
-                    --tw-space-y-reverse: 0;
-                    margin-block-start: calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));
-                    margin-block-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)));
-                }
-            }
-
-            .space-y-8 {
-                :where(& > :not(:last-child)) {
-                    --tw-space-y-reverse: 0;
-                    margin-block-start: calc(calc(var(--spacing) * 8) * var(--tw-space-y-reverse));
-                    margin-block-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-y-reverse)));
-                }
-            }
-
-            .space-y-10 {
-                :where(& > :not(:last-child)) {
-                    --tw-space-y-reverse: 0;
-                    margin-block-start: calc(calc(var(--spacing) * 10) * var(--tw-space-y-reverse));
-                    margin-block-end: calc(calc(var(--spacing) * 10) * calc(1 - var(--tw-space-y-reverse)));
-                }
-            }
-
-            .gap-x-2 {
-                column-gap: calc(var(--spacing) * 2);
-            }
-
-            .space-x-2 {
-                :where(& > :not(:last-child)) {
-                    --tw-space-x-reverse: 0;
-                    margin-inline-start: calc(calc(var(--spacing) * 2) * var(--tw-space-x-reverse));
-                    margin-inline-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-x-reverse)));
-                }
-            }
-
-            .gap-y-2 {
-                row-gap: calc(var(--spacing) * 2);
-            }
-
-            .gap-y-3 {
-                row-gap: calc(var(--spacing) * 3);
-            }
-
-            .divide-y {
-                :where(& > :not(:last-child)) {
-                    --tw-divide-y-reverse: 0;
-                    border-bottom-style: var(--tw-border-style);
-                    border-top-style: var(--tw-border-style);
-                    border-top-width: calc(1px * var(--tw-divide-y-reverse));
-                    border-bottom-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
-                }
-            }
-
-            .divide-neutral-200 {
-                :where(& > :not(:last-child)) {
-                    border-color: var(--color-neutral-200);
-                }
-            }
-
-            .divide-neutral-300 {
-                :where(& > :not(:last-child)) {
-                    border-color: var(--color-neutral-300);
-                }
-            }
-
-            .truncate {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-
-            .overflow-auto {
-                overflow: auto;
-            }
-
-            .overflow-hidden {
-                overflow: hidden;
-            }
-
-            .rounded {
-                border-radius: 0.25rem;
-            }
-
-            .rounded-md {
-                border-radius: var(--radius-md);
-            }
-
-            .border {
-                border-style: var(--tw-border-style);
-                border-width: 1px;
-            }
-
-            .border-y {
-                border-block-style: var(--tw-border-style);
-                border-block-width: 1px;
-            }
-
-            .border-neutral-300 {
-                border-color: var(--color-neutral-300);
-            }
-
-            .bg-gray-300 {
-                background-color: var(--color-gray-300);
-            }
-
-            .bg-neutral-50 {
-                background-color: var(--color-neutral-50);
-            }
-
-            .p-3 {
-                padding: calc(var(--spacing) * 3);
-            }
-
-            .p-6 {
-                padding: calc(var(--spacing) * 6);
-            }
-
-            .px-4 {
-                padding-inline: calc(var(--spacing) * 4);
-            }
-
-            .py-3 {
-                padding-block: calc(var(--spacing) * 3);
-            }
-
-            .pt-2 {
-                padding-top: calc(var(--spacing) * 2);
-            }
-
-            .pt-5 {
-                padding-top: calc(var(--spacing) * 5);
-            }
-
-            .pr-0 {
-                padding-right: calc(var(--spacing) * 0);
-            }
-
-            .pb-5 {
-                padding-bottom: calc(var(--spacing) * 5);
-            }
-
-            .text-4xl {
-                font-size: var(--text-4xl);
-                line-height: var(--tw-leading, var(--text-4xl--line-height));
-            }
-
-            .text-sm {
-                font-size: var(--text-sm);
-                line-height: var(--tw-leading, var(--text-sm--line-height));
-            }
-
-            .font-bold {
-                --tw-font-weight: var(--font-weight-bold);
-                font-weight: var(--font-weight-bold);
-            }
-
-            .text-neutral-500 {
-                color: var(--color-neutral-500);
-            }
-
-            .transition {
-                transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, visibility, content-visibility, overlay, pointer-events;
-                transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-                transition-duration: var(--tw-duration, var(--default-transition-duration));
-            }
-
-            .duration-300 {
-                --tw-duration: 300ms;
-                transition-duration: 300ms;
-            }
-
-            .ease-linear {
-                --tw-ease: linear;
-                transition-timing-function: linear;
-            }
-
-            .select-none {
-                -webkit-user-select: none;
-                user-select: none;
-            }
-
-            .group-open\:max-h-\[1000px\] {
-                &:is(:where(.group):is([open], :popover-open, :open) *) {
-                    max-height: 1000px;
-                }
-            }
-
-            .group-open\:overflow-visible {
-                &:is(:where(.group):is([open], :popover-open, :open) *) {
-                    overflow: visible;
-                }
-            }
-
-            .group-open\:border-b {
-                &:is(:where(.group):is([open], :popover-open, :open) *) {
-                    border-bottom-style: var(--tw-border-style);
-                    border-bottom-width: 1px;
-                }
-            }
-
-            .sm\:mx-auto {
-                @media (width >= 40rem) {
-                    margin-inline: auto;
-                }
-            }
-
-            .sm\:mt-0 {
-                @media (width >= 40rem) {
-                    margin-top: calc(var(--spacing) * 0);
-                }
-            }
-
-            .sm\:flex {
-                @media (width >= 40rem) {
-                    display: flex;
-                }
-            }
-
-            .sm\:hidden {
-                @media (width >= 40rem) {
-                    display: none;
-                }
-            }
-
-            .sm\:max-h-fit {
-                @media (width >= 40rem) {
-                    max-height: fit-content;
-                }
-            }
-
-            .sm\:w-\[45\.5\%\] {
-                @media (width >= 40rem) {
-                    width: 45.5%;
-                }
-            }
-
-            .sm\:w-\[54\.5\%\] {
-                @media (width >= 40rem) {
-                    width: 54.5%;
-                }
-            }
-
-            .sm\:max-w-\[478px\] {
-                @media (width >= 40rem) {
-                    max-width: 478px;
-                }
-            }
-
-            .sm\:max-w-\[638px\] {
-                @media (width >= 40rem) {
-                    max-width: 638px;
-                }
-            }
-
-            .sm\:flex-1 {
-                @media (width >= 40rem) {
-                    flex: 1;
-                }
-            }
-
-            .sm\:flex-row {
-                @media (width >= 40rem) {
-                    flex-direction: row;
-                }
-            }
-
-            .sm\:items-center {
-                @media (width >= 40rem) {
-                    align-items: center;
-                }
-            }
-
-            .sm\:items-stretch {
-                @media (width >= 40rem) {
-                    align-items: stretch;
-                }
-            }
-
-            .sm\:justify-end {
-                @media (width >= 40rem) {
-                    justify-content: flex-end;
-                }
-            }
-
-            .sm\:divide-x {
-                @media (width >= 40rem) {
-                    :where(& > :not(:last-child)) {
-                        --tw-divide-x-reverse: 0;
-                        border-inline-style: var(--tw-border-style);
-                        border-inline-start-width: calc(1px * var(--tw-divide-x-reverse));
-                        border-inline-end-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-                    }
-                }
-            }
-
-            .sm\:overflow-visible {
-                @media (width >= 40rem) {
-                    overflow: visible;
-                }
-            }
-
-            .sm\:\!border-b-0 {
-                @media (width >= 40rem) {
-                    border-bottom-style: var(--tw-border-style) !important;
-                    border-bottom-width: 0px !important;
-                }
-            }
-
-            .sm\:p-0 {
-                @media (width >= 40rem) {
-                    padding: calc(var(--spacing) * 0);
-                }
-            }
-
-            .sm\:p-2 {
-                @media (width >= 40rem) {
-                    padding: calc(var(--spacing) * 2);
-                }
-            }
-
-            .sm\:p-6 {
-                @media (width >= 40rem) {
-                    padding: calc(var(--spacing) * 6);
-                }
-            }
-
-            .sm\:pt-10 {
-                @media (width >= 40rem) {
-                    padding-top: calc(var(--spacing) * 10);
-                }
-            }
-
-            .sm\:pt-16 {
-                @media (width >= 40rem) {
-                    padding-top: calc(var(--spacing) * 16);
-                }
-            }
-
-            .md\:col-span-3 {
-                @media (width >= 48rem) {
-                    grid-column: span 3 / span 3;
-                }
-            }
-
-            .md\:col-span-5 {
-                @media (width >= 48rem) {
-                    grid-column: span 5 / span 5;
-                }
-            }
-
-            .md\:block {
-                @media (width >= 48rem) {
-                    display: block;
-                }
-            }
-
-            .md\:pt-0 {
-                @media (width >= 48rem) {
-                    padding-top: calc(var(--spacing) * 0);
-                }
-            }
-
-            .lg\:pr-12 {
-                @media (width >= 64rem) {
-                    padding-right: calc(var(--spacing) * 12);
-                }
-            }
-
-            .lg\:pl-12 {
-                @media (width >= 64rem) {
-                    padding-left: calc(var(--spacing) * 12);
-                }
-            }
-
-            .\[\&\:\:-webkit-details-marker\]\:hidden {
-                &::-webkit-details-marker {
-                    display: none;
-                }
-            }
+        *, ::before, ::after {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style: ;
         }
 
-        @property --tw-space-y-reverse {
-            syntax: "*";
-            inherits: false;
-            initial-value: 0;
+        ::backdrop {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style: ;
         }
 
-        @property --tw-space-x-reverse {
-            syntax: "*";
-            inherits: false;
-            initial-value: 0;
+        /*
+        ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com
+        */
+        /*
+        1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+        2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
+        */
+        *,
+        ::before,
+        ::after {
+            box-sizing: border-box;
+            /* 1 */
+            border-width: 0;
+            /* 2 */
+            border-style: solid;
+            /* 2 */
+            border-color: #e5e7eb;
+            /* 2 */
         }
 
-        @property --tw-divide-y-reverse {
-            syntax: "*";
-            inherits: false;
-            initial-value: 0;
+        ::before,
+        ::after {
+            --tw-content: '';
         }
 
-        @property --tw-border-style {
-            syntax: "*";
-            inherits: false;
-            initial-value: solid;
+        /*
+        1. Use a consistent sensible line-height in all browsers.
+        2. Prevent adjustments of font size after orientation changes in iOS.
+        3. Use a more readable tab size.
+        4. Use the user's configured `sans` font-family by default.
+        5. Use the user's configured `sans` font-feature-settings by default.
+        6. Use the user's configured `sans` font-variation-settings by default.
+        7. Disable tap highlights on iOS
+        */
+        html,
+        :host {
+            line-height: 1.5;
+            /* 1 */
+            -webkit-text-size-adjust: 100%;
+            /* 2 */
+            -moz-tab-size: 4;
+            /* 3 */
+            tab-size: 4;
+            /* 3 */
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            /* 4 */
+            font-feature-settings: normal;
+            /* 5 */
+            font-variation-settings: normal;
+            /* 6 */
+            -webkit-tap-highlight-color: transparent;
+            /* 7 */
         }
 
-        @property --tw-font-weight {
-            syntax: "*";
-            inherits: false;
+        /*
+        1. Remove the margin in all browsers.
+        2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+        */
+        body {
+            margin: 0;
+            /* 1 */
+            line-height: inherit;
+            /* 2 */
         }
 
-        @property --tw-duration {
-            syntax: "*";
-            inherits: false;
+        /*
+        1. Add the correct height in Firefox.
+        2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
+        3. Ensure horizontal rules are visible by default.
+        */
+        hr {
+            height: 0;
+            /* 1 */
+            color: inherit;
+            /* 2 */
+            border-top-width: 1px;
+            /* 3 */
         }
 
-        @property --tw-ease {
-            syntax: "*";
-            inherits: false;
+        /*
+        Add the correct text decoration in Chrome, Edge, and Safari.
+        */
+        abbr:where([title]) {
+            text-decoration: underline dotted;
         }
 
-        @property --tw-divide-x-reverse {
-            syntax: "*";
-            inherits: false;
-            initial-value: 0;
+        /*
+        Remove the default font size and weight for headings.
+        */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: inherit;
+            font-weight: inherit;
+        }
+
+        /*
+        Reset links to optimize for opt-in styling instead of opt-out.
+        */
+        a {
+            color: inherit;
+            text-decoration: inherit;
+        }
+
+        /*
+        Add the correct font weight in Edge and Safari.
+        */
+        b,
+        strong {
+            font-weight: bolder;
+        }
+
+        /*
+        1. Use the user's configured `mono` font-family by default.
+        2. Use the user's configured `mono` font-feature-settings by default.
+        3. Use the user's configured `mono` font-variation-settings by default.
+        4. Correct the odd `em` font sizing in all browsers.
+        */
+        code,
+        kbd,
+        samp,
+        pre {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            /* 1 */
+            font-feature-settings: normal;
+            /* 2 */
+            font-variation-settings: normal;
+            /* 3 */
+            font-size: 1em;
+            /* 4 */
+        }
+
+        /*
+        Add the correct font size in all browsers.
+        */
+        small {
+            font-size: 80%;
+        }
+
+        /*
+        Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+        */
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+        }
+
+        sub {
+            bottom: -0.25em;
+        }
+
+        sup {
+            top: -0.5em;
+        }
+
+        /*
+        1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
+        2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
+        3. Remove gaps between table borders by default.
+        */
+        table {
+            text-indent: 0;
+            /* 1 */
+            border-color: inherit;
+            /* 2 */
+            border-collapse: collapse;
+            /* 3 */
+        }
+
+        /*
+        1. Change the font styles in all browsers.
+        2. Remove the margin in Firefox and Safari.
+        3. Remove default padding in all browsers.
+        */
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            font-family: inherit;
+            /* 1 */
+            font-feature-settings: inherit;
+            /* 1 */
+            font-variation-settings: inherit;
+            /* 1 */
+            font-size: 100%;
+            /* 1 */
+            font-weight: inherit;
+            /* 1 */
+            line-height: inherit;
+            /* 1 */
+            letter-spacing: inherit;
+            /* 1 */
+            color: inherit;
+            /* 1 */
+            margin: 0;
+            /* 2 */
+            padding: 0;
+            /* 3 */
+        }
+
+        /*
+        Remove the inheritance of text transform in Edge and Firefox.
+        */
+        button,
+        select {
+            text-transform: none;
+        }
+
+        /*
+        1. Correct the inability to style clickable types in iOS and Safari.
+        2. Remove default button styles.
+        */
+        button,
+        input:where([type='button']),
+        input:where([type='reset']),
+        input:where([type='submit']) {
+            -webkit-appearance: button;
+            /* 1 */
+            background-color: transparent;
+            /* 2 */
+            background-image: none;
+            /* 2 */
+        }
+
+        /*
+        Use the modern Firefox focus style for all focusable elements.
+        */
+        :-moz-focusring {
+            outline: auto;
+        }
+
+        /*
+        Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+        */
+        :-moz-ui-invalid {
+            box-shadow: none;
+        }
+
+        /*
+        Add the correct vertical alignment in Chrome and Firefox.
+        */
+        progress {
+            vertical-align: baseline;
+        }
+
+        /*
+        Correct the cursor style of increment and decrement buttons in Safari.
+        */
+        ::-webkit-inner-spin-button,
+        ::-webkit-outer-spin-button {
+            height: auto;
+        }
+
+        /*
+        1. Correct the odd appearance in Chrome and Safari.
+        2. Correct the outline style in Safari.
+        */
+        [type='search'] {
+            -webkit-appearance: textfield;
+            /* 1 */
+            outline-offset: -2px;
+            /* 2 */
+        }
+
+        /*
+        Remove the inner padding in Chrome and Safari on macOS.
+        */
+        ::-webkit-search-decoration {
+            -webkit-appearance: none;
+        }
+
+        /*
+        1. Correct the inability to style clickable types in iOS and Safari.
+        2. Change font properties to `inherit` in Safari.
+        */
+        ::-webkit-file-upload-button {
+            -webkit-appearance: button;
+            /* 1 */
+            font: inherit;
+            /* 2 */
+        }
+
+        /*
+        Add the correct display in Chrome and Safari.
+        */
+        summary {
+            display: list-item;
+        }
+
+        /*
+        Removes the default spacing and border for appropriate elements.
+        */
+        blockquote,
+        dl,
+        dd,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        hr,
+        figure,
+        p,
+        pre {
+            margin: 0;
+        }
+
+        fieldset {
+            margin: 0;
+            padding: 0;
+        }
+
+        legend {
+            padding: 0;
+        }
+
+        ol,
+        ul,
+        menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /*
+        Reset default styling for dialogs.
+        */
+        dialog {
+            padding: 0;
+        }
+
+        /*
+        Prevent resizing textareas horizontally by default.
+        */
+        textarea {
+            resize: vertical;
+        }
+
+        /*
+        1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+        2. Set the default placeholder color to the user's configured gray 400 color.
+        */
+        input::placeholder,
+        textarea::placeholder {
+            opacity: 1;
+            /* 1 */
+            color: #9ca3af;
+            /* 2 */
+        }
+
+        /*
+        Set the default cursor for buttons.
+        */
+        button,
+        [role="button"] {
+            cursor: pointer;
+        }
+
+        /*
+        Make sure disabled buttons don't get the pointer cursor.
+        */
+        :disabled {
+            cursor: default;
+        }
+
+        /*
+        1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
+        2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+           This can trigger a poorly considered lint error in some tools but is included by design.
+        */
+        img,
+        svg,
+        video,
+        canvas,
+        audio,
+        iframe,
+        embed,
+        object {
+            display: block;
+            /* 1 */
+            vertical-align: middle;
+            /* 2 */
+        }
+
+        /*
+        Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
+        */
+        img,
+        video {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Make elements with the HTML hidden attribute stay hidden by default */
+        [hidden]:where(:not([hidden="until-found"])) {
+            display: none;
+        }
+
+        @layer __play_components__;
+
+        .relative {
+            position: relative;
+        }
+
+        .col-span-1 {
+            grid-column: span 1 / span 1;
+        }
+
+        .col-span-3 {
+            grid-column: span 3 / span 3;
+        }
+
+        .col-span-6 {
+            grid-column: span 6 / span 6;
+        }
+
+        .mb-3 {
+            margin-bottom: 0.75rem;
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem;
+        }
+
+        .mt-8 {
+            margin-top: 2rem;
+        }
+
+        .box-border {
+            box-sizing: border-box;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .aspect-square {
+            aspect-ratio: 1 / 1;
+        }
+
+        .h-24 {
+            height: 6rem;
+        }
+
+        .h-3 {
+            height: 0.75rem;
+        }
+
+        .h-5 {
+            height: 1.25rem;
+        }
+
+        .h-8 {
+            height: 2rem;
+        }
+
+        .max-h-0 {
+            max-height: 0px;
+        }
+
+        .max-h-5 {
+            max-height: 1.25rem;
+        }
+
+        .min-h-4 {
+            min-height: 1rem;
+        }
+
+        .min-h-5 {
+            min-height: 1.25rem;
+        }
+
+        .min-h-8 {
+            min-height: 2rem;
+        }
+
+        .min-h-\[100vh\] {
+            min-height: 100vh;
+        }
+
+        .w-12 {
+            width: 3rem;
+        }
+
+        .w-16 {
+            width: 4rem;
+        }
+
+        .w-24 {
+            width: 6rem;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .min-w-10 {
+            min-width: 2.5rem;
+        }
+
+        .min-w-12 {
+            min-width: 3rem;
+        }
+
+        .min-w-24 {
+            min-width: 6rem;
+        }
+
+        .min-w-36 {
+            min-width: 9rem;
+        }
+
+        .max-w-12 {
+            max-width: 3rem;
+        }
+
+        .max-w-32 {
+            max-width: 8rem;
+        }
+
+        .max-w-\[50px\] {
+            max-width: 50px;
+        }
+
+        .max-w-full {
+            max-width: 100%;
+        }
+
+        .flex-1 {
+            flex: 1 1 0%;
+        }
+
+        .flex-shrink-0 {
+            flex-shrink: 0;
+        }
+
+        .origin-top {
+            transform-origin: top;
         }
 
         @keyframes pulse {
             50% {
-                opacity: 0.5;
+                opacity: .5;
             }
         }
 
-        @layer properties {
-            @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-                *, ::before, ::after, ::backdrop {
-                    --tw-space-y-reverse: 0;
-                    --tw-space-x-reverse: 0;
-                    --tw-divide-y-reverse: 0;
-                    --tw-border-style: solid;
-                    --tw-font-weight: initial;
-                    --tw-duration: initial;
-                    --tw-ease: initial;
-                    --tw-divide-x-reverse: 0;
-                }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .select-none {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .list-none {
+            list-style-type: none;
+        }
+
+        .appearance-none {
+            appearance: none;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid-cols-6 {
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+        }
+
+        .flex-row {
+            flex-direction: row;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .flex-col-reverse {
+            flex-direction: column-reverse;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .items-stretch {
+            align-items: stretch;
+        }
+
+        .justify-end {
+            justify-content: flex-end;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-x-2 {
+            column-gap: 0.5rem;
+        }
+
+        .gap-y-2 {
+            row-gap: 0.5rem;
+        }
+
+        .gap-y-3 {
+            row-gap: 0.75rem;
+        }
+
+        .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-x-reverse: 0;
+            margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+            margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+        }
+
+        .space-y-10 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(2.5rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(2.5rem * var(--tw-space-y-reverse));
+        }
+
+        .space-y-3 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
+        }
+
+        .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+        }
+
+        .space-y-5 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
+        }
+
+        .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+        }
+
+        .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(2rem * var(--tw-space-y-reverse));
+        }
+
+        .divide-y > :not([hidden]) ~ :not([hidden]) {
+            --tw-divide-y-reverse: 0;
+            border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+            border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+        }
+
+        .divide-neutral-200 > :not([hidden]) ~ :not([hidden]) {
+            --tw-divide-opacity: 1;
+            border-color: rgb(229 229 229 / var(--tw-divide-opacity, 1));
+        }
+
+        .divide-neutral-300 > :not([hidden]) ~ :not([hidden]) {
+            --tw-divide-opacity: 1;
+            border-color: rgb(212 212 212 / var(--tw-divide-opacity, 1));
+        }
+
+        .overflow-auto {
+            overflow: auto;
+        }
+
+        .overflow-hidden {
+            overflow: hidden;
+        }
+
+        .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .rounded {
+            border-radius: 0.25rem;
+        }
+
+        .rounded-md {
+            border-radius: 0.375rem;
+        }
+
+        .border {
+            border-width: 1px;
+        }
+
+        .border-y {
+            border-top-width: 1px;
+            border-bottom-width: 1px;
+        }
+
+        .border-neutral-300 {
+            --tw-border-opacity: 1;
+            border-color: rgb(212 212 212 / var(--tw-border-opacity, 1));
+        }
+
+        .bg-gray-300 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1));
+        }
+
+        .bg-neutral-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(250 250 250 / var(--tw-bg-opacity, 1));
+        }
+
+        .p-3 {
+            padding: 0.75rem;
+        }
+
+        .p-6 {
+            padding: 1.5rem;
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .pb-5 {
+            padding-bottom: 1.25rem;
+        }
+
+        .pr-0 {
+            padding-right: 0px;
+        }
+
+        .pt-2 {
+            padding-top: 0.5rem;
+        }
+
+        .pt-5 {
+            padding-top: 1.25rem;
+        }
+
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .text-neutral-500 {
+            --tw-text-opacity: 1;
+            color: rgb(115 115 115 / var(--tw-text-opacity, 1));
+        }
+
+        .transition {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+
+        .duration-300 {
+            transition-duration: 300ms;
+        }
+
+        .ease-linear {
+            transition-timing-function: linear;
+        }
+
+        @theme {
+            /* ... */
+        }
+        .group[open] .group-open\:max-h-\[1000px\] {
+            max-height: 1000px;
+        }
+
+        .group[open] .group-open\:overflow-visible {
+            overflow: visible;
+        }
+
+        .group[open] .group-open\:border-b {
+            border-bottom-width: 1px;
+        }
+
+        @media (min-width: 640px) {
+            .sm\:mx-auto {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .sm\:mt-0 {
+                margin-top: 0px;
+            }
+
+            .sm\:flex {
+                display: flex;
+            }
+
+            .sm\:hidden {
+                display: none;
+            }
+
+            .sm\:max-h-fit {
+                max-height: fit-content;
+            }
+
+            .sm\:w-\[45\.5\%\] {
+                width: 45.5%;
+            }
+
+            .sm\:w-\[54\.5\%\] {
+                width: 54.5%;
+            }
+
+            .sm\:max-w-\[478px\] {
+                max-width: 478px;
+            }
+
+            .sm\:max-w-\[638px\] {
+                max-width: 638px;
+            }
+
+            .sm\:flex-1 {
+                flex: 1 1 0%;
+            }
+
+            .sm\:flex-row {
+                flex-direction: row;
+            }
+
+            .sm\:items-center {
+                align-items: center;
+            }
+
+            .sm\:items-stretch {
+                align-items: stretch;
+            }
+
+            .sm\:justify-end {
+                justify-content: flex-end;
+            }
+
+            .sm\:divide-x > :not([hidden]) ~ :not([hidden]) {
+                --tw-divide-x-reverse: 0;
+                border-right-width: calc(1px * var(--tw-divide-x-reverse));
+                border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+            }
+
+            .sm\:overflow-visible {
+                overflow: visible;
+            }
+
+            .sm\:\!border-b-0 {
+                border-bottom-width: 0px !important;
+            }
+
+            .sm\:p-0 {
+                padding: 0px;
+            }
+
+            .sm\:p-2 {
+                padding: 0.5rem;
+            }
+
+            .sm\:p-6 {
+                padding: 1.5rem;
+            }
+
+            .sm\:pt-10 {
+                padding-top: 2.5rem;
+            }
+
+            .sm\:pt-16 {
+                padding-top: 4rem;
             }
         }
 
+        @media (min-width: 768px) {
+            .md\:col-span-3 {
+                grid-column: span 3 / span 3;
+            }
+
+            .md\:col-span-5 {
+                grid-column: span 5 / span 5;
+            }
+
+            .md\:block {
+                display: block;
+            }
+
+            .md\:pt-0 {
+                padding-top: 0px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .lg\:pl-12 {
+                padding-left: 3rem;
+            }
+
+            .lg\:pr-12 {
+                padding-right: 3rem;
+            }
+        }
+
+        .\[\&\:\:-webkit-details-marker\]\:hidden::-webkit-details-marker {
+            display: none;
+        }
     </style>
-    <form method="POST" novalidate="">
-        <div class="min-h-[100vh]  flex flex-col items-stretch sm:flex sm:flex-row sm:items-stretch sm:mx-auto overflow-auto">
-            <div class="flex flex-col items-center space-y-4 flex sm:hidden mb-3">
-                <div class="pt-5 md:pt-0 flex md:block font-bold text-4xl">
-                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-h-8 min-w-36"></div>
-                </div>
-            </div>
-            <div class="flex flex-col-reverse sm:flex-row items-stretch sm:flex-1 sm:divide-x divide-neutral-300">
-                <div class="w-full  sm:w-[54.5%] pt-2 sm:pt-10 flex flex-row sm:justify-end p-3 sm:p-6 sm:p-2 lg:pr-12">
-                    <div class="flex flex-col flex-1 items-stretch space-y-6 sm:max-w-[638px] ">
-                        <div class="flex flex-col items-center space-y-4 hidden sm:flex">
-                            <div class="pt-5 md:pt-0 flex md:block font-bold text-4xl">
-                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-h-8 min-w-36"></div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col space-y-10 flex-1">
-                            <div class="flex flex-col items-stretch space-y-8">
-                                <div class="flex flex-col space-y-8">
-                                    <div class="flex flex-col space-y-3 animate-pulse w-full ">
-                                        <div class="flex flex-row justify-between">
-                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
-                                        </div>
-                                        <div class="flex flex-col ">
-                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
-                                        </div>
-                                    </div>
-                                    <div class="hidden"
-                                         value="gid://shopify/CartDeliveryGroup/269ea2856c41d63937d1ba5212c29713?cart=hWN2Ewvz8P9EBLUzNl9RF1Vc"></div>
-                                    <div class="flex flex-col space-y-3 animate-pulse w-full flex flex-col space-y-4">
-                                        <div class="flex flex-row justify-between">
-                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
-                                        </div>
-                                        <div class="grid grid-cols-6 gap-y-3 gap-x-2">
-                                            <div class="flex flex-col md:col-span-3 col-span-6">
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
-                                            </div>
-                                            <div class="flex flex-col md:col-span-3 col-span-6">
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
-                                            </div>
-                                            <div class="flex flex-col col-span-6">
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
-                                            </div>
-                                            <div class="flex flex-col col-span-6">
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
-                                            </div>
-                                            <div class="flex flex-col col-span-6">
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
-                                            </div>
-                                            <div class="hidden" name="[shipping_address][region]"
-                                                 value="[object Object]"></div>
-                                            <div class="flex flex-col md:col-span-3 col-span-6">
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
-                                            </div>
-                                            <div class="flex flex-col md:col-span-3 col-span-6">
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
-                                            </div>
-                                            <div class="flex flex-col col-span-6">
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-3 animate-pulse w-full">
-                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
-                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-24 w-full"></div>
-                                    </div>
-                                    <div class="space-y-3 animate-pulse w-full">
-                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
-                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-3 w-24"></div>
-                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-24 w-full"></div>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center">
-                                    <a class="text-sm space-x-2 flex flex-row mt-8 sm:mt-0 justify-center items-center cursor-pointer"
-                                       href="/cart">
-                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-36 min-h-5"></div>
-                                    </a>
-                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden relative cursor-pointer select-none lab min-w-24 min-h-8 max-w-full"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden max-w-32 min-w-10 min-h-4"></div>
+    <div class="relative">
+        <form method="POST" novalidate="">
+            <div class="min-h-[100vh]  flex flex-col items-stretch sm:flex sm:flex-row sm:items-stretch sm:mx-auto overflow-auto">
+                <div class="flex flex-col items-center space-y-4 flex sm:hidden mb-3">
+                    <div class="pt-5 md:pt-0 flex md:block font-bold text-4xl">
+                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-h-8 min-w-36"></div>
                     </div>
                 </div>
-                <div class="flex flex-col w-full sm:w-[45.5%] bg-neutral-50 sm:pt-16 sm:p-2 lg:pl-12 relative overflow-hidden">
-                    <div class="">
-                        <details id="summary-details"
-                                 class="sm:max-w-[478px] appearance-none flex flex-col items-stretch undefined group"
-                                 open="">
-                            <script>if (window.screen.availWidth >= 640) {
-                                document.getElementById('summary-details').setAttribute('open', true);
-                            } else {
-                                document.getElementById('summary-details').removeAttribute('open');
-                            }</script>
-                            <summary
-                                    class="appearance-none list-none [&amp;::-webkit-details-marker]:hidden flex items-center flex-row justify-between sm:hidden border-y border-neutral-300 p-6 relative">
-                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-h-8 min-w-36"></div>
-                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-18 min-h-5 max-h-5"></div>
-                            </summary>
-                            <div class="border-neutral-300
+                <div class="flex flex-col-reverse sm:flex-row items-stretch sm:flex-1 sm:divide-x divide-neutral-300">
+                    <div class="w-full  sm:w-[54.5%] pt-2 sm:pt-10 flex flex-row sm:justify-end p-3 sm:p-6 sm:p-2 lg:pr-12">
+                        <div class="flex flex-col flex-1 items-stretch space-y-6 sm:max-w-[638px] ">
+                            <div class="flex flex-col items-center space-y-4 hidden sm:flex">
+                                <div class="pt-5 md:pt-0 flex md:block font-bold text-4xl">
+                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-h-8 min-w-36"></div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col space-y-10 flex-1">
+                                <div class="flex flex-col items-stretch space-y-8">
+                                    <div class="flex flex-col space-y-8">
+                                        <div class="flex flex-col space-y-3 animate-pulse w-full ">
+                                            <div class="flex flex-row justify-between">
+                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
+                                            </div>
+                                            <div class="flex flex-col ">
+                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                            </div>
+                                        </div>
+                                        <div class="hidden"
+                                             value="gid://shopify/CartDeliveryGroup/269ea2856c41d63937d1ba5212c29713?cart=hWN2sxwKvlJodmWmUi8tqPeW"></div>
+                                        <div class="flex flex-col space-y-3 animate-pulse w-full flex flex-col space-y-4">
+                                            <div class="flex flex-row justify-between">
+                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
+                                            </div>
+                                            <div class="grid grid-cols-6 gap-y-3 gap-x-2">
+                                                <div class="hidden" name="[shipping_address][region]"
+                                                     value="[object Object]"></div>
+                                                <div class="flex flex-col col-span-6">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                </div>
+                                                <div class="flex flex-col md:col-span-3 col-span-6">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                </div>
+                                                <div class="flex flex-col md:col-span-3 col-span-6">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                </div>
+                                                <div class="flex flex-col col-span-6">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                </div>
+                                                <div class="flex flex-col col-span-6">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                </div>
+                                                <div class="flex flex-col md:col-span-3 col-span-6">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                </div>
+                                                <div class="flex flex-col md:col-span-3 col-span-6">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                </div>
+                                                <div class="flex flex-col col-span-6">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-3 animate-pulse w-full">
+                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
+                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-24 w-full"></div>
+                                        </div>
+                                        <div class="space-y-3 animate-pulse w-full">
+                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
+                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-3 w-24"></div>
+                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-24 w-full"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center">
+                                        <a class="text-sm space-x-2 flex flex-row mt-8 sm:mt-0 justify-center items-center cursor-pointer"
+                                           href="/cart">
+                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-36 min-h-5"></div>
+                                        </a>
+                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden relative cursor-pointer select-none lab min-w-24 min-h-8 max-w-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden max-w-32 min-w-10 min-h-4"></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col w-full sm:w-[45.5%] bg-neutral-50 sm:pt-16 sm:p-2 lg:pl-12 relative overflow-hidden">
+                        <div class="">
+                            <details id="summary-details"
+                                     class="sm:max-w-[478px] appearance-none flex flex-col items-stretch undefined group"
+                                     open="">
+                                <script>if (window.screen.availWidth >= 640) {
+                                    document.getElementById('summary-details').setAttribute('open', true);
+                                } else {
+                                    document.getElementById('summary-details').removeAttribute('open');
+                                }</script>
+                                <summary
+                                        class="appearance-none list-none [&amp;::-webkit-details-marker]:hidden flex items-center flex-row justify-between sm:hidden border-y border-neutral-300 p-6 relative">
+                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-h-8 min-w-36"></div>
+                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-18 min-h-5 max-h-5"></div>
+                                </summary>
+                                <div class="border-neutral-300
                 box-border
                 max-h-0
                 sm:max-h-fit
@@ -1009,7 +1182,7 @@
                 ease-linear
                 duration-300
             " style="transition-property: max-height;">
-                                <div class="border-neutral-300
+                                    <div class="border-neutral-300
                 box-border
                 max-h-0
                 sm:max-h-fit
@@ -1022,57 +1195,58 @@
                 group-open:max-h-[1000px]
                 duration-300
             " style="transition-property: max-height;">
-                                    <div class="flex flex-col divide-y divide-neutral-200 items-stretch p-6 sm:p-0">
-                                        <div class="pb-5 w-full max-w-full space-y-5">
-                                            <div class="flex flex-row w-full max-w-full">
-                                                <div class="relative w-16">
-                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden overflow-hidden relative aspect-square rounded-md border-neutral-300 border"></div>
-                                                </div>
-                                                <div class="flex-1 overflow-hidden col-span-3 md:col-span-5 flex flex-row space-x-2 items-stretch px-4">
-                                                    <div class="flex flex-1 flex-col justify-center items-stretch overflow-hidden">
-                                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 truncate"></div>
-                                                        <div class="text-neutral-500 text-sm"></div>
+                                        <div class="flex flex-col divide-y divide-neutral-200 items-stretch p-6 sm:p-0">
+                                            <div class="pb-5 w-full max-w-full space-y-5">
+                                                <div class="flex flex-row w-full max-w-full">
+                                                    <div class="relative w-16">
+                                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden overflow-hidden relative aspect-square rounded-md border-neutral-300 border"></div>
+                                                    </div>
+                                                    <div class="flex-1 overflow-hidden col-span-3 md:col-span-5 flex flex-row space-x-2 items-stretch px-4">
+                                                        <div class="flex flex-1 flex-col justify-center items-stretch overflow-hidden">
+                                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 truncate"></div>
+                                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 text-neutral-500 text-sm mt-2 max-w-[50px]"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-span-1 flex flex-row justify-end items-center">
+                                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 flex-shrink-0 pr-0 flex flex-col justify-center min-w-10"></div>
                                                     </div>
                                                 </div>
-                                                <div class="col-span-1 flex flex-row justify-end items-center">
-                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 flex-shrink-0 pr-0 flex flex-col justify-center min-w-10"></div>
+                                            </div>
+                                            <div class="flex flex-col space-y-3 animate-pulse w-full py-3 space-y-3 flex-shrink-0 flex flex-col items-stretch">
+                                                <div class="flex flex-row justify-between">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
+                                                </div>
+                                                <div class="flex flex-row items-center space-x-2">
+                                                    <div class="flex flex-col flex-1">
+                                                        <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                    </div>
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden relative cursor-pointer select-none max-w-104 lab min-w-24 min-h-8"></div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="flex flex-col space-y-3 animate-pulse w-full py-3 space-y-3 flex-shrink-0 flex flex-col items-stretch">
-                                            <div class="flex flex-row justify-between">
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
-                                            </div>
-                                            <div class="flex flex-row items-center space-x-2">
-                                                <div class="flex flex-col flex-1">
-                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                            <div class="grid grid-cols-2 gap-y-2 text-sm pt-2 justify-between">
+                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-12 min-h-5 max-w-12"></div>
+                                                <div class="flex flex-row justify-end">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-12 min-h-5 max-w-12"></div>
                                                 </div>
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden relative cursor-pointer select-none max-w-104 lab min-w-24 min-h-8"></div>
-                                            </div>
-                                        </div>
-                                        <div class="grid grid-cols-2 gap-y-2 text-sm pt-2 justify-between">
-                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-12 min-h-5 max-w-12"></div>
-                                            <div class="flex flex-row justify-end">
                                                 <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-12 min-h-5 max-w-12"></div>
-                                            </div>
-                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-12 min-h-5 max-w-12"></div>
-                                            <div class="flex flex-row justify-end">
+                                                <div class="flex flex-row justify-end">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-12 min-h-5 max-w-12"></div>
+                                                </div>
                                                 <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-12 min-h-5 max-w-12"></div>
-                                            </div>
-                                            <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-12 min-h-5 max-w-12"></div>
-                                            <div class="flex flex-row justify-end">
-                                                <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-12 min-h-5 max-w-12"></div>
+                                                <div class="flex flex-row justify-end">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden min-w-12 min-h-5 max-w-12"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </details>
+                            </details>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 <script type="module" src="/src/main.tsx"></script>
 </body>
