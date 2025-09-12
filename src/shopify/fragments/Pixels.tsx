@@ -23,7 +23,7 @@ export const Pixels: FC<PixelsProps> = (props) => {
     const platforms = Object.keys(tracking).map((key) => {
         const pixels = tracking[key];
         const Component = Platforms[key];
-        if(Component){
+        if(Component && !!pixels && pixels.length > 0){
             return <Component pixels={pixels} key={key}/>
         }
         return null;
