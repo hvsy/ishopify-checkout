@@ -28,6 +28,7 @@ export const NewStateSelector : FC<any> = (props)=>{
     const {zones,...others} = props;
     if ((zones || []).length === 0) return null;
     return <Selector {...others}>
+        <option hidden disabled value={''}>&nbsp;</option>
         {(zones || []).map((zone: any) => {
             return <option key={zone.id} value={zone.code}>{zone.en_name}</option>
         })}

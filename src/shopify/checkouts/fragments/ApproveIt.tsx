@@ -15,8 +15,6 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
     const {} = props;
     const {ing,storage} = useSummary();
     const form = useCurrentForm();
-    const mutation = useMutationCheckout();
-    const sync = useCheckoutSync();
     useEffect(() => {
         form.validateFields().then(() => {
 

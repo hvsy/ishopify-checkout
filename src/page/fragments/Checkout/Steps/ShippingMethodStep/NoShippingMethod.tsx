@@ -4,6 +4,7 @@ export type NoShippingMethodProps = {
     value ?: any,onChange ?: (value : any)=>void;
 };
 
+
 export const NoShippingMethod: FC<NoShippingMethodProps> = (props) => {
     const {value,onChange} = props;
     useEffect(() => {

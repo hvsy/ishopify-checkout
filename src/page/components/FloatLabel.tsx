@@ -3,6 +3,7 @@ import {clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
 import {Loading} from "@components/fragments/Loading.tsx";
 import {Skeleton} from "@components/ui/Skeleton.tsx";
+import {cn} from "@lib/cn.ts";
 
 export type FloatLabelProps = {
     elementRef ?: RefObject<any>,
@@ -55,6 +56,10 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
             <Skeleton className={'h-8 w-full'}/>
         </div>
     }
+    const floatClassName = cn("flex-nowrap text-nowrap flex text-sm px-3 text-neutral-400 select-none pointer-events-none",{
+        "absolute top-1"  : !!value,
+        "absolute inset-0 flex-row items-center"  : !value,
+    },);
     return <div className={`flex flex-col space-y-1 ${className || ''}`}>
         {!!label && <div>{label}</div>}
         <div className={twMerge(clsx(`border rounded-md relative flex flex-row justify-between items-stretch box-border overflow-hidden`,border,h))}>
@@ -64,15 +69,15 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
             <div className={'relative flex-1 flex flex-row items-stretch overflow-hidden'}>
                 <Element ref={elementRef}
                          {...others}
-                         placeholder={ph}
+                         // placeholder={ph}
                          value={onChange ? (value || '') : value}
                          onBlur={onBlur}
                          onChange={onChange}
-                         className={`peer flex-1 w-auto border-none bg-transparent focus:outline-none appearance-none px-3 peer-placeholder-shown:text-xs placeholder-shown:pt-0 ${float ? `pt-5` : ''}`}>
+                         className={`peer flex-1 w-auto border-none bg-transparent focus:outline-none appearance-none px-3 peer-placeholder-shown:text-xs placeholder-shown:pt-0 ${(float && !!value) ? `pt-5` : ''}`}>
                     {children}
                 </Element>
                 {float && <div
-                    className={'flex-nowrap text-nowrap absolute top-1 peer-placeholder-shown:hidden flex text-sm px-3 text-neutral-400 select-none'}>
+                    className={floatClassName}>
                     {ph}
                 </div>}
             </div>
