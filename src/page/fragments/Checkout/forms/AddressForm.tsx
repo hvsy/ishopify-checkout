@@ -6,23 +6,49 @@ import {Tooltip} from "@components/fragments/Tooltip.tsx";
 import {
     NewRegionSelector,
     NewStateSelector,
-    RegionSelector,
-    StateSelector
 } from "../../../components/RegionSelector.tsx";
 import {FormItem} from "@components/fragments/FormItem.tsx";
 import {useWatch} from "rc-field-form";
-import {FormContext, useCurrentForm} from "../../../../container/FormContext.ts";
+import {FormContext, useCurrentForm,} from "../../../../container/FormContext.ts";
 import useSWR from "swr";
 import Validators from "validator";
-import {startsWith as _startsWith } from "lodash-es";
 import {StepBlock} from "@components/frames/StepBlock.tsx";
 import {PhoneInput} from "@components/ui/PhoneInput.tsx";
+import {UNSAFE_useRouteId} from "react-router-dom";
 
 export type AddressFormProps = {
     title: string;
     prefix?: string[];
 };
 
+
+
+export const StateCodeFormItem : FC<any> = (props) => {
+    const {name,zones,className} = props;
+    const approve = UNSAFE_useRouteId() === 'approve';
+    const form = useCurrentForm();
+    useEffect(() => {
+        if(approve){
+            form.validateFields([
+                name
+            ],{
+
+            })
+        }
+    }, [approve]);
+    return <FormItem name={name} rules={[{
+        required :true,
+        message : 'Select a state / province',
+    }]}>
+        <NewStateSelector
+            autoComplete={'address-level1'}
+            // field={'state'}
+            zones={zones}
+            placeholder={'Province/State'}
+            className={className}
+        />
+    </FormItem>
+};
 export const AddressForm: FC<AddressFormProps> = (props) => {
     const {title, prefix = [],} = props;
     const {form:formInstance,onValuesChanged} = FormContext.use()//useCurrentForm();
@@ -77,17 +103,37 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         if(isLoading) return;
         if (!region_id) return;
         const current = formInstance?.getFieldValue([...prefix, 'state_code']);
-        if (!firstZone?.code  || !current || !_find(zones, (z) => {
-            return z.code === current;
-        })) {
-            formInstance?.setFields([{
-                name: [...prefix, 'state_code'],
-                value: firstZone?.code  || null,
-            }, {
-                name: [...prefix, 'state'],
-                value: firstZone || null,
-            }])
+        if(!current || !_find(zones, (z) => {
+                return z.code === current;
+        })){
+                formInstance?.setFields([{
+                    name: [...prefix, 'state_code'],
+                    // value: firstZone?.code  || null,
+                    value : null,
+                }, {
+                    name: [...prefix, 'state'],
+                    // value: firstZone || null,
+                    value : null,
+                }])
         }
+        // if (!firstZone?.code  || !current || !_find(zones, (z) => {
+        //     return z.code === current;
+        // })) {
+        //     formInstance?.setFields([{
+        //         name: [...prefix, 'state_code'],
+        //         value: firstZone?.code  || null,
+        //     }, {
+        //         name: [...prefix, 'state'],
+        //         value: firstZone || null,
+        //     }])
+        //     onValuesChanged?.({
+        //         shipping_address : {
+        //             state_code: firstZone?.code || null,
+        //             state: firstZone || null,
+        //
+        //         }
+        //     });
+        // }
     }, [region_id, firstZone?.id,isLoading]);
     const phonePrefix = hitRegion?.data?.phoneNumberPrefix;
     const zipHolder = hitRegion?.data?.postalCodeExample;
@@ -155,15 +201,11 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        autoComplete={'address-level2'}
                        className={`${colSpanClass} col-span-6`}/>
             </FormItem>
-            <FormItem name={[...prefix,'state_code']}>
-                <NewStateSelector
-                    autoComplete={'address-level1'}
-                    // field={'state'}
-                    zones={zones}
-                    placeholder={'Province/State'}
-                    className={`${colSpanClass} col-span-6`}
-                />
-            </FormItem>
+            {zones.length > 0 && <StateCodeFormItem
+                name={[...prefix,'state_code']}
+                className={`${colSpanClass} col-span-6`}
+                zones={zones}
+            />}
             {postalCodeRequired  && <FormItem name={[...prefix, 'zip']} rules={[{
                 required: true,
                 message: 'Enter a ZIP / postal code',

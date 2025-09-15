@@ -10,12 +10,7 @@ import {ApolloProvider} from "@apollo/client";
 import {ApolloStoreFrontClient} from "@lib/checkout.ts";
 import {Analytics} from "./page/components/Analytics.tsx";
 
-// const Analytics = lazy(async () => {
-//     const m = await import("./page/components/Analytics.tsx");
-//     return {
-//         default : m.Analytics,
-//     }
-// });
+
 
 async function setup(){
     let rootElement = document.getElementById('root');
