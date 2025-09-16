@@ -104,7 +104,8 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     const checkoutSync = useCheckoutSync(form);
     const sync = useDebounceCallback(async (changedValues,) => {
         const values = form.getFieldsValue();
-        const countryChanged = _has(changedValues,'shipping_address.region_code');
+        // const countryChanged = _has(changedValues,'shipping_address.region_code');
+        const provinceChanged = _has(changedValues,'shipping_address.state_code');
         const shippingMethodChanged = _has(changedValues,'shipping_line_id');
 
         const emailChanged = _has(changedValues,'email');
@@ -120,10 +121,12 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             // }])
         }
 
-        if(!countryChanged && !shippingMethodChanged && !emailChanged){
+        // if(!countryChanged && !provinceChanged  && !shippingMethodChanged && !emailChanged){
+        if(!provinceChanged  && !shippingMethodChanged && !emailChanged){
             return;
         }
-        if(countryChanged){
+        // if(countryChanged){
+        if(provinceChanged){
             mutationDeliveryGroups(null);
         }
         const address = buildAddress(values?.shipping_address || {});
@@ -132,7 +135,8 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             deliveryHandle : 'shipping_line_id',
             deliveryGroupId : 'shipping_group_id',
         });
-        if(countryChanged){
+        if(provinceChanged){
+        // if(countryChanged){
             input.deliveryGroupId = undefined;
             input.deliveryHandle = undefined;
         }
