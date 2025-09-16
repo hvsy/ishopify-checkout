@@ -15,7 +15,7 @@ export type BreadcrumbNavigatorProps = {
 export const BreadcrumbNavigator: FC<BreadcrumbNavigatorProps> = (props) => {
     const {basename = ""} = props;
     const {action = 'information'}= useParams();
-    console.log('basename:',basename);
+    // console.log('basename:',basename);
     return <div className={'flex-row items-center hidden sm:flex'}>
         <Breadcrumb>
             <BreadcrumbList>

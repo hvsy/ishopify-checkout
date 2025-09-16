@@ -73,7 +73,7 @@ async function getCheckout(request : Request,params : Params<string>,context : a
     const url = new URL(request.url)
     const key = url.searchParams.get('key');
     let {token, action = 'information'} = params;
-    console.log('params:',params);
+    // console.log('params:',params);
     const storage = new CartStorage(token!);
     if(action === 'recover' && !!key){
         storage.key = key;
@@ -121,7 +121,7 @@ async function getCheckout(request : Request,params : Params<string>,context : a
     let checkout : any = null;
     if(cart){
         checkout = getCheckoutFromSummary(cart);
-        console.log('preload cart:',cart,checkout);
+        // console.log('preload cart:',cart,checkout);
     }
 
     if(!checkout){

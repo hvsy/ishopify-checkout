@@ -44,7 +44,7 @@ export const CheckoutFooter: FC<CheckoutFooterProps> = (props) => {
                         zip : _get(shipping,'zip',null),
                     }
                 };
-                console.log('update shipping address:',json);
+                // console.log('update shipping address:',json);
                 await fn({
                     variables : json,
                 });
@@ -53,7 +53,7 @@ export const CheckoutFooter: FC<CheckoutFooterProps> = (props) => {
         },
         shipping : {
             async submit(values) {
-                console.log('shipping values:',values);
+                // console.log('shipping values:',values);
                 await sync();
             }
         },

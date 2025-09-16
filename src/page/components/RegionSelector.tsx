@@ -49,7 +49,7 @@ export const RegionSelector: FC<RegionSelectorProps> = (props) => {
             }),
             [id]: zone_code,
         };
-        console.log('region after:',after,zone_code);
+        // console.log('region after:',after,zone_code);
         onChange?.(after);
     }}>
         {(zones || []).map((zone: any) => {

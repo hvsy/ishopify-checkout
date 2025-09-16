@@ -26,7 +26,7 @@ export async function removeOtherAddresses(client : ApolloClient<any>,cartId : s
             cartId : cartId,
         }
     })
-    console.log('deliveryAddresses:',response);
+    // console.log('deliveryAddresses:',response);
     const ids = (response?.data?.cart?.delivery?.addresses || []) as string[];
     const result = await client.mutate({
         mutation: gql([
@@ -41,7 +41,7 @@ export async function removeOtherAddresses(client : ApolloClient<any>,cartId : s
             })
         }
     })
-    console.log('remove result:',result);
+    // console.log('remove result:',result);
     return result;
 }
 
@@ -164,7 +164,7 @@ export const ShopifyCheckoutProvider :FC<{
             config.awaitRefetchQueries = true;
             // config.refetchQueries= ['CartLineItems'];
         }
-        console.log('mutation checkout:',config);
+        import.meta.env.DEV && console.log('mutation checkout:',config);
         const response = await fn(config);
         let data = _cloneDeep(_get(response,'data'));
 

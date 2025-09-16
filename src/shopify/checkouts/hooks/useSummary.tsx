@@ -44,13 +44,15 @@ export const SummaryContextProvider :FC<any> = (props) => {
     const [updatingSelectedDelivery,setSelectedDeliveryStatus] = useState<boolean>(false);
     const {ref,storage} = useRouteLoaderData('checkout') as any;
     const {data : json ,error,networkStatus} = useReadQuery<any>(ref);
-    const groups  =_get(json,'cart.deliveryGroups.edges',[]).map((group : any) => {
+    const edges = _get(json,'cart.deliveryGroups.edges');
+    const groups  = (edges || []).map((group : any) => {
         return group.node;
     });
+    // console.log('[delivery] groups:',edges);
     const loading = {
         updatingSelectedDelivery,
         shipping_methods: !_has(json?.cart, 'deliveryGroups') ||
-            !_isArray(json?.cart?.deliveryGroups?.edges),
+            !_isArray(json?.cart?.deliveryGroups?.edges) || (edges === undefined),
         summary : [NetworkStatus.loading,
             NetworkStatus.refetch,
             NetworkStatus.fetchMore,
@@ -60,7 +62,7 @@ export const SummaryContextProvider :FC<any> = (props) => {
     const ing = loading.shipping_methods || loading.summary || loading.updatingSelectedDelivery;
     const checkout = getCheckoutFromSummary(json, 'cart');
     const [form] = Form.useForm();
-    console.log('form init:',checkout);
+    // console.log('form init:',checkout);
     return <SummaryContext value={{
             json,
             checkout() {

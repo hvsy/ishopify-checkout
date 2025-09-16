@@ -28,7 +28,7 @@ export function scrollToError(e : any){
             }else{
                 if(( ( window.innerWidth <= 800 ))){
                     ele= document.querySelector(`[name="${full}"]`);
-                    console.log('scroll ele:',ele)
+                    // console.log('scroll ele:',ele)
                 }else{
                     ele= document.querySelector(`[data-name="shipping-address"]`);
                 }
@@ -104,9 +104,10 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     const checkoutSync = useCheckoutSync(form);
     const sync = useDebounceCallback(async (changedValues,) => {
         const values = form.getFieldsValue();
-        // const countryChanged = _has(changedValues,'shipping_address.region_code');
+        const countryChanged = _has(changedValues,'shipping_address.region_code');
         const provinceChanged = _has(changedValues,'shipping_address.state_code');
         const shippingMethodChanged = _has(changedValues,'shipping_line_id');
+        // console.log('cv:',changedValues);
 
         const emailChanged = _has(changedValues,'email');
         if(emailChanged && !!changedValues.email){
@@ -122,11 +123,11 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         }
 
         // if(!countryChanged && !provinceChanged  && !shippingMethodChanged && !emailChanged){
-        if(!provinceChanged  && !shippingMethodChanged && !emailChanged){
+        if(!countryChanged && !provinceChanged  && !shippingMethodChanged && !emailChanged){
             return;
         }
         // if(countryChanged){
-        if(provinceChanged){
+        if(countryChanged || provinceChanged){
             mutationDeliveryGroups(null);
         }
         const address = buildAddress(values?.shipping_address || {});
@@ -135,7 +136,7 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             deliveryHandle : 'shipping_line_id',
             deliveryGroupId : 'shipping_group_id',
         });
-        if(provinceChanged){
+        if(countryChanged || provinceChanged){
         // if(countryChanged){
             input.deliveryGroupId = undefined;
             input.deliveryHandle = undefined;

@@ -14,7 +14,7 @@ export function Report<key extends ReportEvent>(props : ReportProps<key>) : Reac
     useEffect(() => {
         if(mounted.current) return;
         mounted.current = true;
-        console.log('report effect');
+        // console.log('report effect');
             window?.report?.(name,data as unknown as Omit<Analytics.Events[key]["data"], "eventId">,
                 token + '_' + name);
     }, [token,name]);

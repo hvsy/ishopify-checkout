@@ -17,10 +17,10 @@ export function useFormValidate(){
         }
         values.validationStrategy = 'STRICT';
         let needMutate = !last.current || !isEqual(last.current,values);
-        console.log('need update remote checkout');
+        import.meta.env.DEV  && console.log('need update remote checkout');
         if(needMutate){
             const response = await mutation(values,false);
-            console.log('mutate response',response);
+            import.meta.env.DEV && console.log('mutate response',response);
             const errors = _get(response,'userErrors',[]) || [];
             const fields = (errors).map((error : any) => {
                 let {field,code,message} = error || {};
