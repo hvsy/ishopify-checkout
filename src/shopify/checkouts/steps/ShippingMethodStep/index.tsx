@@ -18,14 +18,11 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
     const {json,groups,loading}= useSummary();
 
     const group = groups?.[0] || null;
-    const methods = _get(group,'deliveryOptions',[]);
-    // const allocations= _get(json,'data.cart.discountAllocations',[]);
+    const methods = _get(group,'deliveryOptions',null);
     const shipping_line_id = _get(group,'selectedDeliveryOption.handle',null);
     const shipping_group_id = _get(group,'id',null);
     const form = useCurrentForm();
-    const state_code = Form.useWatch(['shipping_address','state_code'],{
-        form,
-    });
+    const state_code = form.getFieldValue(['shipping_address','state_code']);
     useEffect(() => {
         const current=form.getFieldsValue(['shipping_line_id','shipping_group_id']);
         const changed : any = {};
@@ -49,7 +46,7 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
             </div>
         </StepFrame>
     }
-    if(!methods?.length && !state_code){
+    if((!methods?.length) && !state_code){
         return <StepFrame title={Title}>
             <div className={'rounded-lg bg-gray-100 p-5 text-gray-500'}>
                 Enter your shipping address to view available shipping methods.
