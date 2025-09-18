@@ -31,6 +31,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                                 'content_id' : line.id,
                                 'quantity' : line.quantity,
                                 'price' : line.price,
+                                'currency':line.currency,
                             }
                         }),
                         quantity: json.quantity,
@@ -51,6 +52,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                                 'content_id' : line.id,
                                 'quantity' : line.quantity,
                                 'price' : line.price,
+                                'currency': line.currency,
                             };
                         }),
                         quantity : json.quantity,

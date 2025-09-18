@@ -38,9 +38,10 @@ export const Order: FC<OrderProps> = (props) => {
             },0),
             contents : data.line_items.map((line) => {
                 return {
-                    id : (line.variant.id).replace('gid://shopify/ProductVariant/',''),
+                    id : (line.variant.id).replace(/gid:\/\/shopify\/[^/]+\//ig,''),
                     quantity : line.quantity,
                     price : Big(line.total.amount).div(line.quantity).toString(),
+                    currency : line.total.currencyCode,
                 }
             })
             // quantity : datat.
