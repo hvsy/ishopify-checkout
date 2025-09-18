@@ -4,7 +4,6 @@ import {md5} from "js-md5";
 import Big from "big.js";
 import {get as _get} from "lodash-es";
 import {useParams} from "react-router-dom";
-import {usePaymentContext} from "../../../container/PaymentContext.tsx";
 
 export type CheckoutPixelReportProps = {
     lines : any[];
@@ -22,14 +21,15 @@ export const CheckoutPixelReport: FC<CheckoutPixelReportProps> = (props) => {
             return pv + cv.quantity;
         },0),
         content_ids : lines.map(((line) => {
-            return line.id.replace('gid://shopify/ProductVariant/','');
+            return line.merchandise.id.replace(/gid:\/\/shopify\/[^/]+\//ig,'');
         })),
         contents : lines.map((line : any) => {
             const cost = line.cost.totalAmount;
             return {
-                id : line.id.replace('gid://shopify/ProductVariant/',''),
+                id : line.merchandise.id.replace(/gid:\/\/shopify\/[^/]+\//ig,'',''),
                 quantity : line.quantity,
                 price : Big(cost.amount).div(line.quantity).toString(),
+                currency : _get(json, 'cart.cost.totalAmount.currencyCode'),
             }
         }),
         price : _get(json, 'cart.cost.totalAmount.amount'),

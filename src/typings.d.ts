@@ -18,6 +18,7 @@ namespace Analytics{
             id : string;
             quantity : number;
             price : number|string,
+            currency : string,
         }[];
     };
     type Purchase = {
@@ -28,6 +29,7 @@ namespace Analytics{
             id : string;
             quantity : number;
             price : number|string,
+            currency : string,
         }[];
         token : string;
     };
