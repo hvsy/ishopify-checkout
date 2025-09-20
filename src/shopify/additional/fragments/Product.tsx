@@ -94,14 +94,12 @@ export const Product: FC<ProductProps> = (props) => {
                    setQuantity(v);
                 }}/>
             </div>
-            <div className={'h-[100px]'}>
-
-            </div>
-            <div className={'fixed bottom-0 right-0 left-0 flex flex-col items-stretch'}>
-                <div className={'flex flex-col items-stretch'}>
+            <div className={'h-[30px] sm:hidden'}></div>
+            <div className={'fixed sm:static bottom-0 inset-x-0 flex flex-col items-stretch'}>
                     <a href={""}
                        className={'text-[#9ca3af] opacity-30 bg-transparent text-[10px] text-left'} style={{
                         transform: 'matrix(0.75,0,0,0.75,0,0)',
+                        transformOrigin : 'top left',
                         marginTop: 20
                     }}>
                         Continue without this
@@ -126,23 +124,7 @@ export const Product: FC<ProductProps> = (props) => {
                                  className={'uppercase bg-yellow-500 hover:bg-yellow-600 py-4 text-lg px-12 rounded-none text-black h-auto max-w-full min-w-4/5'}>
                         complete your order
                     </AsyncButton>
-                </div>
-                <div className={'flex flex-row justify-between text-xs sm:text-sm p-2 sm:pt-5 sm:pb-0 sm:px-0 bg-white'}>
-                    <div>
-                        Privacy policy
-                    </div>
-                    <div className={'flex flex-row items-center space-x-1'}>
-                        <p>&copy;</p>
-                        <p>
-                            {(new Date()).getFullYear()},
-                        </p>
-                        <span>
-                    {shop?.name} Powered by Shopify
-                </span>
-                    </div>
-                </div>
             </div>
-
         </form>
     </div>;
 };

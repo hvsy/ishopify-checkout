@@ -29,5 +29,21 @@ export const ProductContainer: FC<ProductProps> = (props) => {
     const product = data?.product;
     const shop = data?.shop;
 
-    return <Product product={product} shop={shop}/>
+    return <div className={'flex flex-col items-stretch'}>
+        <Product product={product} shop={shop}/>
+        <div className={'pb-[60px] flex flex-row justify-between text-xs sm:text-sm p-2 sm:pt-5 sm:pb-0 sm:px-0 bg-white'}>
+            <div>
+                Privacy policy
+            </div>
+            <div className={'flex flex-row items-center space-x-1'}>
+                <p>&copy;</p>
+                <p>
+                    {(new Date()).getFullYear()},
+                </p>
+                <span>
+                            {shop?.name} Powered by Shopify
+                        </span>
+            </div>
+        </div>
+    </div>
 };
