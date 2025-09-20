@@ -43,19 +43,6 @@ export const Additional: FC<AdditionalProps> = (props) => {
             </div>
             <ProductContainer id={data.product_id}/>
         </div>
-        <div className={'flex flex-row justify-between text-xs sm:text-sm p-2 sm:pt-5 sm:pb-0 sm:px-0'}>
-            <div>
-                Privacy policy
-            </div>
-            <div className={'flex flex-row items-center space-x-1'}>
-                <p>&copy;</p>
-                <p>
-                    {(new Date()).getFullYear()},
-                </p>
-                <span>
-                    {"mydraftorder"} Powered by Shopify
-                </span>
-            </div>
-        </div>
+
     </div>;
 };

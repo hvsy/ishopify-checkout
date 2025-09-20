@@ -163,7 +163,9 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             <FormItem name={[...prefix, 'first_name']} rules={[{
                 // required : true,
                 // message  : 'Enter a first name'
-            }]}>
+            }]} normalize={(value,) => {
+                return (value||'').replace(/\d/ig,'');
+            }}>
                 <Input placeholder={'First Name (optional)'}
                        autoComplete={'give-name'}
                        className={'md:col-span-3 col-span-6'}/>
@@ -171,7 +173,9 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             <FormItem name={[...prefix, 'last_name']} rules={[{
                 required: true,
                 message: 'Enter a last name',
-            }]}>
+            }]} normalize={(value, ) => {
+                return (value||'').replace(/\d/ig,'');
+            }}>
                 <Input placeholder={'Last Name'}
                        autoComplete={'family-name'}
                        className={'md:col-span-3 col-span-6'}/>

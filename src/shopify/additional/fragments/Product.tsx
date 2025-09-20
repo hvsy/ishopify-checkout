@@ -10,10 +10,11 @@ import {PromiseLocation} from "../../lib/payment.ts";
 
 export type ProductProps = {
     product : any;
+    shop : any;
 };
 
 export const Product: FC<ProductProps> = (props) => {
-    const {product} = props;
+    const {product,shop} = props;
     const  variants =get(product,'variants.edges',[]).map((edge : any) => {
         const node = edge.node;
         const options = node.selectedOptions.map((o : any) => {
@@ -93,32 +94,55 @@ export const Product: FC<ProductProps> = (props) => {
                    setQuantity(v);
                 }}/>
             </div>
-            <AsyncButton onClick={async () => {
-                if(!formRef.current) return;
-                const url =  formRef.current.action;
-                const formData= new FormData(formRef.current);
-                // console.log('url:',url,Object.fromEntries(formData));
-                // return new Promise((resolve) => {
-                //   setTimeout(resolve,30000);
-                // });
-                const res = await api({
-                    method : "post",
-                    'url' : url,
-                    data : Object.fromEntries(formData),
-                });
-                if(res.redirect) {
-                    return PromiseLocation(res.redirect);
-                }
-            }} className={'uppercase bg-yellow-500 hover:bg-yellow-600 py-4 text-lg px-12 rounded-none text-black h-auto max-w-full min-w-4/5'}>
-                complete your order
-            </AsyncButton>
-            <a href={""}
-               className={'text-[rgb(156,163,175)] bg-white text-[10px]'} style={{
-                transform : 'matrix(0.75,0,0,0.75,0,0)',
-                marginTop:20
-            }}>
-                Continue without this
-            </a>
+            <div className={'h-[100px]'}>
+
+            </div>
+            <div className={'fixed bottom-0 right-0 left-0 flex flex-col items-stretch'}>
+                <div className={'flex flex-col items-stretch'}>
+                    <a href={""}
+                       className={'text-[#9ca3af] opacity-30 bg-transparent text-[10px] text-left'} style={{
+                        transform: 'matrix(0.75,0,0,0.75,0,0)',
+                        marginTop: 20
+                    }}>
+                        Continue without this
+                    </a>
+                    <AsyncButton onClick={async () => {
+                        if (!formRef.current) return;
+                        const url = formRef.current.action;
+                        const formData = new FormData(formRef.current);
+                        // console.log('url:',url,Object.fromEntries(formData));
+                        // return new Promise((resolve) => {
+                        //   setTimeout(resolve,30000);
+                        // });
+                        const res = await api({
+                            method: "post",
+                            'url': url,
+                            data: Object.fromEntries(formData),
+                        });
+                        if (res.redirect) {
+                            return PromiseLocation(res.redirect);
+                        }
+                    }}
+                                 className={'uppercase bg-yellow-500 hover:bg-yellow-600 py-4 text-lg px-12 rounded-none text-black h-auto max-w-full min-w-4/5'}>
+                        complete your order
+                    </AsyncButton>
+                </div>
+                <div className={'flex flex-row justify-between text-xs sm:text-sm p-2 sm:pt-5 sm:pb-0 sm:px-0 bg-white'}>
+                    <div>
+                        Privacy policy
+                    </div>
+                    <div className={'flex flex-row items-center space-x-1'}>
+                        <p>&copy;</p>
+                        <p>
+                            {(new Date()).getFullYear()},
+                        </p>
+                        <span>
+                    {shop?.name} Powered by Shopify
+                </span>
+                    </div>
+                </div>
+            </div>
+
         </form>
     </div>;
 };
