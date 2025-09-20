@@ -41,8 +41,7 @@ export const Additional: FC<AdditionalProps> = (props) => {
                            auto={true}
                 />
             </div>
-            <ProductContainer id={data.product_id}/>
         </div>
-
+        <ProductContainer id={data.product_id}/>
     </div>;
 };
