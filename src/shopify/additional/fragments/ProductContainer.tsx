@@ -27,6 +27,7 @@ export const ProductContainer: FC<ProductProps> = (props) => {
         </div>
     }
     const product = data?.product;
+    const shop = data?.shop;
 
-    return <Product product={product} />
+    return <Product product={product} shop={shop}/>
 };

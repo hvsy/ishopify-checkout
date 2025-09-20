@@ -35,6 +35,9 @@ fragment Variant on ProductVariant{
     }
 }
 query Product($handle : String,$id : ID,$regionCode: CountryCode)@inContext(country: $regionCode){
+    shop {
+        name
+    }
     product(handle: $handle,id : $id){
         handle
         id
