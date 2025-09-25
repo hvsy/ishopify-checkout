@@ -48,7 +48,8 @@ export const FacebookPixel: FC<{ pixels: string[] }> = (props) => {
                 case 'add_payment_info':{
                     const json = data as Analytics.AddPaymentInfo;
                     window.fbq?.('track','AddPaymentInfo',{
-                        ...data,
+                        value : json.price,
+                        currency : json.currency,
                     },extra);
                 }
                     break;

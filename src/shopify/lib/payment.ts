@@ -14,6 +14,23 @@ export function PromiseLocation(location : string){
         window.location.href = location;
     });
 }
+function summary2Cart(summary : any){
+    const lines = _get(summary,'lines.edges').map((edge:any) => {
+        const node = edge.node;
+        const merchandise = node.merchandise;
+        const product = merchandise.product;
+        return {
+            id : merchandise.id.replace(/gid:\/\/shopify\/[^/]+\//ig,''),
+            title : [product.title,merchandise.title].filter(Boolean).join(' '),
+            sku : merchandise.sku,
+            barcode : merchandise.sku,
+            price : merchandise.price,
+            cost : node.cost,
+            quantity : node.quantity,
+        }
+    });
+    return lines;
+}
 export async function shopify_payment(options : {
                                           summary : any,
                                           // url : string,
@@ -29,6 +46,9 @@ export async function shopify_payment(options : {
         window.report?.("add_payment_info",{
             price : '0',
             currency : currencyCode,
+            cart : summary2Cart(summary),
+            email:values.email,
+            shipping_address : values.shipping_address,
         },token +'_add_payment_info');
         try {
             const res = await free(url);
@@ -44,10 +64,13 @@ export async function shopify_payment(options : {
     }
     if(!method) return;
     const mode = method.mode || 'redirect'
-
+    // console.log('payment:',values,summary2Cart(summary));//lines.edges[0].node);
     window.report?.("add_payment_info",{
         price : amount + '',
         currency : currencyCode,
+        cart : summary2Cart(summary),
+        email:values.email,
+        shipping_address : values.shipping_address,
     },token +  '_add_payment_info');
     if(mode === 'redirect'){
         const target = `${url}/gateway/${method.id}`;
