@@ -16,7 +16,7 @@ export const CheckoutPixelReport: FC<CheckoutPixelReportProps> = (props) => {
     if(!token || !lines.length) return null;
 
     return <Report name={'checkout_started'} data={{
-        eventId : md5(token),
+        // eventId : md5(token),
         quantity : lines.reduce((pv : number,cv : any) => {
             return pv + cv.quantity;
         },0),
