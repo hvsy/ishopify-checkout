@@ -36,9 +36,9 @@ namespace Analytics{
     type AddPaymentInfo = {
         price ?: string;
         currency ?: string;
-        cart : any;
-        email:string;
-        shipping_address:any;
+        cart ?: any;
+        email?:string;
+        shipping_address?:any;
     }
     type Event<NAME extends string,T = any> = {
         name : NAME;
