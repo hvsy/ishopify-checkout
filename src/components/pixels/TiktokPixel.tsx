@@ -59,7 +59,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         value : json.price,
                         currency : json.currency,
                         order_id : md5(json.token),
-                    })
+                    },extra)
                 }
                     break;
                 case 'add_payment_info':{

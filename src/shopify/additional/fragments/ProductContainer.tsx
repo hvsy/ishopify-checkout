@@ -41,8 +41,8 @@ export const ProductContainer: FC<ProductProps> = (props) => {
                     {(new Date()).getFullYear()},
                 </p>
                 <span>
-                            {shop?.name} Powered by Shopify
-                        </span>
+                    {shop?.name} Powered by Shopify
+                </span>
             </div>
         </div>
     </div>

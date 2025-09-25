@@ -8,7 +8,6 @@ import {useCleanCartCookie} from "../hooks/useCleanCartCookie.ts";
 import {Pixels} from "../fragments/Pixels.tsx";
 import {Report} from "../../page/components/Report.tsx";
 import Big from "big.js";
-import {md5} from "js-md5";
 
 export type OrderProps = {};
 
@@ -29,7 +28,7 @@ export const Order: FC<OrderProps> = (props) => {
         </PageFrame>
         {data.shop.tracking && <Pixels tracking={data.shop.tracking} />}
         {data.token && <Report name={'purchase'} data={{
-            eventId : md5(data.token),
+            // eventId : md5(data.token),
             currency : data.total_amount.currencyCode,
             price : data.total_amount.amount + '',
             token : data.token,
