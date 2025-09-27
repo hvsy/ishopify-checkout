@@ -122,6 +122,7 @@ export const Product: FC<ProductProps> = (props) => {
                         return PromiseLocation(res.redirect);
                     }
                 }}
+                             loadingClassName={"bg-yellow-500"}
                              className={'uppercase bg-white hover:bg-yellow-600 py-0 text-lg px-0 rounded-none text-black h-auto max-w-full min-w-4/5'}>
                     <div className={'bg-yellow-500 px-12 py-4 flex-1'}>
                         complete your order

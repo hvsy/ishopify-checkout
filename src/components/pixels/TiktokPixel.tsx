@@ -1,10 +1,12 @@
 import {FC,} from "react";
 import {md5} from "js-md5";
+import {sha256} from "js-sha256";
 import {isArray} from "lodash-es";
 import {usePlatformPixel} from "./usePlatformPixel.tsx";
 import StartCheckout = Analytics.StartCheckout;
 import Purchase = Analytics.Purchase;
 import AddPaymentInfo = Analytics.AddPaymentInfo;
+import Cookies from "js-cookie";
 
 
 export const TiktokPixel: FC<{ pixels: string[] }> = (props) => {
@@ -20,6 +22,12 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 window.ttq?.load(p);
             })
             window.ttq.page();
+            const shopify_y = Cookies.get('_shopify_y');
+            if(!!(shopify_y)){
+                window.ttq.identify({
+                    external_id : sha256(shopify_y),
+                })
+            }
         },
         pixels,
         onEventCallback(type,data,extra){
