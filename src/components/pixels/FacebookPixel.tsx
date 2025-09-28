@@ -1,6 +1,8 @@
 import {FC,} from "react";
 import {md5} from "js-md5";
 import {usePlatformPixel} from "./usePlatformPixel.tsx";
+import Cookies from "js-cookie";
+import {sha256} from "js-sha256";
 
 
 export const FacebookPixel: FC<{ pixels: string[] }> = (props) => {
@@ -16,8 +18,15 @@ export const FacebookPixel: FC<{ pixels: string[] }> = (props) => {
             'https://connect.facebook.net/en_US/fbevents.js');`,
         pixels,
         setup : ps =>{
+            const extra : any = {
+
+            };
+            const shopify_y = Cookies.get('_shopify_y');
+            if(!!(shopify_y)){
+                extra.external_id = sha256(shopify_y);
+            }
             ps.forEach((pixel) => {
-                window.fbq?.('init', pixel);
+                window.fbq?.('init', pixel,extra);
             })
             window.fbq?.("track", "PageView")
         },
