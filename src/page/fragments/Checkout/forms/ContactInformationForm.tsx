@@ -11,7 +11,9 @@ export const ContactInformationForm: FC<ContactInformationFormProps> = (props) =
     return <StepBlock label={"Contact Information"} name={'contact-information'}>
         <FormItem name={['email']} rules={[{
             async validator(rule, value) {
-                if(!value || !Validators.isEmail(value)){
+                if(!value || !Validators.isEmail(value,{
+                    allow_utf8_local_part : false,
+                })){
                     throw new Error("Please enter a valid email");
                 }
                 // if (!EmailRegex.test(value)) {
