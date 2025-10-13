@@ -12,11 +12,12 @@ export type AsyncButtonProps =  {
     children ?: ReactNode,
     className ?: string;
     loadingClassName ?: string;
+    loadingContainerClassName ?: string;
     pulsing ?: boolean;
 } ;
 
 export const AsyncButton : FC<AsyncButtonProps> = (props)=>{
-    const {children,pulsing = false,className = '',loadingClassName = '',onClick,...others} = props;
+    const {children,loadingContainerClassName = '',pulsing = false,className = '',loadingClassName = '',onClick,...others} = props;
     const [{loading : actionLoading},click]  = useAsyncClick(onClick);
     const finalLoading = pulsing || actionLoading;
     const final = cn("relative cursor-pointer select-none",{
@@ -25,7 +26,9 @@ export const AsyncButton : FC<AsyncButtonProps> = (props)=>{
         "*:invisible [&>*:last-child]:visible":finalLoading,
         "min-w-24" : import.meta.env.VITE_SKELETON,
         "min-h-8" : import.meta.env.VITE_SKELETON,
-    },className);
+    },className,{
+        [loadingContainerClassName] : finalLoading,
+    });
     if(import.meta.env.VITE_SKELETON){
         return <Skeleton className={final}/>
     }
