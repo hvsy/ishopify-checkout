@@ -17,6 +17,7 @@ export type RegionSelectorProps = {
 export const NewRegionSelector : FC<any> = (props) => {
     const {data: zones} = useSWR('/a/s/api/zones');
     return <Selector {...props}>
+        <option hidden disabled value={''}>&nbsp;</option>
         {(zones || []).map((zone: any) => {
             return <option value={zone.code} key={zone.code}>
                 {zone.flag} {zone.en_name}
