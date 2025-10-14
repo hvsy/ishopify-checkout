@@ -2,7 +2,17 @@ import {get as _get} from "lodash-es";
 
 function getMetaContent<T = any>(name : string,defaultValue : any|null = null){
     const meta = document.querySelector(`meta[name='${name}']`);
-    return meta?.getAttribute?.('content') || defaultValue;
+    let content = meta?.getAttribute?.('content');
+    if(content){
+        content = content.trim()
+        if(content.indexOf('{{') !== -1 || content.indexOf('{!') !== -1){
+            return defaultValue;
+        }else{
+            return content;
+        }
+    }else{
+        return defaultValue;
+    }
 }
 function getArrayFromMeta(name : string) : string[]{
     const content = getMetaContent(name,'');
