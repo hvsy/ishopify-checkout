@@ -7,11 +7,11 @@ export function useCleanCartCookie(gid ?: string){
             return;
         }
         const token = Cookies.get('cart');
-        const after = decodeURIComponent(gid);
+        const after = decodeURIComponent(gid).replace('gid://shopify/Cart/','');
         if(decodeURIComponent(token||'') === after){
             Cookies.remove('cart');
         }
-        const hit = after.replace('gid://shopify/Cart/','').split("?key=")?.[0];
+        const hit = after.split("?key=")?.[0];
         console.log('token:',gid,token,after,hit);
         localStorage.removeItem(`cart:${hit}`);
         if(localStorage.getItem("cartToken") === JSON.stringify(hit)){
