@@ -1,6 +1,7 @@
 import {createContext, FC, use, useEffect, useState} from "react";
 import useSWR from "swr";
 import {Pixels} from "../shopify/fragments/Pixels.tsx";
+import {isString} from "lodash-es";
 
 export const PaymentContext = createContext<{
     method : DB.PaymentMethod|null;
@@ -19,6 +20,14 @@ export function usePaymentMethod(){
     return usePaymentContext()?.method;
 }
 
+function preload(config : any){
+    const link = document.createElement('link');
+    Object.keys(config).forEach((key) => {
+        //@ts-ignore
+        link[key] = config[key];
+    })
+    document.head.append(link);
+}
 export const PaymentContainer  : FC<any> = (props) => {
     const {children} = props;
     const [method,setMethod] = useState<DB.PaymentMethod|null>(null);
@@ -31,18 +40,24 @@ export const PaymentContainer  : FC<any> = (props) => {
         if(!setup?.payments) return;
         (setup.payments|| []).forEach((payment) => {
             (payment.preloads?.js || []).forEach((js) => {
-                const link = document.createElement('link');
-                link.rel = 'preload';
-                link.href = js;
-                link.as = 'script';
-                document.head.append(link);
+                if(!js) return;
+                const obj = isString(js) ? {
+                    rel : 'preload',
+                    href : js,
+                    as : 'script',
+                    type : 'text/javascript'
+                } : js;
+                preload(obj);
             });
             (payment.preloads?.css || []).forEach((css) => {
-                const link = document.createElement('link');
-                link.rel = 'preload';
-                link.href = css;
-                link.as = 'style';
-                document.head.append(link);
+                if(!css) return;
+                const obj = isString(css) ? {
+                    rel : 'preload',
+                    href : css,
+                    as : 'style',
+                    type : 'text/css'
+                } : css;
+                preload(obj);
             });
         })
     }, [!!setup]);
