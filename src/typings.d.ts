@@ -230,8 +230,8 @@ namespace DB {
         embed ?: string;
         height : number;
         preloads ?: {
-            js ?: string[],
-            css ?: string[],
+            js ?: (string|any)[],
+            css ?: (string|any)[],
         }
     };
     type DiscountType = 'percent' | 'cutoff' | 'free_shipping';
