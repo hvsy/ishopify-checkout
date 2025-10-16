@@ -229,6 +229,10 @@ namespace DB {
         channel : string;
         embed ?: string;
         height : number;
+        preloads ?: {
+            js ?: string[],
+            css ?: string[],
+        }
     };
     type DiscountType = 'percent' | 'cutoff' | 'free_shipping';
 

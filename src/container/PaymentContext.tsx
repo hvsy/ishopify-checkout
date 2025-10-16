@@ -1,4 +1,4 @@
-import {createContext, FC, use, useState} from "react";
+import {createContext, FC, use, useEffect, useState} from "react";
 import useSWR from "swr";
 import {Pixels} from "../shopify/fragments/Pixels.tsx";
 
@@ -27,6 +27,25 @@ export const PaymentContainer  : FC<any> = (props) => {
         tracking : any;
         payments : DB.PaymentMethod[],
     }>(('/a/s/api/setup'));
+    useEffect(() => {
+        if(!setup?.payments) return;
+        (setup.payments|| []).forEach((payment) => {
+            (payment.preloads?.js || []).forEach((js) => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = js;
+                link.as = 'script';
+                document.head.append(link);
+            });
+            (payment.preloads?.css || []).forEach((css) => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = css;
+                link.as = 'style';
+                document.head.append(link);
+            });
+        })
+    }, [!!setup]);
     return <PaymentContext value={{
         tracking : setup?.tracking || null,
         method,
