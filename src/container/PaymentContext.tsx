@@ -32,14 +32,14 @@ export const PaymentContainer  : FC<any> = (props) => {
         (setup.payments|| []).forEach((payment) => {
             (payment.preloads?.js || []).forEach((js) => {
                 const link = document.createElement('link');
-                link.rel = 'prefetch';
+                link.rel = 'preload';
                 link.href = js;
                 link.as = 'script';
                 document.head.append(link);
             });
             (payment.preloads?.css || []).forEach((css) => {
                 const link = document.createElement('link');
-                link.rel = 'prefetch';
+                link.rel = 'preload';
                 link.href = css;
                 link.as = 'style';
                 document.head.append(link);
