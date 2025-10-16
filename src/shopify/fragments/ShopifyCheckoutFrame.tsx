@@ -1,12 +1,15 @@
-import {FC} from "react";
+import {FC, useEffect, useRef} from "react";
 import {GlobalContextProvider, SummaryContextProvider, useSummary} from "../checkouts/hooks/useSummary.tsx";
-import {Outlet} from "react-router-dom";
+import {Outlet, useParams} from "react-router-dom";
+import {Produce} from "./Produce.tsx";
 
 export type ShopifyCheckoutFrameProps = {};
+
 
 export const ShopifyCheckoutFrame: FC<ShopifyCheckoutFrameProps> = (props) => {
     return <GlobalContextProvider>
         <Outlet/>
+        <Produce  event={'loaded'} />
     </GlobalContextProvider>
         // const {json} = useSummary();
         // const checkout = getCheckoutFromSummary(json, 'cart');
