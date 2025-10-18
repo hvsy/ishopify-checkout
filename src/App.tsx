@@ -5,6 +5,7 @@ import {preload} from "swr";
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
 import {getOrder} from "@lib/payment.ts";
+import {get as _get, sum} from "lodash-es";
 import {lazy} from "react";
 import {
     ApolloPreloader,
@@ -120,6 +121,9 @@ async function getCheckout(request : Request,params : Params<string>,context : a
     });
     let checkout : any = null;
     if(cart){
+        if(_get(cart,'data.cart.totalQuantity',0) < 1){
+            return go2home();
+        }
         checkout = getCheckoutFromSummary(cart);
         // console.log('preload cart:',cart,checkout);
     }
