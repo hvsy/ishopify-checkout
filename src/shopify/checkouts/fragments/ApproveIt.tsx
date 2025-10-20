@@ -1,10 +1,8 @@
 import {FC, useEffect} from "react";
 import {AsyncButton} from "@components/fragments/AsyncButton.tsx";
 import {useCurrentForm} from "../../../container/FormContext.ts";
-import {scrollToError, submit} from "@components/frames/FormContainer.tsx";
+import {scrollToError, } from "@components/frames/FormContainer.tsx";
 import {useSummary} from "../hooks/useSummary.tsx";
-import {useMutationCheckout} from "../../context/ShopifyCheckoutContext.tsx";
-import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
 import {api} from "@lib/api.ts";
 import {useFormValidate} from "../../hooks/useFormValidate.tsx";
 import {PromiseLocation} from "../../lib/payment.ts";
@@ -40,5 +38,5 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                 }
             }
         }}
-        className={'max-w-full'}>Payment</AsyncButton> ;
+        className={'max-w-full'}>Place an order</AsyncButton> ;
 };
