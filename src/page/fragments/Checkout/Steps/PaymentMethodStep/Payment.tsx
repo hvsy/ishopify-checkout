@@ -4,6 +4,7 @@ import {flatten as _flatten,isArray as _isArray,isString as _isString} from "lod
 import {PaymentTip} from "./PaymentTip.tsx";
 import {EmbedInFrame} from "./EmbedInFrame.tsx";
 import {cn} from "@lib/cn.ts";
+import {BillingAddressStep} from "../../../../../shopify/checkouts/steps/BillingAddressStep";
 
 export type PaymentProps = {
     method : DB.PaymentMethod,
@@ -64,33 +65,37 @@ export const Payment: FC<PaymentProps> = (props) => {
                 </div>
             </div>
         </div>
-        <div className={cn('p-0 flex flex-col justify-center items-stretch',{
+        <div className={cn('p-0 flex flex-col justify-start items-stretch ',{
             'hidden' : !checked,
+            'bg-[#F5F5F5]'  : method.type === 'credit-card',
         })}>
-            {
-                (function(mode){
-                    switch(mode){
-                        case 'popup':
-                        case 'redirect':{
-                            return <PaymentTip />
+            <div className={'flex flex-col'}>
+                {
+                    (function (mode) {
+                        switch (mode) {
+                            case 'popup':
+                            case 'redirect': {
+                                return <PaymentTip/>
+                            }
+                            case 'embed-in': {
+                                return <EmbedInFrame
+                                    active={checked}
+                                    id={method.channel}
+                                    height={method.height || 145}
+                                    width={'100%'}
+                                    name={method.channel}
+                                    src={method.embed || `/a/s/api/checkouts/${token}/gateway/${method.id}/embed`}
+                                    // src={`/a/s/api/gateway/${method.id}/embed`}
+                                />
+                            }
+                            default:
+                                return mode;
                         }
-                        case 'embed-in':{
-                            return <EmbedInFrame
-                                active={checked}
-                                id={method.channel}
-                                height={method.height || 145}
-                                width={'100%'}
-                                name={method.channel}
-                                src={method.embed || `/a/s/api/checkouts/${token}/gateway/${method.id}/embed`}
-                                 // src={`/a/s/api/gateway/${method.id}/embed`}
-                            />
-                        }
-                        default:
-                            return mode;
-                    }
-                    return null;
-                })(method.mode)
-            }
+                        return null;
+                    })(method.mode)
+                }
+            </div>
+            {method.type === 'credit-card' && checked && <BillingAddressStep />}
         </div>
     </div>;
 };

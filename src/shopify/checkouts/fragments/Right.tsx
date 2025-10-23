@@ -18,6 +18,8 @@ import {
 } from "@query/checkouts/fragments/fragments.ts";
 import {QueryLineItems} from "@query/checkouts/queries.ts";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {getGlobalPath} from "../../lib/globalSettings.ts";
+import {Media} from "../../../page/components/Media.tsx";
 
 export type RightProps = {};
 export const Right: FC<RightProps> = (props) => {
@@ -60,6 +62,7 @@ export const Right: FC<RightProps> = (props) => {
 
     const {json : summary,} = useSummary();
     const format = useMoneyFormat();
+    const pcImage = getGlobalPath('profile.pc.resource.image');
     return <RightFrame totalPrice={format(_get(summary,'cart.cost.totalAmount'))}>
         <div className={'pb-5 w-full max-w-full space-y-5'}>
             {data.map((line : any) => {
@@ -68,5 +71,12 @@ export const Right: FC<RightProps> = (props) => {
         </div>
         <ShopifyCouponForm />
         <Summary lines={data}/>
+        {pcImage?.url && <div className={'hidden sm:flex pt-8 flex-col items-stretch'}>
+            <Media media={{
+                url : pcImage.url,
+                width : pcImage.width,
+                height : pcImage.height,
+            }} width={pcImage.width} />
+        </div>}
     </RightFrame>;
 };

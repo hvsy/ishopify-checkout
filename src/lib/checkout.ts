@@ -1,28 +1,9 @@
 import {get as _get} from "lodash-es";
-
-function getMetaContent<T = any>(name : string,defaultValue : any|null = null){
-    const meta = document.querySelector(`meta[name='${name}']`);
-    let content = meta?.getAttribute?.('content');
-    if(content){
-        content = content.trim()
-        if(content.indexOf('{{') !== -1 || content.indexOf('{!') !== -1){
-            return defaultValue;
-        }else{
-            return content;
-        }
-    }else{
-        return defaultValue;
-    }
-}
-function getArrayFromMeta(name : string) : string[]{
-    const content = getMetaContent(name,'');
-    return content.split(',').filter(Boolean);
-}
+import {ApolloClient, createQueryPreloader, InMemoryCache} from "@apollo/client";
+import {getMetaContent} from "./metaHelper.ts";
 
 const api_version = getMetaContent('api_version');
 const storefront_url = api_version ? `/api/${api_version}/graphql.json` :"/api/2025-10/graphql.json";
-import {ApolloClient, createQueryPreloader, InMemoryCache} from "@apollo/client";
-import {api} from "./api.ts";
 
 export const ApolloStoreFrontClient = new ApolloClient({
     uri : storefront_url,

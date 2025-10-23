@@ -20,5 +20,6 @@ export function getCheckoutFromSummary(summary : any,path : string = 'data.cart'
         countryCode : code || countryCode,
         ...transform_address(summary,path,),
         shipping_discount : discounts?.[0] || null,
+        billing_address : null,
     }
 }

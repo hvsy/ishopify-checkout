@@ -3,6 +3,8 @@ import {Link, LinkProps} from "react-router-dom";
 import {ChevronLeft} from "lucide-react";
 import {AsyncButton} from "../fragments/AsyncButton.tsx";
 import {Skeleton} from "../ui/Skeleton.tsx";
+import {getGlobalPath} from "../../shopify/lib/globalSettings.ts";
+import {Media} from "../../page/components/Media.tsx";
 
 export type FooterFrameProps = {
     back ?: {
@@ -19,6 +21,7 @@ export type FooterFrameProps = {
 
 export const FooterFrame: FC<FooterFrameProps> = (props) => {
     const {back,next} = props;
+    const mobileImage = getGlobalPath("profile.mobile.resource.image");
     const left  = back && <Link className={'text-sm space-x-2 flex flex-row mt-8 sm:mt-0 justify-center items-center cursor-pointer'}
                                 to={back.to}
                                 reloadDocument={back.reload || false}
@@ -28,6 +31,12 @@ export const FooterFrame: FC<FooterFrameProps> = (props) => {
         {import.meta.env.VITE_SKELETON ?<Skeleton className={'min-w-36 min-h-5'}/> : <div>Return to {back?.label}</div>}
     </Link>;
     return <div className={'flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center'}>
+        {mobileImage?.url && <div className={'sm:hidden pt-8'}>
+            <Media
+                media={mobileImage as DB.Media}
+                width={mobileImage.width}
+            />
+        </div>}
         {left}
         <AsyncButton onClick={next?.onClick}  pulsing={next?.pulsing || false} className={'max-w-full'}>
             {next?.label}

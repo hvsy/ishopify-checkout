@@ -71,6 +71,7 @@ export async function shopify_payment(options : {
         cart : summary2Cart(summary),
         email:values.email,
         shipping_address : values.shipping_address,
+        billing_address : values.billing_address || values.shipping_address,
     },token +  '_add_payment_info');
     if(mode === 'redirect'){
         const target = `${url}/gateway/${method.id}`;

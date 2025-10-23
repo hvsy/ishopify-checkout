@@ -39,6 +39,7 @@ namespace Analytics{
         cart ?: any;
         email?:string;
         shipping_address?:any;
+        billing_address?:any;
     }
     type Event<NAME extends string,T = any> = {
         name : NAME;

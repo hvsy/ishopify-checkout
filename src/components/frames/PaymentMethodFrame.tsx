@@ -1,12 +1,7 @@
 import {FC, ReactNode} from "react";
-import {usePaymentLimit} from "../../container/usePaymentLimit.ts";
-import Big from "big.js";
 import {FreeMethod} from "../../page/fragments/Checkout/Steps/PaymentMethodStep/FreeMethod.tsx";
-import {Methods} from "../../page/fragments/Checkout/Steps/PaymentMethodStep/Methods.tsx";
 import {PaymentError} from "../../page/fragments/Checkout/Steps/PaymentMethodStep/PaymentError.tsx";
-import {LimitAlert} from "../../container/LimitAlert.tsx";
-import {NoActivePaymentMethod} from "../../page/fragments/Checkout/Steps/PaymentMethodStep/NoActivePaymentMethod.tsx";
-import {useLoaderData, useParams, useRouteLoaderData} from "react-router-dom";
+import {useRouteLoaderData} from "react-router-dom";
 import {useReadQuery} from "@apollo/client";
 import {get as _get} from "lodash-es";
 import {StepFrame} from "./StepFrame.tsx";

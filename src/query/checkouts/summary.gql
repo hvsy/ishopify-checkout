@@ -19,6 +19,7 @@ query Summary($cartId :ID!,$withCarrierRates : Boolean = false){
             shortDescription
             slogan
         }
+        shipsToCountries
     }
     localization {
         availableCountries {

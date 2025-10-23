@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo} from "react";
+import {FC, useEffect, useMemo, useRef} from "react";
 import {find as _find,capitalize as _capitalize,startsWith} from "lodash-es";
 import {Input} from "../../../components/Input.tsx";
 import {CircleHelp} from "lucide-react";
@@ -17,14 +17,19 @@ import {PhoneInput} from "@components/ui/PhoneInput.tsx";
 import {UNSAFE_useRouteId} from "react-router-dom";
 
 export type AddressFormProps = {
-    title: string;
+    title?: string;
+    titleClassName ?: string;
     prefix?: string[];
+    hidden_fields ?: ('phone'|'zip')[];
+    api ?: string;
+    preserve ?: boolean;
+    zones ?: any[];
 };
 
 
 
 export const StateCodeFormItem : FC<any> = (props) => {
-    const {name,zones,className} = props;
+    const {name,zones,className,autoComplete,preserve = false} = props;
     const approve = UNSAFE_useRouteId() === 'approve';
     const form = useCurrentForm();
     useEffect(() => {
@@ -36,12 +41,13 @@ export const StateCodeFormItem : FC<any> = (props) => {
             })
         }
     }, [approve]);
+    if(!zones?.length) return null;
     return <FormItem name={name} rules={[{
         required :true,
         message : 'Select a state / province',
-    }]}>
+    }]} preserve={preserve}>
         <NewStateSelector
-            autoComplete={'address-level1'}
+            autoComplete={autoComplete}
             // field={'state'}
             zones={zones}
             placeholder={'Province/State'}
@@ -50,20 +56,23 @@ export const StateCodeFormItem : FC<any> = (props) => {
     </FormItem>
 };
 export const AddressForm: FC<AddressFormProps> = (props) => {
-    const {title, prefix = [],} = props;
+    const {preserve = false, title,titleClassName,hidden_fields = [], prefix = [],api = '/a/s/api/zones'} = props;
+    const pf = prefix.join('.').replace('_address','');
     const {form:formInstance,onValuesChanged} = FormContext.use()//useCurrentForm();
+    const {data: Regions,isLoading} = useSWR(api);
     useWatch([...prefix, 'region_code'], {
         form: formInstance,
-        preserve: true,
+        preserve,
     });
     const region_id = formInstance.getFieldValue([...prefix, 'region_code']);
-    const {data: Regions,isLoading} = useSWR('/a/s/api/zones');
     const [zones, hitRegion] = useMemo(() => {
         const hit = _find(Regions, (r) => {
             return (r.code) === region_id;
         });
         return [hit?.children || [], hit] as const;
     }, [region_id, Regions]);
+    const zonesRef = useRef<any>(null);
+    zonesRef.current = zones;
     useEffect(() => {
         if (!region_id) {
             let firstRegion = Regions?.[0];
@@ -84,7 +93,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     }
                 ]);
                 onValuesChanged?.({
-                    shipping_address : {
+                    [prefix.join('.')]: {
                         region_code : firstRegion?.code,
                         region: firstRegion,
                     }
@@ -103,7 +112,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         if(isLoading) return;
         if (!region_id) return;
         const current = formInstance?.getFieldValue([...prefix, 'state_code']);
-        if(!current || !_find(zones, (z) => {
+        if(!current || !_find(zonesRef.current||[], (z) => {
                 return z.code === current;
         })){
                 formInstance?.setFields([{
@@ -116,29 +125,11 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     value : null,
                 }])
         }
-        // if (!firstZone?.code  || !current || !_find(zones, (z) => {
-        //     return z.code === current;
-        // })) {
-        //     formInstance?.setFields([{
-        //         name: [...prefix, 'state_code'],
-        //         value: firstZone?.code  || null,
-        //     }, {
-        //         name: [...prefix, 'state'],
-        //         value: firstZone || null,
-        //     }])
-        //     onValuesChanged?.({
-        //         shipping_address : {
-        //             state_code: firstZone?.code || null,
-        //             state: firstZone || null,
-        //
-        //         }
-        //     });
-        // }
     }, [region_id, firstZone?.id,isLoading]);
     const phonePrefix = hitRegion?.data?.phoneNumberPrefix;
     const zipHolder = hitRegion?.data?.postalCodeExample;
     const label = _capitalize(title || '');
-    const postalCodeRequired = !!hitRegion?.data?.postalCodeRequired;
+    const postalCodeRequired = !!hitRegion?.data?.postalCodeRequired && !(hidden_fields||[]).includes('zip');
     let colSpan = 3;
     if(!zones?.length){
         colSpan--;
@@ -147,14 +138,15 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         colSpan--;
     }
     const colSpanClass = ['md:col-span-6','md:col-span-3' ,'md:col-span-2'][colSpan-1];
-    return <StepBlock className={'flex flex-col space-y-4'} label={`${label} address`} name={`${label}-address`}>
+    return <StepBlock className={'flex flex-col space-y-4'} labelClassName={titleClassName} label={`${label} address`} name={`${label}-address`}>
         <div className={'grid grid-cols-6 gap-y-3 gap-x-2'}>
             <FormItem name={[...prefix, 'region']} preserve={true}>
                 <div className={'hidden'}/>
             </FormItem>
-            <FormItem name={[...prefix,'region_code']} >
+            <FormItem name={[...prefix,'region_code']} preserve={true}>
                 <NewRegionSelector
-                    autoComplete={'country'}
+                    zones={Regions}
+                    autoComplete={`${pf} country`}
                     // field={'region'}
                     placeholder={'Country/Region'}
                     className={`col-span-6`}
@@ -165,9 +157,9 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 // message  : 'Enter a first name'
             }]} normalize={(value,) => {
                 return (value||'').replace(/\d/ig,'');
-            }}>
+            }} preserve={preserve}>
                 <Input placeholder={'First Name (optional)'}
-                       autoComplete={'give-name'}
+                       autoComplete={`${pf} given-name`}
                        className={'md:col-span-3 col-span-6'}/>
             </FormItem>
             <FormItem name={[...prefix, 'last_name']} rules={[{
@@ -175,9 +167,9 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 message: 'Enter a last name',
             }]} normalize={(value, ) => {
                 return (value||'').replace(/\d/ig,'');
-            }}>
+            }} preserve={preserve}>
                 <Input placeholder={'Last Name'}
-                       autoComplete={'family-name'}
+                       autoComplete={`${pf} family-name`}
                        className={'md:col-span-3 col-span-6'}/>
             </FormItem>
             <FormItem name={[...prefix, 'line1']} rules={[{
@@ -187,38 +179,40 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     }
                 },
                 message: 'Please enter 4-200 characters to Automatically retrieve addresses.'
-            }]}>
+            }]} preserve={preserve}>
                 <Input placeholder={'Address'}
-                       autoComplete={'address-line1'}
+                       autoComplete={`${pf} address-line1`}
                        className={'col-span-6'}/>
             </FormItem>
-            <FormItem name={[...prefix, 'line2']}>
+            <FormItem name={[...prefix, 'line2']} preserve={preserve}>
                 <Input placeholder={'Apartment, suite, etc. (optional)'}
-                       autoComplete={'address-lin2'}
+                       autoComplete={`${pf} address-line2`}
                        className={'col-span-6'}/>
             </FormItem>
             <FormItem name={[...prefix, 'city']} rules={[{
                 required: true,
                 message: 'Enter a city'
-            }]}>
+            }]} preserve={preserve}>
                 <Input placeholder={'City'}
-                       autoComplete={'address-level2'}
+                       autoComplete={`${pf} address-level2`}
                        className={`${colSpanClass} col-span-6`}/>
             </FormItem>
             {zones.length > 0 && <StateCodeFormItem
+                autoComplete={`${pf} address-level1`}
                 name={[...prefix,'state_code']}
                 className={`${colSpanClass} col-span-6`}
                 zones={zones}
+                preserve={true}
             />}
             {postalCodeRequired  && <FormItem name={[...prefix, 'zip']} rules={[{
                 required: true,
                 message: 'Enter a ZIP / postal code',
-            }]}>
+            }]} preserve={preserve}>
                 <Input placeholder={zipHolder ? `Postal Code Like ${zipHolder}` : 'Postal Code'}
-                       autoComplete={'postal-code'}
+                       autoComplete={`${pf} postal-code`}
                        className={`${colSpanClass} col-span-6`}/>
             </FormItem>}
-            <FormItem name={[...prefix, 'phone']} rules={[{
+            {!(hidden_fields||[]).includes('phone') && <FormItem name={[...prefix, 'phone']} rules={[{
                 required: true,
                 async validator(rules, value) {
                     if(!value){
@@ -239,10 +233,10 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     }
                 },
                 // message: 'Enter a valid phone number',
-            }]}>
+            }]} preserve={preserve}>
                <PhoneInput placeholder={`Phone (For shipping updates) ${phonePrefix?'+' + phonePrefix:''}`} className={'col-span-6'}
                        countryCode={hitRegion?.code}
-                       autoComplete={'tel'}
+                       autoComplete={`${pf} tel`}
                        // prefix={phonePrefix ? <div>+{phonePrefix}</div> : undefined}
                        suffix={<Tooltip icon={<CircleHelp size={16}/>}>
                            <p>In case we need to contact</p>
@@ -250,7 +244,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        </Tooltip>}
 
                 />
-            </FormItem>
+            </FormItem>}
         </div>
     </StepBlock>
 };
