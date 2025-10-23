@@ -1,12 +1,13 @@
 import {FC, ReactNode, useCallback, useRef, useState} from "react";
 import Form, {FormInstance} from "rc-field-form";
 import {FormContext,} from "../../container/FormContext.ts";
-import {isArray as _isArray, get as _get, has as _has, add,startsWith,isEmpty} from "lodash-es";
+import {get as _get, has as _has, isArray as _isArray} from "lodash-es";
 import {useDebounceCallback} from "usehooks-ts";
 import {CheckoutInput, map2, useMutationCheckout} from "../../shopify/context/ShopifyCheckoutContext.tsx";
 import {useDeliveryGroupMutation, useSummary} from "../../shopify/checkouts/hooks/useSummary.tsx";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
 import Validators from "validator";
+import {buildAddress} from "@lib/buildAddress.ts";
 
 
 export type FormContainerProps = {
@@ -61,26 +62,6 @@ export async function submit(form : FormInstance){
 }
 
 
-function buildAddress(address : any){
-    const after = map2(address,{
-        id : 'id',
-        city : 'city',
-        firstName: 'first_name',
-        lastName : 'last_name',
-        address1: 'line1',
-        address2: 'line2',
-        phone : 'phone',
-        countryCode: 'region_code',
-        provinceCode: 'state_code',
-        zip : 'zip',
-    },true)
-    if(!Validators.isMobilePhone(after.phone || '',"any",{
-        strictMode : true,
-    })){
-        after.phone = "";
-    }
-    return after;
-}
 export const FormContainer: FC<FormContainerProps> = (props) => {
     const {form,children,initialValues,page_style = 'standard'} = props;
     // const [form] = Form.useForm();

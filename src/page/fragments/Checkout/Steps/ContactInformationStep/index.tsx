@@ -16,6 +16,7 @@ export const ContactInformationStep:FC<ContactInformationStepProps>
             <div className={'hidden'}/>
         </Form.Field>
         <AddressForm title={'Shipping'}
+                     preserve={true}
                      prefix={['shipping_address']}
         />
     </>

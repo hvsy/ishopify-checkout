@@ -59,6 +59,15 @@ export type CheckoutInput = {
         lastName ?: string;
         zip ?: string;
     },
+    billing_address ?: {
+        countryCode ?: string;
+        city ?: string;
+        provinceCode ?: string;
+        address1 ?: string;
+        address2 ?: string;
+        firstName ?: string;
+        lastName ?: string;
+    },
     deliveryHandle ?: string;
     deliveryGroupId ?: string;
     validationStrategy?: 'COUNTRY_CODE_ONLY' | 'STRICT'

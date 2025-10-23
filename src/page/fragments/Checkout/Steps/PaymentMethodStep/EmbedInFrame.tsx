@@ -18,9 +18,9 @@ export const EmbedInFrame: FC<EmbedInFrameProps> = memo((props) => {
                 setLoading(false);
                 return;
         }
-        if(!['rpcRequest','rpcResponse'].includes(type)){
-            import.meta.env.DEV && console.log('iframe message:',e);
-        }
+        // if(!['rpcRequest','rpcResponse'].includes(type)){
+        //     import.meta.env.DEV && console.log('iframe message:',e);
+        // }
     });
     useLayoutEffect(() => {
       window.addEventListener('message',onMessage);

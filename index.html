@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <meta name="api" content="/"/>
     <meta name="api_version" content="{{$api_version ?? ''}}"/>
+    <meta name="settings" content="{{json_encode($checkout ?? null)}}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title></title>
     <!-- inject:css -->

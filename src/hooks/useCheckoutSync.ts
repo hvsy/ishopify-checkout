@@ -6,6 +6,8 @@ import {useCallback} from "react";
 import {useCartStorage} from "./useCartStorage.ts";
 import {useCurrentForm} from "../container/FormContext.ts";
 import {FormInstance} from "rc-field-form";
+import {omit as _omit} from "lodash-es";
+import {buildAddress} from "@lib/buildAddress.ts";
 
 export function useCheckoutSync(form?:FormInstance){
     const {token} = useParams();
@@ -27,13 +29,21 @@ export function useCheckoutSync(form?:FormInstance){
         if(needEmail){
             json['email'] = email;
         }
+        const billing_address = formInstance.getFieldValue('billing_address') || null;
+        let billing = billing_address ? buildAddress(_omit(billing_address,'region','state')) : null;
         const  response = await api({
             method : "put",
             url : `/a/s/checkouts/${token}`,
-            data : json,
+            data : {
+                ...json,
+                billing_address : billing,
+            },
         });
         return {
-            request,
+            request : {
+                ...request,
+                billing_address : billing,
+            },
             response,
         }
     },[token])

@@ -17,7 +17,7 @@ export const StepFrame: FC<StepFrameProps> = (props) => {
         </div>
     }
     return <div className={'space-y-3'}>
-        <div>
+        <div className={'font-bold'}>
             {title}
         </div>
         {(!!description) && <div className={'text-sm text-slate-500'}>
