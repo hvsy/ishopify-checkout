@@ -20,7 +20,7 @@ export type RegionSelectorProps = {
 const top = getGlobalPath("profile.countries",[]) as string[];
 
 export const NewRegionSelector: FC<any> = (props) => {
-    const {zones = []} = props;
+    const {zones = [],value} = props;
     const ups = top.map((code) => {
         const zone = (zones || []).find((zone: any) => {
             return zone.code === code;
@@ -32,8 +32,13 @@ export const NewRegionSelector: FC<any> = (props) => {
         }
         return null;
     }).filter(Boolean);
+    const hit = !!value && _find(zones, (zone) => {
+        return zone.code === value;
+    });
+
     return <Selector {...props}>
         <option hidden disabled value={''}>&nbsp;</option>
+        {!hit && !!value &&  <option disabled value={value}>{value}</option> }
         {ups}
         {ups.length > 0 && <option disabled>-------------------------------</option>}
         {_sortBy((zones || []), (zone: any) => {
