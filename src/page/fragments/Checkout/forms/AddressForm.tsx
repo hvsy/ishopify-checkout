@@ -15,6 +15,7 @@ import Validators from "validator";
 import {StepBlock} from "@components/frames/StepBlock.tsx";
 import {PhoneInput} from "@components/ui/PhoneInput.tsx";
 import {UNSAFE_useRouteId} from "react-router-dom";
+import {useEventCallback} from "usehooks-ts";
 
 export type AddressFormProps = {
     title?: string;
@@ -64,17 +65,54 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         form: formInstance,
         preserve,
     });
-    const region_id = formInstance.getFieldValue([...prefix, 'region_code']);
+    const region_code = formInstance.getFieldValue([...prefix, 'region_code']);
     const [zones, hitRegion] = useMemo(() => {
         const hit = _find(Regions, (r) => {
-            return (r.code) === region_id;
+            return (r.code) === region_code;
         });
         return [hit?.children || [], hit] as const;
-    }, [region_id, Regions]);
+    }, [region_code, Regions]);
     const zonesRef = useRef<any>(null);
     zonesRef.current = zones;
+    const setRegion = useEventCallback((region : any)=>{
+       if(!!region?.code) {
+           formInstance.setFields([
+               {
+                   name: [...prefix, 'region_code'],
+                   value: region?.code,
+               }, {
+                   name: [...prefix, 'region'],
+                   value: region,
+               }
+           ]);
+           onValuesChanged?.({
+               [prefix.join('.')]: {
+                   region_code : region?.code,
+                   region: region,
+               }
+           });
+       }
+    });
+    const clearRegion = useEventCallback(() => {
+        formInstance.setFields([
+            {
+                name: [...prefix, 'region_code'],
+                value: null,
+            }, {
+                name: [...prefix, 'region'],
+                value: null,
+            }
+        ]);
+        onValuesChanged?.({
+            [prefix.join('.')]: {
+                region_code : null,
+                region: null,
+            }
+        });
+    });
     useEffect(() => {
-        if (!region_id) {
+        if(!Regions?.length) return;
+        if (!region_code) {
             let firstRegion = Regions?.[0];
             const countryCode = formInstance.getFieldValue('countryCode');
             if(!!countryCode){
@@ -82,25 +120,20 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     return (r.code) === countryCode;
                 });
             }
-            if (!!(firstRegion?.code)) {
-                formInstance.setFields([
-                    {
-                        name: [...prefix, 'region_code'],
-                        value: firstRegion?.code,
-                    }, {
-                        name: [...prefix, 'region'],
-                        value: firstRegion,
-                    }
-                ]);
-                onValuesChanged?.({
-                    [prefix.join('.')]: {
-                        region_code : firstRegion?.code,
-                        region: firstRegion,
-                    }
-                });
+            setRegion(firstRegion);
+            // if (!!(firstRegion?.code)) {
+            //
+            // }
+        }else{
+            let hit_region = _find(Regions, (r) => {
+                return (r.code) === region_code;
+            });
+            if(!hit_region){
+                // clearRegion();
+                setRegion(Regions?.[0]);
             }
         }
-    }, [region_id, Regions]);
+    }, [region_code, Regions]);
     useEffect(() => {
         const region = formInstance.getFieldValue([...prefix,'region']);
         if(!region?.data){
@@ -110,7 +143,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
     const firstZone = zones?.[0];
     useEffect(() => {
         if(isLoading) return;
-        if (!region_id) return;
+        if (!region_code) return;
         const current = formInstance?.getFieldValue([...prefix, 'state_code']);
         if(!current || !_find(zonesRef.current||[], (z) => {
                 return z.code === current;
@@ -125,7 +158,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     value : null,
                 }])
         }
-    }, [region_id, firstZone?.id,isLoading]);
+    }, [region_code, firstZone?.id,isLoading]);
     const phonePrefix = hitRegion?.data?.phoneNumberPrefix;
     const zipHolder = hitRegion?.data?.postalCodeExample;
     const label = _capitalize(title || '');
