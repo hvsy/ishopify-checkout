@@ -17,13 +17,15 @@ export function useCheckoutSync(form?:FormInstance){
     if(form){
         formInstance = form;
     }
-    return useCallback(async (needEmail  : boolean = true) => {
+    return useCallback(async (needEmail  : boolean = true,update_remote_data : boolean = true) => {
         const cached = cache(storage.gid);
         const request = _get(cached,'cart');
         const email = formInstance.getFieldValue('email');
         if(!(email) && needEmail) return;
-        const json : any = {
+        const json : any = update_remote_data ? {
             remote_data : request,
+            quickly : !needEmail,
+        } : {
             quickly : !needEmail,
         };
         if(needEmail){
