@@ -27,7 +27,7 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
         <AsyncButton
             pulsing={ing}
             onClick={async () => {
-                await sync(false);
+                await sync(false,false);
                 const res = await api({
                     method : "post",
                     'url' : storage!.api + '/quickly'

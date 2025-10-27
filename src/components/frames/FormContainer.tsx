@@ -94,7 +94,7 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         if(emailChanged && !!changedValues.email){
                 const email = form.getFieldValue('email');
                 if(Validators.isEmail(email)){
-                    return checkoutSync()
+                    return checkoutSync(true,false);
                 }
             // form.setFields([{
             //     name : ['email'],

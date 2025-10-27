@@ -16,6 +16,7 @@ import {StepBlock} from "@components/frames/StepBlock.tsx";
 import {PhoneInput} from "@components/ui/PhoneInput.tsx";
 import {UNSAFE_useRouteId} from "react-router-dom";
 import {useEventCallback} from "usehooks-ts";
+import {getGlobalPath} from "../../../../shopify/lib/globalSettings.ts";
 
 export type AddressFormProps = {
     title?: string;
@@ -112,28 +113,31 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
     });
     useEffect(() => {
         if(!Regions?.length) return;
+        let ups = getGlobalPath("profile.countries",[]) as string[];
+        ups = ups.map((code)=>{
+            return _find(Regions, (r : any) => {
+                return r.code === code;
+            })
+        }).filter(Boolean);
+        let ipCountryCode = formInstance.getFieldValue('countryCode');
+        let ipRegion = !ipCountryCode ? null : _find(Regions, (r) => {
+            return (r.code) === ipCountryCode;
+        });
         if (!region_code) {
-            let firstRegion = Regions?.[0];
-            const countryCode = formInstance.getFieldValue('countryCode');
-            if(!!countryCode){
-                firstRegion  = _find(Regions, (r) => {
-                    return (r.code) === countryCode;
-                });
-            }
+            let firstRegion = ipRegion || ups?.[0] || Regions?.[0];
             setRegion(firstRegion);
-            // if (!!(firstRegion?.code)) {
-            //
-            // }
+
         }else{
+            //有值的时候,但是该地区不配送
             let hit_region = _find(Regions, (r) => {
                 return (r.code) === region_code;
             });
             if(!hit_region){
                 // clearRegion();
-                setRegion(Regions?.[0]);
+                setRegion(ipRegion || ups?.[0] || Regions?.[0]);
             }
         }
-    }, [region_code, Regions]);
+    }, [region_code, Regions,]);
     useEffect(() => {
         const region = formInstance.getFieldValue([...prefix,'region']);
         if(!region?.data){
