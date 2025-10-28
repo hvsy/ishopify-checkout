@@ -41,6 +41,12 @@ export async function shopify_payment(options : {
     const token = _get(summary,'id').replace("gid://shopify/Cart/","");
     const url = getUrlFrom(token);
     const totalAmount = _get(summary,'cost.totalAmount');
+    const handle=  _get(summary,'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
+    console.log('shipping handle:',handle);
+    if(!handle){
+        alert('Please select the delivery method.');
+        throw "please choice delivery shipping line";
+    }
     const {amount,currencyCode} = totalAmount;
     if(Big(amount).cmp(0) === 0){
         window.report?.("add_payment_info",{
