@@ -6,6 +6,7 @@ import {useSummary} from "../hooks/useSummary.tsx";
 import {api} from "@lib/api.ts";
 import {useFormValidate} from "../../hooks/useFormValidate.tsx";
 import {PromiseLocation} from "../../lib/payment.ts";
+import {get as _get} from "lodash-es";
 
 export type ApproveItProps = {};
 
@@ -27,6 +28,12 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
         onClick={async () => {
             const after = await submit();
             if(!after) return;
+            const handle=  _get(after?.data,'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
+            if(!handle){
+                alert('Please select the delivery method.')
+                throw "please choice delivery shipping line";
+            }
+            console.log(after);
             const res = await api({
                 method : "post",
                 'url' : storage!.api + `/approve`,
