@@ -55,7 +55,7 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
     }
 
     return <StepFrame title={Title}>
-        {!!methods?.length ? <Form.Field name={['shipping_line_id']}>
+        {!!methods?.length ? <Form.Field name={['shipping_line_id']} >
             <ShippingListFrame
                 onSelectedChange={(handle, item) => {
                     // console.log('handle:', handle, item);
