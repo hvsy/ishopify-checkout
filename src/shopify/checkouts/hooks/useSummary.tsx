@@ -110,6 +110,11 @@ export function useDeliveryGroupMutation() {
             query: SummaryQuery,
             variables: vars
         })
+        if(!all){
+            storage.reset();
+            window.location.reload();
+            return;
+        }
         client.writeQuery({
             query: SummaryQuery,
             variables: vars,

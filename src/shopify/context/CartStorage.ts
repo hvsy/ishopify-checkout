@@ -24,7 +24,9 @@ export class CartStorage{
             localStorage.removeItem(this.getStorageKey());
         }
     }
-
+    reset(){
+        localStorage.removeItem(this.getStorageKey());
+    }
     get key(){
         const key = localStorage.getItem(this.getStorageKey());
         if(key !== 'undefined'){
