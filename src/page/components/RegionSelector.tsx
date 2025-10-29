@@ -4,7 +4,6 @@ import {FC,} from "react";
 import {find as _find, sortBy as _sortBy} from "lodash-es";
 import {Selector} from "./Selector.tsx";
 import useSWR from "swr";
-import {getArrayFromMeta} from "@lib/metaHelper.ts";
 import {getGlobalPath} from "../../shopify/lib/globalSettings.ts";
 
 

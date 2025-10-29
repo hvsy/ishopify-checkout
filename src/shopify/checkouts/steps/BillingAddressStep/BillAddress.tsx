@@ -2,6 +2,7 @@ import {FC, useEffect, useRef} from "react";
 import {AddressForm} from "../../../../page/fragments/Checkout/forms/AddressForm.tsx";
 import {useCurrentForm} from "../../../../container/FormContext.ts";
 import {pick as _pickBy} from "lodash-es";
+import {useAllZones} from "../../../../container/PaymentContext.tsx";
 
 export type BillAddressProps = {};
 
@@ -30,9 +31,11 @@ export const BillAddress: FC<BillAddressProps> = (props) => {
             form.setFieldValue('billing_address',null);
         }
     }, []);
+    const {zones,loading} = useAllZones();
     return <div className={'flex flex-col items-stretch px-3 pb-4'}>
         <AddressForm title={'Billing'}
-                     api={'/a/s/api/zones/all'}
+                     zones={zones}
+                     loading={loading}
                      hidden_fields={['phone',]}
                      prefix={['billing_address']}></AddressForm>
     </div>
