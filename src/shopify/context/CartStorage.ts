@@ -26,7 +26,13 @@ export class CartStorage{
     }
 
     get key(){
-        return localStorage.getItem(this.getStorageKey());
+        const key = localStorage.getItem(this.getStorageKey());
+        if(key !== 'undefined'){
+            return key;
+        }else{
+            localStorage.removeItem(this.getStorageKey());
+            return null;
+        }
     }
 
     getStorageKey(){
