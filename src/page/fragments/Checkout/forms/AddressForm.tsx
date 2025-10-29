@@ -10,7 +10,6 @@ import {
 import {FormItem} from "@components/fragments/FormItem.tsx";
 import {useWatch} from "rc-field-form";
 import {FormContext, useCurrentForm,} from "../../../../container/FormContext.ts";
-import useSWR from "swr";
 import Validators from "validator";
 import {StepBlock} from "@components/frames/StepBlock.tsx";
 import {PhoneInput} from "@components/ui/PhoneInput.tsx";
@@ -18,15 +17,7 @@ import {UNSAFE_useRouteId} from "react-router-dom";
 import {useEventCallback} from "usehooks-ts";
 import {getGlobalPath} from "../../../../shopify/lib/globalSettings.ts";
 
-export type AddressFormProps = {
-    title?: string;
-    titleClassName ?: string;
-    prefix?: string[];
-    hidden_fields ?: ('phone'|'zip')[];
-    api ?: string;
-    preserve ?: boolean;
-    zones ?: any[];
-};
+
 
 
 
@@ -57,11 +48,22 @@ export const StateCodeFormItem : FC<any> = (props) => {
         />
     </FormItem>
 };
+
+export type AddressFormProps = {
+    title?: string;
+    titleClassName ?: string;
+    prefix?: string[];
+    hidden_fields ?: ('phone'|'zip')[];
+    preserve ?: boolean;
+    zones ?: any[];
+    loading ?: boolean;
+};
 export const AddressForm: FC<AddressFormProps> = (props) => {
-    const {preserve = false, title,titleClassName,hidden_fields = [], prefix = [],api = '/a/s/api/zones'} = props;
+    const {preserve = false, loading,title,titleClassName,hidden_fields = [], prefix = [],
+        zones : Regions= [],
+    } = props;
     const pf = prefix.join('.').replace('_address','');
     const {form:formInstance,onValuesChanged} = FormContext.use()//useCurrentForm();
-    const {data: Regions,isLoading} = useSWR(api);
     useWatch([...prefix, 'region_code'], {
         form: formInstance,
         preserve,
@@ -146,7 +148,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
     }, [hitRegion]);
     const firstZone = zones?.[0];
     useEffect(() => {
-        if(isLoading) return;
+        if(loading) return;
         if (!region_code) return;
         const current = formInstance?.getFieldValue([...prefix, 'state_code']);
         if(!current || !_find(zonesRef.current||[], (z) => {
@@ -162,7 +164,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     value : null,
                 }])
         }
-    }, [region_code, firstZone?.id,isLoading]);
+    }, [loading,region_code, firstZone?.id,]);
     const phonePrefix = hitRegion?.data?.phoneNumberPrefix;
     const zipHolder = hitRegion?.data?.postalCodeExample;
     const label = _capitalize(title || '');
@@ -182,6 +184,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             </FormItem>
             <FormItem name={[...prefix,'region_code']} preserve={true}>
                 <NewRegionSelector
+                    loading={loading}
                     zones={Regions}
                     autoComplete={`${pf} country`}
                     // field={'region'}

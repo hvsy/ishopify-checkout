@@ -30,6 +30,7 @@ export type FloatLabelProps = {
     label ?: string;
     pattern ?:  string;
     maxLength ?: number;
+    loading ?: boolean;
 };
 
 export const FloatLabel: FC<FloatLabelProps> = (props) => {
@@ -42,6 +43,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
         touched,
         validating,
         validated,
+        loading = false,
         errors,warnings,...others
     } = props;
     const h : any = {
@@ -67,7 +69,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
                 {prefix}
             </div>}
             <div className={'relative flex-1 flex flex-row items-stretch overflow-hidden'}>
-                <Element ref={elementRef}
+                {loading ? <Skeleton className={'h-full w-full bg-gray-200'}/>:<Element ref={elementRef}
                          {...others}
                          // placeholder={ph}
                          value={onChange ? (value || '') : value}
@@ -75,7 +77,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
                          onChange={onChange}
                          className={`peer flex-1 w-auto border-none bg-transparent focus:outline-none appearance-none px-3 peer-placeholder-shown:text-xs placeholder-shown:pt-0 ${(float && !!value) ? `pt-5` : ''}`}>
                     {children}
-                </Element>
+                </Element>}
                 {float && <div
                     className={floatClassName}>
                     {ph}

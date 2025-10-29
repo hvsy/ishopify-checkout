@@ -16,7 +16,7 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
     const method = (methods || []).find((method) => {
         return method.type === 'paypal';
     });
-    const sync =  useCheckoutSync();
+    // const sync =  useCheckoutSync();
     if (!method) {
         return null;
     }
@@ -25,9 +25,9 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
     }
     return <div className={'flex flex-col items-stretch space-y-5'}>
         <AsyncButton
-            pulsing={ing}
+            // pulsing={ing}
             onClick={async () => {
-                await sync(false,false);
+                // await sync(false,false);
                 const res = await api({
                     method : "post",
                     'url' : storage!.api + '/quickly'

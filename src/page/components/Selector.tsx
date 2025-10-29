@@ -3,7 +3,8 @@ import {ChevronDown} from "lucide-react";
 import {FloatLabel, FloatLabelProps} from "./FloatLabel";
 
 export type SelectorProps = FloatLabelProps & {
-    format ?: (value : any)=>any
+    format ?: (value : any)=>any,
+    loading ?: boolean;
 };
 
 export const Selector: FC<SelectorProps> = (props) => {
