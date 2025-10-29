@@ -76,11 +76,12 @@ async function getCheckout(request : Request,params : Params<string>,context : a
     let {token, action = 'information'} = params;
     // console.log('params:',params);
     const storage = new CartStorage(token!);
-    if(action === 'recover' && !!key){
+    if(action === 'recover' && !!key && key !== 'undefined'){
         storage.key = key;
     }else{
         const direct = url.searchParams.get('direct');
-        if(!!direct){
+        if(!!direct && direct !== 'undefined'){
+        // if(!!direct){
             storage.key = direct;
             return redirect(`/a/s/checkouts/${token}`);
         }

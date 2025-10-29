@@ -13,6 +13,7 @@
   "dependencies": {
     "@apollo/client": "^3.13.8",
     "@radix-ui/react-slot": "^1.0.2",
+    "@sentry/react": "^10.22.0",
     "@shopify/graphql-client": "^1.4.0",
     "@types/node": "^20.12.3",
     "autoprefixer": "^10.4.21",
