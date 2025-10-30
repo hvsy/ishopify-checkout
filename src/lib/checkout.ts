@@ -1,12 +1,36 @@
 import {get as _get} from "lodash-es";
-import {ApolloClient, createQueryPreloader, InMemoryCache} from "@apollo/client";
+import {ApolloClient, createQueryPreloader, from, HttpLink, InMemoryCache} from "@apollo/client";
 import {getMetaContent} from "./metaHelper.ts";
+import {onError} from "@apollo/client/link/error";
+import {RetryLink} from "@apollo/client/link/retry";
 
 const api_version = getMetaContent('api_version');
 const storefront_url = api_version ? `/api/${api_version}/graphql.json` :"/api/2025-10/graphql.json";
 
+const httpLink = new HttpLink({
+    uri:storefront_url
+})
+const errorLink = onError(({ graphQLErrors,protocolErrors, networkError }) => {
+    if (graphQLErrors)
+        graphQLErrors.forEach(({ message, locations, path }) =>
+            console.error(
+                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+            ),
+        );
+    if (protocolErrors) {
+        protocolErrors.forEach(({ message, extensions }) => {
+            console.error(
+                `[Protocol error]: Message: ${message}, Extensions: ${JSON.stringify(extensions)}`
+            );
+        });
+    }
+    if (networkError) console.error(`[Network error]: ${networkError}`);
+});
+const retryLink = new RetryLink();
+
 export const ApolloStoreFrontClient = new ApolloClient({
-    uri : storefront_url,
+    // uri : storefront_url,
+    link : from([errorLink,retryLink,httpLink]),
     cache : new InMemoryCache({
         typePolicies : {
             Cart : {},

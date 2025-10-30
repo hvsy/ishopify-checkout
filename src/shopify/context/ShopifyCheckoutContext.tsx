@@ -182,7 +182,7 @@ export const ShopifyCheckoutProvider :FC<{
             let {path,data : incrementalData} = incremental;
             Object.keys(incrementalData).forEach((key) => {
                 const full = path.join('.') + '.' + key;
-                console.log('set data :',full,incrementalData[key]);
+                // console.log('set data :',full,incrementalData[key]);
                 data = _set(data,full,incrementalData[key]);
             })
             // data = Object.assign(data,incremental?.data || {});

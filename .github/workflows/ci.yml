@@ -54,6 +54,10 @@ jobs:
         run: yarn install
 
       - name: 编译打包
+        env:
+          SENTRY_AUTH_TOKEN : ${{ SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ SENTRY_ORG }}
+          SENTRY_PROJECT : ${{ SENTRY_PROJECT }}
         run: yarn build
 
       - name: 获取当前日期时间

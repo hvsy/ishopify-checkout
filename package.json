@@ -52,6 +52,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@sentry/vite-plugin": "^4.6.0",
     "@types/big.js": "^6.2.2",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash-es": "^4.17.12",
