@@ -27,7 +27,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       #            - name: 获取当前分支名称
       #              shell: bash
       #              run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
@@ -36,22 +36,21 @@ jobs:
       #      - name: ls current directory
       #        run: pwd && ls -l
 
+      - name: 安装 yarn
+        run: |
+          curl -fsSL -o ~/bin/yarn https://github.com/yarnpkg/yarn/releases/download/v1.22.17/yarn-1.22.17.js
+          chmod +x ~/bin/yarn
+          echo "$HOME/bin" >> $GITHUB_PATH
+
       - name: 设置 Node.js 版本 22.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: "22.x"
-
-      - name: 安装yarn
-        run: npm install -g yarn
-
-      #      - name: Setup Nodejs with yarn caching
-      #        uses: actions/setup-node@v3
-      #        with:
-      #          node-version: "22.x"
-      #          cache: yarn
+          node-version: 22
+          check-latest: true
+          cache: 'yarn'
 
       - name: 安装依赖
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: 编译打包
         env:
