@@ -36,6 +36,9 @@ jobs:
       #      - name: ls current directory
       #        run: pwd && ls -l
 
+      - name: 查看~目录
+        run: ls -la ~/ && mkdir ~/bin
+
       - name: 安装 yarn
         run: |
           curl -fsSL -o ~/bin/yarn https://github.com/yarnpkg/yarn/releases/download/v1.22.17/yarn-1.22.17.js
