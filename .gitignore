@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 .secrets
 .env
+.env.sentry-build-plugin
