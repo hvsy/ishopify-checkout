@@ -55,9 +55,9 @@ jobs:
 
       - name: 编译打包
         env:
-          SENTRY_AUTH_TOKEN : ${{ SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ SENTRY_ORG }}
-          SENTRY_PROJECT : ${{ SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN : ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT : ${{ secrets.SENTRY_PROJECT }}
         run: yarn build
 
       - name: 获取当前日期时间
