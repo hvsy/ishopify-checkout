@@ -28,19 +28,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v5
-      #            - name: 获取当前分支名称
-      #              shell: bash
-      #              run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-      #              id: extract_branch
-
-      #      - name: ls current directory
-      #        run: pwd && ls -l
-
-      - name: 查看~目录
-        run: ls -la ~/ && mkdir ~/bin
 
       - name: 安装 yarn
         run: |
+          mkdir ~/bin
           curl -fsSL -o ~/bin/yarn https://github.com/yarnpkg/yarn/releases/download/v1.22.17/yarn-1.22.17.js
           chmod +x ~/bin/yarn
           echo "$HOME/bin" >> $GITHUB_PATH
