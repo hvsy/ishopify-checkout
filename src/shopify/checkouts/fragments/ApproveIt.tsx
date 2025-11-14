@@ -43,8 +43,12 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                 if(!!url){
                     await PromiseLocation(url);
                 }
-            }else if(!!res.redirect){
-                await PromiseLocation(res.redirect);
+            }else{
+                if(!!res.redirect){
+                    await PromiseLocation(res.redirect);
+                }else if(!!res.url){
+                    await PromiseLocation(res.url);
+                }
             }
         }}
         className={'max-w-full'}>Place an order</AsyncButton> ;
