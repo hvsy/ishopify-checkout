@@ -10,19 +10,42 @@ export type PhoneInputProps = {
     autoComplete ?: string;
     suffix ?: ReactNode;
     className ?: string;
+    advanced ?: boolean;
 };
 
 
 export const PhoneInput: FC<PhoneInputProps> = (props) => {
-    const {countryCode,value,suffix,onChange,...others} = props;
+    const {countryCode,advanced =false,value,suffix,onChange,...others} = props;
+    const config : any = {
 
+    }
+    if(advanced && !!countryCode?.toLocaleLowerCase()){
+        config.defaultCountry = countryCode?.toLocaleLowerCase();
+    }
     const {inputValue,handlePhoneValueChange,inputRef,country,setCountry} = usePhoneInput({
+        ...config,
         // defaultCountry : countryCode?.toLocaleLowerCase(),
         value  : value || '',
-        disableDialCodePrefill : true,
+        disableDialCodePrefill : !advanced,
         // disableCountryGuess : true,
         onChange(data){
-            onChange?.(data.phone);
+            if(!advanced) {
+                onChange?.(data.phone);
+            }else{
+                const phone = data.phone;
+                if(phone === ('+'+data.country.dialCode)){
+                    return;
+                }else if(phone === '+'){
+                    return;
+                }else {
+                    // if(Validators.isMobilePhone(phone,"any",{
+                    //     strictMode : true,
+                    // })){
+                    onChange?.(phone);
+                    // }
+                }
+            }
+
         }
     });
     return <Input
