@@ -16,6 +16,7 @@ import {PhoneInput} from "@components/ui/PhoneInput.tsx";
 import {UNSAFE_useRouteId} from "react-router-dom";
 import {useEventCallback} from "usehooks-ts";
 import {getGlobalPath} from "../../../../shopify/lib/globalSettings.ts";
+import {getArrayFromMeta} from "@lib/metaHelper.ts";
 
 
 
@@ -58,6 +59,7 @@ export type AddressFormProps = {
     zones ?: any[];
     loading ?: boolean;
 };
+const AdvancedPhoneInput = getArrayFromMeta('features')?.includes('advanced_phone_input') || false;
 export const AddressForm: FC<AddressFormProps> = (props) => {
     const {preserve = false, loading,title,titleClassName,hidden_fields = [], prefix = [],
         zones : Regions= [],
@@ -275,7 +277,9 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 // message: 'Enter a valid phone number',
             }]} preserve={preserve}>
                <PhoneInput placeholder={`Phone (For shipping updates) ${phonePrefix?'+' + phonePrefix:''}`} className={'col-span-6'}
+                       key={AdvancedPhoneInput ? (hitRegion?.code || 'default') : 'default'}
                        countryCode={hitRegion?.code}
+                       advanced={AdvancedPhoneInput}
                        autoComplete={`${pf} tel`}
                        // prefix={phonePrefix ? <div>+{phonePrefix}</div> : undefined}
                        suffix={<Tooltip icon={<CircleHelp size={16}/>}>
