@@ -3,7 +3,6 @@ import useSWR from "swr";
 import {Pixels} from "../shopify/fragments/Pixels.tsx";
 import {isString, get as _get} from "lodash-es";
 
-import {useSummary} from "../shopify/checkouts/hooks/useSummary.tsx";
 
 export const PaymentContext = createContext<{
     method: DB.PaymentMethod | null;
@@ -24,26 +23,32 @@ export function usePaymentMethod() {
 }
 
 export function useAllZones() {
-    const ctx = usePaymentContext();
-    return {zones: ctx?.zones || [], loading: ctx?.loading};
+    // const ctx = usePaymentContext();
+    const {data,isLoading} = useSWR("/a/s/api/zones/all");
+    return {zones: data|| [], loading: isLoading};
 }
 
 export function useShippingZones() {
-    const {json} = useSummary();
-    const {zones: all, loading} = useAllZones();
-    const ships2countries = _get(json, 'shop.shipsToCountries', []);
-    const marketCountries = _get(json, 'localization.availableCountries', []).map((country: any) => {
-        return country?.isoCode;
-    }).filter(Boolean);
+    const {data,isLoading} = useSWR('/a/s/api/zones');
     return {
-        zones: (ships2countries || []).map((code: string) => {
-            if (!marketCountries?.includes(code)) return null;
-            return all.find((region: any) => {
-                return region.code === code;
-            })
-        }).filter(Boolean),
-        loading,
+        zones : data || [],
+        loading:isLoading,
     }
+    // const {json} = useSummary();
+    // const {zones: all, loading} = useAllZones();
+    // const ships2countries = _get(json, 'shop.shipsToCountries', []);
+    // const marketCountries = _get(json, 'localization.availableCountries', []).map((country: any) => {
+    //     return country?.isoCode;
+    // }).filter(Boolean);
+    // return {
+    //     zones: (ships2countries || []).map((code: string) => {
+    //         if (!marketCountries?.includes(code)) return null;
+    //         return all.find((region: any) => {
+    //             return region.code === code;
+    //         })
+    //     }).filter(Boolean),
+    //     loading,
+    // }
 }
 
 function preload(config: any) {
