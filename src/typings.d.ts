@@ -230,6 +230,7 @@ namespace DB {
         channel : string;
         embed ?: string;
         height : number;
+        sdk ?: string|null;
         preloads ?: {
             js ?: (string|any)[],
             css ?: (string|any)[],

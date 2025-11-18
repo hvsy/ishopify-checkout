@@ -29,7 +29,8 @@ export const Summary: FC<SummaryProps> = (props) => {
         }
         return pv + parseFloat(cv.discountedAmount.amount);
     }, 0));
-    const shipping_cost = _get(groups, '0.selectedDeliveryOption.estimatedCost')
+    const selectedDelivery = _get(groups,'0.selectedDeliveryOption',{});
+    const shipping_cost = _get(selectedDelivery , 'estimatedCost')
     const codes = _get(json, 'cart.discountCodes', []).filter((discount: any) => {
         return !!discount.applicable && !shippingCodes.includes(discount.code);
     }).map((discount: any) => {
@@ -58,18 +59,25 @@ export const Summary: FC<SummaryProps> = (props) => {
                                return <LoadingContainer
                                    loading={loading.shipping_methods || loading.updatingSelectedDelivery}
                                    loadingClassName={'w-20 h-5 rounded-xl'}
+                                   loadingContainerClassName={'justify-end'}
                                >
-                                   {freeShipping ?
-                                       <div className={'flex flex-row items-center space-x-2'}>
-                                           {checkout.shipping_discount && <div className={'line-through'}>
-                                               <span></span>
-                                               <span>{format(checkout.shipping_discount.discountedAmount)}</span>
-                                           </div>}
-                                           <span className={'font-bold'}>FREE</span>
-                                       </div>
-                                       : <div className={''}>
+                                   {ing  => {
+                                       if(!selectedDelivery?.handle) {
+                                           return <span>Calculated at next step</span>
+                                       }
+                                       if(freeShipping) {
+                                           return <div className={'flex flex-row items-center space-x-2'}>
+                                               {checkout.shipping_discount && <div className={'line-through'}>
+                                                   <span></span>
+                                                   <span>{format(checkout.shipping_discount.discountedAmount)}</span>
+                                               </div>}
+                                               <span className={'font-bold'}>FREE</span>
+                                           </div>
+                                       }
+                                       return <div className={''}>
                                            <span>{format(shipping_cost, 'Free')}</span>
-                                       </div>}
+                                       </div>
+                                   }}
                                </LoadingContainer>;
                            }}/>
         <CheckoutPixelReport lines={lines} json={json} />
