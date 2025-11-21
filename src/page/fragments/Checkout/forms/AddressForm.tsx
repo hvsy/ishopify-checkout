@@ -17,6 +17,7 @@ import {UNSAFE_useRouteId} from "react-router-dom";
 import {useEventCallback} from "usehooks-ts";
 import {getGlobalPath} from "../../../../shopify/lib/globalSettings.ts";
 import {getArrayFromMeta} from "@lib/metaHelper.ts";
+import {ValidatePhone} from "../../../../shopify/lib/helper.ts";
 
 
 
@@ -268,9 +269,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     //     full = `+${phonePrefix}${full}`;
                     // }
                     // console.log('full:',full);
-                    if (!Validators.isMobilePhone(value,"any",{
-                        strictMode : true,
-                    })) {
+                    if (!ValidatePhone(value)) {
                         throw new Error('Enter a valid phone number');
                     }
                 },
