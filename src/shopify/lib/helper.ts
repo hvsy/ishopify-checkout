@@ -23,12 +23,13 @@ export function moneyFormat(data : any,display :  Intl.NumberFormatOptions['curr
     }).format(data.amount,);
 }
 
-
+import { PhoneNumberUtil } from 'google-libphonenumber';
 export function ValidatePhone(value : string){
     if(!value) return false;
     if(!value.startsWith('+')){
         return false;
     }
+
     const phone_regex = getJsonFromMeta('phone_regex',[]);
     if(isArray(phone_regex)){
         const hit = phone_regex.some(function(regex){
@@ -42,8 +43,15 @@ export function ValidatePhone(value : string){
             return true;
         }
     }
-
-    return Validators.isMobilePhone(value,"any",{
+    if(Validators.isMobilePhone(value,"any",{
         strictMode: true,
-    });
+    })){
+        return true;
+    }
+    const util = new PhoneNumberUtil();
+    const phoneInput=  util.parseAndKeepRawInput(value);
+    if(util.isValidNumber(phoneInput)){
+        return true;
+    }
+    return false;
 }
