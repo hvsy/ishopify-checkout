@@ -24,6 +24,25 @@ export function moneyFormat(data : any,display :  Intl.NumberFormatOptions['curr
 }
 
 import { PhoneNumberUtil } from 'google-libphonenumber';
+import {getCountry} from "react-international-phone";
+
+export function getCountryCode4(phone : string){
+    try {
+        const util = new PhoneNumberUtil();
+        const phoneInput = util.parseAndKeepRawInput(phone);
+        const code = phoneInput.getCountryCode()?.toString()?.replace(/\s/g,'');
+        console.log('phone code:',phoneInput,code);
+        if(code){
+            return getCountry({
+                field : 'dialCode',
+                value : code,
+            })?.name;
+        }
+    } catch (e) {
+        console.log('e:',e);
+        return null;
+    }
+}
 export function ValidatePhone(value : string){
     value = (value||'').replace(/\s/g,'');
     if(!value) return false;
