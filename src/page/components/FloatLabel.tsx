@@ -1,4 +1,4 @@
-import {DetailedHTMLProps, FC, ReactNode, RefObject} from "react";
+import {DetailedHTMLProps, FC, InputHTMLAttributes, ReactNode, RefObject} from "react";
 import {clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
 import {Loading} from "@components/fragments/Loading.tsx";
@@ -20,7 +20,7 @@ export type FloatLabelProps = {
     children ?: ReactNode;
     value ?: any;
     onChange ?: (value : any)=>void;
-    onBlur ?: React.MouseEventHandler,
+    onBlur ?: InputHTMLAttributes<HTMLInputElement>['onBlur'],
     errors ?: string[],
     warnings?: string[],
     autoFocus ?: boolean;

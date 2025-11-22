@@ -10,7 +10,6 @@ import {
 import {FormItem} from "@components/fragments/FormItem.tsx";
 import {useWatch} from "rc-field-form";
 import {FormContext, useCurrentForm,} from "../../../../container/FormContext.ts";
-import Validators from "validator";
 import {StepBlock} from "@components/frames/StepBlock.tsx";
 import {PhoneInput} from "@components/ui/PhoneInput.tsx";
 import {UNSAFE_useRouteId} from "react-router-dom";
@@ -59,10 +58,11 @@ export type AddressFormProps = {
     preserve ?: boolean;
     zones ?: any[];
     loading ?: boolean;
+    onPhoneChange ?: (phone : string,pass : boolean)=>void;
 };
 const AdvancedPhoneInput = getArrayFromMeta('features')?.includes('advanced_phone_input') || false;
 export const AddressForm: FC<AddressFormProps> = (props) => {
-    const {preserve = false, loading,title,titleClassName,hidden_fields = [], prefix = [],
+    const {preserve = false,onPhoneChange, loading,title,titleClassName,hidden_fields = [], prefix = [],
         zones : Regions= [],
     } = props;
     const pf = prefix.join('.').replace('_address','');
@@ -275,7 +275,14 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 },
                 // message: 'Enter a valid phone number',
             }]} preserve={preserve}>
-               <PhoneInput placeholder={`Phone (For shipping updates) ${phonePrefix?'+' + phonePrefix:''}`} className={'col-span-6'}
+               <PhoneInput
+                   onBlur={(e) => {
+                       const phone = e?.target?.value;
+                       if(!!phone) {
+                           onPhoneChange?.(phone,ValidatePhone(phone));
+                       }
+                   }}
+                   placeholder={`Phone (For shipping updates) ${phonePrefix?'+' + phonePrefix:''}`} className={'col-span-6'}
                        key={AdvancedPhoneInput ? (hitRegion?.code || 'default') : 'default'}
                        countryCode={hitRegion?.code}
                        advanced={AdvancedPhoneInput}
