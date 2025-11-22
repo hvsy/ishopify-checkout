@@ -277,7 +277,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             }]} preserve={preserve}>
                <PhoneInput
                    onBlur={(e) => {
-                       const phone = e?.target?.value;
+                       let phone : string = (e?.target?.value||'').replace(/\s/g,'') ;
                        if(!!phone) {
                            onPhoneChange?.(phone,ValidatePhone(phone));
                        }
