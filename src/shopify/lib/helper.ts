@@ -48,10 +48,14 @@ export function ValidatePhone(value : string){
     })){
         return true;
     }
-    const util = new PhoneNumberUtil();
-    const phoneInput=  util.parseAndKeepRawInput(value);
-    if(util.isValidNumber(phoneInput)){
-        return true;
+    try {
+        const util = new PhoneNumberUtil();
+        const phoneInput = util.parseAndKeepRawInput(value);
+        if (util.isValidNumber(phoneInput)) {
+            return true;
+        }
+    } catch (e) {
+        return false;
     }
     return false;
 }
