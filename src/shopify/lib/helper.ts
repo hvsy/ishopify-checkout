@@ -25,6 +25,7 @@ export function moneyFormat(data : any,display :  Intl.NumberFormatOptions['curr
 
 import { PhoneNumberUtil } from 'google-libphonenumber';
 export function ValidatePhone(value : string){
+    value = (value||'').replace(/\s/g,'');
     if(!value) return false;
     if(!value.startsWith('+')){
         return false;
