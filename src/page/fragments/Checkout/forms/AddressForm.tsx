@@ -275,7 +275,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                         ];
                         const phoneCountry = getCountryCode4(value);
                         if(!!phoneCountry && hitRegion?.en_name !== phoneCountry){
-                            message.push(`The current Phone belongs to ${phoneCountry}`)
+                            message.push(`The current phone belongs to ${phoneCountry}`)
                             if(!!hitRegion?.en_name && !!phonePrefix){
                                 message.push(`Phone number in the ${hitRegion?.en_name} start with +${phonePrefix}`)
                             }
