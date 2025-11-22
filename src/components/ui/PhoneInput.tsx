@@ -1,8 +1,8 @@
-import {FC, ReactNode, useEffect} from "react";
+import {FC,  InputHTMLAttributes, ReactNode, } from "react";
 import {FlagImage, usePhoneInput} from "react-international-phone";
 import {Input} from "../../page/components/Input";
 
-export type PhoneInputProps = {
+export type PhoneInputProps ={
     countryCode ?: string;
     value ?: string;
     onChange ?: (value : string)=>void;
@@ -11,6 +11,7 @@ export type PhoneInputProps = {
     suffix ?: ReactNode;
     className ?: string;
     advanced ?: boolean;
+    onBlur ?: InputHTMLAttributes<HTMLInputElement>['onBlur'];
 };
 
 
