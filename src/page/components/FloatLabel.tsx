@@ -93,7 +93,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
         </div>
         {hasError && <div className={'flex flex-col p-1 text-sm'}>
             {errors.map((error,i) => {
-                return <div className={'text-red-500'} key={`error-${i}`}>{error}</div>
+                return <div className={'text-red-500 whitespace-pre-wrap'} key={`error-${i}`}>{error}</div>
             })}
         </div>}
     </div>

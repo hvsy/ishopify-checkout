@@ -16,7 +16,7 @@ import {UNSAFE_useRouteId} from "react-router-dom";
 import {useEventCallback} from "usehooks-ts";
 import {getGlobalPath} from "../../../../shopify/lib/globalSettings.ts";
 import {getArrayFromMeta} from "@lib/metaHelper.ts";
-import {ValidatePhone} from "../../../../shopify/lib/helper.ts";
+import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts";
 
 
 
@@ -270,7 +270,17 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     // }
                     // console.log('full:',full);
                     if (!ValidatePhone(value)) {
-                        throw new Error('Enter a valid phone number');
+                        const message= [
+                            'Enter a valid phone number'
+                        ];
+                        const phoneCountry = getCountryCode4(value);
+                        if(!!phoneCountry && hitRegion?.en_name !== phoneCountry){
+                            message.push(`The current Phone belongs to ${phoneCountry}`)
+                            if(!!hitRegion?.en_name && !!phonePrefix){
+                                message.push(`Phone number in the ${hitRegion?.en_name} start with +${phonePrefix}`)
+                            }
+                        }
+                        throw new Error(message.join("\n"));
                     }
                 },
                 // message: 'Enter a valid phone number',
