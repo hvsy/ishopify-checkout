@@ -6,7 +6,7 @@ import {usePlatformPixel} from "./usePlatformPixel.tsx";
 import StartCheckout = Analytics.StartCheckout;
 import Purchase = Analytics.Purchase;
 import AddPaymentInfo = Analytics.AddPaymentInfo;
-import Cookies from "js-cookie";
+import {getShopifyY} from "@lib/shopify.ts";
 
 
 export const TiktokPixel: FC<{ pixels: string[] }> = (props) => {
@@ -22,7 +22,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 window.ttq?.load(p);
             })
             window.ttq.page();
-            const shopify_y = Cookies.get('_shopify_y');
+            const shopify_y =getShopifyY();
             if(!!(shopify_y)){
                 window.ttq.identify({
                     external_id : sha256(shopify_y),
