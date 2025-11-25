@@ -9,11 +9,10 @@ import {
 } from "@query/checkouts/fragments/fragments.ts";
 import { get as _get,set as _set,isString as _isString,setWith as _setWith,cloneDeep as _cloneDeep} from "lodash-es";
 import {FormInstance} from "rc-field-form";
-import {SummaryQuery} from "../../App.tsx";
 import {useDeliveryGroupMutation} from "../checkouts/hooks/useSummary.tsx";
 import {getBy} from "../lib/helper.ts";
 import {QueryDeliveryAddresses} from "@query/checkouts/queries.ts";
-import {boolean} from "zod";
+import Validators from "validator";
 
 
 export async function removeOtherAddresses(client : ApolloClient<any>,cartId : string,id : string){
@@ -101,7 +100,9 @@ function formatInput(input : CheckoutInput){
     if(!!input.validationStrategy){
         vars.validationStrategy = input.validationStrategy;
     }
-    if(!!input.email){
+    if(!!input.email && Validators.isEmail(input.email,{
+        allow_utf8_local_part : false,
+    })){
         vars.updateBuyer = true;
         vars.buyerIdentity.email = input.email;
     }
