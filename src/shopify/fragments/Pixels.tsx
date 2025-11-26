@@ -16,6 +16,12 @@ const Platforms : any = {
         return {
             default : m.TiktokPixel,
         }
+    }),
+    'newsbreak' : lazy(async () => {
+        const m = await import("@components/pixels/NewsbreakPixel");
+        return {
+            default : m.NewsbreakPixel,
+        }
     })
 }
 export const Pixels: FC<PixelsProps> = (props) => {

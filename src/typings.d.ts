@@ -25,6 +25,8 @@ namespace Analytics{
         price ?: string;
         currency ?: string;
         quantity : number;
+        email ?: string;
+        address ?: Shopify.Address
         contents : {
             id : string;
             quantity : number;
@@ -57,6 +59,7 @@ namespace Analytics{
 interface Window {
     fbq: (fun : string,event : string,data ?: any,extra ?: any)=>void;
     ttq ?: any;
+    nbpix ?: any;
     Analytics : import('mitt').Emitter<Analytics.Events>;
     report ?: <Key extends keyof Analytics.Events>(name : Key,
                                                    data : Omit<Analytics.Events[Key]['data'],"eventId">,
