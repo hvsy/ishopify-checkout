@@ -29,6 +29,8 @@ export const Order: FC<OrderProps> = (props) => {
         {data.shop.tracking && <Pixels tracking={data.shop.tracking} />}
         {data.token && <Report name={'purchase'} data={{
             // eventId : md5(data.token),
+            email : data.email,
+            address: data.shipping_address,
             currency : data.total_amount.currencyCode,
             price : data.total_amount.amount + '',
             token : data.token,
