@@ -1,5 +1,5 @@
 import {map2} from "../shopify/context/ShopifyCheckoutContext.tsx";
-import Validators from "validator";
+import {ValidatePhone} from "../shopify/lib/helper.ts";
 
 export function buildAddress(address: any) {
     const after = map2(address, {
@@ -14,9 +14,7 @@ export function buildAddress(address: any) {
         provinceCode: 'state_code',
         zip: 'zip',
     }, true)
-    if (!Validators.isMobilePhone(after.phone || '', "any", {
-        strictMode: true,
-    })) {
+    if (!ValidatePhone(after.phone || '')) {
         after.phone = "";
     }
     return after;

@@ -1,5 +1,5 @@
 import {z} from "zod";
-import Validators from "validator";
+import {ValidatePhone} from "../shopify/lib/helper.ts";
 
 export let MethodValidators: any = {
     shipping: {
@@ -11,7 +11,7 @@ export let MethodValidators: any = {
                 line1: z.string(),
                 line2: z.string().nullish().nullable(),
                 zip: z.string(),
-                phone: z.string().refine(Validators.isMobilePhone),
+                phone: z.string().refine(ValidatePhone),
                 region_code: z.string(),
                 state_code: z.string().nullable().optional(),
                 // region_id: z.number(),
