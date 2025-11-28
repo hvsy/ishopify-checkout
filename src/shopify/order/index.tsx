@@ -27,11 +27,12 @@ export const Order: FC<OrderProps> = (props) => {
         }}>
         </PageFrame>
         {data.shop.tracking && <Pixels tracking={data.shop.tracking} />}
-        {data.token && <Report name={'purchase'} data={{
+        {data.token  && !data.thanked && <Report name={'purchase'} data={{
             // eventId : md5(data.token),
             email : data.email,
             address: data.shipping_address,
             currency : data.currency_code,
+            thanked : data.thanked,
             price : data.raw_total_price+ '',
             token : data.token,
             quantity : data.line_items.reduce((pv,cv) => {
