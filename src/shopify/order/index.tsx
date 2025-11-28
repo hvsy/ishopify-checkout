@@ -31,8 +31,8 @@ export const Order: FC<OrderProps> = (props) => {
             // eventId : md5(data.token),
             email : data.email,
             address: data.shipping_address,
-            currency : data.total_amount.currencyCode,
-            price : data.total_amount.amount + '',
+            currency : data.currency_code,
+            price : data.raw_total_price+ '',
             token : data.token,
             quantity : data.line_items.reduce((pv,cv) => {
                 return pv + cv.quantity;
