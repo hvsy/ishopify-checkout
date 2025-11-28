@@ -27,6 +27,7 @@ namespace Analytics{
         quantity : number;
         email ?: string;
         address ?: Shopify.Address
+        thanked : boolean;
         contents : {
             id : string;
             quantity : number;
@@ -355,6 +356,7 @@ namespace Shopify{
         email : string;
         raw_total_price : string;
         currency_code: string
+        thanked :boolean;
         number : string;
         subtotal_amount : Money;
         total_saved ?: Money;
