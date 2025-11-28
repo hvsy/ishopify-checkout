@@ -2,7 +2,7 @@ import Big from "big.js";
 import {PaymentError} from "../../exceptions/PaymentError.ts";
 import {api} from "@lib/api.ts";
 import {free} from "@lib/payment.ts";
-import {get as _get,} from "lodash-es";
+import {get as _get,  isObjectLike,} from "lodash-es";
 
 export function getUrlFrom(token : string){
     const cart_token = token.split('?')[0] ?? '';
@@ -81,10 +81,16 @@ export async function shopify_payment(options : {
     },token +  '_add_payment_info');
     if(mode === 'redirect'){
         const target = `${url}/gateway/${method.id}`;
-        const res = await api({
+        const res : any = await api<any>({
             method : "put",
             url: target,
         });
+        if(isObjectLike(res) && res.error){
+            if(res.message){
+                console.error(res.message);
+            }
+            return false;
+        }
         const href= `/a/s/api/transactions/${res}/redirect`;
         return PromiseLocation(href);
         // window.location.href = href;
