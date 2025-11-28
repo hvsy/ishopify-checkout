@@ -353,6 +353,8 @@ namespace Shopify{
         token : string
         cart_id : string;
         email : string;
+        raw_total_price : string;
+        currency_code: string
         number : string;
         subtotal_amount : Money;
         total_saved ?: Money;
