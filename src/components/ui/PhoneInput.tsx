@@ -11,12 +11,13 @@ export type PhoneInputProps ={
     suffix ?: ReactNode;
     className ?: string;
     advanced ?: boolean;
+    disablePrefillDialCode ?: boolean;
     onBlur ?: InputHTMLAttributes<HTMLInputElement>['onBlur'];
 };
 
 
 export const PhoneInput: FC<PhoneInputProps> = (props) => {
-    const {countryCode,advanced =false,value,suffix,onChange,...others} = props;
+    const {countryCode,advanced =false,disablePrefillDialCode =false,value,suffix,onChange,...others} = props;
     const config : any = {
 
     }
@@ -27,7 +28,7 @@ export const PhoneInput: FC<PhoneInputProps> = (props) => {
         ...config,
         // defaultCountry : countryCode?.toLocaleLowerCase(),
         value  : value || '',
-        disableDialCodePrefill : !advanced,
+        disableDialCodePrefill : disablePrefillDialCode || !advanced,
         // disableCountryGuess : true,
         onChange(data){
             if(!advanced) {

@@ -60,7 +60,9 @@ export type AddressFormProps = {
     loading ?: boolean;
     onPhoneChange ?: (phone : string,pass : boolean)=>void;
 };
-const AdvancedPhoneInput = getArrayFromMeta('features')?.includes('advanced_phone_input') || false;
+const features = getArrayFromMeta('features') || [];
+const AdvancedPhoneInput = features?.includes('advanced_phone_input') || false;
+const DisablePrefillPhoneDialCode = features?.includes('disable_prefill_phone_dial_code') || false;
 export const AddressForm: FC<AddressFormProps> = (props) => {
     const {preserve = false,onPhoneChange, loading,title,titleClassName,hidden_fields = [], prefix = [],
         zones : Regions= [],
@@ -296,6 +298,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        key={AdvancedPhoneInput ? (hitRegion?.code || 'default') : 'default'}
                        countryCode={hitRegion?.code}
                        advanced={AdvancedPhoneInput}
+                       disablePrefillDialCode={DisablePrefillPhoneDialCode}
                        autoComplete={`${pf} tel`}
                        // prefix={phonePrefix ? <div>+{phonePrefix}</div> : undefined}
                        suffix={<Tooltip icon={<CircleHelp size={16}/>}>
