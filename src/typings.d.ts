@@ -59,6 +59,7 @@ namespace Analytics{
 
 interface Window {
     fbq: (fun : string,event : string,data ?: any,extra ?: any)=>void;
+    snaptr ?: any;
     ttq ?: any;
     nbpix ?: any;
     Analytics : import('mitt').Emitter<Analytics.Events>;

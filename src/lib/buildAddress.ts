@@ -1,7 +1,7 @@
 import {map2} from "../shopify/context/ShopifyCheckoutContext.tsx";
 import {ValidatePhone} from "../shopify/lib/helper.ts";
 
-export function buildAddress(address: any) {
+export function buildAddress(address: any,validate_phone : boolean = true) {
     const after = map2(address, {
         id: 'id',
         city: 'city',
@@ -14,7 +14,7 @@ export function buildAddress(address: any) {
         provinceCode: 'state_code',
         zip: 'zip',
     }, true)
-    if (!ValidatePhone(after.phone || '')) {
+    if (validate_phone && !ValidatePhone(after.phone || '')) {
         after.phone = "";
     }
     return after;
