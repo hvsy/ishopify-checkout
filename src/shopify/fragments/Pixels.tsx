@@ -22,6 +22,12 @@ const Platforms : any = {
         return {
             default : m.NewsbreakPixel,
         }
+    }),
+    'snapchat' : lazy(async () => {
+        const m = await import("@components/pixels/SnapchatPixel");
+        return {
+            default : m.SnapchatPixel,
+        }
     })
 }
 export const Pixels: FC<PixelsProps> = (props) => {

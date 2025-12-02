@@ -14,8 +14,11 @@ export function usePlatformPixel(type : string,config : PixelConfig){
     const location = useLocation();
     const pathname = location.pathname;
     const mountedRef = useRef(false);
+    const initedRef = useRef(false);
     usePlainScript(`${type}-pixel`, config.script);
     useEffect(() => {
+        if(initedRef.current) return;
+        initedRef.current = true;
         config.setup?.(config.pixels);
     }, [pathname, config.pixels.join('/')]);
     useEffect(() => {
