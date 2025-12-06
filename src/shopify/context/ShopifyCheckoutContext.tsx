@@ -74,8 +74,9 @@ export type CheckoutInput = {
 export const ShopifyCheckoutContext = createContext<{
 
     update ?: (data : CheckoutInput,partialUpdate ?: boolean,force ?: boolean)=>Promise<any>,
+    loading : boolean
 }>({
-
+    loading : false,
 });
 
 // const addressPrefix= "gid://shopify/CartDeliveryAddress/";
@@ -145,7 +146,7 @@ export const ShopifyCheckoutProvider :FC<{
 }> = (props) => {
     const {children,form} = props;
     const storage = useCartStorage();
-    const [fn,{client,error,loading}] = useMutation(gql([
+    const [fn,{client,error,loading,}] = useMutation(gql([
         MutateCheckout,
         QueryCartFieldsFragment,
         QueryDeliveryFragment,
@@ -214,6 +215,7 @@ export const ShopifyCheckoutProvider :FC<{
         }
     }, [fn]);
     return <ShopifyCheckoutContext value={{
+        loading,
         update : async(input : CheckoutInput,partialUpdate : boolean = true,force : boolean = false)=>{
             let vars = formatInput(input);
             let result= await UpdateCallback(vars,partialUpdate,force);
@@ -252,6 +254,10 @@ export const ShopifyCheckoutProvider :FC<{
 
 export function useMutationCheckout(){
     return use(ShopifyCheckoutContext)!.update!;
+}
+
+export function useShopifyCheckoutLoading(){
+    return use(ShopifyCheckoutContext)!.loading;
 }
 
 

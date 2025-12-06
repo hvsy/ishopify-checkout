@@ -10,12 +10,14 @@ import {useMoneyFormat} from "../../../context/ShopifyContext.ts";
 import {useSummary} from "../../hooks/useSummary.tsx";
 import {NoShippingMethod} from "../../../../page/fragments/Checkout/Steps/ShippingMethodStep/NoShippingMethod.tsx";
 import {useCurrentForm} from "../../../../container/FormContext.ts";
+import {useShopifyCheckoutLoading} from "../../../context/ShopifyCheckoutContext.tsx";
 
 
 const Title = "Shipping Method";
 export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
     const {} = props;
     const {json,groups,loading}= useSummary();
+    const checkoutLoading = useShopifyCheckoutLoading();
 
     const group = groups?.[0] || null;
     const methods = _get(group,'deliveryOptions',null);
@@ -38,7 +40,7 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
         }
     }, [shipping_group_id,shipping_line_id]);
     const format = useMoneyFormat();
-    if(loading.shipping_methods){
+    if(loading.shipping_methods || (checkoutLoading && !methods?.length)){
         return <StepFrame title={Title}>
             <div className={'animate-pulse border rounded-md border-neutral-300 flex flex-row items-center  space-x-3 p-4'}>
                     <div className={'size-4 rounded-full bg-slate-200'}></div>
