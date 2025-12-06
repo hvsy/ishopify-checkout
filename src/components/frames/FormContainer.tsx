@@ -41,13 +41,13 @@ export function scrollToError(e : any){
     }
 }
 
-export async function submit(form : FormInstance){
+export async function submit(form : FormInstance,validate_phone : boolean = true){
     try {
         if(form.isFieldsValidating(['email'])){
             return null;
         }
         const values =  await form.validateFields();
-        const address = buildAddress(values?.shipping_address || {});
+        const address = buildAddress(values?.shipping_address || {},validate_phone);
         const input : CheckoutInput =  map2(values,{
             email : 'email',
             deliveryHandle : 'shipping_line_id',
@@ -123,7 +123,7 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             input.deliveryHandle = undefined;
         }
         input.shipping_address = address;
-        mutation(input).then((response) => {
+        mutation(input,true,true).then((response) => {
 
         }).finally(() => {
             if(!!form.getFieldValue(['shipping_address','phone'])){
@@ -141,11 +141,20 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     const mutation = useMutationCheckout();
     return <FormContext.Provider value={{
             onValuesChanged : (changed)=>{
+
+                const countryChanged = _has(changed,'shipping_address.region_code');
+                const provinceChanged = _has(changed,'shipping_address.state_code');
+                const shippingMethodChanged = _has(changed,'shipping_line_id');
+                if(countryChanged || provinceChanged || shippingMethodChanged){
+                    if(sync.isPending()){
+                        sync.cancel();
+                    }
+                }
+                sync(changed, );
                 if(_has(changed,'shipping_line_id')){
                     // console.log('set shipping line updating');
                     setSelectedDeliveryStatus?.(true);
                 }
-                sync(changed, );
             },
             form,
             error,
@@ -157,11 +166,20 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
                   // component={false}
                 component={'form'}
                   onValuesChange={(changedValues) => {
+                      const countryChanged = _has(changedValues,'shipping_address.region_code');
+                      const provinceChanged = _has(changedValues,'shipping_address.state_code');
+                      const shippingMethodChanged = _has(changedValues,'shipping_line_id');
+                      if(countryChanged || provinceChanged || shippingMethodChanged){
+                          if(sync.isPending()){
+                              sync.cancel();
+                          }
+                      }
+                      sync(changedValues);
                       if(_has(changedValues,'shipping_line_id')){
                           // console.log('set shipping line updating');
                           setSelectedDeliveryStatus?.(true);
                       }
-                      sync(changedValues);
+
                   }} >
                 {!import.meta.env.VITE_SKELETON && <Form.Field name={'email'} preserve={true}><div className={'hidden'}/></Form.Field>}
                 {!import.meta.env.VITE_SKELETON && <Form.Field name={'countryCode'} preserve={true}><div className={'hidden'} /></Form.Field>}

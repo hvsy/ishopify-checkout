@@ -1,6 +1,6 @@
 import {createContext, FC, ReactNode, use, useCallback, useRef} from "react";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
-import {ApolloClient, gql, useApolloClient, useMutation, useQueryRefHandlers, useReadQuery} from "@apollo/client";
+import {ApolloClient, from, gql, useApolloClient, useMutation, useQueryRefHandlers, useReadQuery} from "@apollo/client";
 import {MutateCheckout, MutateRemoveAddresses} from "@query/checkouts/mutations.ts";
 import {
     QueryBuyerIdentityFragment,
@@ -73,7 +73,7 @@ export type CheckoutInput = {
 };
 export const ShopifyCheckoutContext = createContext<{
 
-    update ?: (data : CheckoutInput,partialUpdate ?: boolean)=>Promise<any>,
+    update ?: (data : CheckoutInput,partialUpdate ?: boolean,force ?: boolean)=>Promise<any>,
 }>({
 
 });
@@ -155,6 +155,7 @@ export const ShopifyCheckoutProvider :FC<{
         // QueryImageFragment,
         QueryBuyerIdentityFragment,
     ].join("\n")),{
+
         variables : {
             cartId : storage.gid,
         }
@@ -163,8 +164,8 @@ export const ShopifyCheckoutProvider :FC<{
     const mutationLoading = useRef(false);
     mutationLoading.current = loading;
 
-    const update = useCallback(async (variables : any,partialUpdate : boolean = true) => {
-        if(mutationLoading.current) return;
+    const UpdateCallback = useCallback(async (variables : any,partialUpdate : boolean = true,force : boolean = false) => {
+        if(mutationLoading.current && !force) return;
         const config : any = {
             // awaitRefetchQueries : true,
             refetchQueries: ['CartLineItems'],
@@ -213,14 +214,14 @@ export const ShopifyCheckoutProvider :FC<{
         }
     }, [fn]);
     return <ShopifyCheckoutContext value={{
-        update : async(input : CheckoutInput,partialUpdate : boolean = true)=>{
+        update : async(input : CheckoutInput,partialUpdate : boolean = true,force : boolean = false)=>{
             let vars = formatInput(input);
-            let result= await update(vars,partialUpdate);
+            let result= await UpdateCallback(vars,partialUpdate,force);
             let cart = result?.cart;
             const warningCode =result ?.warnings?.[0]?.code;
             if(warningCode === 'DUPLICATE_DELIVERY_ADDRESS'){
                     await removeOtherAddresses(client,storage.gid,vars.addressId)
-                    result = await update(vars,partialUpdate);
+                    result = await UpdateCallback(vars,partialUpdate,force);
                     cart = result?.cart;
             }
             groupsMutation(cart?.deliveryGroups || null);
