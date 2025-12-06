@@ -33,7 +33,9 @@ export const OrderRight: FC<OrderRightProps> = (props) => {
                     title={line.title} total={line.total}
                     price={undefined}
                     options={line.options}
-                    discounted={code ? <LineDiscount discounted={line.discounted}
+                    discounted={code ? <LineDiscount discountAllocation={{
+                        discountedAmount : line.discounted,
+                    }}
                                               code={code}
                     /> : null}
                     media={image ?{

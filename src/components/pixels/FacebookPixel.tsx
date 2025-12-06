@@ -1,7 +1,6 @@
 import {FC,} from "react";
 import {md5} from "js-md5";
 import {usePlatformPixel} from "./usePlatformPixel.tsx";
-import Cookies from "js-cookie";
 import {sha256} from "js-sha256";
 import {getShopifyY} from "@lib/shopify.ts";
 

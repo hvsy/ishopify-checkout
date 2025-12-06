@@ -20,7 +20,7 @@ export function getArrayFromMeta(name: string): string[] {
     if(_isArray(items)) return items;
     return [];
 }
-export function getJsonFromMeta(name: string,defaultValue = {}): any {
+export function getJsonFromMeta(name: string,defaultValue : any = {}): any {
     const content = getMetaContent(name, '');
     try{
         if(!content) return defaultValue;

@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 
-export function usePlainScript(id : string,content : string,removeOnUnmount : boolean = false){
+export function usePlainScript(id : string,content : string,removeOnUnmount : boolean = false,init_mounted : boolean = true){
     useEffect(() => {
+        if(!init_mounted) return;
         let script= document.getElementById(id);
         if(!script){
             script = document.createElement('script') as HTMLScriptElement;
@@ -17,5 +18,5 @@ export function usePlainScript(id : string,content : string,removeOnUnmount : bo
                 document.body.removeChild(script);
             }
         }
-    }, [id]);
+    }, [id,init_mounted]);
 }
