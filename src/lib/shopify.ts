@@ -4,14 +4,32 @@ import LocalExpiredStorage from "./LocalExpiredStorage.ts";
 export function getShopifyY(){
     const cv = Cookies.get('_shopify_y');
     if(!!cv) return cv;
-    return LocalExpiredStorage.getItem('_custom_shopify_y') || null;
+    try {
+        const csy = LocalExpiredStorage.getItem('_custom_shopify_y') || null;
+        if(!!csy) return csy;
+    } catch (e) {
+
+    }
+    try {
+        return sessionStorage.getItem('_custom_shopify_y') || null
+    } catch (e) {
+        return null;
+    }
 }
 
 export function getStorageValue(name : string){
     const value = Cookies.get(name);
     if(!!value) return value;
-    const sv = LocalExpiredStorage.getItem(name);
-    return sv || null;
+    try {
+        const sv = LocalExpiredStorage.getItem(name);
+        if (!!sv) return sv;
+    } catch (e) {
+    }
+    try {
+        return sessionStorage.getItem(name) || null;
+    } catch (e) {
+        return null;
+    }
 }
 
 export function getStorage(map : any){

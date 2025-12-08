@@ -9,8 +9,9 @@ export type LineItemProps = {
     code?: string;
 };
 
-export const LineDiscount: FC<{code ?: string, discounted: any }> = (props) => {
-    const {discounted,code} = props;
+export const LineDiscount: FC<{code ?: string, discountAllocation:any }> = (props) => {
+    const {discountAllocation,code} = props;
+    const discounted = discountAllocation?.discountedAmount || null;
     if (!discounted) return null;
     const amount = discounted.amount;
     const format = useMoneyFormat();
@@ -18,7 +19,7 @@ export const LineDiscount: FC<{code ?: string, discounted: any }> = (props) => {
     return <div className={'flex flex-row items-center  space-x-1 text-sm text-gray-500'}>
         <TagIcon className={'size-4 scale-x-[-1]'}/>
         <span>
-            {code}
+            {code || discountAllocation?.title || ''}
         </span>
         <span>
             {price}
@@ -32,7 +33,8 @@ export const LineItem: FC<LineItemProps> = (props) => {
     const {totalAmount, subtotalAmount} = cost;
     const {product, price, selectedOptions, image} = merchandise;
     const title = product.title;
-    const discountedAmount = _get(discountAllocations, '0.discountedAmount')
+    const discountAllocation = _get(discountAllocations, '0',{});
+    // const discountedAmount = _get(discountAllocations, '0.discountedAmount')
     return <Line
         title={title}
         media={image ? {
@@ -40,7 +42,7 @@ export const LineItem: FC<LineItemProps> = (props) => {
             width: image.width,
             height: image.height,
         } : null}
-        discounted={<LineDiscount discounted={discountedAmount} code={code}/>}
+        discounted={<LineDiscount discountAllocation={discountAllocation} code={code}/>}
         price={price.amount}
         quantity={quantity}
         options={(selectedOptions || []).map((opt: any) => opt.value)}
