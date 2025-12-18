@@ -28,7 +28,7 @@ export const Collapsible: FC<CollapsibleProps> = (props) => {
                 e.preventDefault();
                 setOpen(!open)
             }}
-            className={'appearance-none list-none [&::-webkit-details-marker]:hidden flex items-center flex-row justify-between sm:hidden border-y border-neutral-300 p-6 relative'}>
+            className={'appearance-none cursor-pointer list-none [&::-webkit-details-marker]:hidden flex items-center flex-row justify-between sm:hidden border-y border-neutral-300 px-6 py-3 relative'}>
             {header}
         </summary>
         <div

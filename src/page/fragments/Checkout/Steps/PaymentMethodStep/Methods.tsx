@@ -19,7 +19,6 @@ export const Methods: FC<{ token: string }> = memo((props) => {
     const {token} = props;
     const [search, setSearchParams] = useSearchParams();
 
-    // const {data: methods,isLoading} = useSWR<DB.PaymentMethod[]>(('/a/s/api/payments'));
     let {methods,loading : isLoading} = usePaymentContext() || {};
 
     const form = useCurrentForm();

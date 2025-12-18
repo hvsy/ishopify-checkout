@@ -1,4 +1,4 @@
-import {DetailedHTMLProps, FC, InputHTMLAttributes, ReactNode, RefObject} from "react";
+import {DetailedHTMLProps, FC, InputHTMLAttributes, ReactNode, RefObject, useRef} from "react";
 import {clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
 import {Loading} from "@components/fragments/Loading.tsx";
@@ -31,6 +31,8 @@ export type FloatLabelProps = {
     pattern ?:  string;
     maxLength ?: number;
     loading ?: boolean;
+    tabIndex ?: number;
+    autoScroll ?: boolean;
 };
 
 export const FloatLabel: FC<FloatLabelProps> = (props) => {
@@ -44,6 +46,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
         validating,
         validated,
         loading = false,
+        autoScroll=true,
         errors,warnings,...others
     } = props;
     const h : any = {
@@ -52,6 +55,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
         'large' : 'h-[52px]',
     }[size];
     const hasError = errors && errors.length > 0;
+    const containerRef = useRef<HTMLDivElement>(null);
     const border :any = hasError ? ['border-red-300'] : ['border-[#DEDEDE]','focus-within:border-[#1D5BD1]', 'focus-within:shadow-[#005bd1]'];
     if(import.meta.env.VITE_SKELETON){
         return <div className={`flex flex-col ${className || ''}`}>
@@ -62,7 +66,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
         "absolute top-1"  : !!value,
         "absolute inset-0 flex-row items-center"  : !value,
     },);
-    return <div className={`flex flex-col  space-y-1 ${className || ''}`}>
+    return <div className={`flex flex-col pt-2 space-y-1 ${className || ''}`} ref={containerRef}>
         {!!label && <div>{label}</div>}
         <div className={twMerge(clsx(`bg-white border rounded-md relative flex flex-row justify-between items-stretch box-border `,border,h))}>
             {prefix && <div className={'flex flex-col justify-center px-3 bg-gray-100 flex-shrink-0'}>
@@ -74,6 +78,17 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
                          // placeholder={ph}
                          value={onChange ? (value || '') : value}
                          onBlur={onBlur}
+                         onFocus={(e : any)=>{
+                             if(autoScroll){
+                                 containerRef.current?.scrollIntoView({
+                                     behavior: 'smooth', block: 'start'
+                                 })
+                             }
+                             // const target = e?.target;
+                             // if(target && target?.scrollIntoView){
+                             //     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                             // }
+                         }}
                          onChange={onChange}
                          className={`peer flex-1 w-auto border-none bg-transparent focus:outline-none appearance-none px-3 peer-placeholder-shown:text-xs placeholder-shown:pt-0 ${(float && !!value) ? `pt-5` : ''}`}>
                     {children}

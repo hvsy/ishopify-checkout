@@ -22,7 +22,8 @@ export const ContactInformationForm: FC<ContactInformationFormProps> = (props) =
             }
         }]}>
             <Input placeholder={'Email (For order confirmation)'}
-                   autoFocus
+                   tabIndex={0}
+                   autoFocus={true}
                    autoComplete={'shipping email'}
             />
         </FormItem>
