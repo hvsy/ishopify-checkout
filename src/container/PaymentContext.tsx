@@ -29,7 +29,9 @@ export function useAllZones() {
 }
 
 export function useShippingZones() {
-    const {data,isLoading} = useSWR('/a/s/api/zones');
+    const {data,isLoading} = useSWR('/a/s/api/zones',{
+        errorRetryCount : 10,
+    });
     return {
         zones : data || [],
         loading:isLoading,
@@ -68,7 +70,9 @@ export const PaymentContainer: FC<any> = (props) => {
         payments: DB.PaymentMethod[],
         zones?: any[],
     }>(
-        '/a/s/api/setup'
+        '/a/s/api/setup',{
+            errorRetryCount : 10,
+        }
     );
     useEffect(() => {
         if (!setup?.payments) return;
