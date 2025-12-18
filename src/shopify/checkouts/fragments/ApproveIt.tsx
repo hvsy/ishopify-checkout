@@ -26,7 +26,7 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
     return <AsyncButton
         pulsing={ing}
         onClick={async () => {
-            const after = await submit();
+            const after = await submit(true);
             if(!after) return;
             const handle=  _get(after?.data,'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
             if(!handle){
