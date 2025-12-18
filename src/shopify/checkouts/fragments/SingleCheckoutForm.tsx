@@ -37,6 +37,9 @@ export const SingleCheckoutForm: FC<SingleCheckoutFormProps> = (props) => {
             </FormItem>
             {!approve && <PaymentMethodStep/>}
         </div>
+        <FormItem name={'context'} initialValue={id}>
+            <input hidden={true} value={id}/>
+        </FormItem>
         {approve ? <ApproveIt/> : <SingleFooter/>}
     </div>;
 };

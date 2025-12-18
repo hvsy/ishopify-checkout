@@ -10,7 +10,7 @@ export function useFormValidate() {
     const sync = useCheckoutSync();
     const mutation = useMutationCheckout();
     const last = useRef<any>(null);
-    return async () => {
+    return async (keepBuyerCountryCode  : boolean = false) => {
         const values = await submit(form);
         if (!values) {
             return;
@@ -19,7 +19,7 @@ export function useFormValidate() {
         let needMutate = !last.current || !isEqual(last.current, values);
         import.meta.env.DEV && console.log('need update remote checkout');
         if (needMutate) {
-            const response = await mutation(values, false);
+            const response = await mutation(values, false,false,keepBuyerCountryCode);
             import.meta.env.DEV && console.log('mutate response', response);
             const errors = _get(response, 'userErrors', []) || [];
             const fields = (errors).map((error: any) => {

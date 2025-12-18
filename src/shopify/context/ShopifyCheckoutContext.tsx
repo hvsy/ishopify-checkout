@@ -73,7 +73,11 @@ export type CheckoutInput = {
 };
 export const ShopifyCheckoutContext = createContext<{
 
-    update ?: (data : CheckoutInput,partialUpdate ?: boolean,force ?: boolean)=>Promise<any>,
+    update ?: (data : CheckoutInput,
+               partialUpdate ?: boolean,
+               force ?: boolean,
+               keepBuyerCountryCode  ?: boolean
+               )=>Promise<any>,
     loading : boolean
 }>({
     loading : false,
@@ -87,7 +91,7 @@ function start(target : string,prefix :string){
     return prefix + target.replace(prefix,'');
 }
 
-function formatInput(input : CheckoutInput){
+function formatInput(input : CheckoutInput,keepBuyerCountryCode  : boolean = false){
     let vars  : any= {
         createAddress : false,
         updateAddress : false,
@@ -110,7 +114,9 @@ function formatInput(input : CheckoutInput){
     const countryCode = input?.shipping_address?.countryCode;
     if(!!countryCode){
         vars.updateBuyer = true;
-        vars.buyerIdentity.countryCode = countryCode;
+        if(!keepBuyerCountryCode){
+            vars.buyerIdentity.countryCode = countryCode;
+        }
         vars.updateAddress = true;
         const {id,...others} = input.shipping_address!;
         vars.delivery = others;
@@ -165,7 +171,11 @@ export const ShopifyCheckoutProvider :FC<{
     const mutationLoading = useRef(false);
     mutationLoading.current = loading;
 
-    const UpdateCallback = useCallback(async (variables : any,partialUpdate : boolean = true,force : boolean = false) => {
+    const UpdateCallback = useCallback(async (variables : any,
+                                              partialUpdate : boolean = true,
+                                              force : boolean = false,
+                                              ) => {
+
         if(mutationLoading.current && !force) return;
         const config : any = {
             // awaitRefetchQueries : true,
@@ -216,14 +226,18 @@ export const ShopifyCheckoutProvider :FC<{
     }, [fn]);
     return <ShopifyCheckoutContext value={{
         loading,
-        update : async(input : CheckoutInput,partialUpdate : boolean = true,force : boolean = false)=>{
-            let vars = formatInput(input);
-            let result= await UpdateCallback(vars,partialUpdate,force);
+        update : async(input : CheckoutInput,
+                       partialUpdate : boolean = true,
+                       force : boolean = false,
+                       keepBuyerCountryCode  : boolean = false,
+        )=>{
+            let vars = formatInput(input,keepBuyerCountryCode);
+            let result= await UpdateCallback(vars,partialUpdate,force,);
             let cart = result?.cart;
             const warningCode =result ?.warnings?.[0]?.code;
             if(warningCode === 'DUPLICATE_DELIVERY_ADDRESS'){
                     await removeOtherAddresses(client,storage.gid,vars.addressId)
-                    result = await UpdateCallback(vars,partialUpdate,force);
+                    result = await UpdateCallback(vars,partialUpdate,force,);
                     cart = result?.cart;
             }
             groupsMutation(cart?.deliveryGroups || null);

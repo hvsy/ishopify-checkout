@@ -16,6 +16,7 @@ namespace Analytics{
         currency ?: string;
         contents : {
             id : string;
+            title : string;
             quantity : number;
             price : number|string,
             currency : string,
@@ -30,6 +31,7 @@ namespace Analytics{
         thanked : boolean;
         contents : {
             id : string;
+            title : string;
             quantity : number;
             price : number|string,
             currency : string,
@@ -59,6 +61,7 @@ namespace Analytics{
 
 interface Window {
     fbq: (fun : string,event : string,data ?: any,extra ?: any)=>void;
+    gtag ?: (action : string,event : string, data : any)=>void;
     snaptr ?: any;
     ttq ?: any;
     nbpix ?: any;
