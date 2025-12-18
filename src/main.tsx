@@ -19,21 +19,24 @@ import {globalHandlersIntegration} from "@sentry/react";
 async function setup(){
     const dsn = getMetaContent("sentry");
     if(!!dsn){
+        const features = getArrayFromMeta('sentry_features');
         Sentry.init({
             dsn,
             // Setting this option to true will send default PII data to Sentry.
             // For example, automatic IP address collection on events
-            sendDefaultPii: getArrayFromMeta('sentry_features').includes('ppi'),
+            sendDefaultPii: features.includes('ppi'),
             integrations: function(integrations){
-                // const index = integrations.findIndex(function (integration) {
-                //     return integration.name === "GlobalHandlers";
-                // });
-                // if(index !==-1){
-                //     integrations[index] = globalHandlersIntegration({
-                //         onerror : false,
-                //         onunhandledrejection : false,
-                //     });
-                // }
+                if(features.includes('disable_global_handlers')){
+                    const index = integrations.findIndex(function (integration) {
+                        return integration.name === "GlobalHandlers";
+                    });
+                    if(index !==-1){
+                        integrations[index] = globalHandlersIntegration({
+                            onerror : false,
+                            onunhandledrejection : false,
+                        });
+                    }
+                }
                 return integrations.filter((integration) => {
                     return integration.name !== 'BrowserApiErrors';
                 });
