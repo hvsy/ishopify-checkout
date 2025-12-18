@@ -3,6 +3,7 @@ import {ApolloClient, createQueryPreloader, from, HttpLink, InMemoryCache} from 
 import {getMetaContent} from "./metaHelper.ts";
 import {onError} from "@apollo/client/link/error";
 import {RetryLink} from "@apollo/client/link/retry";
+import MutationQueueLink from "@adobe/apollo-link-mutation-queue";
 
 const api_version = getMetaContent('api_version');
 const storefront_url = api_version ? `/api/${api_version}/graphql.json` :"/api/2025-10/graphql.json";
@@ -10,11 +11,14 @@ const storefront_url = api_version ? `/api/${api_version}/graphql.json` :"/api/2
 const httpLink = new HttpLink({
     uri:storefront_url
 })
-const errorLink = onError(({ graphQLErrors,protocolErrors, networkError }) => {
+const errorLink = onError(({ graphQLErrors,protocolErrors, networkError ,operation}) => {
+    console.error('error:',operation);
     if (graphQLErrors)
-        graphQLErrors.forEach(({ message, locations, path }) =>
+        graphQLErrors.forEach(({ message, locations, path, }) =>
             console.error(
-                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+                `[GraphQL error]: Message: ${message}, Location: ${locations?.map((location) => {
+                    return `@${location.line}:${location.column}`;
+                }).join("\n")}, Path: ${path}`,
             ),
         );
     if (protocolErrors) {
@@ -24,13 +28,14 @@ const errorLink = onError(({ graphQLErrors,protocolErrors, networkError }) => {
             );
         });
     }
-    if (networkError) console.error(`[Network error]: ${networkError}`);
+    if (networkError) console.error(`[Network error]: ${networkError.message} ${networkError.name}`);
 });
 const retryLink = new RetryLink();
-
+const queueLink = new MutationQueueLink({debug : true});
 export const ApolloStoreFrontClient = new ApolloClient({
     // uri : storefront_url,
-    link : from([errorLink,retryLink,httpLink]),
+    //@ts-ignore
+    link : from([errorLink,retryLink,httpLink,queueLink]),
     cache : new InMemoryCache({
         typePolicies : {
             Cart : {},
