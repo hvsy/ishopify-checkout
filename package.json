@@ -11,6 +11,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@adobe/apollo-link-mutation-queue": "^1.1.0",
     "@apollo/client": "^3.13.8",
     "@radix-ui/react-slot": "^1.0.2",
     "@sentry/react": "^10.22.0",
@@ -19,6 +20,7 @@
     "@types/node": "^20.12.3",
     "autoprefixer": "^10.4.21",
     "axios": "^1.6.8",
+    "axios-retry": "^4.5.0",
     "big.js": "^7.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

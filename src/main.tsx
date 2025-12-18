@@ -3,7 +3,7 @@ import React, {lazy} from 'react'
 import './index.css';
 import { createRoot } from "react-dom/client";
 import { SWRConfig } from 'swr';
-import {api} from "@lib/api.ts";
+import { swr_api} from "@lib/api.ts";
 import {App} from "./App.tsx";
 import {loadDevMessages, loadErrorMessages} from "@apollo/client/dev";
 import {ApolloProvider} from "@apollo/client";
@@ -52,7 +52,7 @@ async function setup(){
     root.render(
         <React.StrictMode>
             <SWRConfig value={{
-                fetcher: api,
+                fetcher: swr_api,
                 revalidateIfStale: true,
                 refreshWhenHidden: false,
                 revalidateOnFocus: false,
