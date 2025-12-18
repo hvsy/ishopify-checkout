@@ -21,7 +21,7 @@ export const RightFrame: FC<RightFrameProps> = (props) => {
                         <ShoppingCart size={18}/>
                     </div>
                     <div className={'flex flex-row space-x-3 items-center'}>
-                        <div className={'text-sm'}>
+                        <div className={'text-base'}>
                             <span className={'group-open:hidden'}>Show order summary</span>
                             <span className={'hidden group-open:inline'}>Hide order summary</span>
                         </div>
