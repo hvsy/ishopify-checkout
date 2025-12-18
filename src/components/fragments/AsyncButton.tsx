@@ -20,7 +20,9 @@ export const AsyncButton : FC<AsyncButtonProps> = (props)=>{
     const {children,loadingContainerClassName = '',pulsing = false,className = '',loadingClassName = '',onClick,...others} = props;
     const [{loading : actionLoading},click]  = useAsyncClick(onClick);
     const finalLoading = pulsing || actionLoading;
-    const final = cn("relative cursor-pointer select-none",{
+    const final = cn("relative cursor-pointer select-none bg-black text-white inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",{
+        "bg-primary text-primary-foreground hover:bg-primary/90" : true,
+        "h-10 px-4 py-2":true,
         "max-w-104" : !(className?.includes('max-w-')),
         "lab" : true,
         "*:invisible [&>*:last-child]:visible":finalLoading,
@@ -32,7 +34,7 @@ export const AsyncButton : FC<AsyncButtonProps> = (props)=>{
     if(import.meta.env.VITE_SKELETON){
         return <Skeleton className={final}/>
     }
-    return <Button className={final} {...others} onClick={async (...args) => {
+    return <div className={final} {...others} onClick={async (...args) => {
         if(pulsing) return;
         return click?.(...args);
     }}>
@@ -43,5 +45,5 @@ export const AsyncButton : FC<AsyncButtonProps> = (props)=>{
         {pulsing && <div className={'animate-pulse absolute inset-0 flex visible items-stretch'}>
             <div className={"flex-1 bg-white opacity-75"} />
         </div>}
-    </Button>;
+    </div>;
 };
