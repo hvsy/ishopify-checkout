@@ -24,7 +24,7 @@ async function setup(){
             dsn,
             // Setting this option to true will send default PII data to Sentry.
             // For example, automatic IP address collection on events
-            sendDefaultPii: getArrayFromMeta('sentry_features').includes('ppi'),
+            sendDefaultPii: features.includes('ppi'),
             integrations: function(integrations){
                 if(features.includes('disable_global_handlers')){
                     const index = integrations.findIndex(function (integration) {
