@@ -4,7 +4,6 @@ import {Divider} from "@components/ui/Divider.tsx";
 import {AsyncButton} from "@components/fragments/AsyncButton.tsx";
 import {api} from "@lib/api.ts";
 import {useSummary} from "../checkouts/hooks/useSummary.tsx";
-import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
 import {PromiseLocation} from "../lib/payment.ts";
 
 export type PaypalQuicklyButtonProps = {};
@@ -39,7 +38,7 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
                     }
                 }
             }}
-            className={'bg-[#ffc439] py-3 rounded-md max-w-full hover:bg-[#ff9e39]'}>
+            className={'bg-[#ffc439] py-2 rounded-md max-w-full hover:bg-[#ff9e39]'}>
             <div className={'flex flex-row  space-x-3 justify-center items-center'}>
                 <div className={'font-bold text-black text-lg'}>
                     Pay with

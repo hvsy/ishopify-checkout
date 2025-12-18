@@ -182,8 +182,8 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         colSpan--;
     }
     const colSpanClass = ['md:col-span-6','md:col-span-3' ,'md:col-span-2'][colSpan-1];
-    return <StepBlock className={'flex flex-col space-y-4'} labelClassName={titleClassName} label={`${label} address`} name={`${label}-address`}>
-        <div className={'grid grid-cols-6 gap-y-3 gap-x-2'}>
+    return <StepBlock className={'flex flex-col space-y-1'} labelClassName={titleClassName} label={`${label} address`} name={`${label}-address`}>
+        <div className={'grid grid-cols-6 gap-y-1 gap-x-2'}>
             <FormItem name={[...prefix, 'region']} preserve={true}>
                 <div className={'hidden'}/>
             </FormItem>

@@ -19,6 +19,7 @@ export const CouponFormFrame: FC<CouponFormFrameProps> = (props) => {
                       className={'py-3 space-y-3 flex-shrink-0 flex flex-col items-stretch'}>
         <div className={'flex flex-row items-center space-x-2'}>
             <Input size={'sm'} placeholder={'Coupon code'}
+                   autoScroll={false}
                    className={'flex-1'} float={false}
                    value={code}
                    onChange={(e) => {
