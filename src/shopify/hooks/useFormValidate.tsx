@@ -100,6 +100,7 @@ export function useFormValidate() {
                     produce(cart.token,"shopify_validate",{
                         errors,fields,values,
                         context : form.getFieldValue('context'),
+                        summary_loading : loading.summary,
                         shipping_methods_loading : loading?.shipping_methods,
                         checkout_loading : checkoutLoading,
                         shipping_methods : _get(groups,'0.deliveryOptions',null),
@@ -123,6 +124,7 @@ export function useFormValidate() {
                     values : {
                         ...formatFormValues(e.values,false),
                         context : e.values?.context || null,
+                        summary_loading : loading.summary,
                         shipping_methods_loading : loading?.shipping_methods,
                         checkout_loading : checkoutLoading,
                         shipping_methods : _get(groups,'0.deliveryOptions',null),

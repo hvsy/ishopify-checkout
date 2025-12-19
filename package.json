@@ -35,6 +35,7 @@
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.364.0",
     "mitt": "^3.0.1",
+    "p-queue": "^9.0.1",
     "postcss": "^8.5.6",
     "radix-ui": "^1.0.1",
     "rc-field-form": "^2.5.0",
