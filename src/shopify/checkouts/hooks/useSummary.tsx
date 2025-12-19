@@ -1,7 +1,7 @@
-import {NetworkStatus, useApolloClient, useReadQuery} from "@apollo/client";
-import {get as _get, has as _has, isArray as _isArray, set as _set} from "lodash-es";
+import {gql, NetworkStatus, useApolloClient, useQuery, useReadQuery} from "@apollo/client";
+import {get as _get, has as _has, isArray as _isArray} from "lodash-es";
 
-import {Outlet, useLoaderData, useRouteLoaderData} from "react-router-dom";
+import {useRouteLoaderData} from "react-router-dom";
 import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
 import {SummaryQuery} from "../../../App.tsx";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
@@ -11,9 +11,10 @@ import {FormContainer} from "@components/frames/FormContainer.tsx";
 import {ShopifyFrame} from "../../ShopifyFrame.tsx";
 import {ShopifyCheckoutProvider} from "../../context/ShopifyCheckoutContext.tsx";
 import Form from "rc-field-form";
-import {PaymentContainer, PaymentContext} from "../../../container/PaymentContext.tsx";
+import {PaymentContainer} from "../../../container/PaymentContext.tsx";
 import {PayingContainer} from "@components/frames/PayingContainer.tsx";
-
+import {QueryDeliveryGroups} from "@query/checkouts/queries.ts";
+import {QueryDeliveryGroupsFragment} from "@query/checkouts/fragments/fragments.ts";
 
 
 export const SummaryContext = createContext<{
@@ -25,6 +26,7 @@ export const SummaryContext = createContext<{
         summary : boolean,
         updatingSelectedDelivery : boolean,
     },
+    refetchDeliveryGroup ?: (vars ?: any)=>Promise<any>;
     groups ?: any[],
     storage ?: CartStorage,
     json : any,
@@ -39,24 +41,43 @@ export const SummaryContext = createContext<{
     },
 });
 
+
+
 export const SummaryContextProvider :FC<any> = (props) => {
     const {children} = props;
     const [updatingSelectedDelivery,setSelectedDeliveryStatus] = useState<boolean>(false);
     const {ref,storage} = useRouteLoaderData('checkout') as any;
     const {data : json ,error,networkStatus} = useReadQuery<any>(ref);
-    const edges = _get(json,'cart.deliveryGroups.edges');
+
+
+    const {loading :deliveryGroupsLoading,
+        refetch : deliveryGroupRefetch,
+        data,error : deliveryGroupError,
+        networkStatus : deliveryGroupsStatus} = useQuery(gql([
+        QueryDeliveryGroups,
+        QueryDeliveryGroupsFragment,
+    ].join("\n")),{
+        variables : {
+            cartId : storage.gid,
+        }
+    })
+    const edges = _get(data,'cart.deliveryGroups.edges');
     const groups  = (edges || []).map((group : any) => {
         return group.node;
     });
+    const query_loading = deliveryGroupsLoading || deliveryGroupsStatus !== NetworkStatus.ready;
+    const methods_loading = !_has(data?.cart, 'deliveryGroups') ||
+        !_isArray(data?.cart?.deliveryGroups?.edges) || (edges === undefined);
+
     // console.log('[delivery] groups:',edges);
     const loading = {
         updatingSelectedDelivery,
-        shipping_methods: !_has(json?.cart, 'deliveryGroups') ||
-            !_isArray(json?.cart?.deliveryGroups?.edges) || (edges === undefined),
+        shipping_methods: query_loading || methods_loading,
         summary : [NetworkStatus.loading,
             NetworkStatus.refetch,
             NetworkStatus.fetchMore,
             NetworkStatus.poll,
+            NetworkStatus.setVariables,
         ].includes(networkStatus)
     }
     const ing = loading.shipping_methods || loading.summary || loading.updatingSelectedDelivery;
@@ -70,6 +91,7 @@ export const SummaryContextProvider :FC<any> = (props) => {
                 return getCheckoutFromSummary(json, 'cart');
             },
             ing,
+            refetchDeliveryGroup : deliveryGroupRefetch,
             setSelectedDeliveryStatus,
             loading,
             groups: groups as any[],
@@ -89,9 +111,9 @@ export const GlobalContextProvider : FC<any> = (props : any) => {
     const {children} = props;
     return <PayingContainer>
         <PaymentContainer>
-            <SummaryContextProvider>
-                {children}
-            </SummaryContextProvider>
+                <SummaryContextProvider>
+                    {children}
+                </SummaryContextProvider>
         </PaymentContainer>
     </PayingContainer>
 };

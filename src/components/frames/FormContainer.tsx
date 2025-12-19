@@ -1,13 +1,14 @@
 import {FC, ReactNode, useCallback, useRef, useState} from "react";
 import Form, {FormInstance} from "rc-field-form";
 import {FormContext,} from "../../container/FormContext.ts";
-import {get as _get, has as _has, isArray as _isArray} from "lodash-es";
-import {useDebounceCallback} from "usehooks-ts";
+import {merge as _merge,get as _get, has as _has, isArray as _isArray} from "lodash-es";
 import {CheckoutInput, map2, useMutationCheckout} from "../../shopify/context/ShopifyCheckoutContext.tsx";
 import {useDeliveryGroupMutation, useSummary} from "../../shopify/checkouts/hooks/useSummary.tsx";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
 import Validators from "validator";
 import {buildAddress} from "@lib/buildAddress.ts";
+import {useAsyncQueuer} from "@tanstack/react-pacer";
+
 
 
 export type FormContainerProps = {
@@ -66,7 +67,7 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     const {setSelectedDeliveryStatus} = useSummary();
     const mutationDeliveryGroups = useDeliveryGroupMutation();
     const checkoutSync = useCheckoutSync(form);
-    const sync = useDebounceCallback(async (changedValues,) => {
+    const sync = useAsyncQueuer(async (changedValues,) => {
         const values = form.getFieldsValue();
         const countryChanged = _has(changedValues,'shipping_address.region_code');
         const provinceChanged = _has(changedValues,'shipping_address.state_code');
@@ -118,22 +119,26 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         });
         //TODO 单页模式同步数据
         // console.log('sync:',values);
-    },500,{
-        trailing: true,
+    },{
+        wait : 500,
+        concurrency : 1,
     });
+    const push = useCallback((changedValues : any) => {
+        const items =  sync.peekPendingItems();
+        const newItem = items.reverse().reduce((pv : any,cv : any) => {
+           return _merge({},pv,cv);
+        },{});
+        sync.clear();
+        const final = _merge(newItem,changedValues);
+        sync.addItem(final);
+    },[
+        sync
+    ])
     const mutation = useMutationCheckout();
     return <FormContext.Provider value={{
             onValuesChanged : (changed)=>{
-
-                const countryChanged = _has(changed,'shipping_address.region_code');
-                const provinceChanged = _has(changed,'shipping_address.state_code');
-                const shippingMethodChanged = _has(changed,'shipping_line_id');
-                if(countryChanged || provinceChanged || shippingMethodChanged){
-                    if(sync.isPending()){
-                        sync.cancel();
-                    }
-                }
-                sync(changed, );
+                // sync.addItem(changed, );
+                push(changed);
                 if(_has(changed,'shipping_line_id')){
                     // console.log('set shipping line updating');
                     setSelectedDeliveryStatus?.(true);
@@ -149,15 +154,8 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
                   // component={false}
                 component={'form'}
                   onValuesChange={(changedValues) => {
-                      const countryChanged = _has(changedValues,'shipping_address.region_code');
-                      const provinceChanged = _has(changedValues,'shipping_address.state_code');
-                      const shippingMethodChanged = _has(changedValues,'shipping_line_id');
-                      if(countryChanged || provinceChanged || shippingMethodChanged){
-                          if(sync.isPending()){
-                              sync.cancel();
-                          }
-                      }
-                      sync(changedValues);
+                      push(changedValues);
+                      // sync.addItem(changedValues);
                       if(_has(changedValues,'shipping_line_id')){
                           // console.log('set shipping line updating');
                           setSelectedDeliveryStatus?.(true);

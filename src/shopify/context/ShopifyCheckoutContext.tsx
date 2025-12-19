@@ -13,8 +13,9 @@ import {useDeliveryGroupMutation} from "../checkouts/hooks/useSummary.tsx";
 import {getBy} from "../lib/helper.ts";
 import {QueryDeliveryAddresses} from "@query/checkouts/queries.ts";
 import Validators from "validator";
-import PQueue from "p-queue";
 import {useEventCallback} from "usehooks-ts";
+import {useAsyncQueuer} from "@tanstack/react-pacer";
+import PQueue from "p-queue";
 
 
 export async function removeOtherAddresses(client : ApolloClient<any>,cartId : string,id : string){
@@ -158,7 +159,7 @@ export const ShopifyCheckoutProvider :FC<{
         MutateCheckout,
         QueryCartFieldsFragment,
         QueryDeliveryFragment,
-        QueryDeliveryGroupsFragment,
+        // QueryDeliveryGroupsFragment,
         // QueryLineItemsFragment,
         // QueryVariantFragment,
         // QueryImageFragment,
@@ -172,9 +173,7 @@ export const ShopifyCheckoutProvider :FC<{
     const groupsMutation = useDeliveryGroupMutation();
     const mutationLoading = useRef(false);
     mutationLoading.current = loading;
-    const queue = useMemo(() => {
-        return new PQueue({concurrency: 1});
-    }, []);
+
 
     const UpdateMutationCallback = useEventCallback(async (variables : any,
                                               partialUpdate : boolean = true,
@@ -184,7 +183,7 @@ export const ShopifyCheckoutProvider :FC<{
         if(mutationLoading.current && !force) return;
         const config : any = {
             // awaitRefetchQueries : true,
-            refetchQueries: ['Summary','CartLineItems'],
+            refetchQueries: ['GetDeliveryGroups','CartLineItems'],
             variables,
         };
         if(!partialUpdate){
@@ -264,6 +263,11 @@ export const ShopifyCheckoutProvider :FC<{
         })
         return result;
     })
+    const queue = useMemo(() => {
+       return new PQueue({
+           concurrency : 1,
+       });
+    },[]);
     return <ShopifyCheckoutContext value={{
         loading,
         update : async (...args:any) => {
