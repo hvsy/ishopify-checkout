@@ -18,13 +18,11 @@ import {QueryDeliveryGroupsFragment} from "@query/checkouts/fragments/fragments.
 
 
 export const SummaryContext = createContext<{
-    setSelectedDeliveryStatus ?: (status : boolean)=>void,
     ing : boolean,
     checkout : ()=>any;
     loading : {
         shipping_methods : boolean,
         summary : boolean,
-        updatingSelectedDelivery : boolean,
     },
     refetchDeliveryGroup ?: (vars ?: any)=>Promise<any>;
     groups ?: any[],
@@ -37,7 +35,6 @@ export const SummaryContext = createContext<{
     loading : {
         shipping_methods : false,
         summary : false,
-        updatingSelectedDelivery : false,
     },
 });
 
@@ -45,7 +42,9 @@ export const SummaryContext = createContext<{
 
 export const SummaryContextProvider :FC<any> = (props) => {
     const {children} = props;
-    const [updatingSelectedDelivery,setSelectedDeliveryStatus] = useState<boolean>(false);
+
+
+    //
     const {ref,storage} = useRouteLoaderData('checkout') as any;
     const {data : json ,error,networkStatus} = useReadQuery<any>(ref);
 
@@ -72,7 +71,6 @@ export const SummaryContextProvider :FC<any> = (props) => {
 
     // console.log('[delivery] groups:',edges);
     const loading = {
-        updatingSelectedDelivery,
         shipping_methods: query_loading || methods_loading,
         summary : [NetworkStatus.loading,
             NetworkStatus.refetch,
@@ -81,7 +79,7 @@ export const SummaryContextProvider :FC<any> = (props) => {
             NetworkStatus.setVariables,
         ].includes(networkStatus)
     }
-    const ing = loading.shipping_methods || loading.summary || loading.updatingSelectedDelivery;
+    const ing = loading.shipping_methods || loading.summary;
     const checkout = getCheckoutFromSummary(json, 'cart');
     const [form] = Form.useForm();
     // console.log('form init:',checkout);
@@ -93,7 +91,6 @@ export const SummaryContextProvider :FC<any> = (props) => {
             },
             ing,
             refetchDeliveryGroup : deliveryGroupRefetch,
-            setSelectedDeliveryStatus,
             loading,
             groups: groups as any[],
             storage: storage as CartStorage,

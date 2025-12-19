@@ -1,7 +1,7 @@
 import {FC, ReactNode, useCallback, useRef, useState} from "react";
 import Form, {FormInstance} from "rc-field-form";
 import {FormContext,} from "../../container/FormContext.ts";
-import {merge as _merge,get as _get, has as _has, isArray as _isArray} from "lodash-es";
+import {merge as _merge, get as _get, has as _has, isArray as _isArray, filter, isEmpty} from "lodash-es";
 import {CheckoutInput, map2, useMutationCheckout} from "../../shopify/context/ShopifyCheckoutContext.tsx";
 import {useDeliveryGroupMutation, useSummary} from "../../shopify/checkouts/hooks/useSummary.tsx";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
@@ -65,31 +65,14 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         }
         return {};
     },[])
-    const {setSelectedDeliveryStatus} = useSummary();
     const mutationDeliveryGroups = useDeliveryGroupMutation();
-    const checkoutSync = useCheckoutSync(form);
     const sync = useAsyncQueuer(async (changedValues,) => {
         const values = form.getFieldsValue();
         const countryChanged = _has(changedValues,'shipping_address.region_code');
         const provinceChanged = _has(changedValues,'shipping_address.state_code');
         const shippingMethodChanged = _has(changedValues,'shipping_line_id');
-        // console.log('cv:',changedValues);
 
-        const emailChanged = _has(changedValues,'email');
-        if(emailChanged && !!changedValues.email){
-                const email = form.getFieldValue('email');
-                if(Validators.isEmail(email)){
-                    return checkoutSync(true,false);
-                }
-            // form.setFields([{
-            //     name : ['email'],
-            //     validated :false,
-            //     validating : true,
-            // }])
-        }
-
-        // if(!countryChanged && !provinceChanged  && !shippingMethodChanged && !emailChanged){
-        if(!countryChanged && !provinceChanged  && !shippingMethodChanged && !emailChanged){
+        if(!countryChanged && !provinceChanged  && !shippingMethodChanged){
             return;
         }
         // if(countryChanged){
@@ -108,51 +91,38 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             input.deliveryHandle = undefined;
         }
         input.shipping_address = address;
-        mutation(input,false,true,values?.context === 'approve').then((response) => {
-
-        }).finally(() => {
-            if(!!form.getFieldValue(['shipping_address','phone'])){
-                form.validateFields([
-                    ['shipping_address','phone']
-                ]);
-            }
-            setSelectedDeliveryStatus?.(false);
-        });
-        //TODO 单页模式同步数据
-        // console.log('sync:',values);
+        return mutation(input,true,true,values?.context === 'approve');
     },{
-        wait : 500,
+        wait : 1000,
         concurrency : 1,
+        onSettled : (item, queuer) => {
+            // console.log('job settled :',item,queuer);
+        }
     });
-    const push = useDebounceCallback((changedValues : any) => {
-        console.log('push changed values:',changedValues)
+    const push = ((changedValues : any) => {
         const items =  sync.peekPendingItems();
-        const newItem = items.reverse().reduce((pv : any,cv : any) => {
+        const oldItem = items.reverse().reduce((pv : any,cv : any) => {
            return _merge({},pv,cv);
         },{});
         sync.clear();
-        const final = _merge(newItem,changedValues);
+        const final = _merge(oldItem,changedValues);
+        // console.log('push changed values:',changedValues,oldItem,final,items,items.length);
         sync.addItem(final);
-    },500,{
-        trailing: true,
     })
     const mutation = useMutationCheckout();
+    const onValuesChanged = useCallback((changedValues : any) => {
+        const path = ['shipping_address.region_code',
+            'shipping_address.state_code',
+            'shipping_line_id',
+        ].filter(function(path){
+            return _has(changedValues,path) && !isEmpty(_get(changedValues,path));
+        });
+        if(path.length > 0){
+            push(changedValues);
+        }
+    },[push]);
     return <FormContext.Provider value={{
-            onValuesChanged : (changed)=>{
-                const countryChanged = _has(changed,'shipping_address.region_code');
-                const provinceChanged = _has(changed,'shipping_address.state_code');
-                const shippingMethodChanged = _has(changed,'shipping_line_id');
-                if(countryChanged || provinceChanged || shippingMethodChanged){
-                    if(push.isPending()){
-                        push.cancel();
-                    }
-                }
-                push(changed, );
-                if(_has(changed,'shipping_line_id')){
-                    // console.log('set shipping line updating');
-                    setSelectedDeliveryStatus?.(true);
-                }
-            },
+            onValuesChanged,
             form,
             error,
             setErrors : setFormErrors,
@@ -162,22 +132,16 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
                   noValidate
                   // component={false}
                 component={'form'}
-                  onValuesChange={(changedValues) => {
-                      const countryChanged = _has(changedValues,'shipping_address.region_code');
-                      const provinceChanged = _has(changedValues,'shipping_address.state_code');
-                      const shippingMethodChanged = _has(changedValues,'shipping_line_id');
-                      if(countryChanged || provinceChanged || shippingMethodChanged){
-                          if(push.isPending()){
-                              push.cancel();
-                          }
-                      }
-                      push(changedValues);
-                      if(_has(changedValues,'shipping_line_id')){
-                          // console.log('set shipping line updating');
-                          setSelectedDeliveryStatus?.(true);
-                      }
-
-                  }} >
+                  onFieldsChange={(changedFields, allFields) => {
+                      // const changed = changedFields.filter((field) => {
+                      //     const query = '['+field.name.join('][') + ']';
+                      //     return !field.validating && document.activeElement?.getAttribute('name') !== query;
+                      // }).map((f) => {
+                      //     return {name : f.name,value : f.value};
+                      // });
+                      // console.log('changed:',changed);
+                  }}
+                  onValuesChange={onValuesChanged} >
                 {!import.meta.env.VITE_SKELETON && <Form.Field name={'email'} preserve={true}><div className={'hidden'}/></Form.Field>}
                 {!import.meta.env.VITE_SKELETON && <Form.Field name={'countryCode'} preserve={true}><div className={'hidden'} /></Form.Field>}
                 {!import.meta.env.VITE_SKELETON && <Form.Field name={'shipping_line_id'} preserve={true}><div className={'hidden'}/></Form.Field>}
