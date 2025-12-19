@@ -7,7 +7,8 @@ import {useDeliveryGroupMutation, useSummary} from "../../shopify/checkouts/hook
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
 import Validators from "validator";
 import {buildAddress} from "@lib/buildAddress.ts";
-import {useAsyncQueuer} from "@tanstack/react-pacer";
+import {useAsyncQueuer,} from "@tanstack/react-pacer";
+import {useDebounceCallback} from "usehooks-ts";
 
 
 
@@ -123,7 +124,8 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         wait : 500,
         concurrency : 1,
     });
-    const push = useCallback((changedValues : any) => {
+    const push = useDebounceCallback((changedValues : any) => {
+        console.log('push changed values:',changedValues)
         const items =  sync.peekPendingItems();
         const newItem = items.reverse().reduce((pv : any,cv : any) => {
            return _merge({},pv,cv);
@@ -131,14 +133,21 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         sync.clear();
         const final = _merge(newItem,changedValues);
         sync.addItem(final);
-    },[
-        sync
-    ])
+    },500,{
+        trailing: true,
+    })
     const mutation = useMutationCheckout();
     return <FormContext.Provider value={{
             onValuesChanged : (changed)=>{
-                // sync.addItem(changed, );
-                push(changed);
+                const countryChanged = _has(changed,'shipping_address.region_code');
+                const provinceChanged = _has(changed,'shipping_address.state_code');
+                const shippingMethodChanged = _has(changed,'shipping_line_id');
+                if(countryChanged || provinceChanged || shippingMethodChanged){
+                    if(push.isPending()){
+                        push.cancel();
+                    }
+                }
+                push(changed, );
                 if(_has(changed,'shipping_line_id')){
                     // console.log('set shipping line updating');
                     setSelectedDeliveryStatus?.(true);
@@ -154,8 +163,15 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
                   // component={false}
                 component={'form'}
                   onValuesChange={(changedValues) => {
+                      const countryChanged = _has(changedValues,'shipping_address.region_code');
+                      const provinceChanged = _has(changedValues,'shipping_address.state_code');
+                      const shippingMethodChanged = _has(changedValues,'shipping_line_id');
+                      if(countryChanged || provinceChanged || shippingMethodChanged){
+                          if(push.isPending()){
+                              push.cancel();
+                          }
+                      }
                       push(changedValues);
-                      // sync.addItem(changedValues);
                       if(_has(changedValues,'shipping_line_id')){
                           // console.log('set shipping line updating');
                           setSelectedDeliveryStatus?.(true);
