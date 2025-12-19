@@ -81,7 +81,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
                          onFocus={(e : any)=>{
                              if(autoScroll){
                                  containerRef.current?.scrollIntoView({
-                                     behavior: 'smooth', block: 'start'
+                                     behavior: 'smooth', block: 'start',inline : 'start'
                                  })
                              }
                              // const target = e?.target;

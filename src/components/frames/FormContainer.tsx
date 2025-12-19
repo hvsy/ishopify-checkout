@@ -41,25 +41,8 @@ export function scrollToError(e : any){
     }
 }
 
-export async function submit(form : FormInstance,validate_phone : boolean = true){
-    try {
-        if(form.isFieldsValidating(['email'])){
-            return null;
-        }
-        const values =  await form.validateFields();
-        const address = buildAddress(values?.shipping_address || {},validate_phone);
-        const input : CheckoutInput =  map2(values,{
-            email : 'email',
-            deliveryHandle : 'shipping_line_id',
-            deliveryGroupId : 'shipping_group_id',
-        });
-        input.shipping_address = address;
-        return input;
-    } catch (e) {
-        scrollToError(e);
-        return null;
-    }
-}
+
+
 
 
 export const FormContainer: FC<FormContainerProps> = (props) => {
