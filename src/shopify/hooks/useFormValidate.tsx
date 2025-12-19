@@ -122,10 +122,11 @@ export function useFormValidate() {
             if(isObjectLike(e) && e.hasOwnProperty('errorFields')){
                 let forceUpdateShippingLine = false;
                 let needForce = !loading.summary && !loading?.shipping_methods && !checkoutLoading &&
-                    !isEmpty(_get(groups,'0.deliveryOptions',null));
+                    isEmpty(_get(groups,'0.deliveryOptions',null));
                 if(e.errorFields.length === 1 && (e.errorFields?.[0]?.name||[]).join('.') === 'shipping_line_id'
                     &&needForce
                 ){
+                    forceUpdateShippingLine = true;
                     refetchDeliveryGroup?.()
                 }
                 produce(cart.token,"form_validate",{
