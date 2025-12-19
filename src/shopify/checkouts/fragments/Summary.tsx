@@ -57,7 +57,7 @@ export const Summary: FC<SummaryProps> = (props) => {
                            } : undefined}
                            renderShipping={() => {
                                return <LoadingContainer
-                                   loading={loading.shipping_methods || loading.updatingSelectedDelivery}
+                                   loading={loading.shipping_methods}
                                    loadingClassName={'w-20 h-5 rounded-xl'}
                                    loadingContainerClassName={'justify-end'}
                                >
