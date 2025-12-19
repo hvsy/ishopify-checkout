@@ -121,9 +121,12 @@ export function useFormValidate() {
         } catch (e : any) {
             if(isObjectLike(e) && e.hasOwnProperty('errorFields')){
                 let forceUpdateShippingLine = false;
+                let options = _get(groups,'0.deliveryOptions',null);
                 let needForce = !loading.summary && !loading?.shipping_methods && !checkoutLoading &&
-                    isEmpty(_get(groups,'0.deliveryOptions',null));
-                if(e.errorFields.length === 1 && (e.errorFields?.[0]?.name||[]).join('.') === 'shipping_line_id'
+                    isEmpty(options);
+                const errorLength = e.errorFields.length;
+                const errorName = (e.errorFields?.[0]?.name||[]).join('.');
+                if(errorLength === 1 &&  errorName ==='shipping_line_id'
                     &&needForce
                 ){
                     forceUpdateShippingLine = true;
@@ -137,8 +140,11 @@ export function useFormValidate() {
                         shipping_methods_loading : loading?.shipping_methods,
                         checkout_loading : checkoutLoading,
                         shipping_methods : _get(groups,'0.deliveryOptions',null),
+                        errorLength,
+                        errorName,
                         need_force : needForce,
                         force_fetch_delivery_group : forceUpdateShippingLine,
+                        options,
                     },
                     errors : e.errorFields,
                 }).catch()

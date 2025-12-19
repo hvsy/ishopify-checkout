@@ -57,6 +57,7 @@ export const SummaryContextProvider :FC<any> = (props) => {
         QueryDeliveryGroups,
         QueryDeliveryGroupsFragment,
     ].join("\n")),{
+        refetchWritePolicy : 'overwrite',
         variables : {
             cartId : storage.gid,
         }
