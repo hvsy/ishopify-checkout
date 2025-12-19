@@ -17,7 +17,7 @@ import {useEventCallback} from "usehooks-ts";
 import {getGlobalPath} from "../../../../shopify/lib/globalSettings.ts";
 import {getArrayFromMeta} from "@lib/metaHelper.ts";
 import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts";
-
+import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
 
 
 
@@ -63,6 +63,11 @@ export type AddressFormProps = {
 const features = getArrayFromMeta('features') || [];
 const AdvancedPhoneInput = features?.includes('advanced_phone_input') || false;
 const DisablePrefillPhoneDialCode = features?.includes('disable_prefill_phone_dial_code') || false;
+const MyPhoneInput = features.includes('phone2') ? PhoneInput2 : PhoneInput;
+
+const Phone2 = MyPhoneInput === PhoneInput2;
+
+
 export const AddressForm: FC<AddressFormProps> = (props) => {
     const {preserve = false,onPhoneChange, loading,title,titleClassName,hidden_fields = [], prefix = [],
         zones : Regions= [],
@@ -257,9 +262,10 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        autoComplete={`${pf} postal-code`}
                        className={`${colSpanClass} col-span-6`}/>
             </FormItem>}
-            {!(hidden_fields||[]).includes('phone') && <FormItem name={[...prefix, 'phone']} rules={[{
+            {!(hidden_fields||[]).includes('phone') && <FormItem name={[...prefix, Phone2 ? 'phone2' :'phone']} rules={[{
                 required: true,
-                async validator(rules, value) {
+                async validator(rules, v) {
+                    const value = v?.toString() || '';
                     if(!value){
                         throw new Error("Enter a valid phone number");
                     }
@@ -275,11 +281,13 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                         const message= [
                             'Enter a valid phone number'
                         ];
-                        const phoneCountry = getCountryCode4(value);
-                        if(!!phoneCountry && hitRegion?.en_name !== phoneCountry){
-                            message.push(`The current phone belongs to ${phoneCountry}`)
-                            if(!!hitRegion?.en_name && !!phonePrefix){
-                                message.push(`Phone number in the ${hitRegion?.en_name} start with +${phonePrefix}`)
+                        if(!Phone2){
+                            const phoneCountry = getCountryCode4(value);
+                            if(!!phoneCountry && hitRegion?.en_name !== phoneCountry){
+                                message.push(`The current phone belongs to ${phoneCountry}`)
+                                if(!!hitRegion?.en_name && !!phonePrefix){
+                                    message.push(`Phone number in the ${hitRegion?.en_name} start with +${phonePrefix}`)
+                                }
                             }
                         }
                         throw new Error(message.join("\n"));
@@ -287,16 +295,18 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 },
                 // message: 'Enter a valid phone number',
             }]} preserve={preserve}>
-               <PhoneInput
-                   onBlur={(e) => {
+               <MyPhoneInput
+                   onBlur={(e : any) => {
                        let phone : string = (e?.target?.value||'').replace(/\s/g,'') ;
                        if(!!phone) {
                            onPhoneChange?.(phone,ValidatePhone(phone));
                        }
                    }}
-                   placeholder={`Phone (For shipping updates) ${phonePrefix?'+' + phonePrefix:''}`} className={'col-span-6'}
-                       key={AdvancedPhoneInput ? (hitRegion?.code || 'default') : 'default'}
-                       countryCode={hitRegion?.code}
+                   placeholder={`Phone (For shipping updates) ${phonePrefix && !Phone2 ?'+' + phonePrefix:''}`}
+                   className={'col-span-6'}
+                       key={ !Phone2 && AdvancedPhoneInput ? (hitRegion?.code || 'default') : 'default'}
+                       countryCode={(hitRegion?.code as string)?.toLowerCase()}
+                       phonePrefix={phonePrefix}
                        advanced={AdvancedPhoneInput}
                        disablePrefillDialCode={DisablePrefillPhoneDialCode}
                        autoComplete={`${pf} tel`}
