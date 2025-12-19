@@ -40,6 +40,15 @@ export function api<T = any>(config : AxiosRequestConfig & {authRedirect ?: bool
     });
 }
 
+export async function produce(token: string, action: string, payload: any) {
+    return api({
+        method: 'post',
+        url: `/a/s/api/checkouts/${token}/produce/${action}`,
+        data: {
+            payload,
+        }
+    });
+}
 export function loaded(token : string,event : string){
     return api({
         method : 'post',
