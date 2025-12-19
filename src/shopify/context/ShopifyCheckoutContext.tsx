@@ -14,6 +14,7 @@ import {getBy} from "../lib/helper.ts";
 import {QueryDeliveryAddresses} from "@query/checkouts/queries.ts";
 import Validators from "validator";
 import PQueue from "p-queue";
+import {useEventCallback} from "usehooks-ts";
 
 
 export async function removeOtherAddresses(client : ApolloClient<any>,cartId : string,id : string){
@@ -175,7 +176,7 @@ export const ShopifyCheckoutProvider :FC<{
         return new PQueue({concurrency: 1});
     }, []);
 
-    const UpdateMutationCallback = useCallback(async (variables : any,
+    const UpdateMutationCallback = useEventCallback(async (variables : any,
                                               partialUpdate : boolean = true,
                                               force : boolean = false,
                                               ) => {
@@ -183,7 +184,7 @@ export const ShopifyCheckoutProvider :FC<{
         if(mutationLoading.current && !force) return;
         const config : any = {
             // awaitRefetchQueries : true,
-            refetchQueries: ['CartLineItems'],
+            refetchQueries: ['Summary','CartLineItems'],
             variables,
         };
         if(!partialUpdate){
@@ -227,8 +228,8 @@ export const ShopifyCheckoutProvider :FC<{
                 ... (data?.cartBuyerIdentityUpdate?.cart || {}),
             }
         }
-    }, [fn]);
-    const UpdateCallback = useCallback(async(input : CheckoutInput,
+    });
+    const UpdateCallback = useEventCallback(async(input : CheckoutInput,
                                              partialUpdate : boolean = true,
                                              force : boolean = false,
                                              keepBuyerCountryCode  : boolean = false,
@@ -262,7 +263,7 @@ export const ShopifyCheckoutProvider :FC<{
             },0);
         })
         return result;
-    },[])
+    })
     return <ShopifyCheckoutContext value={{
         loading,
         update : async (...args:any) => {
