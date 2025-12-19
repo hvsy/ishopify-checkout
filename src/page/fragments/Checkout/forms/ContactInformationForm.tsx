@@ -6,8 +6,12 @@ import {FormItem} from "@components/fragments/FormItem.tsx";
 export type ContactInformationFormProps = {};
 import {StepBlock} from "@components/frames/StepBlock.tsx";
 import Validators from "validator";
+import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
+import {useCurrentForm} from "../../../../container/FormContext.ts";
 
 export const ContactInformationForm: FC<ContactInformationFormProps> = (props) => {
+    const form =  useCurrentForm();
+    const checkoutSync = useCheckoutSync(form);
     return <StepBlock label={"Contact Information"} name={'contact-information'}>
         <FormItem name={['email']} rules={[{
             async validator(rule, value) {
@@ -22,6 +26,12 @@ export const ContactInformationForm: FC<ContactInformationFormProps> = (props) =
             }
         }]}>
             <Input placeholder={'Email (For order confirmation)'}
+                   onBlur={(event) => {
+                       const email = form.getFieldValue('email');
+                       if(Validators.isEmail(email)){
+                           return checkoutSync(true,false);
+                       }
+                   }}
                    tabIndex={0}
                    autoFocus={true}
                    autoComplete={'shipping email'}

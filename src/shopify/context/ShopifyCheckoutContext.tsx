@@ -183,13 +183,14 @@ export const ShopifyCheckoutProvider :FC<{
         if(mutationLoading.current && !force) return;
         const config : any = {
             // awaitRefetchQueries : true,
-            refetchQueries: ['GetDeliveryGroups','CartLineItems'],
+            refetchQueries:
+                partialUpdate ? ['GetDeliveryGroups',] : ['GetDeliveryGroups','CartLineItems'],
             variables,
+            awaitRefetchQueries : true,
         };
-        if(!partialUpdate){
-            config.awaitRefetchQueries = true;
-            // config.refetchQueries= ['CartLineItems'];
-        }
+        // if(!partialUpdate){
+        //     // config.refetchQueries= ['CartLineItems'];
+        // }
         import.meta.env.DEV && console.log('mutation checkout:',config);
         const response = await fn(config);
         let data = _cloneDeep(_get(response,'data'));

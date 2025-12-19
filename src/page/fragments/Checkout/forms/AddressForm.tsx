@@ -98,30 +98,15 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                    value: region,
                }
            ]);
-           onValuesChanged?.({
-               [prefix.join('.')]: {
-                   region_code : region?.code,
-                   region: region,
-               }
-           });
+           if(region.children.length === 0 ){
+               onValuesChanged?.({
+                   [prefix.join('.')]: {
+                       region_code : region?.code,
+                       region: region,
+                   }
+               });
+           }
        }
-    });
-    const clearRegion = useEventCallback(() => {
-        formInstance.setFields([
-            {
-                name: [...prefix, 'region_code'],
-                value: null,
-            }, {
-                name: [...prefix, 'region'],
-                value: null,
-            }
-        ]);
-        onValuesChanged?.({
-            [prefix.join('.')]: {
-                region_code : null,
-                region: null,
-            }
-        });
     });
     useEffect(() => {
         if(!Regions?.length) return;
@@ -145,7 +130,6 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 return (r.code) === region_code;
             });
             if(!hit_region){
-                // clearRegion();
                 setRegion(ipRegion || ups?.[0] || Regions?.[0]);
             }
         }
@@ -166,13 +150,17 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         })){
                 formInstance?.setFields([{
                     name: [...prefix, 'state_code'],
-                    // value: firstZone?.code  || null,
                     value : null,
                 }, {
                     name: [...prefix, 'state'],
-                    // value: firstZone || null,
                     value : null,
                 }])
+                onValuesChanged({
+                    [prefix.join('.')]: {
+                        state_code: null,
+                        state: null,
+                    }
+                })
         }
     }, [loading,region_code, firstZone?.id,]);
     const phonePrefix = hitRegion?.data?.phoneNumberPrefix;
