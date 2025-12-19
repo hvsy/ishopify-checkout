@@ -56,12 +56,17 @@ export const PhoneInput2  :FC<PhoneInput2Props> = (props) => {
             const p2 = new Phone2();
             p2.number = after;
             p2.dialCode = data.country.dialCode;
-            if(!p2.number) return;
+            if(!p2.number){
+                p2.dialCode = '';
+                onChange?.(p2)
+                return;
+            }
             if(!!value && value instanceof Phone2) {
                 if(p2.toString() === value.toString()){
                     return;
                 }
-            } else if(p2.toString() !==ValueString){
+            }
+            if(p2.toString() !==ValueString){
                 onChange?.(p2);
             }
         }

@@ -1,5 +1,5 @@
 import {FC, useEffect, useMemo, useRef} from "react";
-import {find as _find,capitalize as _capitalize,startsWith} from "lodash-es";
+import {isString as _isString,find as _find,capitalize as _capitalize,startsWith} from "lodash-es";
 import {Input} from "../../../components/Input.tsx";
 import {CircleHelp} from "lucide-react";
 import {Tooltip} from "@components/fragments/Tooltip.tsx";
@@ -285,9 +285,9 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             }]} preserve={preserve}>
                <MyPhoneInput
                    onBlur={(e : any) => {
-                       let phone : string = (e?.target?.value||'').replace(/\s/g,'') ;
+                       const phone = formInstance.getFieldValue([...prefix, Phone2 ? 'phone2' :'phone'])
                        if(!!phone) {
-                           onPhoneChange?.(phone,ValidatePhone(phone));
+                           onPhoneChange?.(_isString(phone) ? phone : phone?.toString(),ValidatePhone(phone));
                        }
                    }}
                    placeholder={`Phone (For shipping updates) ${phonePrefix && !Phone2 ?'+' + phonePrefix:''}`}
