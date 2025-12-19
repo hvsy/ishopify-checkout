@@ -72,29 +72,15 @@ export default defineConfig(({mode}) => {
         server: {
             host: '0.0.0.0',
             allowedHosts: true,
-            // origin : "https://ladybird-nearby-steadily.ngrok-free.app",
             port: port ? parseInt(port) : undefined,
-            // cors : {
-            //   "origin": "*",
-            //   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-            //   "preflightContinue": false,
-            //   "optionsSuccessStatus": 204
-            // },
             cors: {
                 origin: ['http://ttt.local.vtoshop.com:3000', 'https://localshopfly.myshopify.com', 'https://localshopfly.myshopify.com/'],
-                // origin : ['*'],
-                // origin : '*',
                 credentials: true,
                 "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
                 "preflightContinue": false,
                 "optionsSuccessStatus": 204
             },
-            // cors : true,
             hmr: {
-                // clientPort: 443,
-                // protocol : 'wss',
-                // host : 'ladybird-nearby-steadily.ngrok-free.app',
-                // clientPort : 5173
             },
             proxy: {
                 [proxy_api]: {

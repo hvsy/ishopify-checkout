@@ -9,6 +9,7 @@
     textarea::placeholder {
         color: theme(textColor);
     }
+
     :root {
         --background: 0 0% 100%;
         --foreground: 240 10% 3.9%;
@@ -158,5 +159,17 @@ img{
 
 .swiper.slide-h-full .swiper-wrapper .swiper-slide {
     height: auto;
+}
+
+.react-international-phone-country-selector-button{
+    min-width: 20px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px white inset !important; /* Use the desired background color */
+    transition: background-color 5000s ease-in-out 0s; /* A long transition delay helps prevent immediate color change */
 }
 

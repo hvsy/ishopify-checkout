@@ -40,11 +40,7 @@ export const PhoneInput: FC<PhoneInputProps> = (props) => {
                 }else if(phone === '+'){
                     return;
                 }else {
-                    // if(Validators.isMobilePhone(phone,"any",{
-                    //     strictMode : true,
-                    // })){
                     onChange?.(phone);
-                    // }
                 }
             }
 

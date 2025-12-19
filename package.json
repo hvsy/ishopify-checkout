@@ -44,7 +44,7 @@
     "react-dom": "^19.2.0",
     "react-error-boundary": "^6.0.0",
     "react-frame-component": "^5.2.7",
-    "react-international-phone": "^4.6.0",
+    "react-international-phone": "^4.6.1",
     "react-responsive": "^10.0.0",
     "react-router-dom": "^6.22.3",
     "rimraf": "^5.0.7",
@@ -59,8 +59,6 @@
   },
   "devDependencies": {
     "@sentry/vite-plugin": "^4.6.0",
-    "@tanstack/react-devtools": "^0.8.4",
-    "@tanstack/react-pacer-devtools": "^0.5.0",
     "@types/big.js": "^6.2.2",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash-es": "^4.17.12",

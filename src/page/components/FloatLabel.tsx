@@ -33,6 +33,8 @@ export type FloatLabelProps = {
     loading ?: boolean;
     tabIndex ?: number;
     autoScroll ?: boolean;
+    prefixClassName ?: string;
+    elementClassName ?: string;
 };
 
 export const FloatLabel: FC<FloatLabelProps> = (props) => {
@@ -47,6 +49,8 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
         validated,
         loading = false,
         autoScroll=false,
+        prefixClassName = '',
+        elementClassName = '',
         errors,warnings,...others
     } = props;
     const h : any = {
@@ -62,14 +66,14 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
             <Skeleton className={'h-8 w-full'}/>
         </div>
     }
-    const floatClassName = cn("flex-nowrap text-nowrap flex text-sm px-3 text-[#707070] select-none pointer-events-none",{
+    const floatClassName = cn("flex-nowrap text-nowrap flex text-sm px-3 text-[#707070] select-none pointer-events-none",elementClassName,{
         "absolute top-1"  : !!value,
         "absolute inset-0 flex-row items-center"  : !value,
     },);
     return <div className={`flex flex-col pt-2 space-y-1 ${className || ''}`} ref={containerRef}>
         {!!label && <div>{label}</div>}
         <div className={twMerge(clsx(`bg-white border rounded-md relative flex flex-row justify-between items-stretch box-border `,border,h))}>
-            {prefix && <div className={'flex flex-col justify-center px-3 bg-gray-100 flex-shrink-0'}>
+            {prefix && <div className={cn(`flex flex-col justify-center px-3 bg-gray-100 flex-shrink-0 ${prefixClassName}`)}>
                 {prefix}
             </div>}
             <div className={'relative flex-1 flex flex-row items-stretch overflow-hidden'}>
@@ -91,7 +95,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
                              // }
                          }}
                          onChange={onChange}
-                         className={`peer flex-1 w-auto border-none bg-transparent focus:outline-none appearance-none px-3 peer-placeholder-shown:text-xs placeholder-shown:pt-0 ${(float && !!value) ? `pt-5` : ''}`}>
+                         className={`peer flex-1 w-auto border-none bg-transparent focus:outline-none appearance-none px-3 peer-placeholder-shown:text-xs placeholder-shown:pt-0 ${(float && !!value) ? `pt-5` : ''} ${elementClassName}`}>
                     {children}
                 </Element>}
                 {float && <div
