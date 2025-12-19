@@ -1,6 +1,11 @@
 import {useCurrentForm} from "../../container/FormContext.ts";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
-import {CheckoutInput, map2, useMutationCheckout} from "../context/ShopifyCheckoutContext.tsx";
+import {
+    CheckoutInput,
+    map2,
+    useMutationCheckout,
+    useShopifyCheckoutLoading
+} from "../context/ShopifyCheckoutContext.tsx";
 import {useRef} from "react";
 import {scrollToError} from "@components/frames/FormContainer.tsx";
 import {get as _get, isArray, isEmpty, isEqual, isObjectLike} from "lodash-es";
@@ -8,6 +13,7 @@ import {produce} from "@lib/api.ts";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
 import {FormInstance} from "rc-field-form";
 import {buildAddress} from "@lib/buildAddress.ts";
+import {useSummary} from "../checkouts/hooks/useSummary.tsx";
 
 function formatFormValues(values : any,validate_phone : boolean = true){
     const address = buildAddress(values?.shipping_address || {},validate_phone);
@@ -38,6 +44,8 @@ export function useFormValidate() {
     const mutation = useMutationCheckout();
     const cart = useCartStorage();
     const last = useRef<any>(null);
+    const {loading,groups} = useSummary();
+    const checkoutLoading = useShopifyCheckoutLoading();
     return async (keepBuyerCountryCode  : boolean = false) => {
         try {
             const values = await submit(form);
@@ -92,6 +100,9 @@ export function useFormValidate() {
                     produce(cart.token,"shopify_validate",{
                         errors,fields,values,
                         context : form.getFieldValue('context'),
+                        shipping_methods_loading : loading?.shipping_methods,
+                        checkout_loading : checkoutLoading,
+                        shipping_methods : _get(groups,'0.deliveryOptions',null),
                     }).catch();
                     return false;
                 }
@@ -112,6 +123,9 @@ export function useFormValidate() {
                     values : {
                         ...formatFormValues(e.values,false),
                         context : e.values?.context || null,
+                        shipping_methods_loading : loading?.shipping_methods,
+                        checkout_loading : checkoutLoading,
+                        shipping_methods : _get(groups,'0.deliveryOptions',null),
                     },
                     errors : e.errorFields,
                 }).catch()
