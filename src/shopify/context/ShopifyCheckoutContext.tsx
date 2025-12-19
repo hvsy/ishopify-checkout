@@ -1,4 +1,4 @@
-import {createContext, FC, ReactNode, use, useCallback, useRef} from "react";
+import {createContext, FC, ReactNode, use, useCallback, useMemo, useRef} from "react";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
 import {ApolloClient, from, gql, useApolloClient, useMutation, useQueryRefHandlers, useReadQuery} from "@apollo/client";
 import {MutateCheckout, MutateRemoveAddresses} from "@query/checkouts/mutations.ts";
@@ -13,6 +13,7 @@ import {useDeliveryGroupMutation} from "../checkouts/hooks/useSummary.tsx";
 import {getBy} from "../lib/helper.ts";
 import {QueryDeliveryAddresses} from "@query/checkouts/queries.ts";
 import Validators from "validator";
+import PQueue from "p-queue";
 
 
 export async function removeOtherAddresses(client : ApolloClient<any>,cartId : string,id : string){
@@ -170,8 +171,11 @@ export const ShopifyCheckoutProvider :FC<{
     const groupsMutation = useDeliveryGroupMutation();
     const mutationLoading = useRef(false);
     mutationLoading.current = loading;
+    const queue = useMemo(() => {
+        return new PQueue({concurrency: 1});
+    }, []);
 
-    const UpdateCallback = useCallback(async (variables : any,
+    const UpdateMutationCallback = useCallback(async (variables : any,
                                               partialUpdate : boolean = true,
                                               force : boolean = false,
                                               ) => {
@@ -224,43 +228,49 @@ export const ShopifyCheckoutProvider :FC<{
             }
         }
     }, [fn]);
+    const UpdateCallback = useCallback(async(input : CheckoutInput,
+                                             partialUpdate : boolean = true,
+                                             force : boolean = false,
+                                             keepBuyerCountryCode  : boolean = false,
+    )=>{
+        let vars = formatInput(input,keepBuyerCountryCode);
+        let result= await UpdateMutationCallback(vars,partialUpdate,force,);
+        let cart = result?.cart;
+        const warningCode =result ?.warnings?.[0]?.code;
+        if(warningCode === 'DUPLICATE_DELIVERY_ADDRESS'){
+            await removeOtherAddresses(client,storage.gid,vars.addressId)
+            result = await UpdateMutationCallback(vars,partialUpdate,force,);
+            cart = result?.cart;
+        }
+        groupsMutation(cart?.deliveryGroups || null);
+        const group = _get(cart,'deliveryGroups.edges.0.node');
+        const groupId = group?.id;
+        const after : any = {
+
+        }
+        if(!!groupId){
+            after['shipping_group_id'] = groupId;
+        }
+        const selected = group?.selectedDeliveryOption?.handle;
+        if(!!selected){
+            after['shipping_line_id'] = selected;
+        }
+        await new Promise((resolve) => {
+            setTimeout(() => {
+                form.setFieldsValue(after);
+                resolve(true);
+            },0);
+        })
+        return result;
+    },[])
     return <ShopifyCheckoutContext value={{
         loading,
-        update : async(input : CheckoutInput,
-                       partialUpdate : boolean = true,
-                       force : boolean = false,
-                       keepBuyerCountryCode  : boolean = false,
-        )=>{
-            let vars = formatInput(input,keepBuyerCountryCode);
-            let result= await UpdateCallback(vars,partialUpdate,force,);
-            let cart = result?.cart;
-            const warningCode =result ?.warnings?.[0]?.code;
-            if(warningCode === 'DUPLICATE_DELIVERY_ADDRESS'){
-                    await removeOtherAddresses(client,storage.gid,vars.addressId)
-                    result = await UpdateCallback(vars,partialUpdate,force,);
-                    cart = result?.cart;
-            }
-            groupsMutation(cart?.deliveryGroups || null);
-            const group = _get(cart,'deliveryGroups.edges.0.node');
-            const groupId = group?.id;
-            const after : any = {
-
-            }
-            if(!!groupId){
-                after['shipping_group_id'] = groupId;
-            }
-            const selected = group?.selectedDeliveryOption?.handle;
-            if(!!selected){
-                after['shipping_line_id'] = selected;
-            }
-            await new Promise((resolve) => {
-                setTimeout(() => {
-                    form.setFieldsValue(after);
-                    resolve(true);
-                },0);
+        update : async (...args:any) => {
+            return await queue.add(async() => {
+                //@ts-ignore
+                return await UpdateCallback(...args);
             })
-            return result;
-        }
+        },
     }}>
         {children}
     </ShopifyCheckoutContext>
