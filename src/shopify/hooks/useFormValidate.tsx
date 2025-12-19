@@ -44,7 +44,7 @@ export function useFormValidate() {
     const mutation = useMutationCheckout();
     const cart = useCartStorage();
     const last = useRef<any>(null);
-    const {loading,groups} = useSummary();
+    const {loading,groups,refetchDeliveryGroup} = useSummary();
     const checkoutLoading = useShopifyCheckoutLoading();
     return async (keepBuyerCountryCode  : boolean = false) => {
         try {
@@ -120,6 +120,14 @@ export function useFormValidate() {
             };
         } catch (e : any) {
             if(isObjectLike(e) && e.hasOwnProperty('errorFields')){
+                let forceUpdateShippingLine = false;
+                let needForce = !loading.summary && !loading?.shipping_methods && !checkoutLoading &&
+                    !isEmpty(_get(groups,'0.deliveryOptions',null));
+                if(e.errorFields.length === 1 && (e.errorFields?.[0]?.name||[]).join('.') === 'shipping_line_id'
+                    &&needForce
+                ){
+                    refetchDeliveryGroup?.()
+                }
                 produce(cart.token,"form_validate",{
                     values : {
                         ...formatFormValues(e.values,false),
@@ -128,6 +136,8 @@ export function useFormValidate() {
                         shipping_methods_loading : loading?.shipping_methods,
                         checkout_loading : checkoutLoading,
                         shipping_methods : _get(groups,'0.deliveryOptions',null),
+                        need_force : needForce,
+                        force_fetch_delivery_group : forceUpdateShippingLine,
                     },
                     errors : e.errorFields,
                 }).catch()

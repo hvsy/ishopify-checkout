@@ -66,7 +66,7 @@ export const SummaryQuery = gql([
     QueryCartFieldsFragment,
     QueryDeliveryFragment,
     QueryBuyerIdentityFragment,
-    QueryDeliveryGroupsFragment,
+    // QueryDeliveryGroupsFragment,
 ].join("\n"));
 
 

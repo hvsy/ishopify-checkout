@@ -1,4 +1,4 @@
-query Summary($cartId :ID!,$withCarrierRates : Boolean = false){
+query Summary($cartId :ID!){
     shop {
         id
         moneyFormat
@@ -43,6 +43,5 @@ query Summary($cartId :ID!,$withCarrierRates : Boolean = false){
     }
     cart(id : $cartId){
         ...CartFields
-        ...DeliveryGroups @defer
     }
 }
