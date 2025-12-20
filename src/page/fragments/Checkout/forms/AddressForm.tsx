@@ -63,6 +63,7 @@ export type AddressFormProps = {
 const features = getArrayFromMeta('features') || [];
 const AdvancedPhoneInput = features?.includes('advanced_phone_input') || false;
 const DisablePrefillPhoneDialCode = features?.includes('disable_prefill_phone_dial_code') || false;
+const DisablePhoneAutoFill = features?.includes('disable_phone_autofill') || false;
 const MyPhoneInput = features.includes('phone2') ? PhoneInput2 : PhoneInput;
 
 const Phone2 = MyPhoneInput === PhoneInput2;
@@ -298,7 +299,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        phonePrefix={phonePrefix}
                        advanced={AdvancedPhoneInput}
                        disablePrefillDialCode={DisablePrefillPhoneDialCode}
-                       autoComplete={`${pf} tel-national`}
+                       autoComplete={DisablePhoneAutoFill ? 'off' :`${pf} tel-national`}
                        // prefix={phonePrefix ? <div>+{phonePrefix}</div> : undefined}
                        suffix={<Tooltip icon={<CircleHelp size={16}/>}>
                            <p>In case we need to contact</p>
