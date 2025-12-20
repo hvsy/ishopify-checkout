@@ -243,25 +243,27 @@ export const ShopifyCheckoutProvider :FC<{
             result = await UpdateMutationCallback(vars,partialUpdate,force,);
             cart = result?.cart;
         }
-        groupsMutation(cart?.deliveryGroups || null);
-        const group = _get(cart,'deliveryGroups.edges.0.node');
-        const groupId = group?.id;
-        const after : any = {
+        if(cart?.hasOwnProperty('deliveryGroups')){
+            groupsMutation(cart?.deliveryGroups || null);
+            const group = _get(cart,'deliveryGroups.edges.0.node');
+            const groupId = group?.id;
+            const after : any = {
 
+            }
+            if(!!groupId){
+                after['shipping_group_id'] = groupId;
+            }
+            const selected = group?.selectedDeliveryOption?.handle;
+            if(!!selected){
+                after['shipping_line_id'] = selected;
+            }
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    form.setFieldsValue(after);
+                    resolve(true);
+                },0);
+            })
         }
-        if(!!groupId){
-            after['shipping_group_id'] = groupId;
-        }
-        const selected = group?.selectedDeliveryOption?.handle;
-        if(!!selected){
-            after['shipping_line_id'] = selected;
-        }
-        await new Promise((resolve) => {
-            setTimeout(() => {
-                form.setFieldsValue(after);
-                resolve(true);
-            },0);
-        })
         return result;
     })
     const queue = useMemo(() => {

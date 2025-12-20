@@ -1,8 +1,7 @@
-import {FC, InputHTMLAttributes, ReactNode, useEffect, useMemo, useRef, useState} from "react";
-import {usePhoneInput, FlagImage, CountrySelector, getCountry, defaultCountries} from "react-international-phone";
+import {FC, InputHTMLAttributes, ReactNode, RefObject, useEffect, useRef,} from "react";
+import {usePhoneInput,} from "react-international-phone";
 import {Input} from "../../page/components/Input.tsx";
 import {CountriesSelector} from "./CountriesSelector.tsx";
-import usePrevious from "./usePrevious.tsx";
 import {Phone2} from "../Phone2.ts";
 
 export type PhoneInput2Props = {
@@ -18,11 +17,16 @@ export type PhoneInput2Props = {
     onBlur?: InputHTMLAttributes<HTMLInputElement>['onBlur'];
     phonePrefix ?: string;
     children ?: ReactNode;
+    elementRef ?: RefObject<any>,
 };
 
 export const PhoneInputInner2: FC<PhoneInput2Props> = (props) => {
-    const {children,suffix,className,value,onChange,...others} = props;
+    const {children,suffix,className,
+        countryCode,
+        phonePrefix,
+        value,onChange,...others} = props;
     return <Input
+        type={'tel'}
         {...others}
         prefixClassName={'bg-transparent p-0 border-none'}
         prefix={children}
@@ -38,8 +42,8 @@ export const PhoneInputInner2: FC<PhoneInput2Props> = (props) => {
 
 export const PhoneInput2  :FC<PhoneInput2Props> = (props) => {
     const {
-        countryCode,
         children,
+        countryCode,
         value,  onChange, ...others
     } = props;
     const ValueString=  value ? value + '' :  '';
@@ -85,7 +89,9 @@ export const PhoneInput2  :FC<PhoneInput2Props> = (props) => {
             }
         }
     }, [countryCode,]);
-    return <PhoneInputInner2  countryCode={countryCode} {...others} value={inputValue} onChange={handlePhoneValueChange}>
+    return <PhoneInputInner2
+        elementRef={inputRef}
+        countryCode={countryCode} {...others} value={inputValue} onChange={handlePhoneValueChange}>
         {country?.iso2 ? <CountriesSelector iso2={country.iso2}
                            onSelect={country=> {
                                if(country?.iso2)

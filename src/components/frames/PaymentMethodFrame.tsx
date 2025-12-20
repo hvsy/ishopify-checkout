@@ -12,7 +12,7 @@ export type PaymentMethodFrameProps = {
 
 export const PaymentMethodFrame: FC<PaymentMethodFrameProps> = (props) => {
     let {children} = props;
-    const {ref} = useRouteLoaderData('checkout') as any;
+    const {ref} = useRouteLoaderData('checkout_container') as any;
     const data = useReadQuery(ref) as any;
     const total = _get(data,'data.cart.cost.totalAmount.amount',0);
     if(!parseFloat(total)){

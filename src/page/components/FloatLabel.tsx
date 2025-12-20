@@ -35,7 +35,9 @@ export type FloatLabelProps = {
     autoScroll ?: boolean;
     prefixClassName ?: string;
     elementClassName ?: string;
+    type ?: string;
 };
+
 
 export const FloatLabel: FC<FloatLabelProps> = (props) => {
     const {placeholder : ph,children,prefix,suffix,
