@@ -1,20 +1,18 @@
-import {gql, NetworkStatus, useApolloClient, useQuery, useReadQuery} from "@apollo/client";
-import {get as _get, has as _has, isArray as _isArray} from "lodash-es";
+import {NetworkStatus, useApolloClient, useQuery, useReadQuery} from "@apollo/client";
+import {get as _get, has as _has, isArray as _isArray, isEmpty} from "lodash-es";
 
 import {useRouteLoaderData} from "react-router-dom";
 import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
-import {SummaryQuery} from "../../../App.tsx";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
 import {CartStorage} from "../../context/CartStorage.ts";
-import {createContext, FC, use, useState} from "react";
+import {createContext, FC, use, } from "react";
 import {FormContainer} from "@components/frames/FormContainer.tsx";
 import {ShopifyFrame} from "../../ShopifyFrame.tsx";
 import {ShopifyCheckoutProvider} from "../../context/ShopifyCheckoutContext.tsx";
 import Form from "rc-field-form";
 import {PaymentContainer} from "../../../container/PaymentContext.tsx";
 import {PayingContainer} from "@components/frames/PayingContainer.tsx";
-import {QueryDeliveryGroups} from "@query/checkouts/queries.ts";
-import {QueryDeliveryGroupsFragment} from "@query/checkouts/fragments/fragments.ts";
+import {GetDeliveryGroupQuery} from "../../../gql/GetDeliveryGroupQuery.ts";
 
 
 export const SummaryContext = createContext<{
@@ -39,26 +37,15 @@ export const SummaryContext = createContext<{
 });
 
 
-
-export const SummaryContextProvider :FC<any> = (props) => {
-    const {children} = props;
-
-
-    //
-    const {ref,storage} = useRouteLoaderData('checkout') as any;
-    const {data : json ,error,networkStatus} = useReadQuery<any>(ref);
-
-
+function useDeliveryGroups(cartId: string){
     const {loading :deliveryGroupsLoading,
-        refetch : deliveryGroupRefetch,
-        data,error : deliveryGroupError,
-        networkStatus : deliveryGroupsStatus} = useQuery(gql([
-        QueryDeliveryGroups,
-        QueryDeliveryGroupsFragment,
-    ].join("\n")),{
+        refetch,
+        data,error,
+        networkStatus : deliveryGroupsStatus} = useQuery(GetDeliveryGroupQuery,{
         refetchWritePolicy : 'overwrite',
         variables : {
-            cartId : storage.gid,
+            cartId,
+            withCarrierRates :true,
         }
     })
     const edges = _get(data,'cart.deliveryGroups.edges');
@@ -68,10 +55,26 @@ export const SummaryContextProvider :FC<any> = (props) => {
     const query_loading = deliveryGroupsLoading || deliveryGroupsStatus !== NetworkStatus.ready;
     const methods_loading = !_has(data?.cart, 'deliveryGroups') ||
         !_isArray(data?.cart?.deliveryGroups?.edges) || (edges === undefined);
+    return {
+        loading : query_loading || methods_loading,
+        deliveryGroups : groups,
+        refetch,error,
+    }
+}
 
-    // console.log('[delivery] groups:',edges);
+export const SummaryContextProvider :FC<any> = (props) => {
+    const {children} = props;
+
+    const {ref,storage} = useRouteLoaderData('checkout_container') as any;
+    const {data : json ,networkStatus} = useReadQuery<any>(ref);
+
+    const {loading : shipping_methods_loading,
+        refetch : refetchDeliveryGroup,
+        deliveryGroups,
+    } = useDeliveryGroups(storage.gid);
+
     const loading = {
-        shipping_methods: query_loading || methods_loading,
+        shipping_methods: shipping_methods_loading,
         summary : [NetworkStatus.loading,
             NetworkStatus.refetch,
             NetworkStatus.fetchMore,
@@ -90,9 +93,9 @@ export const SummaryContextProvider :FC<any> = (props) => {
                 return getCheckoutFromSummary(json, 'cart');
             },
             ing,
-            refetchDeliveryGroup : deliveryGroupRefetch,
+            refetchDeliveryGroup,
             loading,
-            groups: groups as any[],
+            groups: deliveryGroups as any[],
             storage: storage as CartStorage,
         }}>
             <ShopifyCheckoutProvider form={form}>
@@ -127,7 +130,8 @@ export function useDeliveryGroupMutation() {
             cartId: storage.gid, withCarrierRates: true,
         };
         const all = client.readQuery({
-            query: SummaryQuery,
+            // query: SummaryQuery,
+            query : GetDeliveryGroupQuery,
             variables: vars
         })
         if(!all){
@@ -136,7 +140,8 @@ export function useDeliveryGroupMutation() {
             return;
         }
         client.writeQuery({
-            query: SummaryQuery,
+            // query: SummaryQuery,
+            query: GetDeliveryGroupQuery,
             variables: vars,
             data: {
                 ...all,

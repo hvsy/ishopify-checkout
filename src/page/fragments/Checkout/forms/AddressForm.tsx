@@ -286,8 +286,9 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                <MyPhoneInput
                    onBlur={(e : any) => {
                        const phone = formInstance.getFieldValue([...prefix, Phone2 ? 'phone2' :'phone'])
-                       if(!!phone) {
-                           onPhoneChange?.(_isString(phone) ? phone : phone?.toString(),ValidatePhone(phone));
+                       const p = _isString(phone) ? phone : phone?.toString();
+                       if(!!p) {
+                           onPhoneChange?.(p,ValidatePhone(phone));
                        }
                    }}
                    placeholder={`Phone (For shipping updates) ${phonePrefix && !Phone2 ?'+' + phonePrefix:''}`}
@@ -297,7 +298,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        phonePrefix={phonePrefix}
                        advanced={AdvancedPhoneInput}
                        disablePrefillDialCode={DisablePrefillPhoneDialCode}
-                       autoComplete={`${pf} tel`}
+                       autoComplete={`${pf} tel-national`}
                        // prefix={phonePrefix ? <div>+{phonePrefix}</div> : undefined}
                        suffix={<Tooltip icon={<CircleHelp size={16}/>}>
                            <p>In case we need to contact</p>

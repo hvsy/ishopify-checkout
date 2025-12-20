@@ -3,12 +3,9 @@ import Form, {FormInstance} from "rc-field-form";
 import {FormContext,} from "../../container/FormContext.ts";
 import {merge as _merge, get as _get, has as _has, isArray as _isArray, filter, isEmpty} from "lodash-es";
 import {CheckoutInput, map2, useMutationCheckout} from "../../shopify/context/ShopifyCheckoutContext.tsx";
-import {useDeliveryGroupMutation, useSummary} from "../../shopify/checkouts/hooks/useSummary.tsx";
-import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
-import Validators from "validator";
+import {useDeliveryGroupMutation,} from "../../shopify/checkouts/hooks/useSummary.tsx";
 import {buildAddress} from "@lib/buildAddress.ts";
 import {useAsyncQueuer,} from "@tanstack/react-pacer";
-import {useDebounceCallback} from "usehooks-ts";
 
 
 
@@ -75,7 +72,6 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         if(!countryChanged && !provinceChanged  && !shippingMethodChanged){
             return;
         }
-        // if(countryChanged){
         if(countryChanged || provinceChanged){
             mutationDeliveryGroups(null);
         }

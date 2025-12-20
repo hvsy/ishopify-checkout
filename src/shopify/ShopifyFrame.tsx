@@ -14,7 +14,7 @@ import {useDocumentTitle} from "usehooks-ts";
 
 export const ShopifyFrame: FC<ShopifyFrameProps> = (props) => {
     const {children} = props;
-    const {ref} = useRouteLoaderData('checkout') as any;
+    const {ref} = useRouteLoaderData('checkout_container') as any;
     const data = useReadQuery(ref) as any;
     const codes = (_get(data, 'data.cart.discountCodes', []) || []).filter((c: any) => !!c.applicable).map((c: any) => c.code);
     const shop = data?.data?.shop;

@@ -7,6 +7,6 @@ export function useCartStorage(){
     //     return  new CartStorage(token!);
     // },[token]);
     // const {storage} = useLoaderData() as any;
-    const {storage} = useRouteLoaderData('checkout') as any;
+    const {storage} = useRouteLoaderData('checkout_container') as any;
     return storage as CartStorage;
 }

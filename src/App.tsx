@@ -179,6 +179,7 @@ let router = createBrowserRouter([
         }
     },{
         path: `${prefix}/orders/:token/:action?`,
+        id : 'order',
         async loader(request) {
             const {params} = request;
             const {token,action}  = params;
@@ -187,7 +188,7 @@ let router = createBrowserRouter([
         Component: OrderPage,
     },{
         path : prefix + '/',
-        id : 'checkout',
+        id : 'checkout_container',
         Component : ShopifyCheckoutFrame,
         async loader({request,params,context}) {
             return await getCheckout(request,params,context)
@@ -198,10 +199,8 @@ let router = createBrowserRouter([
                 'id' : 'approve',
                 Component : Checkout,
             },{
+                'id' : 'checkout',
                 path : 'checkouts/:token/:action?',
-                // async loader({request,params,context}) {
-                //     return await getCheckout(request,params,context)
-                // },
                 Component: Checkout,
             }
         ]
