@@ -181,7 +181,12 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             <FormItem name={[...prefix, 'region']} preserve={true}>
                 <div className={'hidden'}/>
             </FormItem>
-            <FormItem name={[...prefix,'region_code']} preserve={true}>
+            <FormItem name={[...prefix,'region_code']} preserve={true}
+                      rules={[{
+                          required : true,
+                          message : 'Select a country or region',
+                      }]}
+            >
                 <NewRegionSelector
                     loading={loading}
                     zones={Regions}
