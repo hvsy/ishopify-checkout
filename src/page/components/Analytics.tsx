@@ -1,6 +1,7 @@
 import {FC, useEffect} from "react";
 import mitt from "mitt";
 import {getMetaContent} from "@lib/metaHelper.ts";
+import {getShopifyY} from "@lib/shopify.ts";
 
 export type AnalyticsProps = {};
 
@@ -12,6 +13,10 @@ export const Analytics: FC<AnalyticsProps> = (props) => {
             import('@microsoft/clarity').then((m) => {
                 const clarity  =m.default
                 clarity.init(id);
+                const sy = getShopifyY()
+                if(!!sy){
+                    clarity.identify(sy)
+                }
             })
         }
     }, []);
