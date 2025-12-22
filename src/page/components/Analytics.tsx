@@ -1,10 +1,20 @@
 import {FC, useEffect} from "react";
 import mitt from "mitt";
+import {getMetaContent} from "@lib/metaHelper.ts";
 
 export type AnalyticsProps = {};
 
 export const Analytics: FC<AnalyticsProps> = (props) => {
     const {} = props;
+    useEffect(() => {
+        const id = getMetaContent("clarity");
+        if(!!id){
+            import('@microsoft/clarity').then((m) => {
+                const clarity  =m.default
+                clarity.init(id);
+            })
+        }
+    }, []);
     useEffect(() => {
         let memory = new Map<ReportEvent,any>();
         window.Analytics = mitt();

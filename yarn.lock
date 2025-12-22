@@ -540,6 +540,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@microsoft/clarity@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@microsoft/clarity/-/clarity-1.0.2.tgz#9d95c81c3d6976229aa81e296362c6eae55f262d"
+  integrity sha512-9EZYROFpJxEGmQpHvUFqvD3ZJ7QQSqnibYSWmS+1xusoZfG1QQ1/Al9yVBBc11DWMbJrs1pe1hLT273it/skJg==
+
 "@mswjs/cookies@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmmirror.com/@mswjs/cookies/-/cookies-1.1.0.tgz#1528eb43630caf83a1d75d5332b30e75e9bb1b5b"
