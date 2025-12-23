@@ -1,6 +1,24 @@
 import Cookies from "js-cookie";
 import LocalExpiredStorage from "./LocalExpiredStorage.ts";
 
+
+export function getShopifyS(){
+    const cv = Cookies.get('_shopify_s');
+    if(!!cv) return cv;
+    const ccv = Cookies.get('_custom_shopify_s');
+    if(!!ccv) return ccv;
+    try {
+        const csy = LocalExpiredStorage.getItem('_custom_shopify_s') || null;
+        if(!!csy) return csy;
+    } catch (e) {
+
+    }
+    try {
+        return sessionStorage.getItem('_custom_shopify_s') || null
+    } catch (e) {
+        return null;
+    }
+}
 export function getShopifyY(){
     const cv = Cookies.get('_shopify_y');
     if(!!cv) return cv;

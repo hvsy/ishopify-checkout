@@ -1,7 +1,7 @@
 import {FC, useEffect} from "react";
 import mitt from "mitt";
 import {getMetaContent} from "@lib/metaHelper.ts";
-import {getShopifyY} from "@lib/shopify.ts";
+import {getShopifyS, getShopifyY} from "@lib/shopify.ts";
 
 export type AnalyticsProps = {};
 
@@ -14,8 +14,13 @@ export const Analytics: FC<AnalyticsProps> = (props) => {
                 const clarity  =m.default
                 clarity.init(id);
                 const sy = getShopifyY()
+                const ss = getShopifyS();
                 if(!!sy){
-                    clarity.identify(sy)
+                    if(!!ss){
+                        clarity.identify(sy,ss);
+                    }else{
+                        clarity.identify(sy)
+                    }
                 }
             })
         }
