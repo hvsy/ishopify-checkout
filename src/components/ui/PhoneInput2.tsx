@@ -24,6 +24,8 @@ export const PhoneInputInner2: FC<PhoneInput2Props> = (props) => {
     const {children,suffix,className,
         countryCode,
         phonePrefix,
+        disablePrefillDialCode,
+        advanced,
         value,onChange,...others} = props;
     return <Input
         type={'tel'}

@@ -1,4 +1,4 @@
-import {DetailedHTMLProps, FC, InputHTMLAttributes, ReactNode, RefObject, useRef} from "react";
+import {FC, InputHTMLAttributes, ReactNode, RefObject, useRef} from "react";
 import {clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
 import {Loading} from "@components/fragments/Loading.tsx";
@@ -6,7 +6,7 @@ import {Skeleton} from "@components/ui/Skeleton.tsx";
 import {cn} from "@lib/cn.ts";
 
 export type FloatLabelProps = {
-    elementRef ?: RefObject<any>,
+    elementRef ?: RefObject<any> | ((ref : any)=>void),
     autoComplete ?: string;
     name ?: string;
     placeholder ?: string;

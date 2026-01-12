@@ -61,30 +61,37 @@ export const ApolloPreloader = createQueryPreloader(ApolloStoreFrontClient);
 
 
 
+import {Features} from "@lib/flags.ts";
+
 export function transform_address(data : any,prefix : string = "data.cart"){
     const delivery = _get(data, `${prefix}.delivery.addresses.0`, {})
     const address = delivery?.address || {};
     const areas = Array.from(address.formatted || []).reverse();
     const id = delivery.id === 'gid://shopify/CartSelectableAddress/0' ? null : delivery.id;
+    const phone2 = Features.includes('phone2');
+    const shipping : any = {
+        id,
+        first_name: address.firstName,
+        last_name: address.lastName,
+        city: address.city,
+        region: areas[0] ? {
+            en_name: areas[0],
+        } : null,
+        state: areas.length > 4 ? {
+            en_name: areas[1],
+        } : null,
+        region_code: address.countryCode,
+        state_code: address.provinceCode,
+        line1: address.address1,
+        line2: address.address2,
+        zip: address.zip,
+        phone: address.phone || '',
+    };
+    if(phone2){
+        shipping['phone2'] = address.phone || '';
+    }
     return {
         shipping_address_id: id,
-        shipping_address: {
-            id,
-            first_name: address.firstName,
-            last_name: address.lastName,
-            city: address.city,
-            region: areas[0] ? {
-                en_name: areas[0],
-            } : null,
-            state: areas.length > 4 ? {
-                en_name: areas[1],
-            } : null,
-            region_code: address.countryCode,
-            state_code: address.provinceCode,
-            line1: address.address1,
-            line2: address.address2,
-            zip: address.zip,
-            phone: address.phone || '',
-        }
+        shipping_address: shipping,
     }
 }

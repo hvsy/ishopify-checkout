@@ -35,8 +35,14 @@ async function submit(form : FormInstance,validate_phone : boolean = true){
             ]
         });
     }
-    const values =  await form.validateFields();
-    return formatFormValues(values,validate_phone);
+    try{
+        const values =  await form.validateFields();
+        import.meta.env.DEV && console.log('form validate values:',values);
+        return formatFormValues(values,validate_phone);
+    }catch(e){
+        import.meta.env.DEV &&  console.log('after validate:',e);
+        throw e;
+    }
 }
 export function useFormValidate() {
     const form = useCurrentForm();
