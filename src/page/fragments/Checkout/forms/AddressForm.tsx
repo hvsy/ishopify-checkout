@@ -15,9 +15,9 @@ import {PhoneInput} from "@components/ui/PhoneInput.tsx";
 import {UNSAFE_useRouteId} from "react-router-dom";
 import {useEventCallback} from "usehooks-ts";
 import {getGlobalPath} from "../../../../shopify/lib/globalSettings.ts";
-import {getArrayFromMeta} from "@lib/metaHelper.ts";
 import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts";
 import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
+import {Features} from "@lib/flags.ts";
 
 
 
@@ -60,13 +60,13 @@ export type AddressFormProps = {
     loading ?: boolean;
     onPhoneChange ?: (phone : string,pass : boolean)=>void;
 };
-const features = getArrayFromMeta('features') || [];
-const AdvancedPhoneInput = features?.includes('advanced_phone_input') || false;
-const DisablePrefillPhoneDialCode = features?.includes('disable_prefill_phone_dial_code') || false;
-const DisablePhoneAutoFill = features?.includes('disable_phone_autofill') || false;
-const MyPhoneInput = features.includes('phone2') ? PhoneInput2 : PhoneInput;
+const AdvancedPhoneInput = Features?.includes('advanced_phone_input') || false;
+const DisablePrefillPhoneDialCode = Features?.includes('disable_prefill_phone_dial_code') || false;
+const DisablePhoneAutoFill = Features?.includes('disable_phone_autofill') || false;
+const MyPhoneInput = Features.includes('phone2') ? PhoneInput2 : PhoneInput;
 
 const Phone2 = MyPhoneInput === PhoneInput2;
+const RequireFirstName = Features.includes('require_first_name');
 
 
 export const AddressForm: FC<AddressFormProps> = (props) => {
@@ -196,13 +196,13 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     className={`col-span-6`}
                 />
             </FormItem>
-            <FormItem name={[...prefix, 'first_name']} rules={[{
-                // required : true,
-                // message  : 'Enter a first name'
-            }]} normalize={(value,) => {
+            <FormItem name={[...prefix, 'first_name']} rules={[RequireFirstName  ? {
+                required : true,
+                message  : 'Enter a first name'
+            } : {}]} normalize={(value,) => {
                 return (value||'').replace(/\d/ig,'');
             }} preserve={preserve}>
-                <Input placeholder={'First Name (optional)'}
+                <Input placeholder={`First Name${ RequireFirstName ? '':' (optional)'}`}
                        autoComplete={`${pf} given-name`}
                        className={'md:col-span-3 col-span-6'}/>
             </FormItem>
