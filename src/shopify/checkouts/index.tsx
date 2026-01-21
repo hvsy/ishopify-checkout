@@ -7,6 +7,8 @@ import {useCallback} from "react";
 import {ErrorBoundary} from "react-error-boundary";
 import {getGlobalPath, getGlobalSettings} from "../lib/globalSettings.ts";
 import {LogoImage} from "../../page/components/LogoImage.tsx";
+import {UNSAFE_useRouteId} from "react-router-dom";
+import {Produce} from "../fragments/Produce.tsx";
 
 
 export default () => {
@@ -29,8 +31,9 @@ export default () => {
                                                   className={'object-contain'}/> : null}>
         </NavFrame>;
     },[shop]);
+    const id = UNSAFE_useRouteId();
 
-    return <PageFrame
+    return <><PageFrame
             renderNav={nav}
             renderRight={() => {
                 return <ErrorBoundary onError={(error,info) => {
@@ -47,4 +50,6 @@ export default () => {
                 </ErrorBoundary>
             }}
         />
+        <Produce  event={id === 'approve' ? 'approved' :'loaded'} />
+    </>
 }
