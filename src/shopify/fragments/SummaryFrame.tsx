@@ -38,7 +38,7 @@ export const SummaryFrame: FC<SummaryFrameProps> = (props) => {
             </div>
         </div>
     }
-    return <div className={'grid grid-cols-2 gap-y-2 text-sm pt-2'}>
+    return <div className={'grid grid-cols-2 gap-y-2 text-sm py-2'}>
         <div className={'flex flex-row items-center'}>
             Subtotal · {total_quantity} items
         </div>
