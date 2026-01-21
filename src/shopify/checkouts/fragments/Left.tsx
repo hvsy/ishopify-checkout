@@ -3,6 +3,7 @@ import {Default} from "@hooks/client.ts";
 import {useShopify} from "../../context/ShopifyContext.ts";
 import {SingleCheckoutForm} from "./SingleCheckoutForm.tsx";
 import {Skeleton} from "@components/ui/Skeleton.tsx";
+import {HighDemandCountDown} from "../../fragments/HighDemandCountDown.tsx";
 
 export type LeftProps = {
     className ?: string;
@@ -25,6 +26,7 @@ export const Left: FC<LeftProps> = (props) => {
     }
     return  <div className={`flex flex-col flex-1 items-stretch space-y-6 sm:max-w-[638px] ${className}`}>
         {top}
+        <HighDemandCountDown />
         <div className={'flex flex-col space-y-10 flex-1'}>
             <SingleCheckoutForm />
             {/*<CheckoutForm />*/}

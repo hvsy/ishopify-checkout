@@ -42,7 +42,7 @@ export const AsyncButton : FC<AsyncButtonProps> = (props)=>{
         {actionLoading && <div className={'flex visible flex-col justify-center items-center absolute inset-0'}>
             <Loading className={loadingClassName}/>
         </div>}
-        {pulsing && <div className={'animate-pulse absolute inset-0 flex visible items-stretch'}>
+        {!actionLoading && pulsing && <div className={'animate-pulse absolute inset-0 flex visible items-stretch'}>
             <div className={"flex-1 bg-white opacity-75"} />
         </div>}
     </div>;
