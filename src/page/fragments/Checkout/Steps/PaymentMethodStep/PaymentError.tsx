@@ -20,12 +20,15 @@ export const PaymentError: FC<PaymentErrorProps> = (props) => {
                 return;
             }
             case "payment_failed":{
-                if(data?.hasOwnProperty('msg')) {
-                    const msg = data?.msg;
-                    if (!!msg && isString(msg)) {
-                        setMethodError(msg);
-                        return;
+                try {
+                    if (data?.hasOwnProperty('msg')) {
+                        const msg = data?.msg;
+                        if (!!msg && isString(msg)) {
+                            setMethodError(msg);
+                            return;
+                        }
                     }
+                } catch (e) {
                 }
                 setMethodError(true);
             }
