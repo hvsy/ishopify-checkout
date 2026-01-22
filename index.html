@@ -11,7 +11,7 @@
     <meta name="clarity" content="{{$clarity ?? ''}}"/>
     <meta name="sentry_features" content="{{$sentry_features ?? ''}}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="strict_pixel" content="{{json_encode($strict_pixel ?? null)}}" />
+    <meta name="strict_pixel" content="{{json_encode($strict_pixel ?? null)}}"/>
     <title></title>
     <!-- inject:css -->
 </head>
@@ -44,18 +44,11 @@
                                                 <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
                                             </div>
                                         </div>
-                                        <div class="hidden"
-                                             value="gid://shopify/CartDeliveryGroup/269ea2856c41d63937d1ba5212c29713?cart=hWN2sxwKvlJodmWmUi8tqPeW"></div>
                                         <div class="flex flex-col space-y-3 animate-pulse w-full flex flex-col space-y-4">
                                             <div class="flex flex-row justify-between">
                                                 <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-5 w-12"></div>
                                             </div>
-                                            <div class="grid grid-cols-6 gap-y-3 gap-x-2">
-                                                <div class="hidden" name="[shipping_address][region]"
-                                                     value="[object Object]"></div>
-                                                <div class="flex flex-col col-span-6">
-                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
-                                                </div>
+                                            <div class="grid grid-cols-6 gap-y-1 gap-x-2">
                                                 <div class="flex flex-col md:col-span-3 col-span-6">
                                                     <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
                                                 </div>
@@ -68,10 +61,16 @@
                                                 <div class="flex flex-col col-span-6">
                                                     <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
                                                 </div>
-                                                <div class="flex flex-col md:col-span-3 col-span-6">
+                                                <div class="flex flex-col  col-span-6">
                                                     <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
                                                 </div>
-                                                <div class="flex flex-col md:col-span-3 col-span-6">
+                                                <div class="flex flex-col md:col-span-2 col-span-6">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                </div>
+                                                <div class="flex flex-col md:col-span-2 col-span-6">
+                                                    <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
+                                                </div>
+                                                <div class="flex flex-col md:col-span-2 col-span-6">
                                                     <div class="animate-pulse bg-gray-300 rounded overflow-hidden h-8 w-full"></div>
                                                 </div>
                                                 <div class="flex flex-col col-span-6">
