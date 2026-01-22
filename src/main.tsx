@@ -13,6 +13,7 @@ import * as Sentry from "@sentry/react";
 import {getArrayFromMeta, getJsonFromMeta, getMetaContent} from "@lib/metaHelper.ts";
 import {globalHandlersIntegration} from "@sentry/react";
 import {defaultCountries} from "react-international-phone";
+import {isString} from "lodash-es";
 
 
 
@@ -28,12 +29,27 @@ async function setup(){
                     }
                     return false;
                 })
-                console.log('phone patch:',country,values,which,);
                 if(which !== -1){
-                    defaultCountries[which][3] = {
-                        ...values,
-                        ...(defaultCountries[which][3]) as any,
+                    const defaultFormat = defaultCountries?.[which]?.[3] || null;
+                    if(!defaultFormat){
+                        defaultCountries[which][3] = {
+                            ...values,
+                        }
+                    }else{
+                        if(isString(defaultFormat)){
+                            defaultCountries[which][3] = {
+                                default : defaultFormat,
+                                ...values,
+                            }
+                        }else{
+                            defaultCountries[which][3] = {
+                                ...values,
+                                ...defaultFormat,
+                            }
+                        }
                     }
+                    // import.meta.env.DEV && console.log(defaultCountries[which]);
+
                 }
             }catch(e){
 
