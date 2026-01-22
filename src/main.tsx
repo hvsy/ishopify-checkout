@@ -10,13 +10,36 @@ import {ApolloProvider} from "@apollo/client";
 import {ApolloStoreFrontClient} from "@lib/checkout.ts";
 import {Analytics} from "./page/components/Analytics.tsx";
 import * as Sentry from "@sentry/react";
-import {getArrayFromMeta, getMetaContent} from "@lib/metaHelper.ts";
+import {getArrayFromMeta, getJsonFromMeta, getMetaContent} from "@lib/metaHelper.ts";
 import {globalHandlersIntegration} from "@sentry/react";
-
+import {defaultCountries} from "react-international-phone";
 
 
 
 async function setup(){
+    const format = getJsonFromMeta("phone_format");
+    if(format){
+        Object.keys(format).forEach((country) => {
+            try{
+                const values = format[country]  as any;
+                const which = defaultCountries.findIndex((which)=>{
+                    if(which[0].toLowerCase() === country.toLowerCase()){
+                        return true;
+                    }
+                    return false;
+                })
+                console.log('phone patch:',country,values,which,);
+                if(which !== -1){
+                    defaultCountries[which][3] = {
+                        ...values,
+                        ...(defaultCountries[which][3]) as any,
+                    }
+                }
+            }catch(e){
+
+            }
+        });
+    }
     const dsn = getMetaContent("sentry");
     if(!!dsn){
         const features = getArrayFromMeta('sentry_features');
