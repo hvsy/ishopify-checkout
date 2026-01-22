@@ -46,16 +46,16 @@ export const Payment: FC<PaymentProps> = (props) => {
             <div className={'flex flex-col justify-center'}>
                 {children}
             </div>
-            <div key={method.id} className={'flex flex-1 flex-row justify-between flex-wrap'}>
-                <div>
+            <div key={method.id} className={'flex flex-1 flex-row justify-between items-center'}>
                     {logo ?
                         <div className={"border-neutral-300 border overflow-hidden rounded px-1"}>
                             <div className={'flex flex-col'}>
                                 {logo}
                             </div>
                             {/*<img className="object-cover h-7 w-12" src={method.logo}/>*/}
-                        </div> : title}
-                </div>
+                        </div> : <div className={'text-sm text-nowrap'}>
+                            {title}
+                        </div>}
                 <div className={'flex flex-row space-x-1'}>
                     {(icons || []).map((icon, i) => {
                         return <div className={'rounded flex flex-col justify-center items-center overflow-hidden'} key={i}>

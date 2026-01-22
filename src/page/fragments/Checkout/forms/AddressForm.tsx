@@ -67,7 +67,8 @@ const MyPhoneInput = Features.includes('phone2') ? PhoneInput2 : PhoneInput;
 
 const Phone2 = MyPhoneInput === PhoneInput2;
 const RequireFirstName = Features.includes('require_first_name');
-
+const CountryOnTop = Features.includes('country_on_top');
+const CountriesLoading = Features.includes('countries_loading');
 
 export const AddressForm: FC<AddressFormProps> = (props) => {
     const {preserve = false,onPhoneChange, loading,title,titleClassName,hidden_fields = [], prefix = [],
@@ -181,21 +182,21 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             <FormItem name={[...prefix, 'region']} preserve={true}>
                 <div className={'hidden'}/>
             </FormItem>
-            <FormItem name={[...prefix,'region_code']} preserve={true}
+            {CountryOnTop && <FormItem name={[...prefix,'region_code']} preserve={true}
                       rules={[{
                           required : true,
                           message : 'Select a country or region',
                       }]}
             >
                 <NewRegionSelector
-                    loading={loading}
+                    loading={CountriesLoading  && loading}
                     zones={Regions}
                     autoComplete={`${pf} country`}
                     // field={'region'}
                     placeholder={'Country/Region'}
                     className={`col-span-6`}
                 />
-            </FormItem>
+            </FormItem>}
             <FormItem name={[...prefix, 'first_name']} rules={[RequireFirstName  ? {
                 required : true,
                 message  : 'Enter a first name'
@@ -239,8 +240,23 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             }]} preserve={preserve}>
                 <Input placeholder={'City'}
                        autoComplete={`${pf} address-level2`}
-                       className={`${colSpanClass} col-span-6`}/>
+                       className={`${CountryOnTop ? colSpanClass : ''} col-span-6`}/>
             </FormItem>
+            {!CountryOnTop && <FormItem name={[...prefix,'region_code']} preserve={true}
+                                       rules={[{
+                                           required : true,
+                                           message : 'Select a country or region',
+                                       }]}
+            >
+                <NewRegionSelector
+                    loading={CountriesLoading && loading}
+                    zones={Regions}
+                    autoComplete={`${pf} country`}
+                    // field={'region'}
+                    placeholder={'Country/Region'}
+                    className={`${colSpanClass} col-span-6`}
+                />
+            </FormItem>}
             {zones.length > 0 && <StateCodeFormItem
                 autoComplete={`${pf} address-level1`}
                 name={[...prefix,'state_code']}
