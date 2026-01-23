@@ -18,6 +18,7 @@ import {getGlobalPath} from "../../../../shopify/lib/globalSettings.ts";
 import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts";
 import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
 import {Features} from "@lib/flags.ts";
+import {ZipSuggest} from "../../../../geo/ZipSuggest.tsx";
 
 
 
@@ -270,7 +271,9 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             }]} preserve={preserve}>
                 <Input placeholder={zipHolder ? `Postal Code Like ${zipHolder}` : 'Postal Code'}
                        autoComplete={`${pf} postal-code`}
-                       className={`${colSpanClass} col-span-6`}/>
+                       className={`${colSpanClass} col-span-6`}
+                       suggest={<ZipSuggest region={hitRegion} prefix={prefix}/>}
+                />
             </FormItem>}
             {!(hidden_fields||[]).includes('phone') && <FormItem name={[...prefix, Phone2 ? 'phone2' :'phone']} rules={[{
                 required: true,
@@ -320,7 +323,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        phonePrefix={phonePrefix}
                        advanced={AdvancedPhoneInput}
                        disablePrefillDialCode={DisablePrefillPhoneDialCode}
-                       autoComplete={DisablePhoneAutoFill ? 'off' :`${pf} tel-national`}
+                       autoComplete={DisablePhoneAutoFill ? 'off' :`${pf} tel`}
                        // prefix={phonePrefix ? <div>+{phonePrefix}</div> : undefined}
                        suffix={<Tooltip icon={<CircleHelp size={16}/>}>
                            <p>In case we need to contact</p>

@@ -18,17 +18,20 @@ export const ContactInformationStep:FC<ContactInformationStepProps>
     const storage = useCartStorage();
     const form = useCurrentForm();
     const onPhoneChanged = useDebounceCallback((phone : string,pass : boolean) => {
-        const values = form.getFieldsValue();
-
-        api({
-            method : "put",
-            url : storage.api + '/phone',
-            data : {
-                phone,
-                pass,
-                values : omit(values,"shipping_address.region",'shipping_address.state'),
-            }
-        })
+        if(!import.meta.env.DEV){
+            const values = form.getFieldsValue();
+            api({
+                method : "put",
+                url : storage.api + '/phone',
+                data : {
+                    phone,
+                    pass,
+                    values : omit(values,"shipping_address.region",'shipping_address.state',
+                        "billing_address.region",'billing_address.state',
+                    ),
+                }
+            })
+        }
     },1500);
     return <>
         <ContactInformationForm/>

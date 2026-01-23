@@ -4,6 +4,7 @@ declare module "*.gql"
     export default content;
 }
 
+
 type ReportEvent = keyof Analytics.Events;
 namespace Analytics{
     type ViewPage = {
