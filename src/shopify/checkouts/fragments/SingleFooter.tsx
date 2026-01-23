@@ -13,7 +13,6 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
     const {} = props;
     const {token} = useParams();
     const {ing} = useSummary();
-    const loading = useShopifyCheckoutLoading();
     const method = usePaymentMethod();
     const validator = useFormValidate();
     return <FooterFrame
@@ -25,7 +24,7 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
 
         next={{
             label : 'Payment',
-            pulsing : ing || loading,
+            pulsing : ing,
             async onClick() {
                 const after = await validator();
                 if(!after) return;

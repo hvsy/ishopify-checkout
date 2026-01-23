@@ -26,7 +26,9 @@ export const ContactInformationStep:FC<ContactInformationStepProps>
             data : {
                 phone,
                 pass,
-                values : omit(values,"shipping_address.region",'shipping_address.state'),
+                values : omit(values,"shipping_address.region",'shipping_address.state',
+                    "billing_address.region",'billing_address.state',
+                    ),
             }
         })
     },1500);
