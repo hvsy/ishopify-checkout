@@ -320,7 +320,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        phonePrefix={phonePrefix}
                        advanced={AdvancedPhoneInput}
                        disablePrefillDialCode={DisablePrefillPhoneDialCode}
-                       autoComplete={DisablePhoneAutoFill ? 'off' :`${pf} tel-national`}
+                       autoComplete={DisablePhoneAutoFill ? 'off' :`${pf} tel`}
                        // prefix={phonePrefix ? <div>+{phonePrefix}</div> : undefined}
                        suffix={<Tooltip icon={<CircleHelp size={16}/>}>
                            <p>In case we need to contact</p>
