@@ -36,11 +36,13 @@ export type FloatLabelProps = {
     prefixClassName ?: string;
     elementClassName ?: string;
     type ?: string;
+    suggest ?: ReactNode;
 };
 
 
 export const FloatLabel: FC<FloatLabelProps> = (props) => {
     const {placeholder : ph,children,prefix,suffix,
+        suggest,
         label,
         elementRef,
         suffixClassName,
@@ -113,6 +115,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
                 <Loading />
             </div>}
         </div>
+        {suggest}
         {hasError && <div className={'flex flex-col p-1 text-sm'}>
             {errors.map((error,i) => {
                 return <div className={'text-red-500 whitespace-pre-wrap'} key={`error-${i}`}>{error}</div>
