@@ -3,6 +3,7 @@ import {get,uniq} from "lodash-es";
 import {useCurrentForm} from "../container/FormContext.ts";
 import Form from "rc-field-form";
 import useSWR from "swr";
+import {getIntFromMeta, getMetaContent} from "@lib/metaHelper.ts";
 
 export type ZipSuggestProps = {
     region : any,
@@ -62,12 +63,13 @@ export function useDelayValue<T>(value : T, delay : number) {
 
     return debouncedValue;
 }
+const delay =getIntFromMeta('zip_suggest_delay',1000);
 export const ZipSuggestInner : FC<any> = (props)=>{
     const {address,region,onFill} = props;
     const key  =[region?.code,address?.state_code,
         address?.city,
         address?.line1,address?.line2].filter(Boolean).join(',');
-    const debounceKey =  useDelayValue(key,1500);
+    const debounceKey =  useDelayValue(key,delay);
     const {data : suggest} = useSWR(debounceKey, () => {
         return import("./census").then((m) => {
             const state = address?.state_code ? region.children.find((s : any) => {

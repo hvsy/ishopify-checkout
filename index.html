@@ -13,6 +13,8 @@
     <meta name="sentry_features" content="{{$sentry_features ?? ''}}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="strict_pixel" content="{{json_encode($strict_pixel ?? null)}}"/>
+    <meta name="zip_suggest_delay" content="{{$zip_suggest_delay ?? null }}"/>
+
     @if(!empty($preloads))
         @foreach($preloads as $preload)
             @if(!empty($preload))
