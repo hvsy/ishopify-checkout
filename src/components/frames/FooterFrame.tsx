@@ -38,7 +38,7 @@ export const FooterFrame: FC<FooterFrameProps> = (props) => {
             />
         </div>}
         {left}
-        <AsyncButton onClick={next?.onClick}  pulsing={next?.pulsing || false} className={'max-w-full'}>
+        <AsyncButton onClick={next?.onClick}  pulsing={next?.pulsing || false} className={'max-w-full text-xl px-8 py-7 sm:text-lg sm:py-0'}>
             {next?.label}
         </AsyncButton>
     </div>;
