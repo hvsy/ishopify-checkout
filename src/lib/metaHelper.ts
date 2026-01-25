@@ -30,6 +30,17 @@ export function getJsonFromMeta(name: string,defaultValue : any = {}): any {
         return defaultValue;
     }
 }
+
+export function getIntFromMeta(name : string,defaultValue  : number= 0){
+    const content = getMetaContent(name);
+    try{
+        const value = parseInt(content);
+        if(isNaN(value)) return defaultValue;
+        return value;
+    }catch(e){
+        return defaultValue;
+    }
+}
 export function getBooleanFromMeta(name : string,defaultValue : boolean = false){
     const content = getMetaContent(name);
     if(!content) return defaultValue;
