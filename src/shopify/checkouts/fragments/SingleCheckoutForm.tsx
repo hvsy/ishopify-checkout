@@ -7,6 +7,7 @@ import {PaypalQuicklyButton} from "../../fragments/PaypalQuicklyButton.tsx";
 import {UNSAFE_useRouteId} from "react-router-dom";
 import {ApproveIt} from "./ApproveIt.tsx";
 import {FormItem} from "@components/fragments/FormItem.tsx";
+import {LocalizedFieldsStep} from "../steps/LocalizedFields";
 
 export type SingleCheckoutFormProps = {};
 
@@ -31,10 +32,11 @@ export const SingleCheckoutForm: FC<SingleCheckoutFormProps> = (props) => {
             <ShippingMethodStep/>
             <FormItem name={['shipping_line_id']} preserve={true} rules={[{
                 required: true,
-                'message': 'you must select a delivery method.'
+                'message': 'You must select a shipping method.'
             }]}>
                 <PlainField/>
             </FormItem>
+            <LocalizedFieldsStep />
             {!approve && <PaymentMethodStep/>}
         </div>
         <FormItem name={'context'} initialValue={id}>

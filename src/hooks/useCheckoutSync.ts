@@ -21,6 +21,7 @@ export function useCheckoutSync(form?:FormInstance){
         const cached = cache(storage.gid);
         const request = _get(cached,'cart');
         const email = formInstance.getFieldValue('email');
+        const localization = formInstance.getFieldValue('localization');
         if(!(email) && needEmail) return;
         const json : any = update_remote_data ? {
             remote_data : request,
@@ -30,6 +31,9 @@ export function useCheckoutSync(form?:FormInstance){
         };
         if(needEmail){
             json['email'] = email;
+        }
+        if(localization){
+            json['localization'] = localization;
         }
         const billing_address = formInstance.getFieldValue('billing_address') || null;
         let billing = billing_address ? buildAddress(_omit(billing_address,'region','state')) : null;
