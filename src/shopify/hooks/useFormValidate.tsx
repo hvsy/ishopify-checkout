@@ -8,12 +8,13 @@ import {
 } from "../context/ShopifyCheckoutContext.tsx";
 import {useRef} from "react";
 import {scrollToError} from "@components/frames/FormContainer.tsx";
-import {get as _get, isArray, isEmpty, isEqual, isObjectLike} from "lodash-es";
+import {get as _get, isArray, isEmpty, isEqual, isObjectLike, uniq} from "lodash-es";
 import {produce} from "@lib/api.ts";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
 import {FormInstance} from "rc-field-form";
 import {buildAddress} from "@lib/buildAddress.ts";
 import {useSummary} from "../checkouts/hooks/useSummary.tsx";
+import {Features} from "@lib/flags.ts";
 
 function formatFormValues(values : any,validate_phone : boolean = true){
     const address = buildAddress(values?.shipping_address || {},validate_phone);
@@ -44,6 +45,7 @@ async function submit(form : FormInstance,validate_phone : boolean = true){
         throw e;
     }
 }
+const isPhone2 = Features.includes('phone2');
 export function useFormValidate() {
     const form = useCurrentForm();
     const sync = useCheckoutSync();
@@ -54,6 +56,7 @@ export function useFormValidate() {
     const checkoutLoading = useShopifyCheckoutLoading();
     return async (keepBuyerCountryCode  : boolean = false) => {
         try {
+
             const values = await submit(form);
             values.validationStrategy = 'STRICT';
             let needMutate = !last.current || !isEqual(last.current, values);
@@ -78,7 +81,7 @@ export function useFormValidate() {
                                 },
                             },
                             'addresses.0.address.deliveryAddress.phone': {
-                                path: ['shipping_address', 'phone'],
+                                path: ['shipping_address', isPhone2 ? 'phone2' : 'phone'],
                             },
                             'addresses.0.address.deliveryAddress.zip': {
                                 path: ['shipping_address', 'zip'],
@@ -111,6 +114,12 @@ export function useFormValidate() {
                         checkout_loading : checkoutLoading,
                         shipping_methods : _get(groups,'0.deliveryOptions',null),
                     }).catch();
+                    try {
+                        scrollToError({
+                            errorFields: fields,
+                        });
+                    } catch (e) {
+                    }
                     return false;
                 }
                 last.current = {

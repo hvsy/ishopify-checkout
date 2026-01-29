@@ -71,6 +71,8 @@ const RequireFirstName = Features.includes('require_first_name');
 const CountryOnTop = Features.includes('country_on_top');
 const CountriesLoading = Features.includes('countries_loading');
 
+// const AddressTip = 'Please enter 4-200 characters to Automatically retrieve addresses';
+const AddressTip = 'Enter an address';
 export const AddressForm: FC<AddressFormProps> = (props) => {
     const {preserve = false,onPhoneChange, loading,title,titleClassName,hidden_fields = [], prefix = [],
         zones : Regions= [],
@@ -219,12 +221,14 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        className={'md:col-span-3 col-span-6'}/>
             </FormItem>
             <FormItem name={[...prefix, 'line1']} rules={[{
-                async validator(rule, value) {
-                    if (value.length < 4) {
-                        throw new Error('Please enter 4-200 characters to Automatically retrieve addresses.');
-                    }
-                },
-                message: 'Please enter 4-200 characters to Automatically retrieve addresses.'
+                // async validator(rule, value) {
+                    // if (value.length < 4) {
+                    //     throw new Error('Please enter 4-200 characters to Automatically retrieve addresses.');
+                    // }
+                // },
+                required : true,
+                // message: 'Please enter 4-200 characters to Automatically retrieve addresses.'
+                message : AddressTip,
             }]} preserve={preserve}>
                 <Input placeholder={'Address'}
                        autoComplete={`${pf} address-line1`}
