@@ -87,7 +87,7 @@ jobs:
   release:
     name : "发布"
     needs: build
-    if: ${{ github.ref_name == 'dev' || github.ref_name == 'rc' }}
+    if: ${{ github.ref_name == 'dev' || github.ref_name == 'rc' ||  github.ref_name == 'main' }}
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
