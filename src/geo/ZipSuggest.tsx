@@ -21,7 +21,8 @@ export const ZipSuggestContainer : FC<any> = (props) => {
     const {prefix,region} = props;
     const form = useCurrentForm();
     useEffect(() => {
-        if (region.code === 'US') {
+        if(!region?.code)return;
+        if (['US','UM'].includes(region.code)) {
             import("./census.ts").then().catch();
         } else {
             import("./nominatim.ts").then().catch();
@@ -75,7 +76,7 @@ export const ZipSuggestInner : FC<any> = (props)=>{
         address?.line1,address?.line2].filter(Boolean).join(',');
     const debounceKey =  useDelayValue(key,delay);
     const {data : suggest} = useSWR(debounceKey, () => {
-        const module= region.code === 'US' ? import("./census.ts") : import("./nominatim.ts");
+        const module= ['US','UM'].includes(region.code)? import("./census.ts") : import("./nominatim.ts");
         return module.then((m) => {
             const state = address?.state_code ? region.children.find((s : any) => {
                 return s.code === address?.state_code;
