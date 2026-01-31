@@ -13,7 +13,7 @@ export type ZipSuggestProps = {
 export const ZipSuggest: FC<ZipSuggestProps> = (props) => {
     const {region,prefix} = props;
     if(!region) return null;
-    if(!(['US'].includes(region.code.toUpperCase()))) return null;
+    // if(!(['US'].includes(region.code.toUpperCase()))) return null;
     return <ZipSuggestContainer prefix={prefix} region={region}/>;
 };
 
@@ -21,8 +21,12 @@ export const ZipSuggestContainer : FC<any> = (props) => {
     const {prefix,region} = props;
     const form = useCurrentForm();
     useEffect(() => {
-        import("./census").then().catch();
-    }, []);
+        if (region.code === 'US') {
+            import("./census.ts").then().catch();
+        } else {
+            import("./nominatim.ts").then().catch();
+        }
+    }, [region.code]);
     const data = Form.useWatch((values)=>{
         const v = get(values,prefix.join('.'));
         return {
@@ -71,19 +75,26 @@ export const ZipSuggestInner : FC<any> = (props)=>{
         address?.line1,address?.line2].filter(Boolean).join(',');
     const debounceKey =  useDelayValue(key,delay);
     const {data : suggest} = useSWR(debounceKey, () => {
-        return import("./census").then((m) => {
+        const module= region.code === 'US' ? import("./census.ts") : import("./nominatim.ts");
+        return module.then((m) => {
             const state = address?.state_code ? region.children.find((s : any) => {
                 return s.code === address?.state_code;
             }) : null;
             import.meta.env.DEV && console.log('swr:',address,state);
             if(!state) return null;
-            return m.Census({
+            return m.default({
                 ...address,
                 state:state.en_name,
                 region_code : region.code,
             }).then((matches) => {
                 return (matches||[]).filter((m) => {
-                    return m.address.state === address.state_code;
+                    import.meta.env.DEV && console.log('suggest match:',m);
+                    if(!m.address.state_code && !m.address.state && !address.state_code) return true;
+                    if(m.address.state_code){
+                        return m.address.state_code === address.state_code;
+                    }else if(m.address.state){
+                        return m.address.state === address.state;
+                    }
                 })?.[0].address?.zip;
             });
         })

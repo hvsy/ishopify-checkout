@@ -2,15 +2,8 @@ import {uniq,isArray,get} from "lodash-es";
 import axios from "axios";
 //@ts-ignore
 import jsonp from "axios-jsonp";
-export type GeoAddress = {
-    line1 : string,
-    line2 ?: string,
-    city ?: string;
-    state ?: string;
-    state_code ?: string;
-    region: string;
-    region_code : string;
-};
+import {format_address, GeoAddress} from "./GeoAddress.ts";
+
 export let countries : string[] = [
     'US',
 ];
@@ -27,15 +20,7 @@ export async function Census(address : GeoAddress){
     if(!countries.includes(address.region_code.toUpperCase())){
         return null;
     }
-    const segments = uniq([address.line1,
-        address.line2,
-        address.city,
-        address.state,
-    ].filter(Boolean));
-    let decoded = segments.join(',');
-    if(!decoded) return [];
-    import.meta.env.DEV && console.log(decoded);
-    let encoded = encodeURIComponent(decoded);
+    let encoded = format_address(address);
     try {
         const json = await axios({
             url : `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${encoded}&benchmark=Public_AR_Current&format=json`,
@@ -53,7 +38,8 @@ export async function Census(address : GeoAddress){
                 'address' : {
                     zip : match.addressComponents.zip,
                     street : match.addressComponents.streetName,
-                    state : match.addressComponents.state,
+                    state : null,
+                    state_code : match.addressComponents.state,
                     city : match.addressComponents.city,
                     suggest : formatSuggest(match.matchedAddress),
                 }
@@ -64,3 +50,5 @@ export async function Census(address : GeoAddress){
         return [];
     }
 }
+
+export default Census;
