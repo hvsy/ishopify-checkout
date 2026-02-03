@@ -42,7 +42,10 @@ export const ZipSuggestContainer : FC<any> = (props) => {
     });
     import.meta.env.DEV && console.log('zip suggest data:',data,region)
     if(!!data?.zip) return null;
-    if(!data?.state_code) return null;
+    if(!!region?.children?.length && !data?.state_code){
+        import.meta.env.DEV && console.log('zip suggest no state return:',data,region)
+        return null;
+    }
     if(!data?.city) return null;
     if(uniq([data?.line1,data?.line2].filter(Boolean)).join(' ').trim().length <= 5) return null;
     return <ZipSuggestInner
@@ -78,14 +81,16 @@ export const ZipSuggestInner : FC<any> = (props)=>{
     const {data : suggest} = useSWR(debounceKey, () => {
         const module= ['US','UM'].includes(region.code)? import("./census.ts") : import("./nominatim.ts");
         return module.then((m) => {
-            const state = address?.state_code ? region.children.find((s : any) => {
+            const zero_state = !region?.children?.length;
+            const state = address?.state_code ? region.children?.find((s : any) => {
                 return s.code === address?.state_code;
             }) : null;
-            import.meta.env.DEV && console.log('swr:',address,state);
-            if(!state) return null;
+            import.meta.env.DEV && console.log('swr:',address,zero_state,state,!zero_state && !state);
+            if(!zero_state && !state) return null;
             return m.default({
                 ...address,
-                state:state.en_name,
+                state:state?.en_name,
+                region: region.en_name,
                 region_code : region.code,
             }).then((matches) => {
                 return (matches||[]).filter((m) => {
