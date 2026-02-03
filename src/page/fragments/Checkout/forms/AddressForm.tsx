@@ -239,14 +239,14 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        autoComplete={`${pf} address-line2`}
                        className={'col-span-6'}/>
             </FormItem>
-            <FormItem name={[...prefix, 'city']} rules={[{
+            {!['SG'].includes(region_code) && <FormItem name={[...prefix, 'city']} rules={[{
                 required: true,
                 message: 'Enter a city'
             }]} preserve={preserve}>
                 <Input placeholder={'City'}
                        autoComplete={`${pf} address-level2`}
                        className={`${CountryOnTop ? colSpanClass : ''} col-span-6`}/>
-            </FormItem>
+            </FormItem>}
             {!CountryOnTop && <FormItem name={[...prefix,'region_code']} preserve={true}
                                        rules={[{
                                            required : true,
@@ -276,7 +276,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 <Input placeholder={zipHolder ? `Postal Code Like ${zipHolder}` : 'Postal Code'}
                        autoComplete={`${pf} postal-code`}
                        className={`${colSpanClass} col-span-6`}
-                       suggest={!isCN && <ZipSuggest region={hitRegion} prefix={prefix}/>}
+                       suggest={<ZipSuggest region={hitRegion} prefix={prefix}/>}
                 />
             </FormItem>}
             {!(hidden_fields||[]).includes('phone') && <FormItem name={[...prefix, Phone2 ? 'phone2' :'phone']} rules={[{

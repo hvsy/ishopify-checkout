@@ -5,7 +5,7 @@ import jsonp from "axios-jsonp";
 import {format_address, GeoAddress} from "./GeoAddress.ts";
 
 export let countries : string[] = [
-    'US',
+    'US','UM',
 ];
 function formatSuggest(address : string){
     try {

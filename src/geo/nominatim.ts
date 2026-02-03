@@ -5,8 +5,9 @@ import {isArray} from "lodash-es";
 import jsonp from "axios-jsonp";
 
 export async function Nominatim(address : GeoAddress){
-    const search = format_address(address);
+    const search = format_address(address,true);
     try{
+        import.meta.env.DEV && console.log('nominatim search:',search);
         const url = `https://nominatim.openstreetmap.org/search?q=${search}&format=json&limit=1&addressdetails=1`;
         //@ts-ignore
         const json = await axios({
