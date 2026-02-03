@@ -17,7 +17,7 @@ import {useEventCallback} from "usehooks-ts";
 import {getGlobalPath} from "../../../../shopify/lib/globalSettings.ts";
 import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts";
 import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
-import {Features} from "@lib/flags.ts";
+import {Features, isCN} from "@lib/flags.ts";
 import {ZipSuggest} from "../../../../geo/ZipSuggest.tsx";
 
 
@@ -276,7 +276,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 <Input placeholder={zipHolder ? `Postal Code Like ${zipHolder}` : 'Postal Code'}
                        autoComplete={`${pf} postal-code`}
                        className={`${colSpanClass} col-span-6`}
-                       suggest={<ZipSuggest region={hitRegion} prefix={prefix}/>}
+                       suggest={!isCN && <ZipSuggest region={hitRegion} prefix={prefix}/>}
                 />
             </FormItem>}
             {!(hidden_fields||[]).includes('phone') && <FormItem name={[...prefix, Phone2 ? 'phone2' :'phone']} rules={[{

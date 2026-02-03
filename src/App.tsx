@@ -136,28 +136,8 @@ async function getCheckout(request : Request,params : Params<string>,context : a
         Cookies.set('recovery_key', key,{
             expires : dayjs().add(1,'day').toDate(),
         });
-        if(checkout?.shop?.preference?.checkout?.page_style !== 'single'){
-            const steps = Object.keys(MethodValidators);
-            let next = "information"
-            for(let i=0; i < steps.length; i++){
-                const step = steps[i] as any;
-                if(!!MethodValidators[step]?.validator(checkout)){
-                    next = step;
-                }
-            }
-            return redirect(`/a/s/checkouts/${token}/${next}`);
-        }
-        return {checkout,ref,storage};
-    }else{
-        //TODO 三步模式需要开启
-        // const method = MethodValidators[action];
-        // if(method){
-        //     if(!method.validator(checkout)){
-        //         return redirect(`/a/s/checkouts/${token}/${method.prev}`);
-        //     }
-        // }
-        return {checkout,ref,storage};
     }
+    return {checkout,ref,storage};
 }
 
 let router = createBrowserRouter([
