@@ -14,6 +14,9 @@ export class CartStorage{
     get token(){
         return this._token;
     }
+    get beacon(){
+        return `/a/s/checkouts/${this.token}/beacon`;
+    }
     get gid() : string{
         return `gid://shopify/Cart/${this._token}?key=${this.key}`;
     }

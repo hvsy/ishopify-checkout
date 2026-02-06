@@ -1,4 +1,4 @@
-import {createContext, FC, use, useEffect, useState} from "react";
+import {createContext, Dispatch, FC, SetStateAction, use, useEffect, useState} from "react";
 import useSWR from "swr";
 import {Pixels} from "../shopify/fragments/Pixels.tsx";
 import {isString, get as _get} from "lodash-es";
@@ -11,6 +11,8 @@ export const PaymentContext = createContext<{
     loading?: boolean,
     tracking?: any,
     zones?: any[],
+    progress ?: string;
+    setProgress?: Dispatch<SetStateAction<string | undefined>>;
 } | null>(null);
 
 
@@ -49,6 +51,7 @@ function preload(config: any) {
 export const PaymentContainer: FC<any> = (props) => {
     const {children} = props;
     const [method, setMethod] = useState<DB.PaymentMethod | null>(null);
+    const [progress,setProgress] = useState<string|undefined>();
     const {data: setup, isLoading} = useSWR<{
         tracking: any;
         payments: DB.PaymentMethod[],
@@ -90,6 +93,8 @@ export const PaymentContainer: FC<any> = (props) => {
         methods: setup?.payments || [],
         loading: isLoading,
         zones: setup?.zones || [],
+        progress,
+        setProgress,
     }}>
         {children}
         {setup?.tracking && <Pixels tracking={setup.tracking}/>}
