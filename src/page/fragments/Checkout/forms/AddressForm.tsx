@@ -19,6 +19,7 @@ import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts"
 import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
 import {Features, isCN} from "@lib/flags.ts";
 import {ZipSuggest} from "../../../../geo/ZipSuggest.tsx";
+import {ErrorBoundary} from "react-error-boundary";
 
 
 
@@ -180,6 +181,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         colSpan--;
     }
     const colSpanClass = ['md:col-span-6','md:col-span-3' ,'md:col-span-2'][colSpan-1];
+    const no_city = ['SG'].includes(region_code);
     return <StepBlock className={'flex flex-col space-y-1'} labelClassName={titleClassName} label={`${label} address`} name={`${label}-address`}>
         <div className={'grid grid-cols-6 gap-y-1 gap-x-2'}>
             <FormItem name={[...prefix, 'region']} preserve={true}>
@@ -239,7 +241,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        autoComplete={`${pf} address-line2`}
                        className={'col-span-6'}/>
             </FormItem>
-            {!['SG'].includes(region_code) && <FormItem name={[...prefix, 'city']} rules={[{
+            {!no_city && <FormItem name={[...prefix, 'city']} rules={[{
                 required: true,
                 message: 'Enter a city'
             }]} preserve={preserve}>
@@ -275,8 +277,12 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             }]} preserve={preserve}>
                 <Input placeholder={zipHolder ? `Postal Code Like ${zipHolder}` : 'Postal Code'}
                        autoComplete={`${pf} postal-code`}
-                       className={`${colSpanClass} col-span-6`}
-                       suggest={<ZipSuggest region={hitRegion} prefix={prefix}/>}
+                       className={`${no_city ?'' :colSpanClass} col-span-6`}
+                       suggest={<ErrorBoundary onError={()=>{
+
+                       }} fallback={null}>
+                           <ZipSuggest region={hitRegion} prefix={prefix}/>
+                       </ErrorBoundary>}
                 />
             </FormItem>}
             {!(hidden_fields||[]).includes('phone') && <FormItem name={[...prefix, Phone2 ? 'phone2' :'phone']} rules={[{
