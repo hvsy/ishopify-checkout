@@ -19,6 +19,7 @@ import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts"
 import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
 import {Features, isCN} from "@lib/flags.ts";
 import {ZipSuggest} from "../../../../geo/ZipSuggest.tsx";
+import {ErrorBoundary} from "react-error-boundary";
 
 
 
@@ -277,7 +278,11 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 <Input placeholder={zipHolder ? `Postal Code Like ${zipHolder}` : 'Postal Code'}
                        autoComplete={`${pf} postal-code`}
                        className={`${no_city ?'' :colSpanClass} col-span-6`}
-                       suggest={<ZipSuggest region={hitRegion} prefix={prefix}/>}
+                       suggest={<ErrorBoundary onError={()=>{
+
+                       }} fallback={null}>
+                           <ZipSuggest region={hitRegion} prefix={prefix}/>
+                       </ErrorBoundary>}
                 />
             </FormItem>}
             {!(hidden_fields||[]).includes('phone') && <FormItem name={[...prefix, Phone2 ? 'phone2' :'phone']} rules={[{

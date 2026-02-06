@@ -29,13 +29,13 @@ export const ZipSuggestContainer : FC<any> = (props) => {
         }
     }, [region.code]);
     const data = Form.useWatch((values)=>{
-        const v = get(values,prefix.join('.'));
+        const v = get(values,prefix.join('.')) || {};
         return {
-            state_code : v.state_code,
-            line1 : v.line1,
-            line2 : v.line2,
-            zip : v.zip,
-            city : v.city,
+            state_code : v?.state_code,
+            line1 : v?.line1,
+            line2 : v?.line2,
+            zip : v?.zip,
+            city : v?.city,
         }
     },{
         form
