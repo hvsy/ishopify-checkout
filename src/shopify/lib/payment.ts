@@ -128,5 +128,6 @@ export async function shopify_payment(options : {
         step?.(() => {
             return `payment ${method.channel} submit`;
         });
+        throw '!!!';
     }
 }

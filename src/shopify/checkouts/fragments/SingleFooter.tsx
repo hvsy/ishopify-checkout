@@ -26,6 +26,7 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
             label : 'Payment',
             pulsing : ing,
             async onClick() {
+
                 setProgress?.(() => {
                     return "before form validator";
                 });
@@ -35,7 +36,7 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
                         return "form validator failed";
                     });
                     return;
-                };
+                }
                 setProgress?.(() => {
                     return "pass form validator";
                 });
