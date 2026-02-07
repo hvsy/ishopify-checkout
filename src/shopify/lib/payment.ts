@@ -3,6 +3,7 @@ import {PaymentError} from "../../exceptions/PaymentError.ts";
 import {api} from "@lib/api.ts";
 import {free} from "@lib/payment.ts";
 import {get as _get,  isObjectLike,} from "lodash-es";
+import {Dispatch, SetStateAction} from "react";
 
 export function getUrlFrom(token : string){
     const cart_token = token.split('?')[0] ?? '';
@@ -36,7 +37,7 @@ export async function shopify_payment(options : {
                                           // url : string,
                                           method : DB.PaymentMethod,
                                           values : any,
-                                      }){
+                                      },step ?: Dispatch<SetStateAction<string | undefined>>){
     const {summary,method,values} = options;
     const token = _get(summary,'id').replace("gid://shopify/Cart/","");
     const url = getUrlFrom(token);
@@ -44,6 +45,9 @@ export async function shopify_payment(options : {
     const handle=  _get(summary,'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
     console.log('shipping handle:',handle);
     if(!handle){
+        step?.(() => {
+            return ('Please select the delivery method.');
+        });
         alert('Please select the delivery method.');
         throw "please choice delivery shipping line";
     }
@@ -68,7 +72,12 @@ export async function shopify_payment(options : {
             throw new PaymentError()
         }
     }
-    if(!method) return;
+    if(!method){
+        step?.(() => {
+            return "not payment method";
+        });
+        return;
+    }
     const mode = method.mode || 'redirect'
     // console.log('payment:',values,summary2Cart(summary));//lines.edges[0].node);
     window.report?.("add_payment_info",{
@@ -87,11 +96,17 @@ export async function shopify_payment(options : {
         });
         if(isObjectLike(res) && res.error){
             if(res.message){
+                step?.(() => {
+                    return "payment api error:" + res.message;
+                });
                 console.error(res.message);
             }
             return false;
         }
         const href= `/a/s/api/transactions/${res}/redirect`;
+        step?.(() => {
+            return "before payment redirect";
+        });
         return PromiseLocation(href);
         // window.location.href = href;
         // return false;
@@ -99,6 +114,9 @@ export async function shopify_payment(options : {
         const frame = document.getElementById(method.channel) as HTMLIFrameElement;
         const window = frame?.contentWindow
         if(!window){
+            step?.(() => {
+                return `con't find payment window:${method.channel}`;
+            });
             console.log(values,url,method);
             return;
         }
@@ -107,6 +125,8 @@ export async function shopify_payment(options : {
             event : 'submit',
             checkout : values,
         },'*')
-        throw "!!!";
+        step?.(() => {
+            return `payment {method.channel} submit`;
+        });
     }
 }
