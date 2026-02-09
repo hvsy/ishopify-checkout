@@ -1,5 +1,5 @@
 import {get as _get} from "lodash-es";
-import {ApolloClient, createQueryPreloader, from, HttpLink, InMemoryCache} from "@apollo/client";
+import {ApolloClient, createQueryPreloader, from, gql, HttpLink, InMemoryCache} from "@apollo/client";
 import {getMetaContent} from "./metaHelper.ts";
 import {onError} from "@apollo/client/link/error";
 import {RetryLink} from "@apollo/client/link/retry";
@@ -58,12 +58,34 @@ export const ApolloStoreFrontClient = new ApolloClient({
     }),
 });
 export const ApolloPreloader = createQueryPreloader(ApolloStoreFrontClient);
-
+export async function PreloadCart(gid : string){
+    let ref = null;
+    const cart  =  await (new Promise((resolve,reject) => {
+        ref = ApolloPreloader(SummaryQuery,{
+            variables : {
+                cartId : gid,
+                withCarrierRates : true,
+            }
+        });
+        ref.toPromise().then((result) => {
+            const unwrap = unwrapQueryRef(result);
+            // console.log('then:',result,unwrap?.promise);
+            resolve(unwrap?.promise);
+            return result;
+        }, (error) => {
+            console.error('error:',error);
+            reject(error);
+        })
+    }));
+    return {ref,cart};
+}
 
 
 import {Features} from "@lib/flags.ts";
+import {unwrapQueryRef} from "@apollo/client/react/internal";
+import {SummaryQuery} from "../App.tsx";
 
-export function transform_address(data : any,prefix : string = "data.cart"){
+export function transform_address(data : any,prefix : string = "data.cart",preset_shipping : any= null){
     const delivery = _get(data, `${prefix}.delivery.addresses.0`, {})
     const address = delivery?.address || {};
     const areas = Array.from(address.formatted || []).reverse();
@@ -71,24 +93,24 @@ export function transform_address(data : any,prefix : string = "data.cart"){
     const phone2 = Features.includes('phone2');
     const shipping : any = {
         id,
-        first_name: address.firstName,
-        last_name: address.lastName,
-        city: address.city,
+        first_name: address.firstName || preset_shipping?.firstName || '',
+        last_name: address.lastName || preset_shipping?.lastName || '',
+        city: address.city || preset_shipping?.city || '',
         region: areas[0] ? {
             en_name: areas[0],
         } : null,
         state: areas.length > 4 ? {
             en_name: areas[1],
         } : null,
-        region_code: address.countryCode,
-        state_code: address.provinceCode,
-        line1: address.address1,
-        line2: address.address2,
-        zip: address.zip,
-        phone: address.phone || '',
+        region_code: address.countryCode || preset_shipping?.countryCode || null,
+        state_code: address.provinceCode || preset_shipping?.provinceCode || null,
+        line1: address.address1 || preset_shipping?.address1 || null,
+        line2: address.address2 || preset_shipping?.address2 || null,
+        zip: address.zip || preset_shipping?.zip || null,
+        phone: address.phone || preset_shipping?.phone || null,
     };
     if(phone2){
-        shipping['phone2'] = address.phone || '';
+        shipping['phone2'] = shipping.phone || '';
     }
     return {
         shipping_address_id: id,

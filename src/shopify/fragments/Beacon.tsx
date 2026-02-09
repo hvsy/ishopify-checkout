@@ -16,14 +16,19 @@ export const Beacon: FC<BeaconProps> = (props) => {
     const ctx = usePaymentContext();
     import.meta.env.DEV && console.log('payment progress:',ctx?.progress);
     const callback = useEventCallback(() => {
-        const data = getBeacon(form,context);
-        if(!!data){
-            const blob = new Blob([JSON.stringify({
-                ...data,
-                step : ctx?.progress,
-            })], {type: 'application/json'});
-            navigator.sendBeacon(cart.beacon, blob);
+        try{
+            const data = getBeacon(form,context);
+            if(!!data){
+                const blob = new Blob([JSON.stringify({
+                    ...data,
+                    step : ctx?.progress,
+                })], {type: 'application/json'});
+                navigator.sendBeacon(cart.beacon, blob);
+            }
+        }catch(e){
+            console.error(e);
         }
+
     });
     useEventListener('unload', callback);
     return null;
