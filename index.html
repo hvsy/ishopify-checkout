@@ -15,13 +15,17 @@
     <meta name="strict_pixel" content="{{json_encode($strict_pixel ?? null)}}"/>
     <meta name="zip_suggest_delay" content="{{$zip_suggest_delay ?? null }}"/>
 
-    @if(!empty($preloads))
-        @foreach($preloads as $preload)
-            @if(!empty($preload))
-                <link rel="preload" href="{!! $preload !!}" as="fetch" @if(!empty($crossorigin)) crossorigin="{{$crossorigin}}" @endif />
-            @endif
-        @endforeach
-    @endif
+@if(!empty($approve_shipping))
+    <meta name="approve_shipping" content="{{json_encode($approve_shipping ?? null)}}" />
+@endif
+
+@if(!empty($preloads))
+    @foreach($preloads as $preload)
+        @if(!empty($preload))
+            <link rel="preload" href="{!! $preload !!}" as="fetch" @if(!empty($crossorigin)) crossorigin="{{$crossorigin}}" @endif />
+        @endif
+    @endforeach
+@endif
 
     <title></title>
     <!-- inject:css -->

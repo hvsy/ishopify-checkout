@@ -8,9 +8,8 @@ import {getOrder} from "@lib/payment.ts";
 import {get as _get, sum} from "lodash-es";
 import {lazy} from "react";
 import {
-    ApolloPreloader,
+    PreloadCart,
 } from "@lib/checkout.ts";
-import {MethodValidators} from "@lib/MethodValidators.ts";
 import {gql,} from "@apollo/client";
 
 
@@ -48,7 +47,6 @@ function go2home(){
 }
 
 
-import {unwrapQueryRef} from "@apollo/client/react/internal";
 import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
 import {QuerySummary} from "@query/checkouts/queries.ts";
 import {
@@ -102,31 +100,13 @@ async function getCheckout(request : Request,params : Params<string>,context : a
             expires : dayjs().add(2,'weeks').toDate(),
         });
     }
-    let ref = null;
-    const cart = await new Promise((resolve,reject) => {
-        ref = ApolloPreloader(SummaryQuery,{
-            variables : {
-                cartId : storage.gid,
-                withCarrierRates : true,
-            }
-        });
-        ref.toPromise().then((result) => {
-            const unwrap = unwrapQueryRef(result);
-            // console.log('then:',result,unwrap?.promise);
-            resolve(unwrap?.promise);
-            return result;
-        }, (error) => {
-            console.error('error:',error);
-            reject(error);
-        })
-    });
+    let {ref,cart} = await PreloadCart(storage.gid);
     let checkout : any = null;
     if(cart){
         if(_get(cart,'data.cart.totalQuantity',0) < 1){
             return go2home();
         }
         checkout = getCheckoutFromSummary(cart);
-        // console.log('preload cart:',cart,checkout);
     }
 
     if(!checkout){
