@@ -15,8 +15,8 @@
     <meta name="strict_pixel" content="{{json_encode($strict_pixel ?? null)}}"/>
     <meta name="zip_suggest_delay" content="{{$zip_suggest_delay ?? null }}"/>
 
-@if(!empty($approve_shipping))
-    <meta name="approve_shipping" content="{{json_encode($approve_shipping ?? null)}}" />
+@if(!empty($preset_shipping))
+    <meta name="preset_shipping" content="{{json_encode($preset_shipping ?? null)}}" />
 @endif
 
 @if(!empty($preloads))
