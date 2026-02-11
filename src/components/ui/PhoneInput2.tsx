@@ -4,6 +4,7 @@ import {Input} from "../../page/components/Input.tsx";
 import {CountriesSelector} from "./CountriesSelector.tsx";
 import {Phone2} from "../Phone2.ts";
 import {PhoneOnlyRequired} from "../../shopify/lib/globalSettings.ts";
+import {Features} from "@lib/flags.ts";
 
 export type PhoneInput2Props = {
     countryCode?: string;
@@ -16,18 +17,20 @@ export type PhoneInput2Props = {
     advanced?: boolean;
     disablePrefillDialCode?: boolean;
     onBlur?: InputHTMLAttributes<HTMLInputElement>['onBlur'];
-    phonePrefix ?: string;
-    children ?: ReactNode;
-    elementRef ?: RefObject<any>,
+    phonePrefix?: string;
+    children?: ReactNode;
+    elementRef?: RefObject<any>,
 };
 
 export const PhoneInputInner2: FC<PhoneInput2Props> = (props) => {
-    const {children,suffix,className,
+    const {
+        children, suffix, className,
         countryCode,
         phonePrefix,
         disablePrefillDialCode,
         advanced,
-        value,onChange,...others} = props;
+        value, onChange, ...others
+    } = props;
     return <Input
         type={'tel'}
         {...others}
@@ -41,46 +44,50 @@ export const PhoneInputInner2: FC<PhoneInput2Props> = (props) => {
         onChange={onChange}
     />
 };
-
-export const PhoneInput2  :FC<PhoneInput2Props> = (props) => {
+const SkipInitPhoneValidate = Features.includes('skip_init_phone_validate')
+export const PhoneInput2: FC<PhoneInput2Props> = (props) => {
     const {
         children,
         countryCode,
-        value,  onChange, ...others
+        value, onChange, ...others
     } = props;
-    const ValueString=  value ? value + '' :  '';
-    const lastInputValue = useRef<any>('');
-    const {inputValue,handlePhoneValueChange,inputRef,country,setCountry} = usePhoneInput({
-        defaultCountry : countryCode?.toLocaleLowerCase(),
-        value  : ValueString,
-        disableDialCodePrefill : true,
-        disableCountryGuess : false,
-        disableDialCodeAndPrefix : true,
-        forceDialCode : false,
-        disableFormatting : PhoneOnlyRequired(),
+    const ValueString = value ? value + '' : '';
+    const changedRef = useRef<any>(value);
+    const {inputValue, handlePhoneValueChange, inputRef, country, setCountry} = usePhoneInput({
+        defaultCountry: countryCode?.toLocaleLowerCase(),
+        value: ValueString,
+        disableDialCodePrefill: true,
+        disableCountryGuess: false,
+        disableDialCodeAndPrefix: true,
+        forceDialCode: false,
+        disableFormatting: PhoneOnlyRequired(),
 
-        onChange(data){
-            if(lastInputValue.current !== data.inputValue){
-                const after =data.phone?.replace(`+${data.country.dialCode}`,'');
-                const p2 = new Phone2();
-                lastInputValue.current = data.inputValue;
-                p2.input = data.inputValue;
-                p2.number = after;
-                p2.dialCode = data.country.dialCode;
-                import.meta.env.DEV && console.log('phone2 onChange:',data,p2);
-                if(!p2.number){
-                    p2.dialCode = '';
-                    onChange?.(p2)
+        onChange(data) {
+            const iv = (data.inputValue)?.toString().trim();
+            if(!!iv){
+                changedRef.current = iv;
+            }
+            if(SkipInitPhoneValidate){
+                if (!iv && !changedRef.current) return;
+            }
+            const after = data.phone?.replace(`+${data.country.dialCode}`, '');
+            const p2 = new Phone2();
+            p2.input = iv;
+            p2.number = after;
+            p2.dialCode = data.country.dialCode;
+            import.meta.env.DEV && console.log('phone2 onChange:', data, p2);
+            if (!p2.number) {
+                p2.dialCode = '';
+                onChange?.(p2)
+                return;
+            }
+            if (!!value && value instanceof Phone2) {
+                if (p2.toString() === value.toString()) {
                     return;
                 }
-                if(!!value && value instanceof Phone2) {
-                    if(p2.toString() === value.toString()){
-                        return;
-                    }
-                }
-                if(p2.toString() !==ValueString){
-                    onChange?.(p2);
-                }
+            }
+            if (p2.toString() !== ValueString) {
+                onChange?.(p2);
             }
 
         }
@@ -91,10 +98,10 @@ export const PhoneInput2  :FC<PhoneInput2Props> = (props) => {
     const currentValue = useRef(value);
     currentValue.current = value;
     useEffect(() => {
-        if(!countryCode) return;
+        if (!countryCode) return;
         const cv = (currentValue.current || '') + '';
-        if(!cv || cv === ('+'+currentCountry.current.dialCode)){
-            if(currentCountry.current?.iso2 !== countryCode){
+        if (!cv || cv === ('+' + currentCountry.current.dialCode)) {
+            if (currentCountry.current?.iso2 !== countryCode) {
                 setCountry(countryCode);
             }
         }
@@ -103,10 +110,10 @@ export const PhoneInput2  :FC<PhoneInput2Props> = (props) => {
         elementRef={inputRef}
         countryCode={countryCode} {...others} value={inputValue} onChange={handlePhoneValueChange}>
         {country?.iso2 ? <CountriesSelector iso2={country.iso2}
-                           onSelect={country=> {
-                               if(country?.iso2)
-                                   setCountry(country?.iso2);
-                           }}
+                                            onSelect={country => {
+                                                if (country?.iso2)
+                                                    setCountry(country?.iso2);
+                                            }}
         /> : null}
     </PhoneInputInner2>
 }
