@@ -310,6 +310,14 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                                     message.push(`Phone number in the ${hitRegion?.en_name} start with +${phonePrefix}`)
                                 }
                             }
+                        }else{
+                            const dialCode = (v?.dialCode || '').replace('+','');
+                            import.meta.env.DEV && console.log('phone2 dial code:',dialCode,v,value);
+                            if(dialCode && v?.number){
+                                if(v?.number?.startsWith(dialCode)){
+                                    throw new Error("Enter a valid phone number.\nPlease don't enter the international dial code.")
+                                }
+                            }
                         }
                         throw new Error(message.join("\n"));
                     }
