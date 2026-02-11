@@ -3,6 +3,7 @@ import {usePhoneInput,} from "react-international-phone";
 import {Input} from "../../page/components/Input.tsx";
 import {CountriesSelector} from "./CountriesSelector.tsx";
 import {Phone2} from "../Phone2.ts";
+import {PhoneOnlyRequired} from "../../shopify/lib/globalSettings.ts";
 
 export type PhoneInput2Props = {
     countryCode?: string;
@@ -41,7 +42,6 @@ export const PhoneInputInner2: FC<PhoneInput2Props> = (props) => {
     />
 };
 
-
 export const PhoneInput2  :FC<PhoneInput2Props> = (props) => {
     const {
         children,
@@ -49,6 +49,7 @@ export const PhoneInput2  :FC<PhoneInput2Props> = (props) => {
         value,  onChange, ...others
     } = props;
     const ValueString=  value ? value + '' :  '';
+    const lastInputValue = useRef<any>('');
     const {inputValue,handlePhoneValueChange,inputRef,country,setCountry} = usePhoneInput({
         defaultCountry : countryCode?.toLocaleLowerCase(),
         value  : ValueString,
@@ -56,25 +57,32 @@ export const PhoneInput2  :FC<PhoneInput2Props> = (props) => {
         disableCountryGuess : false,
         disableDialCodeAndPrefix : true,
         forceDialCode : false,
-        disableFormatting : false,
+        disableFormatting : PhoneOnlyRequired(),
+
         onChange(data){
-            const after =data.phone?.replace(`+${data.country.dialCode}`,'');
-            const p2 = new Phone2();
-            p2.number = after;
-            p2.dialCode = data.country.dialCode;
-            if(!p2.number){
-                p2.dialCode = '';
-                onChange?.(p2)
-                return;
-            }
-            if(!!value && value instanceof Phone2) {
-                if(p2.toString() === value.toString()){
+            if(lastInputValue.current !== data.inputValue){
+                const after =data.phone?.replace(`+${data.country.dialCode}`,'');
+                const p2 = new Phone2();
+                lastInputValue.current = data.inputValue;
+                p2.input = data.inputValue;
+                p2.number = after;
+                p2.dialCode = data.country.dialCode;
+                import.meta.env.DEV && console.log('phone2 onChange:',data,p2);
+                if(!p2.number){
+                    p2.dialCode = '';
+                    onChange?.(p2)
                     return;
                 }
+                if(!!value && value instanceof Phone2) {
+                    if(p2.toString() === value.toString()){
+                        return;
+                    }
+                }
+                if(p2.toString() !==ValueString){
+                    onChange?.(p2);
+                }
             }
-            if(p2.toString() !==ValueString){
-                onChange?.(p2);
-            }
+
         }
     });
 

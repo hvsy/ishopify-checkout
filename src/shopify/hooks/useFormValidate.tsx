@@ -15,6 +15,7 @@ import {FormInstance} from "rc-field-form";
 import {buildAddress} from "@lib/buildAddress.ts";
 import {useSummary} from "../checkouts/hooks/useSummary.tsx";
 import {Features} from "@lib/flags.ts";
+import {PhoneOnlyRequired} from "../lib/globalSettings.ts";
 
 function formatFormValues(values : any,validate_phone : boolean = true){
     const address = buildAddress(values?.shipping_address || {},validate_phone);
@@ -56,9 +57,8 @@ export function useFormValidate() {
     const checkoutLoading = useShopifyCheckoutLoading();
     return async (keepBuyerCountryCode  : boolean = false) => {
         try {
-
             const values = await submit(form);
-            values.validationStrategy = 'STRICT';
+            values.validationStrategy = PhoneOnlyRequired() ? 'COUNTRY_CODE_ONLY' :'STRICT';
             let needMutate = !last.current || !isEqual(last.current, values);
             import.meta.env.DEV && console.log('need update remote checkout');
             if (needMutate) {

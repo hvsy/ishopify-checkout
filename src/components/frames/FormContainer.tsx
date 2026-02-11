@@ -126,6 +126,7 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             <Form form={form} initialValues={initialValues}
                   method={'POST'}
                   noValidate
+                  validateTrigger={['onBlur','onChange']}
                   // component={false}
                 component={'form'}
                   onFieldsChange={(changedFields, allFields) => {

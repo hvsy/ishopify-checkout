@@ -14,7 +14,7 @@ import {StepBlock} from "@components/frames/StepBlock.tsx";
 import {PhoneInput} from "@components/ui/PhoneInput.tsx";
 import {UNSAFE_useRouteId} from "react-router-dom";
 import {useEventCallback} from "usehooks-ts";
-import {getGlobalPath} from "../../../../shopify/lib/globalSettings.ts";
+import {getGlobalPath, PhoneOnlyRequired} from "../../../../shopify/lib/globalSettings.ts";
 import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts";
 import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
 import {Features, isCN} from "@lib/flags.ts";
@@ -288,19 +288,17 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             {!(hidden_fields||[]).includes('phone') && <FormItem name={[...prefix, Phone2 ? 'phone2' :'phone']} rules={[{
                 required: true,
                 async validator(rules, v) {
+                    import.meta.env.DEV &&  console.log('phone2 validator:',v);
                     const value = v?.toString() || '';
                     if(!value){
                         throw new Error("Enter a valid phone number");
                     }
-                    if(!startsWith(value,'+')){
-                        throw new Error("please input the country calling code , for example : +" + phonePrefix);
+                    if(!PhoneOnlyRequired()){
+                        if(!startsWith(value,'+')){
+                            throw new Error("please input the country calling code , for example : +" + phonePrefix);
+                        }
                     }
-                    // let full = value;
-                    // if(!_startsWith(full,'+')){
-                    //     full = `+${phonePrefix}${full}`;
-                    // }
-                    // console.log('full:',full);
-                    if (!ValidatePhone(value)) {
+                    if(!ValidatePhone(value)) {
                         const message= [
                             'Enter a valid phone number'
                         ];
@@ -323,7 +321,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        const phone = formInstance.getFieldValue([...prefix, Phone2 ? 'phone2' :'phone'])
                        const p = _isString(phone) ? phone : phone?.toString();
                        if(!!p) {
-                           onPhoneChange?.(p,ValidatePhone(phone));
+                           onPhoneChange?.(p,ValidatePhone(phone,true));
                        }
                    }}
                    placeholder={`Phone (For shipping updates) ${phonePrefix && !Phone2 ?'+' + phonePrefix:''}`}

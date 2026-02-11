@@ -8,6 +8,7 @@ import {api} from "@lib/api.ts";
 import {useDebounceCallback} from "usehooks-ts";
 import {useCurrentForm} from "../../../../../container/FormContext.ts";
 import {omit} from "lodash-es";
+import {PhoneOnlyRequired} from "../../../../../shopify/lib/globalSettings.ts";
 
 export type ContactInformationStepProps = {
 };
@@ -26,6 +27,7 @@ export const ContactInformationStep:FC<ContactInformationStepProps>
                 data : {
                     phone,
                     pass,
+                    phone_only_required : PhoneOnlyRequired(),
                     values : omit(values,"shipping_address.region",'shipping_address.state',
                         "billing_address.region",'billing_address.state',
                     ),
