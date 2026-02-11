@@ -235,6 +235,7 @@ export const ShopifyCheckoutProvider :FC<{
                                              keepBuyerCountryCode  : boolean = false,
     )=>{
         let vars = formatInput(input,keepBuyerCountryCode);
+        import.meta.env.DEV && console.log('update remote cart vars:', vars);
         let result= await UpdateMutationCallback(vars,partialUpdate,force,);
         let cart = result?.cart;
         const warningCode =result ?.warnings?.[0]?.code;

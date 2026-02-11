@@ -25,6 +25,7 @@ export function moneyFormat(data : any,display :  Intl.NumberFormatOptions['curr
 
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import {getCountry} from "react-international-phone";
+import {PhoneOnlyRequired} from "./globalSettings.ts";
 
 export function getCountryCode4(phone : string){
     try {
@@ -43,9 +44,12 @@ export function getCountryCode4(phone : string){
         return null;
     }
 }
-export function ValidatePhone(value : string){
+export function ValidatePhone(value : string,strict : boolean = false){
     value = (value||'').replace(/\s/g,'');
     if(!value) return false;
+    if(PhoneOnlyRequired() && !strict){
+        return true;
+    }
     if(!value.startsWith('+')){
         return false;
     }

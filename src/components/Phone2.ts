@@ -1,6 +1,7 @@
 export class Phone2{
     _number ?: string | null;
     _dialCode ?: string | null;
+    _intputValue ?: string|null;
 
     set number(n : string|null|undefined){
         this._number = n;
@@ -8,7 +9,13 @@ export class Phone2{
     set dialCode(code : string|null|undefined){
         this._dialCode = code;
     }
+    set input(value : string|null|undefined){
+        this._intputValue = value;
+    }
 
+    get inputValue(){
+        return this._intputValue;
+    }
     get number(){
         return this._number;
     }

@@ -14,3 +14,7 @@ export function getGlobalSettings(){
 export function getGlobalPath(path : string,defaultValue : any = null){
     return _get(getGlobalSettings(),path,defaultValue);
 }
+
+export function PhoneOnlyRequired(){
+    return getGlobalPath('phone.validate') === 'required';
+}
