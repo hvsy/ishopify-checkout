@@ -61,9 +61,9 @@ export const PhoneInput2: FC<PhoneInput2Props> = (props) => {
         disableDialCodeAndPrefix: true,
         forceDialCode: false,
         disableFormatting: PhoneOnlyRequired(),
-
         onChange(data) {
             const iv = (data.inputValue)?.toString().trim();
+            import.meta.env.DEV && console.log('phone2:',iv);
             if(!!iv){
                 changedRef.current = iv;
             }

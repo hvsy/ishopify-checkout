@@ -315,7 +315,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                             import.meta.env.DEV && console.log('phone2 dial code:',dialCode,v,value);
                             if(dialCode && v?.number){
                                 if(v?.number?.startsWith(dialCode)){
-                                    throw new Error("Enter a valid phone number.\nPlease don't enter the international dial code.")
+                                    message.push("Please don't enter the international dial code")
                                 }
                             }
                         }
