@@ -29,7 +29,9 @@ export const ContactInformationForm: FC<ContactInformationFormProps> = (props) =
                    type={'email'}
                    onBlur={(event) => {
                        const email = form.getFieldValue('email');
-                       if(Validators.isEmail(email)){
+                       if(email && Validators.isEmail(email,{
+                           allow_utf8_local_part : false,
+                       })){
                            return checkoutSync(true,false);
                        }
                    }}
