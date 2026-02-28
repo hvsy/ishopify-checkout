@@ -8,6 +8,7 @@ import {useCleanCartCookie} from "../hooks/useCleanCartCookie.ts";
 import {Pixels} from "../fragments/Pixels.tsx";
 import {Report} from "../../page/components/Report.tsx";
 import Big from "big.js";
+import {ErrorBoundary} from "react-error-boundary";
 
 export type OrderProps = {};
 
@@ -26,7 +27,11 @@ export const Order: FC<OrderProps> = (props) => {
             return <OrderMain/>
         }}>
         </PageFrame>
-        {data.shop.tracking && <Pixels tracking={data.shop.tracking} />}
+        {data.shop.tracking && <ErrorBoundary onError={() => {
+
+        }} fallback={null}>
+            <Pixels tracking={data.shop.tracking} />
+        </ErrorBoundary>}
         {data.token  && !data.thanked && <Report name={'purchase'} data={{
             // eventId : md5(data.token),
             email : data.email,

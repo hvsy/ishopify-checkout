@@ -2,6 +2,7 @@ import {createContext, Dispatch, FC, SetStateAction, use, useEffect, useState} f
 import useSWR from "swr";
 import {Pixels} from "../shopify/fragments/Pixels.tsx";
 import {isString, get as _get} from "lodash-es";
+import {ErrorBoundary} from "react-error-boundary";
 
 
 export const PaymentContext = createContext<{
@@ -11,7 +12,7 @@ export const PaymentContext = createContext<{
     loading?: boolean,
     tracking?: any,
     zones?: any[],
-    progress ?: string;
+    progress?: string;
     setProgress?: Dispatch<SetStateAction<string | undefined>>;
 } | null>(null);
 
@@ -25,17 +26,17 @@ export function usePaymentMethod() {
 }
 
 export function useAllZones() {
-    const {data,isLoading} = useSWR("/a/s/api/zones/all");
-    return {zones: data|| [], loading: isLoading};
+    const {data, isLoading} = useSWR("/a/s/api/zones/all");
+    return {zones: data || [], loading: isLoading};
 }
 
 export function useShippingZones() {
-    const {data,isLoading} = useSWR('/a/s/api/zones',{
-        errorRetryCount : 10,
+    const {data, isLoading} = useSWR('/a/s/api/zones', {
+        errorRetryCount: 10,
     });
     return {
-        zones : data || [],
-        loading:isLoading,
+        zones: data || [],
+        loading: isLoading,
     }
 }
 
@@ -51,14 +52,14 @@ function preload(config: any) {
 export const PaymentContainer: FC<any> = (props) => {
     const {children} = props;
     const [method, setMethod] = useState<DB.PaymentMethod | null>(null);
-    const [progress,setProgress] = useState<string|undefined>();
+    const [progress, setProgress] = useState<string | undefined>();
     const {data: setup, isLoading} = useSWR<{
         tracking: any;
         payments: DB.PaymentMethod[],
         zones?: any[],
     }>(
-        '/a/s/api/setup',{
-            errorRetryCount : 10,
+        '/a/s/api/setup', {
+            errorRetryCount: 10,
         }
     );
     useEffect(() => {
@@ -97,6 +98,10 @@ export const PaymentContainer: FC<any> = (props) => {
         setProgress,
     }}>
         {children}
-        {setup?.tracking && <Pixels tracking={setup.tracking}/>}
+
+        {setup?.tracking && <ErrorBoundary onError={() => {}} fallback={null}>
+            <Pixels tracking={setup.tracking}/>
+        </ErrorBoundary>}
+
     </PaymentContext>
 }
