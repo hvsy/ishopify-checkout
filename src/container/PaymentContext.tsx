@@ -14,6 +14,8 @@ export const PaymentContext = createContext<{
     zones?: any[],
     progress?: string;
     setProgress?: Dispatch<SetStateAction<string | undefined>>;
+    suggestZipCode ?: string;
+    setSuggestZipCode ?: Dispatch<SetStateAction<string | undefined>>;
 } | null>(null);
 
 
@@ -53,6 +55,7 @@ export const PaymentContainer: FC<any> = (props) => {
     const {children} = props;
     const [method, setMethod] = useState<DB.PaymentMethod | null>(null);
     const [progress, setProgress] = useState<string | undefined>();
+    const [suggestZipCode, setSuggestZipCode] = useState<string|undefined>();
     const {data: setup, isLoading} = useSWR<{
         tracking: any;
         payments: DB.PaymentMethod[],
@@ -96,6 +99,8 @@ export const PaymentContainer: FC<any> = (props) => {
         zones: setup?.zones || [],
         progress,
         setProgress,
+        suggestZipCode,
+        setSuggestZipCode,
     }}>
         {children}
 

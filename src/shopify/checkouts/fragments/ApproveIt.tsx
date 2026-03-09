@@ -12,6 +12,7 @@ import {usePaymentContext} from "../../../container/PaymentContext.tsx";
 
 export type ApproveItProps = {};
 
+const AutoFillSuggestCode = Features.includes('auto-fill-suggest-zip');
 const FloatApprove = Features.includes('float_approve_button');
 export const ApproveIt: FC<ApproveItProps> = (props) => {
     const {} = props;
@@ -25,8 +26,8 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
             scrollToError(error);
         });
     }, []);
-    const {setProgress} = usePaymentContext() ||{};
-    const submit = useFormValidate();
+    const {setProgress,suggestZipCode} = usePaymentContext() ||{};
+    const submit = useFormValidate(form);
     const float_approve_class = FloatApprove ? 'fixed bottom-0 left-0 right-0 py-1 px-1 sm:static sm:left-auto sm:right-auto sm:bottom-auto sm:px-0 sm:py-0 z-50' : '';
     return <div className={`flex flex-col items-stretch ${float_approve_class}`}>
         <AsyncButton
@@ -38,6 +39,25 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                         return "after validate failed";
                     })
                     return;
+                }
+                try {
+                    if (AutoFillSuggestCode && !!suggestZipCode) {
+                        const zipErrors = form.getFieldsError([
+                            ['shipping_address', 'zip'],
+                            ['billing_address', 'zip']
+                        ]);
+                        if (zipErrors.length > 0) {
+                            form.setFields(
+                                zipErrors.map((error) => {
+                                    return {
+                                        name: error.name,
+                                        value: suggestZipCode,
+                                    };
+                                }));
+                        }
+                    }
+                } catch (e) {
+
                 }
                 const handle=  _get(after?.data,'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
                 if(!handle){
