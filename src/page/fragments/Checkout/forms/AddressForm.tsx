@@ -275,7 +275,8 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 required: true,
                 message: 'Enter a ZIP / postal code',
             }]} preserve={preserve}>
-                <Input placeholder={zipHolder ? `Postal Code Like ${zipHolder}` : 'Postal Code'}
+                <Input
+                       placeholder={zipHolder && Features.includes('zip_placeholder') ? `Postal Code Like ${zipHolder}` : 'Postal Code'}
                        autoComplete={`${pf} postal-code`}
                        className={`${no_city ?'' :colSpanClass} col-span-6`}
                        suggest={<ErrorBoundary onError={()=>{
