@@ -75,14 +75,15 @@ export const Methods: FC<{ token: string }> = memo((props) => {
             }}
             renderItem={(method, checked, radio) => {
                 // console.log('render method item',method,checked,radio);
-                let mode : ActivityProps['mode'] =  show(method,region_code) ? 'visible' : 'hidden';
-                return <Activity mode={mode}>
-                    <Payment
+                // let mode : ActivityProps['mode'] =  show(method,region_code) ? 'visible' : 'hidden';
+                // let mode : ActivityProps['mode'] =  show(method,region_code) ? 'visible' : 'hidden';
+                // return <Activity mode={mode}>
+                    return <Payment
                         token={token}
                         method={method} checked={checked}>
                         {radio}
                     </Payment>
-                </Activity>
+                // </Activity>
             }}
         />
     </Form.Field>
