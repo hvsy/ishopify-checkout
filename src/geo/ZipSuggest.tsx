@@ -4,6 +4,7 @@ import {useCurrentForm} from "../container/FormContext.ts";
 import Form from "rc-field-form";
 import useSWR from "swr";
 import {getIntFromMeta, getMetaContent} from "@lib/metaHelper.ts";
+import {usePaymentContext} from "../container/PaymentContext.tsx";
 
 export type ZipSuggestProps = {
     region : any,
@@ -107,6 +108,14 @@ export const ZipSuggestInner : FC<any> = (props)=>{
     },{
 
     })
+    const ctx = usePaymentContext();
+    useEffect(() => {
+        try{
+            ctx?.setSuggestZipCode?.(suggest || undefined);
+        }catch(e){
+
+        }
+    }, [suggest]);
     if(!suggest) return null;
     return <div className={'flex flex-row space-x-1 items-baseline p-1'}>
         <span>Suggest Code :</span>

@@ -47,8 +47,8 @@ async function submit(form : FormInstance,validate_phone : boolean = true){
     }
 }
 const isPhone2 = Features.includes('phone2');
-export function useFormValidate() {
-    const form = useCurrentForm();
+export function useFormValidate(form : FormInstance) {
+    // const form = useCurrentForm();
     const sync = useCheckoutSync();
     const mutation = useMutationCheckout();
     const cart = useCartStorage();

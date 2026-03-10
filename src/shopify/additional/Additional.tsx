@@ -8,6 +8,20 @@ import {useCleanCartCookie} from "../hooks/useCleanCartCookie.ts";
 
 export type AdditionalProps = {};
 
+const Expired = () => {
+    const {token}= useParams();
+    const  {data} = useSWR(`/a/s/checkouts/${token}/next`,{
+        refreshInterval : 1000,
+    });
+    useEffect(() => {
+        if(data?.url){
+            window.location.replace(data.url);
+        }
+    }, [data?.url]);
+    return <span className={'accent-orange-500'}>
+       Order reservation ended.
+   </span>
+};
 export const Additional: FC<AdditionalProps> = (props) => {
     const {} = props;
     const {token} = useParams();
@@ -25,18 +39,16 @@ export const Additional: FC<AdditionalProps> = (props) => {
                 Prepare for an Outstanding Shopping Experience
             </div>
             <div className={'flex flex-row items-center justify-center py-5'}>
-                Exclusive ONe Time Offer Just for You!
+                Exclusive One Time Offer Just for You!
             </div>
             <div className={'flex flex-row items-center justify-center py-5 bg-yellow-400 space-x-3'}>
-                <CountDown milliseconds={10 * 1000 * 60} name={`additional-${token}`}
+                <CountDown milliseconds={6 * 1000 * 60} name={`additional-${token}`}
                            prefix={<span className={'text-black'}>
                                     Hurry! Special Offer Expires in
                            </span>}
-                           expired={<span className={'accent-orange-500'}>
-                               Order reservation ended.
-                           </span>}
+                           expired={<Expired />}
                            containerClassName={''}
-                           format={'mm:ss'}
+                           format={'mm:ss:S'}
                            className={'bg-transparent text-red-500 font-bold text-xl'}
                            auto={true}
                 />

@@ -64,7 +64,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
     }[size];
     const hasError = errors && errors.length > 0;
     const containerRef = useRef<HTMLDivElement>(null);
-    const border :any = hasError ? ['border-red-300'] : ['border-[#DEDEDE]','focus-within:border-[#1D5BD1]', 'focus-within:shadow-[#005bd1]'];
+    const border :any = hasError ? ['border-red-500','border-[3px]'] : ['border ','border-[#DEDEDE]','focus-within:border-[#1D5BD1]', 'focus-within:shadow-[#005bd1]'];
     if(import.meta.env.VITE_SKELETON){
         return <div className={`flex flex-col ${className || ''}`}>
             <Skeleton className={'h-8 w-full'}/>
@@ -76,7 +76,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
     },);
     return <div className={`flex flex-col pt-2 space-y-1 ${className || ''}`} ref={containerRef}>
         {!!label && <div>{label}</div>}
-        <div className={twMerge(clsx(`bg-white border rounded-md relative flex flex-row justify-between items-stretch box-border `,border,h))}>
+        <div className={twMerge(clsx(`bg-white rounded-md relative flex flex-row justify-between items-stretch box-border `,border,h))}>
             {prefix && <div className={cn(`flex flex-col justify-center px-3 bg-gray-100 flex-shrink-0 ${prefixClassName}`)}>
                 {prefix}
             </div>}
