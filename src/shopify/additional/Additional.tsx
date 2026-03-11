@@ -5,6 +5,7 @@ import {ProductContainer} from "./fragments/ProductContainer.tsx";
 import useSWR from "swr";
 import {Loading} from "@components/fragments/Loading.tsx";
 import {useCleanCartCookie} from "../hooks/useCleanCartCookie.ts";
+import {useRemoveAppLoader} from "@hooks/useRemoveAppLoader.tsx";
 
 export type AdditionalProps = {};
 
@@ -25,6 +26,7 @@ const Expired = () => {
 export const Additional: FC<AdditionalProps> = (props) => {
     const {} = props;
     const {token} = useParams();
+    useRemoveAppLoader();
     const data = useLoaderData() as any;
     // const {data,isLoading,error} = useSWR();
     useCleanCartCookie(data?.cart_gid);

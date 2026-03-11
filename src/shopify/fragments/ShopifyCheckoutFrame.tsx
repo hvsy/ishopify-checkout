@@ -1,11 +1,13 @@
 import {FC, useEffect, useRef} from "react";
 import {GlobalContextProvider, SummaryContextProvider, useSummary} from "../checkouts/hooks/useSummary.tsx";
 import {Outlet, UNSAFE_useRouteId, useParams} from "react-router-dom";
+import {useRemoveAppLoader} from "@hooks/useRemoveAppLoader.tsx";
 
 export type ShopifyCheckoutFrameProps = {};
 
 
 export const ShopifyCheckoutFrame: FC<ShopifyCheckoutFrameProps> = (props) => {
+    useRemoveAppLoader();
     return <GlobalContextProvider>
         <Outlet/>
     </GlobalContextProvider>
