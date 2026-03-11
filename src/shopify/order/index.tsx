@@ -9,11 +9,13 @@ import {Pixels} from "../fragments/Pixels.tsx";
 import {Report} from "../../page/components/Report.tsx";
 import Big from "big.js";
 import {ErrorBoundary} from "react-error-boundary";
+import {useRemoveAppLoader} from "@hooks/useRemoveAppLoader.tsx";
 
 export type OrderProps = {};
 
 export const Order: FC<OrderProps> = (props) => {
     const {} = props;
+    useRemoveAppLoader();
     const data = useLoaderData() as Shopify.Order;
     useCleanCartCookie(data?.cart_id);
     return <ShopifyContext value={{

@@ -2,18 +2,13 @@ import React, {lazy} from 'react'
 // import './index.css?inline';
 import './index.css';
 import { createRoot } from "react-dom/client";
-import { SWRConfig } from 'swr';
-import { swr_api} from "@lib/api.ts";
-import {App} from "./App.tsx";
 import {loadDevMessages, loadErrorMessages} from "@apollo/client/dev";
-import {ApolloProvider} from "@apollo/client";
-import {ApolloStoreFrontClient} from "@lib/checkout.ts";
-import {Analytics} from "./page/components/Analytics.tsx";
 import * as Sentry from "@sentry/react";
 import {getArrayFromMeta, getJsonFromMeta, getMetaContent} from "@lib/metaHelper.ts";
 import {globalHandlersIntegration} from "@sentry/react";
 import {defaultCountries} from "react-international-phone";
 import {isString} from "lodash-es";
+import {Global} from "./Global.tsx";
 
 
 
@@ -93,21 +88,7 @@ async function setup(){
     // const {App} = await import('./App.tsx');
     root.render(
         <React.StrictMode>
-            <SWRConfig value={{
-                fetcher: swr_api,
-                revalidateIfStale: true,
-                refreshWhenHidden: false,
-                revalidateOnFocus: false,
-                shouldRetryOnError: false,
-                refreshWhenOffline: false,
-                revalidateOnReconnect: false,
-                revalidateOnMount: true,
-            }}>
-                <ApolloProvider client={ApolloStoreFrontClient}>
-                    <App/>
-                    <Analytics />
-                </ApolloProvider>
-            </SWRConfig>
+            <Global />
         </React.StrictMode>
     );
 }
