@@ -26,7 +26,7 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
         }}
 
         next={{
-            label: 'Payment',
+            label: 'Place an order',
             pulsing: ing,
             async onClick() {
 
