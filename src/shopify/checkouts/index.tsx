@@ -20,16 +20,19 @@ export default () => {
         const image = profileLogo?.resource?.image;
         const logo = image?.url ? {
             url: image.url,
-            width: image?.width,
-            height: image?.height,
+            width: image?.width + 'px',
+            height: image?.height + 'px',
         } : null;
-        return <NavFrame className={className}
+        return <NavFrame className={`${className}`}
+                         contentClassName={`${image? 'pt-1':""}`}
                          title={title}
                          align={(profileLogo?.align || undefined) as string}
                          logo={logo ? <LogoImage {...logo}
-                                                 width={'auto'}
-                                                 height={'100%'}
-                                                 className={'object-contain'}/> : null}>
+                                                style={{
+                                                    width:'auto',
+                                                    maxHeight:'100%',
+                                                }}
+                                                className={'object-contain'}/> : null}>
         </NavFrame>;
     }, [shop]);
     const id = UNSAFE_useRouteId();

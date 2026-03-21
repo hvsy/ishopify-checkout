@@ -1,7 +1,7 @@
 import {FC, ReactNode} from "react";
-import {Media} from "../../page/components/Media.tsx";
 import {useMoneyFormat} from "../../shopify/context/ShopifyContext.ts";
 import {SmartDiv} from "../ui/SmartDiv.tsx";
+import {NewMedia} from "../../page/components/NewMedia.tsx";
 
 export type LineProps = {
     media ?: DB.Media|null;
@@ -26,7 +26,7 @@ export const Line: FC<LineProps> = (props) => {
         <div className={'relative w-16'}>
             <SmartDiv
                 className={"overflow-hidden relative aspect-square rounded-md border-neutral-300 border"}>
-                <Media media={media} />
+                <NewMedia {...media||{}} />
                 {free && <div className={`absolute 
                             bg-red-500 
                             font-semibold

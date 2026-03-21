@@ -83,3 +83,17 @@ export function ValidatePhone(value : string,strict : boolean = false){
     }
     return false;
 }
+
+export function object_diff(to : any,from : any, map : any,callback ?: any){
+    const final:any = {};
+    Object.keys(map).forEach((key) => {
+        const fk = map[key];
+        if((!to.hasOwnProperty(key) || !to[key]) && !!from[fk]){
+            if(!!callback){
+                callback(from[fk],key,fk);
+            }
+            final[key] = from[fk];
+        }
+    })
+    return final;
+}
