@@ -1,4 +1,4 @@
-import {FC, useEffect} from "react";
+import {FC, } from "react";
 
 import { SWRConfig } from 'swr';
 import { swr_api} from "@lib/api.ts";

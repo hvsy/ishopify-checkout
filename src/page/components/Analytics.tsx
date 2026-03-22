@@ -1,30 +1,10 @@
 import {FC, useEffect} from "react";
 import mitt from "mitt";
-import {getMetaContent} from "@lib/metaHelper.ts";
-import {getShopifyS, getShopifyY} from "@lib/shopify.ts";
 
 export type AnalyticsProps = {};
 
 export const Analytics: FC<AnalyticsProps> = (props) => {
     const {} = props;
-    useEffect(() => {
-        const id = getMetaContent("clarity");
-        if(!!id){
-            import('@microsoft/clarity').then((m) => {
-                const clarity  =m.default
-                clarity.init(id);
-                const sy = getShopifyY()
-                const ss = getShopifyS();
-                if(!!sy){
-                    if(!!ss){
-                        clarity.identify(sy,ss);
-                    }else{
-                        clarity.identify(sy)
-                    }
-                }
-            })
-        }
-    }, []);
     useEffect(() => {
         let memory = new Map<ReportEvent,any>();
         window.Analytics = mitt();
