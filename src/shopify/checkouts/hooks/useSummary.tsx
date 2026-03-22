@@ -13,6 +13,7 @@ import Form from "rc-field-form";
 import {PaymentContainer} from "../../../container/PaymentContext.tsx";
 import {PayingContainer} from "@components/frames/PayingContainer.tsx";
 import {GetDeliveryGroupQuery} from "../../../gql/GetDeliveryGroupQuery.ts";
+import {Features} from "@lib/flags.ts";
 
 
 export const SummaryContext = createContext<{
@@ -134,22 +135,25 @@ export function useDeliveryGroupMutation() {
             query : GetDeliveryGroupQuery,
             variables: vars
         })
-        if(!all){
+
+        if(!all && Features.includes('empty_delivery_redirect')){
             storage.reset();
             window.location.reload();
             return;
         }
-        client.writeQuery({
-            // query: SummaryQuery,
-            query: GetDeliveryGroupQuery,
-            variables: vars,
-            data: {
-                ...all,
-                cart: {
-                    ...all.cart,
-                    deliveryGroups: groups,
-                }
-            },
-        })
+        if(!!all){
+            client.writeQuery({
+                // query: SummaryQuery,
+                query: GetDeliveryGroupQuery,
+                variables: vars,
+                data: {
+                    ...all,
+                    cart: {
+                        ...all.cart,
+                        deliveryGroups: groups,
+                    }
+                },
+            })
+        }
     }
 }
