@@ -36,7 +36,7 @@ async function prefetch<T = any>(key : string){
     // return Preloader.fetch<T>(key,preload_api)
 }
 const OrderPage = lazy(async() => {
-    const m = await import("./shopify/order");
+    const m = await import("./shopify/order/order.tsx");
     return {
         default : m.Order,
     }
@@ -57,7 +57,12 @@ import {
 } from "@query/checkouts/fragments/fragments.ts";
 import {CartStorage} from "./shopify/context/CartStorage.ts";
 import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
-import {Additional} from "./shopify/additional/Additional.tsx";
+// import {Additional} from "./shopify/additional/Additional.tsx";
+const Additional = lazy(() => {
+    return import("./shopify/additional/Additional").then(m=>{
+        return {default : m.Additional};
+    })
+})
 export const SummaryQuery = gql([
     QuerySummary,
     QueryImageFragment,

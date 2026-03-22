@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react-swc'
 import {rimraf} from 'rimraf';
 import {trimEnd as _trimEnd} from "lodash-es";
 import {sentryVitePlugin} from "@sentry/vite-plugin";
+import {readFileSync} from "fs";
 
 const removeMSW = () => ({
     name: 'remove-msw',
@@ -20,15 +21,16 @@ export default defineConfig(({mode}) => {
     const remote_api = env.VITE_API_REMOTE_HOST || undefined;
     return {
 
-        plugins: [sentryVitePlugin({
-            org: process.env.SENTRY_ORG,//"hvsy",
-            project: process.env.SENTRY_PROJECT,//"ishopify",
-            authToken: process.env.SENTRY_AUTH_TOKEN,
-            telemetry : false,
-            sourcemaps : {
-                filesToDeleteAfterUpload :  [path.join(__dirname, "dist", "assets","*.js.map")],
-            }
-        }),
+        plugins: [
+            sentryVitePlugin({
+                org: process.env.SENTRY_ORG,//"hvsy",
+                project: process.env.SENTRY_PROJECT,//"ishopify",
+                authToken: process.env.SENTRY_AUTH_TOKEN,
+                telemetry : false,
+                sourcemaps : {
+                    filesToDeleteAfterUpload :  [path.join(__dirname, "dist", "assets","*.js.map")],
+                }
+            }),
             react(),
 
             // tailwindcss(),
@@ -39,34 +41,34 @@ export default defineConfig(({mode}) => {
                 enforce: 'post',
                 async transformIndexHtml(html, ctx) {
                     const bundles = ctx.bundle;
-                    if (!bundles) {
-                        return html;
-                    }
-                    // 找到后缀为 .css 的资源
-                    const cssFiles = Object.values(bundles).filter(
-                        (file: any) =>
-                            file.type === 'asset' &&
-                            file.fileName.endsWith('.css') && file.fileName.includes('index') &&
-                            typeof file.source === 'string'
-                    ) as any[];
+                    let h = html;
+                    if (!!bundles) {
+                        const cssFiles = Object.values(bundles).filter(
+                            (file: any) =>
+                                file.type === 'asset' &&
+                                file.fileName.endsWith('.css') &&
+                                typeof file.source === 'string'
+                        ) as any[];
 
-                    if (cssFiles.length === 0) {
-                        return html;
+                        if (cssFiles.length !== 0) {
+                            const cssContent = cssFiles[0].source;
+                            console.log(cssFiles[0].fileName);
+                            h = h.replace('<!-- inject:css -->', `<style>${cssContent}</style>`).replace(
+                                `<link rel="stylesheet" crossorigin href="./${cssFiles[0].fileName}">`, ''
+                            )
+                        }
                     }
-
-                    // 这里假设只有一个 CSS 文件（因为 cssCodeSplit: false）
-                    const cssContent = cssFiles[0].source;
-                    console.log(cssFiles[0].fileName);
-                    return html.replace('<!-- inject:css -->', `<style>${cssContent}</style>`).replace(
-                        `<link rel="stylesheet" crossorigin href="./${cssFiles[0].fileName}">`, ''
+                    return h.replace('<!-- inject:blade -->',
+                        readFileSync(__dirname+'/index.blade.php','utf8'),
                     );
                 }
-            }
+            },
         ],
         base: './',
         build: {
             sourcemap : true,
             manifest: "manifest.json",
+            cssCodeSplit : false,
         },
         content: ["./dist/**/*.{html,js}"],
         server: {

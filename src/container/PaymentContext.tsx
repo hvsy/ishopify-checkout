@@ -1,9 +1,13 @@
-import {createContext, Dispatch, FC, SetStateAction, use, useEffect, useState} from "react";
+import {createContext, Dispatch, FC, lazy, SetStateAction, use, useEffect, useState} from "react";
 import useSWR from "swr";
-import {Pixels} from "../shopify/fragments/Pixels.tsx";
 import {ErrorBoundary} from "react-error-boundary";
 import {Setup} from "@lib/flags.ts";
 import {isString} from "lodash-es";
+const Pixels = lazy(()=>{
+    return import("../shopify/fragments/Pixels").then(m=>{
+        return {default : m.Pixels}
+    })
+})
 
 
 export const PaymentContext = createContext<{

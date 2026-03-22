@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo, useRef} from "react";
+import {FC, lazy, useEffect, useMemo, useRef} from "react";
 import {isString as _isString,find as _find,capitalize as _capitalize,startsWith} from "lodash-es";
 import {Input} from "../../../components/Input.tsx";
 import {CircleHelp} from "lucide-react";
@@ -18,8 +18,12 @@ import {getGlobalPath, PhoneOnlyRequired} from "../../../../shopify/lib/globalSe
 import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts";
 import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
 import {Features, isCN} from "@lib/flags.ts";
-import {ZipSuggest} from "../../../../geo/ZipSuggest.tsx";
 import {ErrorBoundary} from "react-error-boundary";
+const ZipSuggest = lazy(() => {
+    return import('../../../../geo/ZipSuggest').then((m) => {
+        return {default : m.ZipSuggest};
+    })
+});
 
 
 
