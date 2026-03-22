@@ -26,7 +26,7 @@ export const CouponFormFrame: FC<CouponFormFrameProps> = (props) => {
                        setCode(e.target.value);
                    }}
             />
-            <AsyncButton onClick={async () => {
+            <AsyncButton className={'mt-2'} onClick={async () => {
                 if (!code) return;
                 setError(false);
                 try {

@@ -6,7 +6,7 @@ let globalSettings : any = null;
 export function getGlobalSettings(){
     if(globalSettings === null){
         globalSettings = getJsonFromMeta('settings',{});
-        console.log('global settings:',globalSettings);
+        import.meta.env.DEV && console.log('global settings:',globalSettings);
     }
     return globalSettings;
 }

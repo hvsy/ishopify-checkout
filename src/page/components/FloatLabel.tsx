@@ -83,7 +83,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
             <div className={'relative flex-1 flex flex-row items-stretch overflow-hidden'}>
                 {loading ? <Skeleton className={'h-full w-full bg-gray-200'}/>:<Element ref={elementRef}
                          {...others}
-                         // placeholder={ph}
+                         placeholder={float ?undefined :ph}
                          value={onChange ? (value || '') : value}
                          onBlur={onBlur}
                          onFocus={(e : any)=>{

@@ -76,6 +76,8 @@ const RequireFirstName = Features.includes('require_first_name');
 const CountryOnTop = Features.includes('country_on_top');
 const CountriesLoading = Features.includes('countries_loading');
 
+const AutoRemoveDialCode = Features.includes('auto_remove_dial_code');
+
 // const AddressTip = 'Please enter 4-200 characters to Automatically retrieve addresses';
 const AddressTip = 'Enter an address';
 export const AddressForm: FC<AddressFormProps> = (props) => {
@@ -319,7 +321,8 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                             const dialCode = (v?.dialCode || '').replace('+','');
                             import.meta.env.DEV && console.log('phone2 dial code:',dialCode,v,value);
                             if(dialCode && v?.number){
-                                if(v?.number?.startsWith(dialCode)){
+                                const vn = v?.number;
+                                if(vn?.startsWith(dialCode)){
                                     message.push("Please don't enter the international dial code")
                                 }
                             }
@@ -335,6 +338,19 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        const p = _isString(phone) ? phone : phone?.toString();
                        if(!!p) {
                            onPhoneChange?.(p,ValidatePhone(phone,true));
+                       }
+                       if(Phone2 && AutoRemoveDialCode) {
+                           const dialCode = (phone?.dialCode || '').replace('+','');
+                           import.meta.env.DEV && console.log('phone2 dial code:',dialCode,phone,);
+                           if(dialCode && phone?.number){
+                               const vn = phone?.number;
+                               if(vn?.startsWith(dialCode)){
+                                   const final  = `+${dialCode}${vn.replace(new RegExp(`^${dialCode}`),'')}`;
+                                   if(ValidatePhone(final)) {
+                                       formInstance.setFieldValue([...prefix,Phone2 ? 'phone2' : 'phone'],final);
+                                   }
+                               }
+                           }
                        }
                    }}
                    placeholder={`Phone (For shipping updates) ${phonePrefix && !Phone2 ?'+' + phonePrefix:''}`}
