@@ -16,7 +16,7 @@ export const StepFrame: FC<StepFrameProps> = (props) => {
             {!!children && <Skeleton className={'h-24 w-full'}/>}
         </div>
     }
-    return <div className={'space-y-3'}>
+    return <div className={'space-y-3 min-h-[90px]'}>
         <div className={'font-bold'}>
             {title}
         </div>

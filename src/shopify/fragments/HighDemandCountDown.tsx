@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC,} from "react";
 import {CountDown} from "@components/fragments/CountDown.tsx";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
 

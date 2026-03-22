@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="strict_pixel" content="{{json_encode($strict_pixel ?? null)}}"/>
     <meta name="zip_suggest_delay" content="{{$zip_suggest_delay ?? null }}"/>
+    <meta name="setup" content="{{json_encode($setup ?? null)}}" />
 
 @if(!empty($preset_shipping))
     <meta name="preset_shipping" content="{{json_encode($preset_shipping ?? null)}}" />
@@ -26,13 +27,23 @@
         @endif
     @endforeach
 @endif
+@if(!empty($scripts))
+    @foreach($scripts as $script)
+        @if(!empty($script))
+            <script type="text/javascript" src="{!! $script!!}" ></script>
+        @endif
+    @endforeach
+@endif
 
     <title></title>
     <!-- inject:css -->
     </head>
 <body>
-<div id="root"></div>
+<div id="root">
+@if(!empty($advanced_loading))
+</div>
 <div id="__loader__" style="position: fixed;inset: 0;z-index: 10000;">
+@endif
     <div class="relative">
         <form method="POST" novalidate="">
             <div class="min-h-[100vh]  flex flex-col items-stretch sm:flex sm:flex-row sm:items-stretch sm:mx-auto overflow-auto">

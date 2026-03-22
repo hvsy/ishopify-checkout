@@ -1,8 +1,9 @@
 import {createContext, Dispatch, FC, SetStateAction, use, useEffect, useState} from "react";
 import useSWR from "swr";
 import {Pixels} from "../shopify/fragments/Pixels.tsx";
-import {isString, get as _get} from "lodash-es";
 import {ErrorBoundary} from "react-error-boundary";
+import {Setup} from "@lib/flags.ts";
+import {isString} from "lodash-es";
 
 
 export const PaymentContext = createContext<{
@@ -50,21 +51,26 @@ function preload(config: any) {
     })
     document.head.append(link);
 }
-
-export const PaymentContainer: FC<any> = (props) => {
-    const {children} = props;
-    const [method, setMethod] = useState<DB.PaymentMethod | null>(null);
-    const [progress, setProgress] = useState<string | undefined>();
-    const [suggestZipCode, setSuggestZipCode] = useState<string|undefined>();
-    const {data: setup, isLoading} = useSWR<{
-        tracking: any;
-        payments: DB.PaymentMethod[],
-        zones?: any[],
-    }>(
+type CheckoutSetup = {
+    tracking: any;
+    payments: DB.PaymentMethod[],
+    zones?: any[],
+}
+export function useSetup(){
+    if(!!Setup)  return {setup : Setup as CheckoutSetup,isLoading : false,inner:true};
+    const {data, isLoading} = useSWR<CheckoutSetup>(
         '/a/s/api/setup', {
             errorRetryCount: 10,
         }
     );
+    return {setup : data,isLoading,inner : false};
+}
+export const PaymentContainer: FC<any> = (props) => {
+    const {children} = props;
+    const {setup, isLoading,inner} = useSetup();
+    const [method, setMethod] = useState<DB.PaymentMethod | null>(null);
+    const [progress, setProgress] = useState<string | undefined>();
+    const [suggestZipCode, setSuggestZipCode] = useState<string|undefined>();
     useEffect(() => {
         if (!setup?.payments) return;
         (setup.payments || []).forEach((payment) => {
@@ -92,11 +98,11 @@ export const PaymentContainer: FC<any> = (props) => {
     }, [!!setup]);
     return <PaymentContext value={{
         tracking: setup?.tracking || null,
+        methods: setup?.payments || [],
+        zones: setup?.zones || [],
         method,
         setMethod,
-        methods: setup?.payments || [],
         loading: isLoading,
-        zones: setup?.zones || [],
         progress,
         setProgress,
         suggestZipCode,
