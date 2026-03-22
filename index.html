@@ -15,11 +15,17 @@
     <meta name="strict_pixel" content="{{json_encode($strict_pixel ?? null)}}"/>
     <meta name="zip_suggest_delay" content="{{$zip_suggest_delay ?? null }}"/>
     <meta name="setup" content="{{json_encode($setup ?? null)}}" />
-@if(!empty($preconnects))
-    @foreach($preconnects as $preconnect)
-        <link rel="preconnect" href="{!! $preconnect !!}" />
-    @endforeach
-@endif
+    <meta name="money_format" content="{{json_encode($money_format ?? null)}}" />
+    <meta name="shop_title" content="{{json_encode($shop_title?? null)}}" />
+    @if(!empty($preconnects))
+        @foreach($preconnects as $preconnect)
+            @if(is_string($preconnect))
+                <link rel="preconnect" href="{!! $preconnect !!}" />
+            @else
+                <link rel="preconnect" href="{!! $preconnect['url'] !!}" @if(!empty($preconnect['crossorigin'])) crossorigin="{{$preconnect['crossorigin']}}" @endif />
+            @endif
+        @endforeach
+    @endif
 
 @if(!empty($preset_shipping))
     <meta name="preset_shipping" content="{{json_encode($preset_shipping ?? null)}}" />
@@ -28,14 +34,23 @@
 @if(!empty($preloads))
     @foreach($preloads as $preload)
         @if(!empty($preload))
-            <link rel="preload" href="{!! $preload !!}" as="fetch" @if(!empty($crossorigin)) crossorigin="{{$crossorigin}}" @endif />
+            @if(is_string($preload))
+                <link rel="preload" href="{!! $preload !!}" as="fetch" />
+            @else
+                <link rel="preload" href="{!! $preload['url'] !!}" as="fetch" @if(!empty($preload['crossorigin'])) crossorigin="{{$preload['crossorigin']}}" @endif />
+            @endif
         @endif
     @endforeach
 @endif
+
 @if(!empty($scripts))
     @foreach($scripts as $script)
         @if(!empty($script))
-            <script type="text/javascript" src="{!! $script!!}" ></script>
+            @if(is_string($script))
+                <script type="text/javascript" src="{!! $script!!}" ></script>
+            @else
+                <script type="text/javascript" src="{!! $script['href'] !!}" @if(!empty($script['crossorigin'])) crossorigin="{{$script['crossorigin']}}" @endif></script>
+            @endif
         @endif
     @endforeach
 @endif
