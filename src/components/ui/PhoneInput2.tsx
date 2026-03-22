@@ -55,12 +55,12 @@ export const PhoneInput2: FC<PhoneInput2Props> = (props) => {
     const changedRef = useRef<any>(value);
     const {inputValue, handlePhoneValueChange, inputRef, country, setCountry} = usePhoneInput({
         defaultCountry: countryCode?.toLocaleLowerCase(),
+        allowMaskOverflow : true,
         value: ValueString,
         disableDialCodePrefill: true,
         disableCountryGuess: false,
         disableDialCodeAndPrefix: true,
         forceDialCode: false,
-        disableFormatting: PhoneOnlyRequired(),
         onChange(data) {
             const iv = (data.inputValue)?.toString().trim();
             import.meta.env.DEV && console.log('phone2:',iv);

@@ -4823,10 +4823,10 @@ react-frame-component@^5.2.7:
   resolved "https://registry.yarnpkg.com/react-frame-component/-/react-frame-component-5.2.7.tgz#e31c0943be95fdf667c59d6d7fcf18c1dda4d4b2"
   integrity sha512-ROjHtSLoSVYUBfTieazj/nL8jIX9rZFmHC0yXEU+dx6Y82OcBEGgU9o7VyHMrBFUN9FuQ849MtIPNNLsb4krbg==
 
-react-international-phone@^4.6.1:
-  version "4.6.1"
-  resolved "https://registry.yarnpkg.com/react-international-phone/-/react-international-phone-4.6.1.tgz#9c04da4e0c1191dc1336cf074756437d4ef21785"
-  integrity sha512-Hfm8r5+yGObrqg+R2S17fhmrHpZQHNsPmREZ6XAFHHspvGvvPdYX3fRfvE800hYMJoBPRYpoFCdClH2V32FPWg==
+react-international-phone@^4.8.0:
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/react-international-phone/-/react-international-phone-4.8.0.tgz#6a9056a0404cbd96bcc4f4a25420f7959f7a8415"
+  integrity sha512-PoyXx8t0OZNZXLupZN5UtmLb8nO6PQ6f6jQvYCAtg7VzxonuBcDs/4YA4+flqZZj5QOVqN4DLY1p39mEtJAwzw==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
