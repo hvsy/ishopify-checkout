@@ -15,6 +15,11 @@
     <meta name="strict_pixel" content="{{json_encode($strict_pixel ?? null)}}"/>
     <meta name="zip_suggest_delay" content="{{$zip_suggest_delay ?? null }}"/>
     <meta name="setup" content="{{json_encode($setup ?? null)}}" />
+@if(!empty($preconnects))
+    @foreach($preconnects as $preconnect)
+        <link rel="preconnect" href="{!! $preconnect !!}" />
+    @endforeach
+@endif
 
 @if(!empty($preset_shipping))
     <meta name="preset_shipping" content="{{json_encode($preset_shipping ?? null)}}" />
