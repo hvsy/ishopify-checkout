@@ -57,7 +57,7 @@ import {
 } from "@query/checkouts/fragments/fragments.ts";
 import {CartStorage} from "./shopify/context/CartStorage.ts";
 import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
-import {getBooleanFromMeta} from "@lib/metaHelper.ts";
+import {Features} from "@lib/flags.ts";
 // import {Additional} from "./shopify/additional/Additional.tsx";
 const Additional = lazy(() => {
     return import("./shopify/additional/Additional").then(m=>{
@@ -87,7 +87,7 @@ async function getCheckout(request : Request,params : Params<string>,context : a
         if(!!direct && direct !== 'undefined'){
         // if(!!direct){
             storage.key = direct;
-            if(getBooleanFromMeta('redirect')){
+            if(Features.includes('redirect')){
                 return redirect(`/a/s/checkouts/${token}`);
             }
         }
