@@ -14,8 +14,12 @@ export function buildAddress(address: any,validate_phone : boolean = true) {
         provinceCode: 'state_code',
         zip: 'zip',
     }, true)
-    if(address?.phone2 && address.phone2.toString()){
-        after.phone = address.phone2.toString();
+    if(address?.phone2){
+        if(address.phone2.getFullPhone){
+            after.phone = address.phone2.getFullPhone();
+        }else if(address.toString && address.toString()){
+            after.phone = address.phone2.toString();
+        }
     }
     if (validate_phone && !ValidatePhone(after.phone || '')) {
         after.phone = "";

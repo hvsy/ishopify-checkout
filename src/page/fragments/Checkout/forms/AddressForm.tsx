@@ -318,13 +318,8 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                                 }
                             }
                         }else{
-                            const dialCode = (v?.dialCode || '').replace('+','');
-                            import.meta.env.DEV && console.log('phone2 dial code:',dialCode,v,value);
-                            if(dialCode && v?.number){
-                                const vn = v?.number;
-                                if(vn?.startsWith(dialCode)){
-                                    message.push("Please don't enter the international dial code")
-                                }
+                            if(v?.validate && v.validate() !== false){
+                                return;
                             }
                         }
                         throw new Error(message.join("\n"));
@@ -339,19 +334,19 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        if(!!p) {
                            onPhoneChange?.(p,ValidatePhone(phone,true));
                        }
-                       if(Phone2 && AutoRemoveDialCode) {
-                           const dialCode = (phone?.dialCode || '').replace('+','');
-                           import.meta.env.DEV && console.log('phone2 dial code:',dialCode,phone,);
-                           if(dialCode && phone?.number){
-                               const vn = phone?.number;
-                               if(vn?.startsWith(dialCode)){
-                                   const final  = `+${dialCode}${vn.replace(new RegExp(`^${dialCode}`),'')}`;
-                                   if(ValidatePhone(final)) {
-                                       formInstance.setFieldValue([...prefix,Phone2 ? 'phone2' : 'phone'],final);
-                                   }
-                               }
-                           }
-                       }
+                       // if(Phone2 && AutoRemoveDialCode) {
+                       //     const dialCode = (phone?.dialCode || '').replace('+','');
+                       //     import.meta.env.DEV && console.log('phone2 dial code:',dialCode,phone,);
+                       //     if(dialCode && phone?.number){
+                       //         const vn = phone?.number;
+                       //         if(vn?.startsWith(dialCode)){
+                       //             const final  = `+${dialCode}${vn.replace(new RegExp(`^${dialCode}`),'')}`;
+                       //             if(ValidatePhone(final)) {
+                       //                 formInstance.setFieldValue([...prefix,Phone2 ? 'phone2' : 'phone'],final);
+                       //             }
+                       //         }
+                       //     }
+                       // }
                    }}
                    placeholder={`Phone (For shipping updates) ${phonePrefix && !Phone2 ?'+' + phonePrefix:''}`}
                    className={'col-span-6'}

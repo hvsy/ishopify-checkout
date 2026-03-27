@@ -17,6 +17,9 @@
     <meta name="setup" content="{{json_encode($setup ?? null)}}" />
     <meta name="money_format" content="{{json_encode($money_format ?? null)}}" />
     <meta name="shop_title" content="{{json_encode($shop_title?? null)}}" />
+    @if(!empty($payment_title))
+        <meta name="payment_title" content="{{$payment_title}}" />
+    @endif
     <!-- inject:blade -->
 
     <title></title>
