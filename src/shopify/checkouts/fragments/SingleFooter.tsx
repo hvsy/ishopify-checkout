@@ -7,6 +7,7 @@ import {useParams} from "react-router-dom";
 import {useFormValidate} from "../../hooks/useFormValidate.tsx";
 import {useCurrentForm} from "../../../container/FormContext.ts";
 import {Features} from "@lib/flags.ts";
+import {getMetaContent} from "@lib/metaHelper.ts";
 
 export type SingleFooterProps = {};
 
@@ -26,7 +27,7 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
         }}
 
         next={{
-            label: 'Place an order',
+            label: getMetaContent('payment_title') || 'Place an order',
             pulsing: ing,
             async onClick() {
 

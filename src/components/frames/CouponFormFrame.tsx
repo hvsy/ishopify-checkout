@@ -17,16 +17,16 @@ export const CouponFormFrame: FC<CouponFormFrameProps> = (props) => {
     const [error, setError] = useState<any>(false);
     return <StepBlock label={'Sign in Coupon code applied will be stored on your account'} name={'coupon'}
                       className={'py-3 space-y-3 flex-shrink-0 flex flex-col items-stretch'}>
-        <div className={'flex flex-row items-center space-x-2'}>
-            <Input size={'sm'} placeholder={'Coupon code'}
+        <div className={'flex flex-row items-stretch space-x-2'}>
+            <Input size={'default'} placeholder={'Discount code'}
                    autoScroll={false}
-                   className={'flex-1'} float={false}
+                   className={'flex-1'}
                    value={code}
                    onChange={(e) => {
                        setCode(e.target.value);
                    }}
             />
-            <AsyncButton className={'mt-2'} onClick={async () => {
+            <AsyncButton className={`mt-2 h-[49px] text-lg ${!code ? 'bg-neutral-200 text-gray-400 hover:bg-neutral-200' :""}`} onClick={async () => {
                 if (!code) return;
                 setError(false);
                 try {

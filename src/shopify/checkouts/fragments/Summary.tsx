@@ -11,6 +11,7 @@ import {useSummary} from "../hooks/useSummary.tsx";
 import {LoadingContainer} from "@components/fragments/LoadingContainer.tsx";
 import {SummaryFrame} from "../../fragments/SummaryFrame.tsx";
 import {CheckoutPixelReport} from "./CheckoutPixelReport.tsx";
+import {DeliveryTip} from "../../fragments/DeliveryTip.tsx";
 
 export const Summary: FC<SummaryProps> = (props) => {
     const {lines} = props;
@@ -46,7 +47,9 @@ export const Summary: FC<SummaryProps> = (props) => {
     });
     const freeShipping = checkout.shipping_discount?.discountedAmount?.amount === shipping_cost?.amount;
     const total = _get(json, 'cart.cost.totalAmount');
-    return <><SummaryFrame subtotal={_get(json, 'cart.cost.subtotalAmount')}
+    return <div className={'flex flex-col items-stretch pt-2 space-y-2'}>
+        <DeliveryTip />
+        <SummaryFrame subtotal={_get(json, 'cart.cost.subtotalAmount')}
                            total={total}
                            total_quantity={_get(json, 'cart.totalQuantity')}
                            discount_codes={codes}
@@ -81,5 +84,5 @@ export const Summary: FC<SummaryProps> = (props) => {
                                </LoadingContainer>;
                            }}/>
         <CheckoutPixelReport lines={lines} json={json} />
-    </>;
+    </div>;
 }

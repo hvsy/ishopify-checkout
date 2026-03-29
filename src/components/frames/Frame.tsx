@@ -29,7 +29,7 @@ export const Frame: FC<FrameProps> = (props) => {
                 })}>
                 {children}
             </div>
-            <div className={clsx(`flex flex-col w-full sm:w-[45.5%] bg-neutral-50 sm:pt-16 sm:p-2 lg:pl-12 relative overflow-hidden`,
+            <div className={clsx(`flex flex-col w-full sm:w-[45.5%] bg-neutral-50 sm:pt-16 sm:p-8 lg:pl-12 relative overflow-hidden`,
                 {
                     'sm:max-h-[100vh]': mode !== 0,
                 }

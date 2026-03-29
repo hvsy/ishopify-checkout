@@ -9,11 +9,14 @@ import {PromiseLocation} from "../../lib/payment.ts";
 import {get as _get} from "lodash-es";
 import {Features} from "@lib/flags.ts";
 import {usePaymentContext} from "../../../container/PaymentContext.tsx";
+import {getMetaContent} from "@lib/metaHelper.ts";
 
 export type ApproveItProps = {};
 
 const AutoFillSuggestCode = Features.includes('auto-fill-suggest-zip');
 const FloatApprove = Features.includes('float_approve_button');
+
+const payment_title = getMetaContent('payment_title') || 'Place an order'
 export const ApproveIt: FC<ApproveItProps> = (props) => {
     const {} = props;
     const {ing,storage} = useSummary();
@@ -87,6 +90,6 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                     })
                 }
             }}
-            className={`max-w-full text-xl sm:text-lg h-12`}>Place an order</AsyncButton>
+            className={`max-w-full text-xl sm:text-lg h-12`}>{payment_title}</AsyncButton>
     </div>;
 };

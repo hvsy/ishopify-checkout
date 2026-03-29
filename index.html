@@ -17,6 +17,9 @@
     <meta name="setup" content="{{json_encode($setup ?? null)}}" />
     <meta name="money_format" content="{{json_encode($money_format ?? null)}}" />
     <meta name="shop_title" content="{{json_encode($shop_title?? null)}}" />
+    @if(!empty($payment_title))
+        <meta name="payment_title" content="{{$payment_title}}" />
+    @endif
     <!-- inject:blade -->
 
     <title></title>
@@ -111,7 +114,7 @@
                             <div class="animate-pulse bg-gray-300 rounded overflow-hidden max-w-32 min-w-10 min-h-4"></div>
                         </div>
                     </div>
-                    <div class="flex flex-col w-full sm:w-[45.5%] bg-neutral-50 sm:pt-16 sm:p-2 lg:pl-12 relative overflow-hidden">
+                    <div class="flex flex-col w-full sm:w-[45.5%] bg-neutral-50 sm:pt-16 sm:p-8 lg:pl-12 relative overflow-hidden">
                         <div class="">
                             <details id="summary-details"
                                      class="sm:max-w-[478px] appearance-none flex flex-col items-stretch undefined group"
