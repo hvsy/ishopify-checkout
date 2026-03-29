@@ -37,7 +37,7 @@ export const Left: FC<LeftProps> = (props) => {
             {/*<CheckoutForm />*/}
         </div>
         <div className={'border-t pb-4'}></div>
-        {import.meta.env.VITE_SKELETON ?<Skeleton className={'max-w-32 min-w-10 min-h-4'} /> :<div className={'pl-4 text-xs flex flex-col gap-[.5rem] !mt-0'}>
+        {import.meta.env.VITE_SKELETON ?<Skeleton className={'max-w-32 min-w-10 min-h-4'} /> :<div className={'pl-2 text-xs flex flex-col gap-[.5rem] !mt-0'}>
              <span
                  className={'cursor-pointer hover:underline'}
                  onClick={() => setShowPolicy(true)}

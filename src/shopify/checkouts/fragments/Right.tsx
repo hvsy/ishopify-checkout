@@ -20,8 +20,12 @@ import {QueryLineItems} from "@query/checkouts/queries.ts";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
 import {getGlobalPath} from "../../lib/globalSettings.ts";
 import {Media} from "../../../page/components/Media.tsx";
+import {WhyChooseUs2} from "../../fragments/WhyChooseUs2.tsx";
+import {Features} from "@lib/flags.ts";
 import {WhyChooseUs} from "../../fragments/WhyChooseUs.tsx";
 
+
+const WhyChooseVersion = Features.includes('why_choose_v2')
 export type RightProps = {};
 export const Right: FC<RightProps> = (props) => {
     const {} = props;
@@ -79,7 +83,10 @@ export const Right: FC<RightProps> = (props) => {
                 height: pcImage.height,
             }} width={pcImage.width}/>
         </div>}
-        <WhyChooseUs />
+        {WhyChooseVersion  ? <div className={'hidden sm:flex flex-col'}>
+            <WhyChooseUs2 />
+        </div> : <WhyChooseUs />}
+
 
     </RightFrame>;
 };

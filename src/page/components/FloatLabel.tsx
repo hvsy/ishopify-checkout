@@ -59,7 +59,7 @@ export const FloatLabel: FC<FloatLabelProps> = (props) => {
     } = props;
     const h : any = {
         'sm' : 'h-[40px]',
-        'default' : 'h-[46px]',
+        'default' : 'h-[49px]',
         'large' : 'h-[52px]',
     }[size];
     const hasError = errors && errors.length > 0;

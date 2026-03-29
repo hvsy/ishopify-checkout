@@ -5,6 +5,8 @@ import {AsyncButton} from "../fragments/AsyncButton.tsx";
 import {Skeleton} from "../ui/Skeleton.tsx";
 import {getGlobalPath} from "../../shopify/lib/globalSettings.ts";
 import {Media} from "../../page/components/Media.tsx";
+import {WhyChooseUs2} from "../../shopify/fragments/WhyChooseUs2.tsx";
+import {Features} from "@lib/flags.ts";
 
 export type FooterFrameProps = {
     back ?: {
@@ -19,6 +21,7 @@ export type FooterFrameProps = {
     }
 };
 
+const WhyChooseVersion = Features.includes('why_choose_v2')
 export const FooterFrame: FC<FooterFrameProps> = (props) => {
     const {back,next} = props;
     const mobileImage = getGlobalPath("profile.mobile.resource.image");
@@ -36,6 +39,9 @@ export const FooterFrame: FC<FooterFrameProps> = (props) => {
                 media={mobileImage as DB.Media}
                 width={mobileImage.width}
             />
+        </div>}
+        {WhyChooseVersion && <div className={'sm:hidden'}>
+            <WhyChooseUs2 />
         </div>}
         {left}
         <AsyncButton onClick={next?.onClick}  pulsing={next?.pulsing || false} className={'max-w-full text-xl px-8 py-7 sm:text-lg sm:py-0'}>
