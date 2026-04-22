@@ -6,11 +6,11 @@ import {api} from "@lib/api.ts";
 
 export function usePaypalCardFields(method_id : string|number,sdk : string){
     const status =  useScript(sdk,{
-        id : 'paypal-card',
+        id : 'paypal-card-sdk',
     })
     const valuesRef = useRef<any>(null);
     const fields = useMemo(() => {
-        if(!window.paypal || status !== 'ready') return null;
+        if(!window.paypal || !['ready',].includes(status)) return null;
         return window.paypal.CardFields?.({
             style: {
                 input: {
