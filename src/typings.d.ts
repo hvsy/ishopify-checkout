@@ -1,3 +1,4 @@
+
 declare module "*.gql"
 {
     const content: string;
@@ -61,6 +62,7 @@ namespace Analytics{
 }
 
 interface Window {
+    paypal : any;
     fbq: (fun : string,event : string,data ?: any,extra ?: any)=>void;
     gtag ?: (action : string,event : string, data : any)=>void;
     snaptr ?: any;

@@ -5,6 +5,8 @@ import {PaymentTip} from "./PaymentTip.tsx";
 import {EmbedInFrame} from "./EmbedInFrame.tsx";
 import {cn} from "@lib/cn.ts";
 import {BillingAddressStep} from "../../../../../shopify/checkouts/steps/BillingAddressStep";
+import {Discover} from "../../../../../assets/discover.tsx";
+import {PaypalCard} from "../../../../../payments/PaypalCard.tsx";
 
 export type PaymentProps = {
     method : DB.PaymentMethod,
@@ -21,6 +23,7 @@ const Icons : any = {
         "master": ['https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/mastercard.1c4_lyMp.svg',],
         "amex" :'https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/amex.Csr7hRoy.svg',
         "jcb" : 'https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/jcb.BgZHqF0u.svg',
+        'discover': Discover,
     },
 };
 
@@ -58,7 +61,7 @@ export const Payment: FC<PaymentProps> = (props) => {
                         </div>}
                 <div className={'flex flex-row space-x-1'}>
                     {(icons || []).map((icon, i) => {
-                        return <div className={'rounded flex flex-col justify-center items-center overflow-hidden'} key={i}>
+                        return <div className={'rounded flex flex-col justify-center items-center overflow-hidden min-w-[38px]'} key={i}>
                             {_isString(icon) ? <img width={38} height={24} className="object-cover overflow-hidden" src={icon}/> : icon }
                         </div>
                     })}
@@ -71,8 +74,17 @@ export const Payment: FC<PaymentProps> = (props) => {
         })}>
             <div className={'flex flex-col'}>
                 {
-                    (function (mode) {
+                    (function (m) {
+                        const {mode,channel}= m;
+
                         switch (mode) {
+                            case 'component':{
+                                switch(channel){
+                                    case 'paypal-card':
+                                        return <PaypalCard method={m}/>;
+                                }
+                                break;
+                            }
                             case 'popup':
                             case 'redirect': {
                                 return <PaymentTip/>
@@ -92,7 +104,7 @@ export const Payment: FC<PaymentProps> = (props) => {
                                 return mode;
                         }
                         return null;
-                    })(method.mode)
+                    })(method)
                 }
             </div>
             {method.type === 'credit-card' && checked && <BillingAddressStep />}

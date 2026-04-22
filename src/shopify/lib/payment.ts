@@ -2,8 +2,9 @@ import Big from "big.js";
 import {PaymentError} from "../../exceptions/PaymentError.ts";
 import {api} from "@lib/api.ts";
 import {free} from "@lib/payment.ts";
-import {get as _get,  isObjectLike,} from "lodash-es";
+import {get as _get, isObjectLike, isString,} from "lodash-es";
 import {Dispatch, SetStateAction} from "react";
+import {Bus} from "../../bus.tsx";
 
 export function getUrlFrom(token : string){
     const cart_token = token.split('?')[0] ?? '';
@@ -110,12 +111,29 @@ export async function shopify_payment(options : {
         return PromiseLocation(href);
         // window.location.href = href;
         // return false;
+    }else if(mode === 'component'){
+        try {
+            await Bus.emitAsync('payment:validate');
+        }catch (e) {
+            step?.(() => {
+                return isString(e) ? e : method.channel  + ' validate error';
+            });
+            throw e;
+        }
+        try{
+            await Bus.emitAsync('payment:submit',values);
+        }catch (e) {
+            step?.(() => {
+                return isString(e) ? e : method.channel  + ' submit error';
+            });
+            throw e;
+        }
     }else{
         const frame = document.getElementById(method.channel) as HTMLIFrameElement;
         const window = frame?.contentWindow
         if(!window){
             step?.(() => {
-                return `con't find payment window:${method.channel}`;
+                return `can't find payment window:${method.channel}`;
             });
             console.log(values,url,method);
             return;

@@ -21,9 +21,3 @@ export function useCheckout(){
     return CheckoutContainer.use();
 }
 
-export function useBasename(){
-    const checkout = useCheckout();
-    const token = checkout?.token;
-    return `/checkouts/${token}`;
-}
-

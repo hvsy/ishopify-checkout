@@ -6,7 +6,7 @@ import {CheckoutSummary} from "../container/SummaryContext.tsx";
 export const Steps = ['information','shipping','payment'] as const;
 
 export type StepTypes = typeof Steps[number];
-export const PaymentMethodTypes = ["redirect","builtin","popup","embed-in"] as const;
+export const PaymentMethodTypes = ["redirect","builtin","popup","embed-in",'component'] as const;
 
 export type PaymentMethodType = typeof PaymentMethodTypes[number];
 
