@@ -61,7 +61,9 @@ type CheckoutSetup = {
     zones?: any[],
 }
 export function useSetup(){
-    if(!!Setup)  return {setup : Setup as CheckoutSetup,isLoading : false,inner:true};
+    if(!!Setup){
+        return {setup : Setup as CheckoutSetup,isLoading : false,inner:true}
+    };
     const {data, isLoading} = useSWR<CheckoutSetup>(
         '/a/s/api/setup', {
             errorRetryCount: 10,

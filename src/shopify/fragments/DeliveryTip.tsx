@@ -11,7 +11,7 @@ export const DeliveryTip: FC<DeliveryTipProps> = (props) => {
     >
         <img src="https://cdn.shopify.com/s/files/1/0762/4491/0316/files/shipping_van.png?v=1763041268"
              className={'w-20'}
-             loading={'eager'}
+             loading={'lazy'}
              alt=""/>
         <div className={'flex flex-col space-y-2'}>
             <div className={'font-bold text-sm'}>
