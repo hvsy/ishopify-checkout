@@ -26,9 +26,9 @@ export const WhyChooseUs2: FC<WhyChooseUs2Props> = (props) => {
                 image : "https://cdn.shopify.com/s/files/1/0762/4491/0316/files/10003.avif?v=1763041268",
                 title : 'Trusted by 90,000+ Customers',
                 content : `${title} is a health-focused brand dedicated to helping you restore natural balance and well-being — trusted and appreciated by a growing global community`,
-            }].map((item) => {
-                return <div className={'flex flex-row  space-x-4 p-2 rounded-lg border border-[#D6D6D6]'}>
-                    <img src={item.image} className={'size-16'} loading="eager"/>
+            }].map((item,title) => {
+                return <div key={title} className={'flex flex-row  space-x-4 p-2 rounded-lg border border-[#D6D6D6]'}>
+                    <img src={item.image} className={'size-16'} loading="lazy"/>
                     <div className={'flex flex-col space-y-1'}>
                         <div className={'font-medium text-base'}>{item.title}</div>
                         <div className={'text-xs text-gray-500'}>{item.content}</div>
