@@ -1,4 +1,4 @@
-import {createContext, Dispatch, FC, lazy, SetStateAction, use, useEffect, useState} from "react";
+import {createContext, Dispatch, FC, lazy, SetStateAction, use, useEffect, useRef, useState} from "react";
 import useSWR from "swr";
 import {ErrorBoundary} from "react-error-boundary";
 import {Setup} from "@lib/flags.ts";
@@ -77,8 +77,11 @@ export const PaymentContainer: FC<any> = (props) => {
     const [method, setMethod] = useState<DB.PaymentMethod | null>(null);
     const [progress, setProgress] = useState<string | undefined>();
     const [suggestZipCode, setSuggestZipCode] = useState<string|undefined>();
+    const mountedRef = useRef(false);
     useEffect(() => {
         if (!setup?.payments) return;
+        if(mountedRef.current) return;
+        mountedRef.current = true;
         (setup.payments || []).forEach((payment) => {
             (payment.preloads?.js || []).forEach((js) => {
                 if (!js) return;
