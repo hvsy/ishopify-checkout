@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {get, uniq} from "lodash-es";
 import {useCurrentForm} from "../container/FormContext.ts";
-import Form from "rc-field-form";
+import Form from "@rc-component/form";
 import useSWR from "swr";
 import {getIntFromMeta,} from "@lib/metaHelper.ts";
 import {usePaymentContext} from "../container/PaymentContext.tsx";

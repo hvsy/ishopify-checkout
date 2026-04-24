@@ -1,12 +1,7 @@
-import {useLoaderData, useParams, useRouteLoaderData} from "react-router-dom";
 import {CartStorage} from "../shopify/context/CartStorage.ts";
+import {useCurrentLoaderData} from "../shopify/checkouts/hooks/useCurrentLoaderData.tsx";
 
 export function useCartStorage(){
-    // const {token} = useParams();
-    // return useMemo(() => {
-    //     return  new CartStorage(token!);
-    // },[token]);
-    // const {storage} = useLoaderData() as any;
-    const {storage} = useRouteLoaderData('checkout_container') as any;
+    const {storage} = useCurrentLoaderData();
     return storage as CartStorage;
 }

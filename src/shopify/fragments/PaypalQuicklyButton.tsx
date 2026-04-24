@@ -2,7 +2,7 @@ import {FC} from "react";
 import {usePaymentContext} from "../../container/PaymentContext.tsx";
 import {Divider} from "@components/ui/Divider.tsx";
 import {AsyncButton} from "@components/fragments/AsyncButton.tsx";
-import {api} from "@lib/api.ts";
+import {api, getFinalPath} from "@lib/api.ts";
 import {useSummary} from "../checkouts/hooks/useSummary.tsx";
 import {PromiseLocation} from "../lib/payment.ts";
 
@@ -34,7 +34,7 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
                 if(!res['error']) {
                     const id = res.id;
                     if(!!id) {
-                        await PromiseLocation(`/a/s/api/transactions/${id}/redirect?quickly=1`);
+                        await PromiseLocation(getFinalPath(`/api/transactions/${id}/redirect?quickly=1`));
                     }
                 }
             }}

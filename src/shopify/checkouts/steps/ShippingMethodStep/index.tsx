@@ -1,6 +1,6 @@
 import {FC, useEffect} from "react";
 import {get as _get,isEmpty as _isEmpty} from "lodash-es";
-import Form from "rc-field-form";
+import Form from "@rc-component/form";
 
 export type ShippingMethodStepProps = {};
 

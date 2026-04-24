@@ -1,6 +1,6 @@
 import Big from "big.js";
 import {PaymentError} from "../../exceptions/PaymentError.ts";
-import {api} from "@lib/api.ts";
+import {api, getFinalPath} from "@lib/api.ts";
 import {free} from "@lib/payment.ts";
 import {get as _get, isObjectLike, isString,} from "lodash-es";
 import {Dispatch, SetStateAction} from "react";
@@ -8,7 +8,7 @@ import {Bus} from "../../bus.tsx";
 
 export function getUrlFrom(token : string){
     const cart_token = token.split('?')[0] ?? '';
-    return `/a/s/api/checkouts/${cart_token}`;
+    return getFinalPath(`/api/checkouts/${cart_token}`);
 }
 export function PromiseLocation(location : string){
     return new Promise((resolve, reject) => {
@@ -104,7 +104,7 @@ export async function shopify_payment(options : {
             }
             return false;
         }
-        const href= `/a/s/api/transactions/${res}/redirect`;
+        const href= getFinalPath(`/api/transactions/${res}/redirect`);
         step?.(() => {
             return "before payment redirect";
         });
@@ -135,10 +135,10 @@ export async function shopify_payment(options : {
             step?.(() => {
                 return `can't find payment window:${method.channel}`;
             });
-            console.log(values,url,method);
+            import.meta.env.DEV && console.log(values,url,method);
             return;
         }
-        console.log('payment method submit:',values);
+        import.meta.env.DEV && console.log('payment method submit:',values);
         window.postMessage({
             event : 'submit',
             checkout : values,

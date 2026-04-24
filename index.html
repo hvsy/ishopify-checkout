@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <meta name="api" content="/"/>
     <meta name="api_version" content="{{$api_version ?? ''}}"/>
     <meta name="settings" content="{{json_encode($checkout ?? null)}}"/>
     <meta name="features" content="{{$features ?? ''}}"/>
@@ -17,9 +16,20 @@
     <meta name="setup" content="{{json_encode($setup ?? null)}}" />
     <meta name="money_format" content="{{json_encode($money_format ?? null)}}" />
     <meta name="shop_title" content="{{json_encode($shop_title?? null)}}" />
+    <meta name="api" content="/"/>
+    @if(!empty($site_base))
+    <meta name="site_base" content="{{$site_base ?? ''}}"/>
+    @endif
     @if(!empty($payment_title))
         <meta name="payment_title" content="{{$payment_title}}" />
     @endif
+    @if(!empty($storefront_url))
+    <meta name="storefront_url" content="{{$storefront_url ?? ''}}"/>
+    @endif
+    @if(!empty($storefront_token))
+    <meta name="storefront_token" content="{{$storefront_token ?? ''}}"/>
+    @endif
+
     <!-- inject:blade -->
 
     <title></title>

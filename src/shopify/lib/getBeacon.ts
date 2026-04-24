@@ -1,5 +1,5 @@
 import {omit as _omit} from "lodash-es";
-import {FormInstance} from "rc-field-form";
+import {FormInstance} from "@rc-component/form";
 
 export function getBeacon(form : FormInstance,context : string){
     const data : any = {

@@ -11,7 +11,7 @@ import {scrollToError} from "@components/frames/FormContainer.tsx";
 import {get as _get, isArray, isEmpty, isEqual, isObjectLike, uniq} from "lodash-es";
 import {produce} from "@lib/api.ts";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
-import {FormInstance} from "rc-field-form";
+import {FormInstance} from "@rc-component/form";
 import {buildAddress} from "@lib/buildAddress.ts";
 import {useSummary} from "../checkouts/hooks/useSummary.tsx";
 import {Features} from "@lib/flags.ts";

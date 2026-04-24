@@ -6,10 +6,19 @@ import {RetryLink} from "@apollo/client/link/retry";
 import MutationQueueLink from "@adobe/apollo-link-mutation-queue";
 
 const api_version = getMetaContent('api_version');
-const storefront_url = api_version ? `/api/${api_version}/graphql.json` :"/api/2025-10/graphql.json";
+const preset_storefront_url = getMetaContent('storefront_url');
+const preset_storefront_token = getMetaContent('storefront_token');
+const storefront_url = preset_storefront_url || (api_version ? `/api/${api_version}/graphql.json` :"/api/2025-10/graphql.json");
 
+const headers : any = {
+
+};
+if(!!preset_storefront_token){
+    headers['X-Shopify-Storefront-Access-Token'] = preset_storefront_token;
+}
 const httpLink = new HttpLink({
-    uri:storefront_url
+    uri:storefront_url,
+    headers,
 })
 const errorLink = onError(({ graphQLErrors,protocolErrors, networkError ,operation}) => {
     console.error('error:',operation);

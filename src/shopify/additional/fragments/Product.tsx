@@ -5,7 +5,7 @@ import {Covers} from "./Covers.tsx";
 import {InputNumber} from "./InputNumber.tsx";
 import {useParams} from "react-router-dom";
 import {AsyncButton} from "@components/fragments/AsyncButton.tsx";
-import {api} from "@lib/api.ts";
+import {api, getFinalPath} from "@lib/api.ts";
 import {PromiseLocation} from "../../lib/payment.ts";
 
 export type ProductProps = {
@@ -70,7 +70,7 @@ export const Product: FC<ProductProps> = (props) => {
         <div className={'flex sm:flex-1 overflow-hidden'}>
             <Covers images={config.images} selected={selectedOptions}/>
         </div>
-        <form ref={formRef} method={'post'} action={`/a/s/${token}/upsell`}
+        <form ref={formRef} method={'post'} action={getFinalPath(`/${token}/upsell`)}
               className={'px-5 flex flex-col items-stretch sm:items-center sm:flex-1 overflow-hidden text-center space-y-5 sm:space-y-8'}>
             <div className={'text-2xl font-bold min-w-4/5'}>
                 {product.title}

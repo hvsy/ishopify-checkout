@@ -1,5 +1,5 @@
-import {get as _get} from "lodash-es";
-import {getJsonFromMeta} from "@lib/metaHelper.ts";
+import {get as _get, trimStart} from "lodash-es";
+import {getJsonFromMeta, getMetaContent} from "@lib/metaHelper.ts";
 
 let globalSettings : any = null;
 
@@ -17,4 +17,9 @@ export function getGlobalPath(path : string,defaultValue : any = null){
 
 export function PhoneOnlyRequired(){
     return getGlobalPath('phone.validate') === 'required';
+}
+
+export let GloablBase = getMetaContent('site_base');
+export function getGlobalBase(){
+    return GloablBase ? '/a/s/' + trimStart(GloablBase,'/') :   '/a/s';
 }

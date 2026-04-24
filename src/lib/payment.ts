@@ -1,4 +1,4 @@
-import {api} from "./api.ts";
+import {api, getFinalPath} from "./api.ts";
 import {CheckoutSummary} from "../container/SummaryContext.tsx";
 import Big from "big.js";
 import { PaymentError } from "../exceptions/PaymentError.ts";
@@ -6,8 +6,8 @@ import { PaymentError } from "../exceptions/PaymentError.ts";
 export async function getOrder(token : string,thankYou : boolean = false){
     return await api({
         method : 'get',
-        url : thankYou ? `/a/s/api/orders/${token}/thank-you` :
-            `/a/s/api/orders/${token}`,
+        url : getFinalPath(thankYou ? `/api/orders/${token}/thank-you` :
+            `/api/orders/${token}`),
     });
 }
 

@@ -1,5 +1,5 @@
 import {FC, ReactNode} from "react";
-import Form from "rc-field-form";
+import Form from "@rc-component/form";
 import {Check} from "../../page/components/Check.tsx";
 import {Price} from "../fragments/Price.tsx";
 import {Tooltip} from "../fragments/Tooltip.tsx";

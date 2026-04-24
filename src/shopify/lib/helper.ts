@@ -2,6 +2,10 @@ import Validators from "validator";
 import { getJsonFromMeta} from "@lib/metaHelper.ts";
 import {isArray} from "lodash-es";
 
+export function _start(target : string,prefix: string){
+    return target.indexOf(prefix) !== 0 ? prefix + target: target;
+}
+
 export function getBy(target : any,...paths : string[]){
     for(let i = 0;i<paths.length; ++i){
         const path = paths[i];

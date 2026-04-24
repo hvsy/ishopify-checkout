@@ -7,6 +7,7 @@ import {cn} from "@lib/cn.ts";
 import {BillingAddressStep} from "../../../../../shopify/checkouts/steps/BillingAddressStep";
 import {Discover} from "../../../../../assets/discover.tsx";
 import {PaypalCard} from "../../../../../payments/PaypalCard.tsx";
+import {getFinalPath, getReplacePathBase} from "@lib/api.ts";
 
 export type PaymentProps = {
     method : DB.PaymentMethod,
@@ -54,7 +55,7 @@ export const Payment: FC<PaymentProps> = (props) => {
         const target = Icons[method.type];
         icons = (_isArray(target) ? target : Object.values(target));
     }
-    console.log('payment icons:',method.channel,icons);
+    import.meta.env.DEV && console.log('payment icons:',method.channel,icons);
     return  <div className={'flex flex-col flex-1 items-stretch divide-neutral-300 divide-y cursor-pointer select-none'}>
         <div className={'flex flex-row px-3 space-x-3 py-3'}>
             <div className={'flex flex-col justify-center'}>
@@ -111,7 +112,7 @@ export const Payment: FC<PaymentProps> = (props) => {
                                     height={method.height || 145}
                                     width={'100%'}
                                     name={method.channel}
-                                    src={method.embed || `/a/s/api/checkouts/${token}/gateway/${method.id}/embed`}
+                                    src={method.embed ? getReplacePathBase(method.embed): getFinalPath(`/api/checkouts/${token}/gateway/${method.id}/embed`)}
                                     // src={`/a/s/api/gateway/${method.id}/embed`}
                                 />
                             }
