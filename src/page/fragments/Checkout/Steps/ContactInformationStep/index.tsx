@@ -1,7 +1,7 @@
 import {FC, } from "react";
 import {ContactInformationForm} from "../../forms/ContactInformationForm.tsx";
 import {AddressForm} from "../../forms/AddressForm.tsx";
-import Form from "rc-field-form";
+import Form from "@rc-component/form";
 import {useShippingZones} from "../../../../../container/PaymentContext.tsx";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
 import {api} from "@lib/api.ts";

@@ -1,10 +1,12 @@
 import Cookies from "js-cookie";
-import {createContext} from "react";
+import {getFinalPath} from "@lib/api.ts";
 
 export class CartStorage{
     private _token: string;
-    constructor(token : string) {
+    private _shop ?: string;
+    constructor(token : string,shop ?: string) {
         this._token = token;
+        this._shop = shop;
         const cart = Cookies.get('cart') || '';
         if(cart?.indexOf(token) === 0){
             const segments=  decodeURIComponent(cart).split('?key=');
@@ -15,7 +17,7 @@ export class CartStorage{
         return this._token;
     }
     get beacon(){
-        return `/a/s/checkouts/${this.token}/beacon`;
+        return getFinalPath(`/checkouts/${this.token}/beacon`,this._shop);
     }
     get gid() : string{
         return `gid://shopify/Cart/${this._token}?key=${this.key}`;
@@ -44,10 +46,10 @@ export class CartStorage{
         return `cart:${this._token}`;
     }
     get basename(){
-        return `/a/s/checkouts/${this.token}`;
+        return getFinalPath(`/checkouts/${this.token}`,this._shop);
     }
     get api(){
-        return `/a/s/api/checkouts/${this.token}`;
+        return getFinalPath(`/api/checkouts/${this.token}`,this._shop);
     }
 }
 

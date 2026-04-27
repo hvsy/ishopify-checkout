@@ -1,7 +1,6 @@
 import {NetworkStatus, useApolloClient, useQuery, useReadQuery} from "@apollo/client";
 import {get as _get, has as _has, isArray as _isArray, isEmpty} from "lodash-es";
 
-import {useRouteLoaderData} from "react-router-dom";
 import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
 import {useCartStorage} from "@hooks/useCartStorage.ts";
 import {CartStorage} from "../../context/CartStorage.ts";
@@ -9,11 +8,12 @@ import {createContext, FC, use, } from "react";
 import {FormContainer} from "@components/frames/FormContainer.tsx";
 import {ShopifyFrame} from "../../ShopifyFrame.tsx";
 import {ShopifyCheckoutProvider} from "../../context/ShopifyCheckoutContext.tsx";
-import Form from "rc-field-form";
+import Form from "@rc-component/form";
 import {PaymentContainer} from "../../../container/PaymentContext.tsx";
 import {PayingContainer} from "@components/frames/PayingContainer.tsx";
 import {GetDeliveryGroupQuery} from "../../../gql/GetDeliveryGroupQuery.ts";
 import {Features} from "@lib/flags.ts";
+import {useCurrentLoaderData} from "./useCurrentLoaderData.tsx";
 
 
 export const SummaryContext = createContext<{
@@ -65,8 +65,7 @@ function useDeliveryGroups(cartId: string){
 
 export const SummaryContextProvider :FC<any> = (props) => {
     const {children} = props;
-
-    const {ref,storage} = useRouteLoaderData('checkout_container') as any;
+    const {ref,storage} = useCurrentLoaderData();
     const {data : json ,networkStatus} = useReadQuery<any>(ref);
 
     const {loading : shipping_methods_loading,

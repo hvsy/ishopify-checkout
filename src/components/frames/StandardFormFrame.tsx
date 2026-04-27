@@ -1,9 +1,7 @@
-import {FunctionComponent, FC, ReactNode, useEffect} from "react";
-import Form from "rc-field-form";
+import {FunctionComponent, FC, ReactNode, } from "react";
+import Form from "@rc-component/form";
 import {useParams} from "react-router-dom";
 import {NavBar, StandardNavigationBarFrame} from "./StandardNavigationBarFrame.tsx";
-import {useDocumentTitle} from "usehooks-ts";
-import {capitalize as _capitalize} from "lodash-es";
 
 export type StandardFormFrameProps = {
     ChildrenComponents : {

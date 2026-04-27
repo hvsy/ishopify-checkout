@@ -1,11 +1,12 @@
-import {FC, ReactNode, useCallback, useRef, useState} from "react";
-import Form, {FormInstance} from "rc-field-form";
+import {FC, ReactNode, useCallback, useEffect, useRef, useState} from "react";
+import Form, {FormInstance} from "@rc-component/form";
 import {FormContext,} from "../../container/FormContext.ts";
 import {merge as _merge, get as _get, has as _has, isArray as _isArray, filter, isEmpty} from "lodash-es";
 import {CheckoutInput, map2, useMutationCheckout} from "../../shopify/context/ShopifyCheckoutContext.tsx";
 import {useDeliveryGroupMutation,} from "../../shopify/checkouts/hooks/useSummary.tsx";
 import {buildAddress} from "@lib/buildAddress.ts";
 import {useAsyncQueuer,} from "@tanstack/react-pacer";
+import {Bus} from "../../bus.tsx";
 
 
 
@@ -62,6 +63,18 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         }
         return {};
     },[])
+    import.meta.env.DEV && useEffect(() => {
+        console.log('listen window message');
+        const output = (e : any) => {
+            if(e.data === 'form_values'){
+                console.log(form.getFieldsValue());
+            }
+        };
+        window.addEventListener('message', output);
+        return () => {
+            window.removeEventListener('message',output);
+        }
+    },[]);
     const mutationDeliveryGroups = useDeliveryGroupMutation();
     const sync = useAsyncQueuer(async (changedValues,) => {
         const values = form.getFieldsValue();

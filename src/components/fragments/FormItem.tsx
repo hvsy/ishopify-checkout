@@ -1,14 +1,14 @@
-import Form from "rc-field-form";
-import type { Meta } from 'rc-field-form/lib/interface';
-import useState from 'rc-util/lib/hooks/useState';
+import Form from "@rc-component/form";
 import {isArray as _isArray} from "lodash-es";
+import {cloneElement, FC,} from "react";
+import useState from '@rc-component/util/lib/hooks/useState';
+import {isFunction as _isFunction} from "lodash-es";
+import {FieldProps} from "@rc-component/form/es/Field";
+import {Meta} from "@rc-component/form/es/interface";
 
 
 const FormField = Form.Field;
 
-import {FieldProps} from "rc-field-form/es/Field";
-import {cloneElement, FC, } from "react";
-import {isFunction as _isFunction} from "lodash-es";
 
 export type FormItemProps = Omit<FieldProps,'children'> & {
     help ?: string;

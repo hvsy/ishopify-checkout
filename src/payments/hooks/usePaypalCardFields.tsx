@@ -2,7 +2,7 @@ import {useScript} from "usehooks-ts";
 import {useMemo, useRef} from "react";
 import {Bus, useBusListener} from "../../bus.tsx";
 import {PromiseLocation} from "../../shopify/lib/payment.ts";
-import {api} from "@lib/api.ts";
+import {api, getFinalPath} from "@lib/api.ts";
 
 export function usePaypalCardFields(method_id : string|number,sdk : string){
     const status =  useScript(sdk,{
@@ -20,7 +20,7 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
             createOrder: (data : any,...args : any[]) => {
                 return api({
                     method : "POST",
-                    url : `/a/s/api/gateways/${method_id}/create`,
+                    url : getFinalPath(`/api/gateways/${method_id}/create`),
                     data : {
                         token : valuesRef.current.token,
                         billing_address: valuesRef.current.billing_address,
@@ -33,7 +33,7 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
                     const matches = url.match(/orders\/([^\/]+)\//im)
                     if(matches?.[1]){
                         return api({
-                            url: `/a/s/api/gateways/${method_id}/fail`,
+                            url: getFinalPath(`/api/gateways/${method_id}/fail`),
                             method: 'POST',
                             data: {
                                 order_id : matches[1],
@@ -48,7 +48,7 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
                 console.log('paypal card approve',data,...args);
                 return api({
                     method : 'POST',
-                    url : `/a/s/api/gateways/${method_id}/approve/${data.orderID}`,
+                    url : getFinalPath(`/api/gateways/${method_id}/approve/${data.orderID}`),
                 }).then((json) => {
                     console.log('paypal card approve json:',json);
                     if(json.redirect){

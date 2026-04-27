@@ -1,5 +1,5 @@
 import {createBrowserRouter, Params, redirect, redirectDocument, RouterProvider,} from "react-router-dom";
-import {api} from "@lib/api.ts";
+import {api, getFinalPath} from "@lib/api.ts";
 import Checkout from "./shopify/checkouts";
 import {preload} from "swr";
 import Cookies from "js-cookie";
@@ -41,11 +41,10 @@ const OrderPage = lazy(async() => {
         default : m.Order,
     }
 })
-const prefix = '/a/s'
+const prefix = getGlobalBase();
 function go2home(){
     return redirectDocument('/');
 }
-
 
 import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
 import {QuerySummary} from "@query/checkouts/queries.ts";
@@ -58,6 +57,7 @@ import {
 import {CartStorage} from "./shopify/context/CartStorage.ts";
 import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
 import {Features} from "@lib/flags.ts";
+import {getGlobalBase} from "./shopify/lib/globalSettings.ts";
 // import {Additional} from "./shopify/additional/Additional.tsx";
 const Additional = lazy(() => {
     return import("./shopify/additional/Additional").then(m=>{
@@ -77,9 +77,9 @@ export const SummaryQuery = gql([
 async function getCheckout(request : Request,params : Params<string>,context : any){
     const url = new URL(request.url)
     const key = url.searchParams.get('key');
-    let {token, action = 'information'} = params;
+    let {token,shop, action = 'information'} = params;
     // console.log('params:',params);
-    const storage = new CartStorage(token!);
+    const storage = new CartStorage(token!,shop);
     if(action === 'recover' && !!key && key !== 'undefined'){
         storage.key = key;
     }else{
@@ -88,14 +88,14 @@ async function getCheckout(request : Request,params : Params<string>,context : a
         // if(!!direct){
             storage.key = direct;
             if(Features.includes('redirect')){
-                return redirect(`/a/s/checkouts/${token}`);
+                return redirect(getFinalPath(`/checkouts/${token}`,shop));
             }
         }
     }
     if(!storage.key){
         const res =  await api({
             method : "post",
-            url : `/a/s/checkouts/${token}/key`,
+            url : getFinalPath(`/checkouts/${token}/key`,shop),
         });
         if(!res){
             return go2home();
@@ -125,9 +125,10 @@ async function getCheckout(request : Request,params : Params<string>,context : a
             expires : dayjs().add(1,'day').toDate(),
         });
     }
-    return {checkout,ref,storage};
+    return {checkout,ref,storage,shop};
 }
 
+import.meta.env.DEV && console.log('prefix:', prefix);
 let router = createBrowserRouter([
     {
         path : `${prefix}/additional/:token`,
@@ -138,7 +139,7 @@ let router = createBrowserRouter([
             const {token} = params;
             const res = await api({
                 method : "get",
-                url : `/a/s/api/upsell/${token}`,
+                url : getFinalPath(`/api/upsell/${token}`),
             });
             if(res){
                return res;
@@ -172,7 +173,7 @@ let router = createBrowserRouter([
                 Component: Checkout,
             }
         ]
-    },
+    }
 ], {
 });
 

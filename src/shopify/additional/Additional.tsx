@@ -6,12 +6,13 @@ import useSWR from "swr";
 import {Loading} from "@components/fragments/Loading.tsx";
 import {useCleanCartCookie} from "../hooks/useCleanCartCookie.ts";
 import {useRemoveAppLoader} from "@hooks/useRemoveAppLoader.tsx";
+import {getFinalPath} from "@lib/api.ts";
 
 export type AdditionalProps = {};
 
 const Expired = () => {
     const {token}= useParams();
-    const  {data} = useSWR(`/a/s/checkouts/${token}/next`,{
+    const  {data} = useSWR(getFinalPath(`/checkouts/${token}/next`),{
         refreshInterval : 1000,
     });
     useEffect(() => {

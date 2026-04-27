@@ -2,7 +2,7 @@ import {createContext, FC, ReactNode, useMemo} from "react";
 import {CheckoutContainer} from "./CheckoutContext.ts";
 import {getSubtotal} from "@lib/calc.ts";
 import Big from "big.js";
-import Form from "rc-field-form";
+import Form from "@rc-component/form";
 import {useCurrentForm} from "./FormContext.ts";
 
 export type CheckoutSummary = {

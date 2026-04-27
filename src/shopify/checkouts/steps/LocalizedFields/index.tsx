@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {useCurrentForm} from "../../../../container/FormContext.ts";
-import Form from "rc-field-form";
+import Form from "@rc-component/form";
 import {FormItem} from "@components/fragments/FormItem.tsx";
 import {Input} from "../../../../page/components/Input.tsx";
 import {StepFrame} from "@components/frames/StepFrame.tsx";

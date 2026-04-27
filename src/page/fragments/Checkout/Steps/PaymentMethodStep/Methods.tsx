@@ -1,7 +1,7 @@
 import {FC, memo, useEffect, Activity, ActivityProps} from "react";
 import {useSearchParams} from "react-router-dom";
 import {useCurrentForm} from "../../../../../container/FormContext.ts";
-import Form from "rc-field-form";
+import Form from "@rc-component/form";
 import {usePaymentContext} from "../../../../../container/PaymentContext.tsx";
 import {find as _find} from "lodash-es";
 import {RadioGroup} from "../../../../components/RadioGroup.tsx";

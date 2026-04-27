@@ -8,7 +8,7 @@ import {
     NewStateSelector,
 } from "../../../components/RegionSelector.tsx";
 import {FormItem} from "@components/fragments/FormItem.tsx";
-import {useWatch} from "rc-field-form";
+import {useWatch} from "@rc-component/form";
 import {FormContext, useCurrentForm,} from "../../../../container/FormContext.ts";
 import {StepBlock} from "@components/frames/StepBlock.tsx";
 import {PhoneInput} from "@components/ui/PhoneInput.tsx";

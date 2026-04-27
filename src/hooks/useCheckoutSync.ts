@@ -1,11 +1,11 @@
 import {useParams} from "react-router-dom";
-import {api} from "@lib/api.ts";
+import {api, getFinalPath} from "@lib/api.ts";
 import {get as _get} from "lodash-es";
 import {useCartCache} from "@query/checkouts/cache/useCartCache.ts";
 import {useCallback} from "react";
 import {useCartStorage} from "./useCartStorage.ts";
 import {useCurrentForm} from "../container/FormContext.ts";
-import {FormInstance} from "rc-field-form";
+import {FormInstance} from "@rc-component/form";
 import {omit as _omit} from "lodash-es";
 import {buildAddress} from "@lib/buildAddress.ts";
 
@@ -39,7 +39,7 @@ export function useCheckoutSync(form?:FormInstance){
         let billing = billing_address ? buildAddress(_omit(billing_address,'region','state')) : null;
         const  response = await api({
             method : "put",
-            url : `/a/s/checkouts/${token}`,
+            url : getFinalPath(`/checkouts/${token}`),
             data : {
                 ...json,
                 billing_address : billing,

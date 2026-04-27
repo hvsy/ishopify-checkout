@@ -1,8 +1,10 @@
 import {createContext, Dispatch, FC, lazy, SetStateAction, use, useEffect, useRef, useState} from "react";
 import useSWR from "swr";
 import {ErrorBoundary} from "react-error-boundary";
-import {Setup} from "@lib/flags.ts";
+import {Features, Setup} from "@lib/flags.ts";
 import {isString} from "lodash-es";
+import {getFinalPath} from "@lib/api.ts";
+import {AllZones} from "../assets/zones.ts";
 const Pixels = lazy(()=>{
     return import("../shopify/fragments/Pixels").then(m=>{
         return {default : m.Pixels}
@@ -33,18 +35,26 @@ export function usePaymentMethod() {
 }
 
 export function useAllZones() {
-    const {data, isLoading} = useSWR("/a/s/api/zones/all");
+    if(Features.includes('local_zones')){
+        return {zones : AllZones,loading : false}
+    }
+    const {data, isLoading} = useSWR(getFinalPath("/api/zones/all"));
     return {zones: data || [], loading: isLoading};
 }
 
 export function useShippingZones() {
-    const {data, isLoading} = useSWR('/a/s/api/zones', {
-        errorRetryCount: 10,
-    });
-    return {
-        zones: data || [],
-        loading: isLoading,
+    if(Features.includes('local_zones')){
+        return {zones : AllZones,loading : false}
+    }else{
+        const {data, isLoading} = useSWR(getFinalPath('/api/zones'), {
+            errorRetryCount: 10,
+        });
+        return {
+            zones: data || [],
+            loading: isLoading,
+        }
     }
+
 }
 
 function preload(config: any) {
@@ -65,7 +75,7 @@ export function useSetup(){
         return {setup : Setup as CheckoutSetup,isLoading : false,inner:true}
     };
     const {data, isLoading} = useSWR<CheckoutSetup>(
-        '/a/s/api/setup', {
+        getFinalPath('/api/setup'), {
             errorRetryCount: 10,
         }
     );

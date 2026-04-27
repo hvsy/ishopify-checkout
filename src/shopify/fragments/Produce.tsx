@@ -1,5 +1,5 @@
 import {FC, useEffect, useRef} from "react";
-import {api} from "@lib/api.ts";
+import {api, getFinalPath} from "@lib/api.ts";
 import dayjs from "dayjs";
 import {useParams} from "react-router-dom";
 
@@ -16,7 +16,7 @@ export const Produce: FC<ProduceProps> = (props) => {
         mountedRef.current = true;
         api({
             method : 'post',
-            url  : `/a/s/checkouts/${token}/produce`,
+            url  : getFinalPath(`/checkouts/${token}/produce`),
             data : {
                 event,
                 at : dayjs().toISOString(),

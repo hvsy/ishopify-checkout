@@ -1,5 +1,5 @@
 import {createSimpleContainer} from "@lib/SimpleContainer.tsx";
-import Form, {FormInstance} from "rc-field-form";
+import Form, {FormInstance} from "@rc-component/form";
 import {useEffect} from "react";
 
 export const FormContext = createSimpleContainer<{

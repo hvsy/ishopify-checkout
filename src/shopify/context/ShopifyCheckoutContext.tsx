@@ -8,13 +8,12 @@ import {
     QueryDeliveryFragment, QueryDeliveryGroupsFragment
 } from "@query/checkouts/fragments/fragments.ts";
 import { get as _get,set as _set,isString as _isString,setWith as _setWith,cloneDeep as _cloneDeep} from "lodash-es";
-import {FormInstance} from "rc-field-form";
+import {FormInstance} from "@rc-component/form";
 import {useDeliveryGroupMutation} from "../checkouts/hooks/useSummary.tsx";
 import {getBy} from "../lib/helper.ts";
 import {QueryDeliveryAddresses} from "@query/checkouts/queries.ts";
 import Validators from "validator";
 import {useEventCallback} from "usehooks-ts";
-import {useAsyncQueuer} from "@tanstack/react-pacer";
 import PQueue from "p-queue";
 
 

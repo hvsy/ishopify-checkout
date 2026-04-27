@@ -1,9 +1,7 @@
 import {FC, ReactNode} from "react";
-import {gql, useQuery, useReadQuery} from "@apollo/client";
-import {capitalize as _capitalize, template as _tpl} from "lodash-es";
+import {template as _tpl} from "lodash-es";
 import {ShopifyContext} from "./context/ShopifyContext.ts";
 
-import {useLoaderData, useParams, useRouteLoaderData} from "react-router-dom";
 import {ShopifyDiscountCodeProvider} from "./context/ShopifyDiscountCodeContext.tsx";
 
 export type ShopifyFrameProps = {
@@ -11,11 +9,11 @@ export type ShopifyFrameProps = {
 };
 import {get as _get} from "lodash-es";
 import {useDocumentTitle} from "usehooks-ts";
+import {useCurrentReadQuery} from "./checkouts/hooks/useCurrentLoaderData.tsx";
 
 export const ShopifyFrame: FC<ShopifyFrameProps> = (props) => {
     const {children} = props;
-    const {ref} = useRouteLoaderData('checkout_container') as any;
-    const data = useReadQuery(ref) as any;
+    const data = useCurrentReadQuery();
     const codes = (_get(data, 'data.cart.discountCodes', []) || []).filter((c: any) => !!c.applicable).map((c: any) => c.code);
     const shop = data?.data?.shop;
     useDocumentTitle(shop ? shop.name + '-Checkout' : '');
