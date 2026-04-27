@@ -5,6 +5,7 @@ import {free} from "@lib/payment.ts";
 import {get as _get, isObjectLike, isString,} from "lodash-es";
 import {Dispatch, SetStateAction} from "react";
 import {Bus} from "../../bus.tsx";
+import {summary2Cart} from "./helper.ts";
 
 export function getUrlFrom(token : string){
     const cart_token = token.split('?')[0] ?? '';
@@ -15,23 +16,6 @@ export function PromiseLocation(location : string){
         setTimeout(reject,15000);
         window.location.href = location;
     });
-}
-function summary2Cart(summary : any){
-    const lines = _get(summary,'lines.edges').map((edge:any) => {
-        const node = edge.node;
-        const merchandise = node.merchandise;
-        const product = merchandise.product;
-        return {
-            id : merchandise.id.replace(/gid:\/\/shopify\/[^/]+\//ig,''),
-            title : [product.title,merchandise.title].filter(Boolean).join(' '),
-            sku : merchandise.sku,
-            barcode : merchandise.sku,
-            price : merchandise.price,
-            cost : node.cost,
-            quantity : node.quantity,
-        }
-    });
-    return lines;
 }
 export async function shopify_payment(options : {
                                           summary : any,
