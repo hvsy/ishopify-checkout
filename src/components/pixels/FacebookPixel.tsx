@@ -28,11 +28,7 @@ export const FacebookPixel: FC<{ pixels: (string|any)[],regex?:string[] }> = (pr
                 extra.external_id = sha256(shopify_y);
             }
             ps.forEach((pixel) => {
-                let pid = pixel;
-                if(isObjectLike(pixel)){
-                    pid = pixel.pixel_id;
-                }
-                window.fbq?.('init', pid,extra);
+                window.fbq?.('init', pixel,extra);
             })
             window.fbq?.("track", "PageView")
         },

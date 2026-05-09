@@ -9,8 +9,8 @@ import AddPaymentInfo = Analytics.AddPaymentInfo;
 import {getShopifyY} from "@lib/shopify.ts";
 
 
-export const TiktokPixel: FC<{ pixels: string[] }> = (props) => {
-    const {pixels} = props;
+export const TiktokPixel: FC<{ pixels: (string|any)[],regex ?: string[]}> = (props) => {
+    const {pixels,regex} = props;
     usePlatformPixel('tiktok',{
         script : `!function (w, d, t) {
   w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
@@ -29,64 +29,80 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 })
             }
         },
+        regex,
         pixels,
-        onEventCallback(type,data,extra){
+        onEventCallback(type,data,extra,each){
             switch (type) {
                 case "checkout_started": {
                     const json = data as StartCheckout;
-                    window.ttq?.track?.("InitiateCheckout", {
-                        content_ids: json.content_ids,
-                        contents : json.contents.map((line) => {
-                            return {
-                                'content_id' : line.id,
-                                'quantity' : line.quantity,
-                                'price' : line.price,
-                                'currency':line.currency,
-                            }
-                        }),
-                        quantity: json.quantity,
-                        // content_type: 'product_group',
-                        value: data.price,
-                        currency: data.currency,
-                    },extra);
+                    each((pxid) => {
+                        window.ttq?.instance(pxid)?.track?.("InitiateCheckout", {
+                            content_ids: json.content_ids,
+                            contents : json.contents.map((line) => {
+                                return {
+                                    'content_id' : line.id,
+                                    'quantity' : line.quantity,
+                                    'price' : line.price,
+                                    'currency':line.currency,
+                                }
+                            }),
+                            quantity: json.quantity,
+                            // content_type: 'product_group',
+                            value: data.price,
+                            currency: data.currency,
+                        },extra);
+                    },json.contents.map((line) => {
+                        return line.sku || null;
+                    }));
+
                 }
                     break;
                 case 'purchase': {
                     const json = data as Purchase;
-                    window.ttq?.track?.('Purchase',{
-                        content_ids : json.contents.map((t) => {
-                            return t.id;
-                        }),
-                        contents : json.contents.map((line) => {
-                            return {
-                                'content_id' : line.id,
-                                'quantity' : line.quantity,
-                                'price' : line.price,
-                                'currency': line.currency,
-                            };
-                        }),
-                        quantity : json.quantity,
-                        value : json.price,
-                        currency : json.currency,
-                        order_id : md5(json.token),
-                    },extra)
+                    each((pxid) => {
+                        window.ttq?.instance(pxid)?.track?.('Purchase',{
+                            content_ids : json.contents.map((t) => {
+                                return t.id;
+                            }),
+                            contents : json.contents.map((line) => {
+                                return {
+                                    'content_id' : line.id,
+                                    'quantity' : line.quantity,
+                                    'price' : line.price,
+                                    'currency': line.currency,
+                                };
+                            }),
+                            quantity : json.quantity,
+                            value : json.price,
+                            currency : json.currency,
+                            order_id : md5(json.token),
+                        },extra)
+                    },json.contents.map((line) => {
+                        return line.sku || null;
+                    }));
+
                 }
                     break;
                 case 'add_payment_info':{
                     const json = data as AddPaymentInfo;
                     const lines = isArray(json.cart) ? json.cart : [json.cart];
-                    window.ttq?.track('AddPaymentInfo',{
-                        contents : (lines).map((line : any) => {
-                            return {
-                                'content_id' : line.id,
-                                "quantity" : line.quantity,
-                                'price' : line.price.amount,
-                                'currency' : line.price.currencyCode,
-                            }
-                        }),
-                        value : data.price,
-                        currency : data.currency,
-                    },extra);
+                    each((pxid) => {
+                        window.ttq?.instance(pxid)?.track?.('AddPaymentInfo',{
+                            contents : (lines).map((line : any) => {
+                                return {
+                                    'content_id' : line.id,
+                                    "quantity" : line.quantity,
+                                    'price' : line.price.amount,
+                                    'currency' : line.price.currencyCode,
+                                }
+                            }),
+                            value : data.price,
+                            currency : data.currency,
+                        },extra);
+                    },lines.map((line) => {
+                        return line?.sku || null;
+                    }))
+
                 }
                     break;
                 default: {

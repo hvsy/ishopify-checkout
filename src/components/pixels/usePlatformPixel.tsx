@@ -27,7 +27,13 @@ export function usePlatformPixel(type : string,config : PixelConfig){
         if(!pixels.length) return;
         if(initedRef.current) return;
         initedRef.current = true;
-        config.setup?.(pixels);
+        config.setup?.(pixels.map((p) => {
+            let pid = p;
+            if(isObjectLike(p)){
+                pid = p.pixel_id;
+            }
+            return pid;
+        }));
     }, [pathname, pixels.join('/')]);
     const each = useEffectEvent((callback : (pxid: string)=>void,skus: (string|null|undefined)[]) => {
         const categories = parseSkuCategories(regex!,skus);
