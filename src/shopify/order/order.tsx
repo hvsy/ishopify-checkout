@@ -47,6 +47,7 @@ export const Order: FC<OrderProps> = (props) => {
             },0),
             contents : data.line_items.map((line) => {
                 return {
+                    sku : line.variant?.sku || null,
                     id : (line.variant.id).replace(/gid:\/\/shopify\/[^/]+\//ig,''),
                     title : line.product?.title || '',
                     quantity : line.quantity,

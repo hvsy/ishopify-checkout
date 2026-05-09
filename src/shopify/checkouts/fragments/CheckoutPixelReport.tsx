@@ -26,6 +26,7 @@ export const CheckoutPixelReport: FC<CheckoutPixelReportProps> = (props) => {
         contents : lines.map((line : any) => {
             const cost = line.cost.totalAmount;
             return {
+                sku : line.merchandise?.sku || null,
                 title : line.merchandise?.title || '',
                 id : line.merchandise.id.replace(/gid:\/\/shopify\/[^/]+\//ig,'',''),
                 quantity : line.quantity,

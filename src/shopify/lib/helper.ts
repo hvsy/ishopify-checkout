@@ -1,6 +1,9 @@
 import Validators from "validator";
-import { getJsonFromMeta} from "@lib/metaHelper.ts";
-import {isArray} from "lodash-es";
+import {getJsonFromMeta} from "@lib/metaHelper.ts";
+import {get as _get, isArray, isEmpty} from "lodash-es";
+import {PhoneNumberUtil} from 'google-libphonenumber';
+import {getCountry} from "react-international-phone";
+import {PhoneOnlyRequired} from "./globalSettings.ts";
 
 export function _start(target : string,prefix: string){
     return target.indexOf(prefix) !== 0 ? prefix + target: target;
@@ -26,10 +29,6 @@ export function moneyFormat(data : any,display :  Intl.NumberFormatOptions['curr
         currencyDisplay : display
     }).format(data.amount,);
 }
-
-import { PhoneNumberUtil } from 'google-libphonenumber';
-import {getCountry} from "react-international-phone";
-import {PhoneOnlyRequired} from "./globalSettings.ts";
 
 export function getCountryCode4(phone : string){
     try {
@@ -100,4 +99,42 @@ export function object_diff(to : any,from : any, map : any,callback ?: any){
         }
     })
     return final;
+}
+
+export function summary2Cart(summary: any) {
+    const lines = _get(summary, 'lines.edges').map((edge: any) => {
+        const node = edge.node;
+        const merchandise = node.merchandise;
+        const product = merchandise.product;
+        return {
+            id: merchandise.id.replace(/gid:\/\/shopify\/[^/]+\//ig, ''),
+            title: [product.title, merchandise.title].filter(Boolean).join(' '),
+            sku: merchandise.sku,
+            barcode: merchandise.sku,
+            price: merchandise.price,
+            cost: node.cost,
+            quantity: node.quantity,
+        }
+    });
+    return lines;
+}
+
+export function parseSkuCategories(regex : string[],skus : (string|null|undefined)[]){
+    return skus.map((sku) => {
+        if (!sku || !sku?.trim()) return null;
+        if (isEmpty(regex)) return null;
+        const segments = sku.split(/[+,\u{FF0B}\u{FF0C}]/u).map((line) => {
+            return line.split('*')?.[0];
+        });
+        return segments?.map((s) => {
+            for (let i = 0; i < regex?.length!; ++i) {
+                const reg = new RegExp(regex?.[i]!);
+                const hit = (s.match(reg));
+                if (hit?.[1]) {
+                    return hit?.[1] || null;
+                }
+            }
+            return null;
+        }).filter(Boolean) as string[];
+    }).flat(1).filter(Boolean) as string[];
 }

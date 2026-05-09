@@ -17,6 +17,7 @@ namespace Analytics{
         price ?: string;
         currency ?: string;
         contents : {
+            sku ?: string|null,
             id : string;
             title : string;
             quantity : number;
@@ -32,6 +33,7 @@ namespace Analytics{
         address ?: Shopify.Address
         thanked : boolean;
         contents : {
+            sku ?: string|null,
             id : string;
             title : string;
             quantity : number;
@@ -43,7 +45,7 @@ namespace Analytics{
     type AddPaymentInfo = {
         price ?: string;
         currency ?: string;
-        cart ?: any;
+        cart ?: {id : string,title : string,sku ?: string,barcode ?: string,price : string,cost:string,quantity : string}[];
         email?:string;
         shipping_address?:any;
         billing_address?:any;
@@ -63,7 +65,7 @@ namespace Analytics{
 
 interface Window {
     paypal : any;
-    fbq: (fun : string,event : string,data ?: any,extra ?: any)=>void;
+    fbq: (fun : string,event : string,data ?: any,extra ?: any,args ?: any)=>void;
     gtag ?: (action : string,event : string, data : any)=>void;
     snaptr ?: any;
     ttq ?: any;

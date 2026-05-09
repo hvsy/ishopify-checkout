@@ -10,6 +10,8 @@ import {get as _get} from "lodash-es";
 import {Features} from "@lib/flags.ts";
 import {usePaymentContext} from "../../../container/PaymentContext.tsx";
 import {getMetaContent} from "@lib/metaHelper.ts";
+import {summary2Cart} from "../../lib/helper.ts";
+import {useParams} from "react-router-dom";
 
 export type ApproveItProps = {};
 
@@ -19,8 +21,9 @@ const FloatApprove = Features.includes('float_approve_button');
 const payment_title = getMetaContent('payment_title') || 'Place an order'
 export const ApproveIt: FC<ApproveItProps> = (props) => {
     const {} = props;
-    const {ing,storage} = useSummary();
+    const {ing,storage,json : summary} = useSummary();
     const form = useCurrentForm();
+    const {token} = useParams();
     useEffect(() => {
         form.validateFields().then(() => {
 
@@ -71,6 +74,19 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                     throw "please choice delivery shipping line";
                 }
                 console.log(after);
+                try {
+                    const totalAmount = _get(summary, 'cost.totalAmount');
+                    const {amount, currencyCode} = totalAmount;
+                    window.report?.("add_payment_info", {
+                        price: amount + '',
+                        currency: currencyCode,
+                        cart: summary2Cart(summary),
+                        email: after.values.email,
+                        shipping_address: after.values.shipping_address,
+                        billing_address: after.values.billing_address || after.values.shipping_address,
+                    }, token + '_add_payment_info');
+                } catch (e) {
+                }
                 const res = await api({
                     method : "post",
                     'url' : storage!.api + `/approve`,

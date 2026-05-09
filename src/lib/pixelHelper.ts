@@ -31,7 +31,7 @@ export function getCurrentPixelParams(){
     return current_pixel_params;
 }
 
-export function getFilterPixels(platform : string,pixels ?: string[]){
+export function getFilterPixels(platform : string,pixels ?: string[]) : (string|any)[]{
     if(!strict_pixel_config){
         return pixels || [];
     }
