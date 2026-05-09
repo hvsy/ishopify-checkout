@@ -9,6 +9,7 @@ import Clarity from "@microsoft/clarity";
 
 export type PixelsProps = {
     tracking : any;
+    regex ?: string[];
 };
 
 const Platforms : any = {
@@ -18,7 +19,7 @@ const Platforms : any = {
     snapchat : SnapchatPixel,
 }
 export const Pixels: FC<PixelsProps> = (props) => {
-    const {tracking} = props;
+    const {tracking,regex} = props;
     useEffect(() => {
         const id = getMetaContent("clarity");
         if(!!id){
@@ -38,7 +39,7 @@ export const Pixels: FC<PixelsProps> = (props) => {
         const pixels = tracking[key];
         const Component = Platforms[key];
         if(Component && !!pixels && pixels.length > 0){
-            return <Component pixels={pixels} key={key}/>
+            return <Component pixels={pixels} key={key} regex={regex}/>
         }
         return null;
     }).filter(Boolean);

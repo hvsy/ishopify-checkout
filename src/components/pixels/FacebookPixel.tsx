@@ -3,10 +3,11 @@ import {md5} from "js-md5";
 import {usePlatformPixel} from "./usePlatformPixel.tsx";
 import {sha256} from "js-sha256";
 import {getShopifyY} from "@lib/shopify.ts";
+import {isObjectLike} from "lodash-es";
 
 
-export const FacebookPixel: FC<{ pixels: string[] }> = (props) => {
-    const {pixels} = props;
+export const FacebookPixel: FC<{ pixels: (string|any)[],regex?:string[] }> = (props) => {
+    const {pixels,regex} = props;
     usePlatformPixel('facebook',{
         script : `!function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -17,6 +18,7 @@ export const FacebookPixel: FC<{ pixels: string[] }> = (props) => {
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');`,
         pixels,
+        regex,
         setup : ps =>{
             const extra : any = {
 
@@ -26,40 +28,57 @@ export const FacebookPixel: FC<{ pixels: string[] }> = (props) => {
                 extra.external_id = sha256(shopify_y);
             }
             ps.forEach((pixel) => {
-                window.fbq?.('init', pixel,extra);
+                let pid = pixel;
+                if(isObjectLike(pixel)){
+                    pid = pixel.pixel_id;
+                }
+                window.fbq?.('init', pid,extra);
             })
             window.fbq?.("track", "PageView")
         },
-        onEventCallback(type,data,extra){
+        onEventCallback(type,data,extra,each){
             switch (type) {
                 case "checkout_started": {
                     const json = data as Analytics.StartCheckout;
-                    window.fbq?.("track", "InitiateCheckout", {
-                        content_ids: json.content_ids,
-                        num_item: json .quantity,
-                        content_type: 'product_group',
-                        value: data.price,
-                        currency: data.currency,
-                    },extra);
+                    each((pxid) => {
+                        window.fbq?.("trackSingle",pxid, "InitiateCheckout", {
+                            content_ids: json.content_ids,
+                            num_item: json.quantity,
+                            content_type: 'product_group',
+                            value: data.price,
+                            currency: data.currency,
+                        },extra);
+                    },json.contents.map((content) => {
+                        return content.sku || null;
+                    }))
                 }
                     break;
                 case 'purchase': {
                     const json = data  as Analytics.Purchase;
-                    window.fbq?.("track", "Purchase", {
-                        contents: json.contents,
-                        content_type: 'product_group',
-                        value: data.price,
-                        currency: data.currency,
-                        order_id  : md5(json.token),
-                    },extra);
+                    each((pxid) => {
+                        window.fbq?.("trackSingle",pxid, "Purchase", {
+                            contents: json.contents,
+                            content_type: 'product_group',
+                            value: data.price,
+                            currency: data.currency,
+                            order_id  : md5(json.token),
+                        },extra);
+                    },json.contents.map((content) => {
+                        return content.sku || null;
+                    }))
+
                 }
                     break;
                 case 'add_payment_info':{
                     const json = data as Analytics.AddPaymentInfo;
-                    window.fbq?.('track','AddPaymentInfo',{
-                        value : json.price,
-                        currency : json.currency,
-                    },extra);
+                    each((pxid) => {
+                        window.fbq?.('trackSingle',pxid,'AddPaymentInfo',{
+                            value : json.price,
+                            currency : json.currency,
+                        },extra);
+                    },(json.cart||[]).map((content) => {
+                        return content.sku || null;
+                    }))
                 }
                     break;
                 default: {

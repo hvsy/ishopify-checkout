@@ -1,6 +1,6 @@
 import Validators from "validator";
 import {getJsonFromMeta} from "@lib/metaHelper.ts";
-import {get as _get, isArray} from "lodash-es";
+import {get as _get, isArray, isEmpty} from "lodash-es";
 import {PhoneNumberUtil} from 'google-libphonenumber';
 import {getCountry} from "react-international-phone";
 import {PhoneOnlyRequired} from "./globalSettings.ts";
@@ -117,4 +117,24 @@ export function summary2Cart(summary: any) {
         }
     });
     return lines;
+}
+
+export function parseSkuCategories(regex : string[],skus : (string|null|undefined)[]){
+    return skus.map((sku) => {
+        if (!sku || !sku?.trim()) return null;
+        if (isEmpty(regex)) return null;
+        const segments = sku.split(/[+,\u{FF0B}\u{FF0C}]/u).map((line) => {
+            return line.split('*')?.[0];
+        });
+        return segments?.map((s) => {
+            for (let i = 0; i < regex?.length!; ++i) {
+                const reg = new RegExp(regex?.[i]!);
+                const hit = (s.match(reg));
+                if (hit?.[1]) {
+                    return hit?.[1] || null;
+                }
+            }
+            return null;
+        }).filter(Boolean) as string[];
+    }).flat(1).filter(Boolean) as string[];
 }

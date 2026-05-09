@@ -76,7 +76,8 @@ export default defineConfig(({mode}) => {
             allowedHosts: true,
             port: port ? parseInt(port) : undefined,
             cors: {
-                origin: ['http://ttt.local.vtoshop.com:3000', 'https://localshopfly.myshopify.com', 'https://localshopfly.myshopify.com/'],
+                // origin: ['http://ttt.local.vtoshop.com:3000', 'https://localshopfly.myshopify.com', 'https://localshopfly.myshopify.com/'],
+                origin: '*',
                 credentials: true,
                 "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
                 "preflightContinue": false,

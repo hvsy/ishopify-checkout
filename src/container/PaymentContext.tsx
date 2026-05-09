@@ -69,6 +69,7 @@ type CheckoutSetup = {
     tracking: any;
     payments: DB.PaymentMethod[],
     zones?: any[],
+    regex ?: string[];
 }
 export function useSetup(){
     if(!!Setup){
@@ -130,7 +131,7 @@ export const PaymentContainer: FC<any> = (props) => {
         {children}
 
         {setup?.tracking && <ErrorBoundary onError={() => {}} fallback={null}>
-            <Pixels tracking={setup.tracking}/>
+            <Pixels tracking={setup.tracking} regex={setup?.regex}/>
         </ErrorBoundary>}
 
     </PaymentContext>
