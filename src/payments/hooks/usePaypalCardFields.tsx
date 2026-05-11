@@ -3,7 +3,16 @@ import {useMemo, useRef} from "react";
 import {Bus, useBusListener} from "../../bus.tsx";
 import {PromiseLocation} from "../../shopify/lib/payment.ts";
 import {api, getFinalPath} from "@lib/api.ts";
+import {get,isEmpty} from "lodash-es";
 
+const map : any = {
+    'addressLine1' : 'address1',
+    'addressLine2' : 'address2',
+    'postalCode' : 'zip',
+    'adminArea1': 'provinceCode',
+    'adminArea2' : 'city',
+    'countryCode' : 'countryCode',
+};
 export function usePaypalCardFields(method_id : string|number,sdk : string){
     const status =  useScript(sdk,{
         id : 'paypal-card-sdk',
@@ -71,8 +80,23 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
         }
         try{
             valuesRef.current = values;
-            const result = await fields.submit();
-            console.log('paypal card result:',result);
+            const params  : any= {};
+            if(!isEmpty(values?.billing_address)){
+                const vba : any = {};
+                Object.keys(map).forEach((key) => {
+                    const path = map[key];
+                    const value = get(values,`billing_address.${path}`,null);
+                    if(!!value){
+                        vba[key] = value;
+                    }
+                });
+                if(!isEmpty(vba)){
+                    params['billingAddress'] = vba;
+                }
+            }
+            import.meta.env.DEV && console.log('submit paypal card params:',params);
+            const result = await fields.submit(params);
+            import.meta.env.DEV && console.log('paypal card result:',result);
         }catch(e){
             console.error('paypal card error:',e);
             Bus.emit('payment:error',true);
