@@ -5,6 +5,7 @@ import {capitalize} from "lodash-es";
 import {useEventCallback} from "usehooks-ts";
 import {Bus} from "../bus.tsx";
 import {Loading} from "@components/fragments/Loading.tsx";
+import {Features} from "@lib/flags.ts";
 
 export type PaypalCardProps = {
     method : any;
@@ -61,6 +62,14 @@ const PaypalCardForm : FC<any> = (props : any) => {
     });
 
     return <div className={'min-h-32 py-2'} id={'paypal-card-container'} >
+        {Features.includes('paypal_card_name') && <PaypalField fields={fields} id={'Name'}
+                     onInputChange={onInputChange}
+                     placeholder={'Cardholder Name (optional)'} field={'Name'}
+                     error={error_tip(errors['name'],'Name',validated)}
+                     config={{
+                         maskInput: false,
+                     }}
+        />}
         <PaypalField fields={fields} id={'number'}
                      onInputChange={onInputChange}
                      placeholder={'Card Number'} field={'Number'}
