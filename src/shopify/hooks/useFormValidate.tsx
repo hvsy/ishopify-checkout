@@ -16,6 +16,7 @@ import {buildAddress} from "@lib/buildAddress.ts";
 import {useSummary} from "../checkouts/hooks/useSummary.tsx";
 import {Features} from "@lib/flags.ts";
 import {PhoneOnlyRequired} from "../lib/globalSettings.ts";
+import {usePaymentContext} from "../../container/PaymentContext.tsx";
 
 function formatFormValues(values : any,validate_phone : boolean = true){
     const address = buildAddress(values?.shipping_address || {},validate_phone);
@@ -27,7 +28,9 @@ function formatFormValues(values : any,validate_phone : boolean = true){
     input.shipping_address = address;
     return input;
 }
-async function submit(form : FormInstance,validate_phone : boolean = true){
+
+const AutoFillSuggestCode = Features.includes('auto-fill-suggest-zip');
+async function submit(form : FormInstance,validate_phone : boolean = true,suggestZipCode ?: string){
     if(form.isFieldsValidating(['email'])){
         throw ({
             "errorFields" : [
@@ -38,6 +41,28 @@ async function submit(form : FormInstance,validate_phone : boolean = true){
         });
     }
     try{
+        if(AutoFillSuggestCode){
+            if(!!suggestZipCode){
+                const saz = form.getFieldValue(['shipping_address','zip']);
+                const set = [];
+                if(!saz){
+                    set.push({
+                        name : ['shipping_address','zip'],
+                        value : suggestZipCode,
+                    })
+                }
+                const ba = form.getFieldValue(['billing_address']);
+                if(!!ba && !ba.zip){
+                    set.push({
+                        name : ['billing_address','zip'],
+                        value : suggestZipCode,
+                    })
+                }
+                if(set.length > 0){
+                    form.setFields(set);
+                }
+            }
+        }
         const values =  await form.validateFields();
         import.meta.env.DEV && console.log('form validate values:',values);
         return formatFormValues(values,validate_phone);
@@ -55,9 +80,10 @@ export function useFormValidate(form : FormInstance) {
     const last = useRef<any>(null);
     const {loading,groups,refetchDeliveryGroup} = useSummary();
     const checkoutLoading = useShopifyCheckoutLoading();
+    const pctx = usePaymentContext();
     return async (keepBuyerCountryCode  : boolean = false) => {
         try {
-            const values = await submit(form);
+            const values = await submit(form,true,pctx?.suggestZipCode);
             values.validationStrategy = PhoneOnlyRequired() ? 'COUNTRY_CODE_ONLY' :'STRICT';
             let needMutate = !last.current || !isEqual(last.current, values);
             import.meta.env.DEV && console.log('need update remote checkout');
