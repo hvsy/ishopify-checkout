@@ -86,6 +86,12 @@ async function setup(){
     }
     const root = createRoot(rootElement);
     // const {App} = await import('./App.tsx');
+    if(import.meta.env.DEV){
+        const dev_style = document.getElementById('__dev-style__');
+        if(dev_style){
+            dev_style.remove();
+        }
+    }
     root.render(
         <React.StrictMode>
             <Global />

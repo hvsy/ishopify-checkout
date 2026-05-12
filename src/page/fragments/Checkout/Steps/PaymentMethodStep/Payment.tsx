@@ -8,6 +8,8 @@ import {BillingAddressStep} from "../../../../../shopify/checkouts/steps/Billing
 import {Discover} from "../../../../../assets/discover.tsx";
 import {PaypalCard} from "../../../../../payments/PaypalCard.tsx";
 import {getFinalPath, getReplacePathBase} from "@lib/api.ts";
+import {useScreen} from "usehooks-ts";
+import {Tooltip} from "@components/fragments/Tooltip.tsx";
 
 export type PaymentProps = {
     method : DB.PaymentMethod,
@@ -21,10 +23,11 @@ const Icons : any = {
     "paypal" : [PaypalSvg],
     "credit-card" : {
         "visa" : 'https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/visa.sxIq5Dot.svg',
-        "mastercard": [
-            'https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/mastercard.1c4_lyMp.svg',
-            'https://cdn.shopify.com/shopifycloud/admin-ui-foundations/payment-icons/0878f.svg',
-        ],
+        "mastercard": 'https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/mastercard.1c4_lyMp.svg',
+        // "mastercard": [
+        //     'https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/mastercard.1c4_lyMp.svg',
+        //     'https://cdn.shopify.com/shopifycloud/admin-ui-foundations/payment-icons/0878f.svg',
+        // ],
         "amex" :'https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/amex.Csr7hRoy.svg',
         "jcb" : 'https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/jcb.BgZHqF0u.svg',
         'discover': Discover,
@@ -41,11 +44,45 @@ const PaymentIcon  : FC<any> = (props) => {
         {_isString(icon) ? <img width={38} height={24} className="object-cover overflow-hidden" src={icon}/> : icon }
     </div>
 }
+const IconList : FC<any> = (props) => {
+    const {icons = []} = props;
+    const all_icon = (icons||[]).flat(1);
+    const {width} = useScreen({
+        initializeWithValue:true,
+    });
+    const less_icon = width < 430 && all_icon.length > 3;
+    if(less_icon){
+        const clone = [...all_icon];
+        const show = clone.splice(0,3);
+        return <div className={'flex flex-row space-x-1'}>
+            {show.map((icon : any,si : number) => {
+                if(_isArray(icon)){
+                    return <PaymentIcon icon={icon?.[0]} key={`show_${si}`}/>
+                }else{
+                    return <PaymentIcon icon={icon} key={`show_${si}`}/>;
+                }
+            })}
+            <Tooltip icon={<div className={'bg-white border shadow px-1'}>+{all_icon.length - 3}</div>}>
+                <div className={'flex flex-row flex-wrap gap-2 '}>
+                    {clone.map((c: any, hi: number) => {
+                        return <PaymentIcon icon={c} key={`hidden_${hi}`}/>;
+                    })}
+                </div>
+            </Tooltip>
+        </div>
+    }else{
+        return  (all_icon).map((icon : any, i : number) => {
+            return <PaymentIcon icon={icon} key={`${i}`}/>
+        })
+    }
+}
 export const Payment: FC<PaymentProps> = (props) => {
     const {method,token,checked,children} = props;
     const title = {
         "paypal" : "Paypal",
-        "credit-card" : "Credit / Debit Card",
+        "credit-card" :<div>
+            Credit <span className={'hidden sm:inline'}>/ Debit</span> Card
+        </div>,
     }[method.type];
     const logo = null;//Logos[method.type] || null;
     let icons = ((method.icons||[]).map(i=>{
@@ -56,12 +93,12 @@ export const Payment: FC<PaymentProps> = (props) => {
         icons = (_isArray(target) ? target : Object.values(target));
     }
     import.meta.env.DEV && console.log('payment icons:',method.channel,icons);
-    return  <div className={'flex flex-col flex-1 items-stretch divide-neutral-300 divide-y cursor-pointer select-none'}>
+    return  <div className={'flex flex-col flex-1 items-stretch divide-neutral-300 divide-y cursor-pointer select-none overflow-hidden max-w-full'}>
         <div className={'flex flex-row px-3 space-x-3 py-3'}>
             <div className={'flex flex-col justify-center'}>
                 {children}
             </div>
-            <div key={method.id} className={'flex flex-1 flex-row justify-between items-center'}>
+            <div key={method.id} className={'flex flex-1 flex-row justify-between items-center max-w-full overflow-hidden'}>
                     {logo ?
                         <div className={"border-neutral-300 border overflow-hidden rounded px-1"}>
                             <div className={'flex flex-col'}>
@@ -71,16 +108,8 @@ export const Payment: FC<PaymentProps> = (props) => {
                         </div> : <div className={'text-sm text-nowrap'}>
                             {title}
                         </div>}
-                <div className={'flex flex-row space-x-1'}>
-                    {(icons || []).map((icon, i) => {
-                        if(_isArray(icon)){
-                            return icon.map((ic,ii) => {
-                                return <PaymentIcon icon={ic} key={`${i}-${ii}`} className={ii != 0 ? 'hidden sm:flex' :''} />
-                            })
-                        }else{
-                            return <PaymentIcon icon={icon} key={`${i}`}/>
-                        }
-                    })}
+                <div className={'flex flex-row space-x-1 overflow-hidden max-w-full'}>
+                    <IconList icons={icons || []}/>
                 </div>
             </div>
         </div>
