@@ -4,6 +4,7 @@ import {PaypalField} from "./fragments/PaypalField.tsx";
 import {capitalize} from "lodash-es";
 import {useEventCallback} from "usehooks-ts";
 import {Bus} from "../bus.tsx";
+import {Loading} from "@components/fragments/Loading.tsx";
 
 export type PaypalCardProps = {
     method : any;
@@ -68,7 +69,7 @@ const PaypalCardForm : FC<any> = (props : any) => {
                          maskInput: false,
                      }}
         />
-        <div className={'flex flex-row space-x-3'}>
+        <div className={'flex flex-col sm:space-x-3 sm:flex-row'}>
             <PaypalField id="expired" className={'flex-1'}
                          onInputChange={onInputChange}
                          error={error_tip(errors['expiry'],'Expired Date',validated)}
@@ -92,8 +93,11 @@ const PaypalCardForm : FC<any> = (props : any) => {
 export const PaypalCard: FC<PaypalCardProps> = (props) => {
     const {method} = props;
     const cardFields  = usePaypalCardFields(method.id,method.sdk);
-    if(cardFields && cardFields.isEligible()){
-        return <PaypalCardForm fields={cardFields}/>
+    const loaded = !!(cardFields && cardFields.isEligible());
+    if(loaded){
+        return <PaypalCardForm fields={cardFields}/>;
     }
-    return <div className={'min-h-32 py-2'} id={'paypal-card-container'} ></div>;
+    return <div className={'min-h-32 py-2 flex-col justify-center items-center flex'} id={'paypal-card-container'} >
+        <Loading />
+    </div>;
 };
