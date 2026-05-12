@@ -1,5 +1,5 @@
 import {FC, lazy, useEffect, useMemo, useRef} from "react";
-import {isString as _isString,find as _find,capitalize as _capitalize,startsWith} from "lodash-es";
+import {isString as _isString, find as _find, capitalize as _capitalize, startsWith, lowerCase} from "lodash-es";
 import {Input} from "../../../components/Input.tsx";
 import {CircleHelp} from "lucide-react";
 import {Tooltip} from "@components/fragments/Tooltip.tsx";
@@ -187,7 +187,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
     }
     const colSpanClass = ['md:col-span-6','md:col-span-3' ,'md:col-span-2'][colSpan-1];
     const no_city = ['SG'].includes(region_code);
-    return <StepBlock className={'flex flex-col space-y-1'} labelClassName={titleClassName} label={`${label} address`} name={`${label}-address`}>
+    return <StepBlock className={'flex flex-col space-y-1'} labelClassName={titleClassName} label={`${label} address`} name={`${lowerCase(title)}-address`}>
         <div className={'grid grid-cols-6 gap-y-1 gap-x-2'}>
             <FormItem name={[...prefix, 'region']} preserve={true}>
                 <div className={'hidden'}/>
