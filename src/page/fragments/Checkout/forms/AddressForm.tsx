@@ -135,7 +135,6 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         if (!region_code) {
             let firstRegion = ipRegion || ups?.[0] || Regions?.[0];
             setRegion(firstRegion);
-
         }else{
             //有值的时候,但是该地区不配送
             let hit_region = _find(Regions, (r) => {
@@ -178,7 +177,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
     const phonePrefix = hitRegion?.data?.phoneNumberPrefix;
     const zipHolder = hitRegion?.data?.postalCodeExample;
     const label = _capitalize(title || '');
-    const postalCodeRequired = !!hitRegion?.data?.postalCodeRequired && !(hidden_fields||[]).includes('zip');
+    const postalCodeRequired = hitRegion?.data?.postalCodeRequired !== false && !(hidden_fields||[]).includes('zip');
     let colSpan = 3;
     if(!zones?.length){
         colSpan--;
