@@ -1,5 +1,5 @@
 import {useScript} from "usehooks-ts";
-import {useMemo, useRef} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {Bus, useBusListener} from "../../bus.tsx";
 import {PromiseLocation} from "../../shopify/lib/payment.ts";
 import {api, getFinalPath} from "@lib/api.ts";
@@ -13,6 +13,27 @@ const map : any = {
     'adminArea2' : 'city',
     'countryCode' : 'countryCode',
 };
+export function usePaypalCardScript(id:string){
+    const [status,setStatus] = useState('idle');
+    useEffect(() => {
+        const setStateFromEvent = (event: Event) => {
+            const newStatus = event.type === 'load' ? 'ready' : 'error'
+            setStatus(newStatus)
+        }
+        const script = document.getElementById(id)
+        if(script){
+            script.addEventListener('load', setStateFromEvent);
+            script.addEventListener('error',setStateFromEvent)
+        }
+        return ()=>{
+            if(script){
+                script.removeEventListener('load',setStateFromEvent);
+                script.removeEventListener('error',setStateFromEvent);
+            }
+        }
+    }, [id]);
+    return status;
+}
 export function usePaypalCardFields(method_id : string|number,sdk : string){
     const status =  useScript(sdk,{
         id : 'paypal-card-sdk',

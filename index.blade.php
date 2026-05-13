@@ -25,6 +25,42 @@
     @endforeach
 @endif
 
+@php try{ @endphp
+@foreach(($setup['payments'] ?? []) as $payment)
+    @foreach(($payment->getPreloads() ?? []) ?: [] as $key=>$content)
+        @if(!empty($content))
+            @if(is_string($content))
+                <link rel="preload" href="{!! $content!!}" as="fetch"/>
+            @else
+                @php
+                    $as = ['js'=>'script','css'=>'style'][$key] ?? 'fetch';
+                @endphp
+                @if(is_string($content))
+                    <link rel="preload" href="{!! $content !!}" as="{{$as}}"/>
+                @else
+                    @foreach($content as $item)
+                        @if(is_string($item))
+                            <link rel="preload" href="{!! $item !!}" as="{{$as}}"/>
+                        @elseif(!empty($item['href']))
+                            <link rel="{{$item['rel'] ?? 'preload'}}"
+                                  href="{!! $item['href'] !!}"
+                                  as="{{$item['as'] ?? $as}}"
+                                  @if(!empty($item['crossOrigin']))
+                                      crossorigin="{{$item['crossOrigin']}}"
+                                  @endif
+                                  @if(!empty($item['type']))
+                                      type="{{$item['type']}}"
+                                    @endif
+                            />
+                        @endif
+                    @endforeach
+                @endif
+            @endif
+        @endif
+    @endforeach
+@endforeach
+@php }catch(Throwable){ } @endphp
+
 @if(!empty($scripts))
     @foreach($scripts as $script)
         @if(!empty($script))
