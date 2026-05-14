@@ -41,6 +41,7 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
     const valuesRef = useRef<any>(null);
     const fields = useMemo(() => {
         if(!window.paypal || !['ready',].includes(status)) return null;
+        import.meta.env.DEV && console.log('card fields :',window.paypal.CardFields);
         return window.paypal.CardFields?.({
             style: {
                 input: {
@@ -58,6 +59,7 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
                 }).then((json) => json.order_id); // Return the order ID
             },
             onError: function(err : any,...args : any[]) {
+                Bus.emit('payment:error',true);
                 const url = err?.data?.url as string;
                 if(url){
                     const matches = url.match(/orders\/([^\/]+)\//im)
@@ -75,14 +77,17 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
                 console.error('PayPal CardFields Error:', err,...args);
             },
             onApprove: (data : any,...args : any[]) => {
-                console.log('paypal card approve',data,...args);
+                import.meta.env.DEV &&  console.log('paypal card approve',data,...args);
                 return api({
                     method : 'POST',
                     url : getFinalPath(`/api/gateways/${method_id}/approve/${data.orderID}`),
                 }).then((json) => {
-                    console.log('paypal card approve json:',json);
+                    import.meta.env.DEV && console.log('paypal card approve json:',json);
                     if(json.redirect){
                         return PromiseLocation(json.redirect);
+                    }
+                    if(json.error){
+                        Bus.emit('payment:error',json.message || true);
                     }
                 });
             },
