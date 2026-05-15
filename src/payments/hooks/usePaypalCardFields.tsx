@@ -3,16 +3,32 @@ import {useEffect, useMemo, useRef, useState} from "react";
 import {Bus, useBusListener} from "../../bus.tsx";
 import {PromiseLocation} from "../../shopify/lib/payment.ts";
 import {api, getFinalPath} from "@lib/api.ts";
-import {get,isEmpty} from "lodash-es";
+import {get, isEmpty, isObjectLike} from "lodash-es";
 
 const map : any = {
-    'addressLine1' : 'address1',
-    'addressLine2' : 'address2',
-    'postalCode' : 'zip',
-    'adminArea1': 'provinceCode',
-    'adminArea2' : 'city',
     'countryCode' : 'countryCode',
+    'addressLine1' : 'address1',
+
+    'postalCode' : 'zip',
+    'adminArea2' : 'city',
+
+    'addressLine2' : 'address2',
+    'adminArea1': 'provinceCode',
 };
+
+function validate_billing(vba ?: any){
+    if(!vba) return false;
+    if(!isObjectLike(vba)) return false;
+    if(!vba.countryCode) return false;
+    if(!vba.addressLine1) return false;
+    let hit = 0;
+    ['adminArea1','adminArea2','postalCode','addressLine2'].forEach((key) => {
+        if(!!vba[key]){
+            hit++;
+        }
+    });
+    return hit;
+}
 export function usePaypalCardScript(id:string){
     const [status,setStatus] = useState('idle');
     useEffect(() => {
@@ -106,20 +122,20 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
         }
         try{
             valuesRef.current = values;
+            import.meta.env.DEV && console.log('paypal card submit:',values);
             const params  : any= {};
-            if(!isEmpty(values?.billing_address)){
-                const vba : any = {};
-                Object.keys(map).forEach((key) => {
-                    const path = map[key];
-                    const value = get(values,`billing_address.${path}`,null);
-                    if(!!value){
-                        vba[key] = value;
-                    }
-                });
-                if(!isEmpty(vba)){
-                    params['billingAddress'] = vba;
+            const vba : any = {};
+            Object.keys(map).forEach((key) => {
+                const path = map[key];
+                const value = get(values,`billing_address.${path}`) || get(values,`shipping_address.${path}`);
+                if(!!value){
+                    vba[key] = value;
                 }
+            });
+            if(!isEmpty(vba) && validate_billing(vba) !== false){
+                params['billingAddress'] = vba;
             }
+
             import.meta.env.DEV && console.log('submit paypal card params:',params);
             const result = await fields.submit(params);
             import.meta.env.DEV && console.log('paypal card result:',result);
