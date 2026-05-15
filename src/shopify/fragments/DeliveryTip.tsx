@@ -10,6 +10,8 @@ export const DeliveryTip: FC<DeliveryTipProps> = (props) => {
                 }}
     >
         <img src="https://cdn.shopify.com/s/files/1/0762/4491/0316/files/shipping_van.png?v=1763041268"
+             width={222}
+             height={123}
              className={'w-20'}
              loading={'lazy'}
              alt=""/>
