@@ -1,11 +1,9 @@
 import {defineConfig, loadEnv} from 'vite'
 import path from "path"
-// import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react-swc'
 import {rimraf} from 'rimraf';
 import {trimEnd as _trimEnd} from "lodash-es";
 import {sentryVitePlugin} from "@sentry/vite-plugin";
-import {readFileSync} from "fs";
 
 const removeMSW = () => ({
     name: 'remove-msw',
@@ -58,9 +56,7 @@ export default defineConfig(({mode}) => {
                             )
                         }
                     }
-                    return h.replace('<!-- inject:blade -->',
-                        readFileSync(__dirname+'/index.blade.php','utf8'),
-                    );
+                    return h;
                 }
             },
         ],
@@ -76,7 +72,6 @@ export default defineConfig(({mode}) => {
             allowedHosts: true,
             port: port ? parseInt(port) : undefined,
             cors: {
-                // origin: ['http://ttt.local.vtoshop.com:3000', 'https://localshopfly.myshopify.com', 'https://localshopfly.myshopify.com/'],
                 origin: '*',
                 credentials: true,
                 "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
