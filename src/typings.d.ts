@@ -360,6 +360,7 @@ namespace Shopify{
         zip : string;
     };
     type Order = {
+        regex ?: string[],
         token : string
         cart_id : string;
         email : string;

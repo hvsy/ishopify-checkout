@@ -1,6 +1,4 @@
 import {createContext, use} from "react";
-import {Currency} from "lucide-react";
-import {useParams} from "react-router-dom";
 import {gql, useApolloClient} from "@apollo/client";
 import Big from "big.js";
 import {moneyFormat} from "../lib/helper.ts";

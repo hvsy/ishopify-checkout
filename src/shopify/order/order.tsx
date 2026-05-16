@@ -18,6 +18,8 @@ export const Order: FC<OrderProps> = (props) => {
     useRemoveAppLoader();
     const data = useLoaderData() as Shopify.Order;
     useCleanCartCookie(data?.cart_id);
+    const reported = data.token && !data.thanked;
+    // const reported = data.token;
     return <ShopifyContext value={{
         shop: data.shop
     }}>
@@ -32,9 +34,11 @@ export const Order: FC<OrderProps> = (props) => {
         {data.shop.tracking && <ErrorBoundary onError={() => {
 
         }} fallback={null}>
-            <Pixels tracking={data.shop.tracking} />
+            <Pixels tracking={data.shop.tracking}
+                    regex={data?.regex}
+            />
         </ErrorBoundary>}
-        {data.token  && !data.thanked && <Report name={'purchase'} data={{
+        {reported && <Report name={'purchase'} data={{
             // eventId : md5(data.token),
             email : data.email,
             address: data.shipping_address,
