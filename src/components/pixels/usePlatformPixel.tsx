@@ -43,11 +43,11 @@ export function usePlatformPixel(type : string,config : PixelConfig){
                 id = px.pixel_id;
                 if(!isEmpty(px.categories)){ // 像素设置分类
                     if(isEmpty(categories)){ // 内容没有分类
-                        console.log('产品没有分类信息:',px,categories)
+                        import.meta.env.DEV && console.log('产品没有分类信息:',px,categories,skus)
                         return;
                     }else{
                         if(isEmpty(intersection(categories || [],px.categories))){
-                            console.log('分类不匹配:',px,categories)
+                            import.meta.env.DEV && console.log('分类不匹配:',px,categories,skus)
                             return;  //像素的分类和内容的分类不匹配
                         }
                     }

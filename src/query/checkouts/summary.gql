@@ -19,28 +19,28 @@ query Summary($cartId :ID!){
             shortDescription
             slogan
         }
-        shipsToCountries
+        #shipsToCountries
     }
-    localization {
-        availableCountries {
-            currency {
-                isoCode
-                name
-                symbol
-            }
-            name
-            unitSystem
-            isoCode
-        }
-        #        country {
-        #            isoCode
-        #            unitSystem
-        #            name
-        #            currency {
-        #
-        #            }
-        #        }
-    }
+#    localization {
+#        availableCountries {
+#            currency {
+#                isoCode
+#                name
+#                symbol
+#            }
+#            name
+#            unitSystem
+#            isoCode
+#        }
+#        #        country {
+#        #            isoCode
+#        #            unitSystem
+#        #            name
+#        #            currency {
+#        #
+#        #            }
+#        #        }
+#    }
     cart(id : $cartId){
         ...CartFields
     }
