@@ -3,11 +3,10 @@ import {md5} from "js-md5";
 import {usePlatformPixel} from "./usePlatformPixel.tsx";
 import {sha256} from "js-sha256";
 import {getShopifyY} from "@lib/shopify.ts";
-import {isObjectLike} from "lodash-es";
 
 
-export const FacebookPixel: FC<{ pixels: (string|any)[],regex?:string[] }> = (props) => {
-    const {pixels,regex} = props;
+export const FacebookPixel: FC<PixelProps> = (props) => {
+    const {pixels,regex,sy} = props;
     usePlatformPixel('facebook',{
         script : `!function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -23,7 +22,10 @@ export const FacebookPixel: FC<{ pixels: (string|any)[],regex?:string[] }> = (pr
             const extra : any = {
 
             };
-            const shopify_y = getShopifyY();
+            let shopify_y = sy;
+            if(!shopify_y){
+                shopify_y = getShopifyY();
+            }
             if(!!(shopify_y)){
                 extra.external_id = sha256(shopify_y);
             }

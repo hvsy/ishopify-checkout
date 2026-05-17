@@ -36,6 +36,7 @@ export const Order: FC<OrderProps> = (props) => {
         }} fallback={null}>
             <Pixels tracking={data.shop.tracking}
                     regex={data?.regex}
+                    sy={data?.sy}
             />
         </ErrorBoundary>}
         {reported && <Report name={'purchase'} data={{

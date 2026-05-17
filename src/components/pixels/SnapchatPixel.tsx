@@ -4,8 +4,8 @@ import {sha256} from "js-sha256";
 import {getShopifyY, getStorage} from "@lib/shopify.ts";
 
 
-export const SnapchatPixel: FC<{ pixels: string[] }> = (props) => {
-    const {pixels} = props;
+export const SnapchatPixel: FC<PixelProps> = (props) => {
+    const {pixels,sy} = props;
     usePlatformPixel('snapchat', {
         script: `(function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function()
 {a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};
@@ -16,7 +16,10 @@ u.parentNode.insertBefore(r,u);})(window,document,
         pixels,
         setup: ps => {
             const extra: any = {};
-            const shopify_y = getShopifyY();
+            let shopify_y = sy;
+            if(!shopify_y){
+                shopify_y = getShopifyY();
+            }
             if (!!(shopify_y)) {
                 extra.external_id = sha256(shopify_y);
             }

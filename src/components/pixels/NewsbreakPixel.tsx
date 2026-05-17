@@ -3,9 +3,6 @@ import {usePlatformPixel} from "./usePlatformPixel.tsx";
 import {getShopifyY} from "@lib/shopify.ts";
 import {sha256} from "js-sha256";
 
-export type NewsbreakPixelProps = {
-    pixels: string[]
-};
 
 function getExtra(){
     const sy  = getShopifyY();
@@ -17,8 +14,8 @@ function getExtra(){
     }
 }
 
-export const NewsbreakPixel: FC<NewsbreakPixelProps> = (props) => {
-    const {pixels} = props;
+export const NewsbreakPixel: FC<PixelProps> = (props) => {
+    const {pixels,sy} = props;
     usePlatformPixel('newsbreak', {
         script: `!(function (e, n, t, i, p, a, s) {
   e[i] ||
