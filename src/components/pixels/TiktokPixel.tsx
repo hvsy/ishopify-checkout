@@ -9,8 +9,8 @@ import AddPaymentInfo = Analytics.AddPaymentInfo;
 import {getShopifyY} from "@lib/shopify.ts";
 
 
-export const TiktokPixel: FC<{ pixels: (string|any)[],regex ?: string[]}> = (props) => {
-    const {pixels,regex} = props;
+export const TiktokPixel: FC<PixelProps> = (props) => {
+    const {pixels,regex,sy} = props;
     usePlatformPixel('tiktok',{
         script : `!function (w, d, t) {
   w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
@@ -22,7 +22,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 window.ttq?.load(p);
             })
             window.ttq.page();
-            const shopify_y =getShopifyY();
+            let shopify_y = sy;
+            if(!shopify_y){
+                shopify_y = getShopifyY();
+            }
             if(!!(shopify_y)){
                 window.ttq.identify({
                     external_id : sha256(shopify_y),

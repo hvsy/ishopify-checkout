@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import LocalExpiredStorage from "./LocalExpiredStorage.ts";
+import {getMetaContent} from "./metaHelper.ts";
 
 
 export function getShopifyS(){
@@ -20,6 +21,11 @@ export function getShopifyS(){
     }
 }
 export function getShopifyY(){
+    const sy =  getMetaContent('sy');
+    if(!!sy) {
+        import.meta.env.DEV && console.log('meta sy:',sy);
+        return sy;
+    }
     const cv = Cookies.get('_shopify_y');
     if(!!cv) return cv;
     try {

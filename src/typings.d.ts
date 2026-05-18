@@ -7,6 +7,11 @@ declare module "*.gql"
 
 
 type ReportEvent = keyof Analytics.Events;
+type PixelProps = {
+    pixels: (string|any)[],
+    regex?:string[],
+    sy ?: string
+}
 namespace Analytics{
     type ViewPage = {
 
@@ -361,6 +366,7 @@ namespace Shopify{
     };
     type Order = {
         regex ?: string[],
+        sy?:string;
         token : string
         cart_id : string;
         email : string;
