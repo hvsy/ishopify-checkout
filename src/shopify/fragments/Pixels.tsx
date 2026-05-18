@@ -25,14 +25,18 @@ export const Pixels: FC<PixelsProps> = (props) => {
         const id = getMetaContent("clarity");
         if(!!id){
             Clarity.init(id);
-            const sy = getShopifyY()
-            const ss = getShopifyS();
-            if(!!sy){
-                if(!!ss){
-                    Clarity.identify(sy,ss);
-                }else{
-                    Clarity.identify(sy)
-                }
+            let csy = sy;
+            if(!csy){
+                csy = getShopifyY();
+            }
+            // const css = getShopifyS();
+            if(!!csy){
+                Clarity.identify(csy)
+                // if(!!css){
+                //     Clarity.identify(csy,css);
+                // }else{
+                // Clarity.identify(csy)
+                // }
             }
         }
     }, []);
