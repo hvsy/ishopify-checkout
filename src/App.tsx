@@ -35,11 +35,28 @@ async function prefetch<T = any>(key : string){
     return preload<T>(key,preload_api)
     // return Preloader.fetch<T>(key,preload_api)
 }
-const OrderPage = lazy(async() => {
-    const m = await import("./shopify/order/order.tsx");
-    return {
-        default : m.Order,
-    }
+// import {Additional} from "./shopify/additional/Additional.tsx";
+// const Additional = lazy(() => {
+//     return import("./shopify/additional/Additional").then(m=>{
+//         return {default : m.Additional};
+//     })
+// })
+
+// const OrderPage = lazy(async() => {
+//     const m = await import("./shopify/order/order.tsx");
+//     return {
+//         default : m.Order,
+//     }
+// })
+const Additional = lazy(()=>{
+    return import("./NextPages.tsx").then((m) => {
+        return {default : m.Additional};
+    });
+})
+const OrderPage= lazy(()=>{
+    return import("./NextPages.tsx").then((m) => {
+        return {default : m.Order};
+    });
 })
 const prefix = getGlobalBase();
 function go2home(){
@@ -58,12 +75,7 @@ import {CartStorage} from "./shopify/context/CartStorage.ts";
 import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
 import {Features} from "@lib/flags.ts";
 import {getGlobalBase} from "./shopify/lib/globalSettings.ts";
-// import {Additional} from "./shopify/additional/Additional.tsx";
-const Additional = lazy(() => {
-    return import("./shopify/additional/Additional").then(m=>{
-        return {default : m.Additional};
-    })
-})
+
 export const SummaryQuery = gql([
     QuerySummary,
     QueryImageFragment,
