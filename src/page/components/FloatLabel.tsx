@@ -6,6 +6,7 @@ import {Skeleton} from "@components/ui/Skeleton.tsx";
 import {cn} from "@lib/cn.ts";
 
 export type FloatLabelProps = {
+    id ?: string;
     elementRef ?: RefObject<any> | ((ref : any)=>void),
     autoComplete ?: string;
     name ?: string;
