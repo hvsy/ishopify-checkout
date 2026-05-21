@@ -25,7 +25,7 @@ export const ContactInformationForm: FC<ContactInformationFormProps> = (props) =
                 // }
             }
         }]}>
-            <Input placeholder={'Email (For order confirmation)'}
+            <Input id={'email'} placeholder={'Email (For order confirmation)'}
                    type={'email'}
                    onBlur={(event) => {
                        const email = form.getFieldValue('email');
