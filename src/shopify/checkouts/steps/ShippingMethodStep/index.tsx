@@ -1,5 +1,5 @@
 import {FC, useEffect} from "react";
-import {get as _get,isEmpty as _isEmpty} from "lodash-es";
+import {get as _get, isEmpty as _isEmpty} from "lodash-es";
 import Form from "@rc-component/form";
 
 export type ShippingMethodStepProps = {};
@@ -11,44 +11,47 @@ import {useSummary} from "../../hooks/useSummary.tsx";
 import {NoShippingMethod} from "../../../../page/fragments/Checkout/Steps/ShippingMethodStep/NoShippingMethod.tsx";
 import {useCurrentForm} from "../../../../container/FormContext.ts";
 import {useShopifyCheckoutLoading} from "../../../context/ShopifyCheckoutContext.tsx";
+import {FormItem} from "@components/fragments/FormItem.tsx";
+import {PlainField} from "../../fragments/SingleCheckoutForm.tsx";
 
 
 const Title = "Shipping Method";
 export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
     const {} = props;
-    const {json,groups,loading}= useSummary();
+    const {json, groups, loading} = useSummary();
     const checkoutLoading = useShopifyCheckoutLoading();
 
     const group = groups?.[0] || null;
-    const methods = _get(group,'deliveryOptions',null);
-    const shipping_line_id = _get(group,'selectedDeliveryOption.handle',null);
-    const shipping_group_id = _get(group,'id',null);
+    const methods = _get(group, 'deliveryOptions', null);
+    const shipping_line_id = _get(group, 'selectedDeliveryOption.handle', null);
+    const shipping_group_id = _get(group, 'id', null);
     const form = useCurrentForm();
-    const state_code = form.getFieldValue(['shipping_address','state_code']);
+    const state_code = form.getFieldValue(['shipping_address', 'state_code']);
     useEffect(() => {
-        const current=form.getFieldsValue(['shipping_line_id','shipping_group_id']);
-        const changed : any = {};
-        if(current.shipping_line_id !== shipping_line_id){
+        const current = form.getFieldsValue(['shipping_line_id', 'shipping_group_id']);
+        const changed: any = {};
+        if (current.shipping_line_id !== shipping_line_id) {
             changed['shipping_line_id'] = shipping_line_id;
 
         }
-        if(current.shipping_group_id !== shipping_group_id){
+        if (current.shipping_group_id !== shipping_group_id) {
             changed['shipping_group_id'] = shipping_group_id;
         }
-        if(!_isEmpty(changed)){
+        if (!_isEmpty(changed)) {
             form.setFieldsValue(changed);
         }
-    }, [shipping_group_id,shipping_line_id]);
+    }, [shipping_group_id, shipping_line_id]);
     const format = useMoneyFormat();
-    if(loading.shipping_methods || (checkoutLoading && !methods?.length)){
+    if (loading.shipping_methods || (checkoutLoading && !methods?.length)) {
         return <StepFrame title={Title}>
-            <div className={'animate-pulse border rounded-md border-neutral-300 flex flex-row items-center  space-x-3 p-4'}>
-                    <div className={'size-4 rounded-full bg-slate-200'}></div>
-                    <div className={'flex-1 bg-slate-200 h-3 rounded-xl'}></div>
+            <div
+                className={'animate-pulse border rounded-md border-neutral-300 flex flex-row items-center  space-x-3 p-4'}>
+                <div className={'size-4 rounded-full bg-slate-200'}></div>
+                <div className={'flex-1 bg-slate-200 h-3 rounded-xl'}></div>
             </div>
         </StepFrame>
     }
-    if((!methods?.length) && !state_code){
+    if ((!methods?.length) && !state_code) {
         return <StepFrame title={Title}>
             <div className={'rounded-lg bg-gray-100 p-5 text-gray-500'}>
                 Enter your shipping address to view available shipping methods.
@@ -56,8 +59,9 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
         </StepFrame>
     }
 
-    return <StepFrame title={Title}>
-        {!!methods?.length ? <Form.Field name={['shipping_line_id']} >
+    return <>
+        <StepFrame title={Title}>
+        {!!methods?.length ? <Form.Field name={['shipping_line_id']}>
             <ShippingListFrame
                 onSelectedChange={(handle, item) => {
                     // console.log('handle:', handle, item);
@@ -83,8 +87,15 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
                         cost: method.estimatedCost,
                     };
                 })} renderPrice={(line: any) => {
-                return format(line.cost,'Free');
+                return format(line.cost, 'Free');
             }}/>
-        </Form.Field>:  <NoShippingMethod /> }
-    </StepFrame>;
+        </Form.Field> : <NoShippingMethod/>}
+    </StepFrame>
+        <FormItem name={['shipping_line_id']} preserve={true} rules={[{
+            required: true,
+            'message': 'You must select a shipping method.'
+        }]}>
+            <PlainField/>
+        </FormItem>
+    </>;
 };

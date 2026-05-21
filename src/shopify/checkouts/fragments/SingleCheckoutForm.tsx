@@ -30,12 +30,7 @@ export const SingleCheckoutForm: FC<SingleCheckoutFormProps> = (props) => {
         <div className={'flex flex-col space-y-8'}>
             <ContactInformationStep/>
             <ShippingMethodStep/>
-            <FormItem name={['shipping_line_id']} preserve={true} rules={[{
-                required: true,
-                'message': 'You must select a shipping method.'
-            }]}>
-                <PlainField/>
-            </FormItem>
+
             <LocalizedFieldsStep />
             {!approve && <PaymentMethodStep/>}
         </div>
