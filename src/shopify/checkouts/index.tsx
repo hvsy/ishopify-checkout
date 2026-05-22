@@ -2,7 +2,6 @@ import {Right} from "./fragments/Right.tsx";
 import {Left} from "./fragments/Left.tsx";
 import {PageFrame} from "@components/frames/PageFrame.tsx";
 import {NavFrame} from "@components/frames/NavFrame.tsx";
-import {useShopify} from "../context/ShopifyContext.ts";
 import {useCallback} from "react";
 import {ErrorBoundary} from "react-error-boundary";
 import {getGlobalPath,} from "../lib/globalSettings.ts";
@@ -10,11 +9,11 @@ import {LogoImage} from "../../page/components/LogoImage.tsx";
 import {UNSAFE_useRouteId} from "react-router-dom";
 import {Produce} from "../fragments/Produce.tsx";
 import {Beacon} from "../fragments/Beacon.tsx";
+import {getMetaContent} from "@lib/metaHelper.ts";
 
 
 export default () => {
-    const shop = useShopify();
-    const title = shop.title || shop.name;
+    const title = getMetaContent('shop_title');
     const nav = useCallback((className ?: string) => {
         const profileLogo = getGlobalPath('profile.logo', null);
         const image = profileLogo?.resource?.image;
@@ -34,7 +33,7 @@ export default () => {
                                                 }}
                                                 className={'object-contain'}/> : null}>
         </NavFrame>;
-    }, [shop]);
+    }, [title]);
     const id = UNSAFE_useRouteId();
 
     return <><PageFrame

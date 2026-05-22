@@ -1,14 +1,13 @@
 import {FC} from "react";
-import {useShopify} from "../../context/ShopifyContext.ts";
 import dayjs from "dayjs";
+import {getMetaContent} from "@lib/metaHelper.ts";
 
 export type PolicyProps = {};
 
 export const Policy: FC<PolicyProps> = () => {
-    const shop = useShopify();
-    const title = shop.title || shop.name;
+    const title = getMetaContent('shop_title');
     const domain = typeof window !== 'undefined' ? window.location.hostname : '';
-    const contactEmail = shop.config?.email?.contact || `serviceon@${domain}`;
+    const contactEmail = getMetaContent('shop_contact') || `serviceon@${domain}`;
 
     return <div className="page-policies max-h-[calc(70vh-99px)] pb-4 overflow-y-auto text-[#545454] text-sm leading-relaxed">
         <p>Last updated: November 25, {dayjs().subtract(1,'year').format('YYYY')}</p>

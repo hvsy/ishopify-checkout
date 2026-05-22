@@ -1,12 +1,12 @@
 import {FC, ReactNode, useState} from "react";
 import {Default} from "@hooks/client.ts";
-import {useShopify} from "../../context/ShopifyContext.ts";
 import {SingleCheckoutForm} from "./SingleCheckoutForm.tsx";
 import {Skeleton} from "@components/ui/Skeleton.tsx";
 import {HighDemandCountDown} from "../../fragments/HighDemandCountDown.tsx";
 import dayjs from "dayjs";
 import {DialogHeader,Dialog, DialogContent, DialogTitle} from "@components/ui/dialog.tsx";
 import {Policy} from "./Policy.tsx";
+import {getMetaContent} from "@lib/metaHelper.ts";
 
 export type LeftProps = {
     className ?: string;
@@ -15,8 +15,7 @@ export type LeftProps = {
 
 export const Left: FC<LeftProps> = (props) => {
     const {renderNav,className = ''} = props;
-    const shop = useShopify();
-    const title = shop.title || shop.name;
+    const title = getMetaContent('shop_title');
     const [showPolicy,setShowPolicy] = useState(false);
     let top = null;
     if(renderNav){
