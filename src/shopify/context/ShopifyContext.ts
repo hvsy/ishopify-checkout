@@ -1,14 +1,13 @@
-import {createContext, use} from "react";
+// import {createContext, use} from "react";
 import Big from "big.js";
 import {moneyFormat} from "../lib/helper.ts";
 
-export const ShopifyContext = createContext<any>({
-    shop :null
-});
+// export const ShopifyContext = createContext<any>({
+//     shop :null
+// });
 
 
 export function useMoneyFormat(){
-    const ctx = use(ShopifyContext);
     return (data : any,free : string|null = null)=>{
         const {amount,currencyCode} = data || {};
         if(amount === undefined) return null;
@@ -21,6 +20,5 @@ export function useMoneyFormat(){
                 currencyCode,
             })
         }
-        return ctx?.shop?.format?.(data);
     };
 }

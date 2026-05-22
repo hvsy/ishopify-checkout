@@ -1,26 +1,26 @@
 query Summary($cartId :ID!){
-    shop {
-        id
-        moneyFormat
-        name
-        brand {
-            logo {
-                id
-                image {
-                    ...Image
-                }
-            }
-            coverImage {
-                id
-                image {
-                    ...Image
-                }
-            }
-            shortDescription
-            slogan
-        }
-        #shipsToCountries
-    }
+#    shop {
+#        id
+#        moneyFormat
+#        name
+#        brand {
+#            logo {
+#                id
+#                image {
+#                    ...Image
+#                }
+#            }
+#            coverImage {
+#                id
+#                image {
+#                    ...Image
+#                }
+#            }
+#            shortDescription
+#            slogan
+#        }
+#        #shipsToCountries
+#    }
 #    localization {
 #        availableCountries {
 #            currency {
