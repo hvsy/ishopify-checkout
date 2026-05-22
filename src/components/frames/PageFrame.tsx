@@ -1,5 +1,4 @@
 import {FC, ReactNode} from "react";
-import {DesktopCheckoutBoard} from "../../plugins/DesktopCheckoutBoard.tsx";
 import {Frame} from "./Frame.tsx";
 import {SiteNav} from "../../shopify/fragments/SiteNav.tsx";
 
@@ -12,7 +11,6 @@ export const PageFrame: FC<PageFrameProps> = (props) => {
     const {renderRight, renderLeft,} = props;
     return <Frame header={<SiteNav />}
                   right={renderRight?.()}
-                  rightBottom={<DesktopCheckoutBoard/>}
     >
         {renderLeft?.()}
     </Frame>;
