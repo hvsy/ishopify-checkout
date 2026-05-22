@@ -4,6 +4,7 @@ import {twMerge} from "tailwind-merge";
 import {useIsMounted, useWindowSize} from "usehooks-ts";
 import {createPortal} from "react-dom";
 import {getMetaContent} from "@lib/metaHelper.ts";
+import {PolicyDialog} from "../../shopify/checkouts/fragments/PolicyDialog.tsx";
 
 export type FrameProps = {
     children : ReactNode;
@@ -59,6 +60,7 @@ export const Frame: FC<FrameProps> = (props) => {
                                       className={'hidden sm:flex max-h-[64px] mb-3 flex-col items-stretch space-y-4 overflow-hidden'}>
                     </div>}
                     {children}
+                    <PolicyDialog />
                 </div>
             </div>
             <div className={clsx(`flex flex-col w-full sm:w-[45.5%] bg-neutral-50 sm:pt-16 sm:p-8 lg:pl-12 relative overflow-hidden`,

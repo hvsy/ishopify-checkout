@@ -166,9 +166,5 @@ export const OrderMain: FC<OrderMainProps> = (props) => {
                 Continue shopping
             </a>
         </div>
-        <div className={'border-b border-gray-300'}></div>
-        <div className={'text-xs'}>
-            All rights reserved {data.shop.title || data.shop.name}
-        </div>
     </>;
 };
