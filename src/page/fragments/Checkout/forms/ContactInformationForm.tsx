@@ -27,6 +27,7 @@ export const ContactInformationForm: FC<ContactInformationFormProps> = (props) =
         }]}>
             <Input id={'email'} placeholder={'Email (For order confirmation)'}
                    type={'email'}
+                   className={'overflow-hidden'}
                    onBlur={(event) => {
                        const email = form.getFieldValue('email');
                        if(email && Validators.isEmail(email,{
