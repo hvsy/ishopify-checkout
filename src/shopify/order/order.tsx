@@ -18,10 +18,6 @@ export const Order: FC<OrderProps> = (props) => {
     const data = useLoaderData() as Shopify.Order;
     useCleanCartCookie(data?.cart_id);
     const reported = data.token && !data.thanked;
-    // const reported = data.token;
-    // return <ShopifyContext value={{
-    //     shop: data.shop
-    // }}>
     return <>
         <PageFrame
             renderRight={() => {
@@ -60,8 +56,6 @@ export const Order: FC<OrderProps> = (props) => {
                     currency : line.total.currencyCode,
                 }
             })
-            // quantity : datat.
         }} token={data.token}/>}
     </>
-    // </ShopifyContext>;
 };

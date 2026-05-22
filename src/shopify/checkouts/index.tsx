@@ -1,43 +1,18 @@
 import {Right} from "./fragments/Right.tsx";
 import {Left} from "./fragments/Left.tsx";
 import {PageFrame} from "@components/frames/PageFrame.tsx";
-import {NavFrame} from "@components/frames/NavFrame.tsx";
-import {useCallback} from "react";
 import {ErrorBoundary} from "react-error-boundary";
-import {getGlobalPath,} from "../lib/globalSettings.ts";
-import {LogoImage} from "../../page/components/LogoImage.tsx";
 import {UNSAFE_useRouteId} from "react-router-dom";
 import {Produce} from "../fragments/Produce.tsx";
 import {Beacon} from "../fragments/Beacon.tsx";
-import {getMetaContent} from "@lib/metaHelper.ts";
+// import {Nav} from "../fragments/SiteNav.tsx";
 
 
 export default () => {
-    const title = getMetaContent('shop_title');
-    const nav = useCallback((className ?: string) => {
-        const profileLogo = getGlobalPath('profile.logo', null);
-        const image = profileLogo?.resource?.image;
-        const logo = image?.url ? {
-            url: image.url,
-            width: image?.width + 'px',
-            height: image?.height + 'px',
-        } : null;
-        return <NavFrame className={`${className}`}
-                         contentClassName={`${image? 'pt-1':""}`}
-                         title={title}
-                         align={(profileLogo?.align || undefined) as string}
-                         logo={logo ? <LogoImage {...logo}
-                                                style={{
-                                                    width:'auto',
-                                                    maxHeight:'100%',
-                                                }}
-                                                className={'object-contain'}/> : null}>
-        </NavFrame>;
-    }, [title]);
     const id = UNSAFE_useRouteId();
 
     return <><PageFrame
-        renderNav={nav}
+        // renderNav={()=><Nav/>}
         renderRight={() => {
             return <ErrorBoundary onError={(error, info) => {
                 console.error(error, info);
@@ -49,7 +24,7 @@ export default () => {
             return <ErrorBoundary onError={(error, info) => {
                 console.error(error, info);
             }} fallback={null}>
-                <Left renderNav={nav}/>
+                <Left/>
             </ErrorBoundary>
         }}/>
         <ErrorBoundary fallback={null} onError={() => {

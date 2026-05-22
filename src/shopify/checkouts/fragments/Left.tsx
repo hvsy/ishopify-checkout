@@ -14,21 +14,9 @@ export type LeftProps = {
 };
 
 export const Left: FC<LeftProps> = (props) => {
-    const {renderNav,className = ''} = props;
     const title = getMetaContent('shop_title');
     const [showPolicy,setShowPolicy] = useState(false);
-    let top = null;
-    if(renderNav){
-        if(import.meta.env.VITE_SKELETON){
-            top = renderNav("hidden sm:flex")
-        }else{
-            top = <Default>
-                {renderNav("hidden sm:flex")}
-            </Default>;
-        }
-    }
-
-    return  <div className={`flex flex-col flex-1 items-stretch space-y-6 sm:max-w-[638px] ${className}`}>
+    return  <>
         {top}
         <HighDemandCountDown />
         <div className={'flex flex-col space-y-10 flex-1'}>
@@ -55,5 +43,5 @@ export const Left: FC<LeftProps> = (props) => {
                 </div>
             </DialogContent>
         </Dialog>
-    </div>;
+    </>;
 };

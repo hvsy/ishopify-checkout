@@ -18,14 +18,11 @@ export const NavFrame: FC<NavFrameProps> = (props) => {
         'justify-start w-full' : align === 'left',
         'justify-end w-full' : align === 'right',
     })
-    return <div className={`flex flex-col items-stretch space-y-4 ${className}`}>
-        <div className={cn(`pt-5 md:pt-0 flex md:block font-bold text-4xl max-h-[64px] ${contentClassName}`)}>
+    return <div className={cn(`flex md:block flex-1 ${contentClassName}`)}>
             {import.meta.env.VITE_SKELETON ?<Skeleton className={'min-h-8 min-w-36'}/> : <a href={'/'} className={finalClass}>
-                {logo ? logo : <span className={''}>
+                {logo ? logo : <span className={'my-3 sm:my-0 text-center font-bold text-4xl'}>
                     {title}
                 </span>}
             </a>}
         </div>
-        {children}
-    </div>
 };
