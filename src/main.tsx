@@ -1,5 +1,4 @@
 import React, {lazy} from 'react'
-// import './index.css?inline';
 import './index.css';
 import { createRoot } from "react-dom/client";
 import {loadDevMessages, loadErrorMessages} from "@apollo/client/dev";

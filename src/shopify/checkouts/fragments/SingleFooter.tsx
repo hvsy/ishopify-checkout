@@ -6,12 +6,10 @@ import {usePaymentContext,} from "../../../container/PaymentContext.tsx";
 import {useParams} from "react-router-dom";
 import {useFormValidate} from "../../hooks/useFormValidate.tsx";
 import {useCurrentForm} from "../../../container/FormContext.ts";
-import {Features} from "@lib/flags.ts";
 import {getMetaContent} from "@lib/metaHelper.ts";
 
 export type SingleFooterProps = {};
 
-// const AutoFillSuggestCode = Features.includes('auto-fill-suggest-zip');
 export const SingleFooter: FC<SingleFooterProps> = (props) => {
     const {} = props;
     const {token} = useParams();
