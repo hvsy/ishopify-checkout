@@ -41,7 +41,7 @@ const Icons : any = {
 const PaymentIcon  : FC<any> = (props) => {
     const {icon,className= ''} = props;
     return <div className={`rounded flex flex-col justify-center items-center overflow-hidden min-w-[38px] ${className}`}>
-        {_isString(icon) ? <img width={38} height={24} className="object-cover overflow-hidden" src={icon}/> : icon }
+        {_isString(icon) ? <img loading={'lazy'} width={38} height={24} className="object-cover overflow-hidden" src={icon}/> : icon }
     </div>
 }
 const IconList : FC<any> = (props) => {
