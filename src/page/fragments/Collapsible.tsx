@@ -1,4 +1,5 @@
-import React, {FC, ReactNode, useLayoutEffect, useState} from "react";
+import React, {FC, ReactNode, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useWindowSize} from "usehooks-ts";
 
 export type CollapsibleProps = {
     header ?: ReactNode;
@@ -9,14 +10,18 @@ export type CollapsibleProps = {
 
 export const Collapsible: FC<CollapsibleProps> = (props) => {
     const {header,children,className,render} = props;
-    const [open, setOpen] = useState(false);
-    useLayoutEffect(() => {
-        setOpen(window.screen.availWidth >= 640);
-    }, []);
-    return <details id={'summary-details'} className={`sm:max-w-[478px] appearance-none flex flex-col items-stretch ${className} group`}
-                    open={open}>
+    const [open, setOpen] = useState(() => {
+        return window.innerWidth >= 640;
+    });
+    const {width} = useWindowSize({
+        initializeWithValue : true,
+    });
+    const final = open || width >= 640;
+    return <details
+                    open={final}
+                    id={'summary-details'} className={`sm:max-w-[478px] appearance-none flex flex-col items-stretch ${className} group`}>
         {import.meta.env.VITE_SKELETON && <script dangerouslySetInnerHTML={{
-            __html : `if(window.screen.availWidth >= 640){
+            __html : `if(window.innerWidth >= 640){
             document.getElementById('summary-details').setAttribute('open',true);
         }else{
             document.getElementById('summary-details').removeAttribute('open');
@@ -49,7 +54,7 @@ export const Collapsible: FC<CollapsibleProps> = (props) => {
             `} style={{
             transitionProperty: 'max-height'
         }}>
-            {(open || import.meta.env.VITE_SKELETON) ? (render ? render() :children) : null}
+            {(final || import.meta.env.VITE_SKELETON) ? (render ? render() :children) : null}
         </div>
     </details>;
 };

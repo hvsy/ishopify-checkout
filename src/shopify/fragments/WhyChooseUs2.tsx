@@ -1,13 +1,12 @@
 import {FC} from "react";
-import {useShopify} from "../context/ShopifyContext.ts";
 import {capitalize} from "lodash-es";
+import {getMetaContent} from "@lib/metaHelper.ts";
 
 export type WhyChooseUs2Props = {};
 
 export const WhyChooseUs2: FC<WhyChooseUs2Props> = (props) => {
     const {} = props;
-    const shop = useShopify();
-    const title = capitalize(shop.title || shop.name ||'us') ;
+    const title = capitalize(getMetaContent('shop_title') ||'us') ;
     return <div className={'flex flex-col space-y-3 items-stretch'}>
         <div className={'font-bold text-center pt-5 text-base sm:text-lg'}>
             Why Over 90,000+ People Trust {title}

@@ -34,14 +34,14 @@ export const FooterFrame: FC<FooterFrameProps> = (props) => {
         {import.meta.env.VITE_SKELETON ?<Skeleton className={'min-w-36 min-h-5'}/> : <div>Return to {back?.label}</div>}
     </Link>;
     return <div className={'flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center'}>
+        {WhyChooseVersion && <div className={'sm:hidden'}>
+            <WhyChooseUs2 />
+        </div>}
         {mobileImage?.url && <div className={'sm:hidden pt-8'}>
             <Media
                 media={mobileImage as DB.Media}
                 width={mobileImage.width}
             />
-        </div>}
-        {WhyChooseVersion && <div className={'sm:hidden'}>
-            <WhyChooseUs2 />
         </div>}
         {left}
         <AsyncButton onClick={next?.onClick}  pulsing={next?.pulsing || false} className={'max-w-full text-xl px-8 py-7 sm:text-lg sm:py-0'}>

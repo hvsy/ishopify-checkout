@@ -23,10 +23,7 @@ export const OrderMain: FC<OrderMainProps> = (props) => {
     const name = [_get(data,'shipping_address.first_name'),_get(data,'shipping_address.last_name')].filter((name) => {
         return !!name;
     }).join(' ');
-    return <div className={'flex flex-col flex-1 items-stretch space-y-6 sm:max-w-[638px]'}>
-        <a className={'text-center font-bold text-3xl'} href={'/'}>
-            {data.shop.title || data.shop.name}
-        </a>
+    return <>
         <div className={'flex flex-col space-y-2'}>
             <div className={'flex flex-row items-center space-x-2 font-bold md:font-normal'}>
                 <div>
@@ -169,9 +166,5 @@ export const OrderMain: FC<OrderMainProps> = (props) => {
                 Continue shopping
             </a>
         </div>
-        <div className={'border-b border-gray-300'}></div>
-        <div className={'text-xs'}>
-            All rights reserved {data.shop.title || data.shop.name}
-        </div>
-    </div>;
+    </>;
 };

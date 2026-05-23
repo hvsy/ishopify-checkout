@@ -1,18 +1,13 @@
-import {createContext, use} from "react";
-import {gql, useApolloClient} from "@apollo/client";
+// import {createContext, use} from "react";
 import Big from "big.js";
 import {moneyFormat} from "../lib/helper.ts";
 
-export const ShopifyContext = createContext<any>({
-    shop :null
-});
+// export const ShopifyContext = createContext<any>({
+//     shop :null
+// });
 
-export function useShopify(){
-    return use(ShopifyContext).shop;
-}
 
 export function useMoneyFormat(){
-    const ctx = use(ShopifyContext);
     return (data : any,free : string|null = null)=>{
         const {amount,currencyCode} = data || {};
         if(amount === undefined) return null;
@@ -25,14 +20,5 @@ export function useMoneyFormat(){
                 currencyCode,
             })
         }
-        return ctx?.shop?.format?.(data);
     };
-}
-
-export function useCacheQuery(queries: string[],variables : any = {}){
-    const client = useApolloClient();
-    return client.readQuery({
-        query : gql(queries.join("\n")),
-        variables,
-    })
 }

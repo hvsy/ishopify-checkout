@@ -1,6 +1,6 @@
 import {FC, ReactNode} from "react";
-import {template as _tpl} from "lodash-es";
-import {ShopifyContext} from "./context/ShopifyContext.ts";
+// import {template as _tpl} from "lodash-es";
+// import {ShopifyContext} from "./context/ShopifyContext.ts";
 
 import {ShopifyDiscountCodeProvider} from "./context/ShopifyDiscountCodeContext.tsx";
 
@@ -18,16 +18,16 @@ export const ShopifyFrame: FC<ShopifyFrameProps> = (props) => {
     const shop = data?.data?.shop;
     useDocumentTitle(shop ? shop.name + '-Checkout' : '');
 
-    return <ShopifyContext value={{
-            shop: !!shop ? {
-                ...shop,
-                format: _tpl(shop.moneyFormat, {
-                    interpolate: /{{([\s\S]+?)}}/g,
-                })
-            } : {},
-        }}>
-            <ShopifyDiscountCodeProvider codes={codes}>
+    // return <ShopifyContext value={{
+    //         shop: !!shop ? {
+    //             ...shop,
+    //             format: _tpl(shop.moneyFormat, {
+    //                 interpolate: /{{([\s\S]+?)}}/g,
+    //             })
+    //         } : {},
+    //     }}>
+            return <ShopifyDiscountCodeProvider codes={codes}>
                 {children}
             </ShopifyDiscountCodeProvider>
-        </ShopifyContext>
+        // </ShopifyContext>
 };

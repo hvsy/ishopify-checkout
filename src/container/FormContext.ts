@@ -1,6 +1,5 @@
 import {createSimpleContainer} from "@lib/SimpleContainer.tsx";
-import Form, {FormInstance} from "@rc-component/form";
-import {useEffect} from "react";
+import  {FormInstance} from "@rc-component/form";
 
 export const FormContext = createSimpleContainer<{
     form: FormInstance,
@@ -15,29 +14,4 @@ export const FormContext = createSimpleContainer<{
 
 export function useCurrentForm() {
     return FormContext.use()?.form!;
-}
-
-export function useFormError() {
-    return FormContext.use()!.error;
-}
-
-export function useFormField() {
-    const error = useFormError();
-    return (name: string) => {
-        return {
-            name,
-            ...error(name),
-        }
-    }
-}
-
-export type SFV = Parameters<FormInstance['setFieldsValue']>[0];
-
-export function useCheckoutForm<T>(initialValues : SFV) {
-    const [form] = Form.useForm<T>();
-    useEffect(() => {
-        form.setFieldsValue(initialValues);
-    }, []);
-
-    return [form];
 }

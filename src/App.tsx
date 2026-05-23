@@ -68,8 +68,9 @@ import {QuerySummary} from "@query/checkouts/queries.ts";
 import {
     QueryBuyerIdentityFragment,
     QueryCartFieldsFragment,
-    QueryDeliveryFragment, QueryDeliveryGroupsFragment,
-    QueryImageFragment
+    QueryDeliveryFragment,
+    // QueryDeliveryGroupsFragment,
+    // QueryImageFragment
 } from "@query/checkouts/fragments/fragments.ts";
 import {CartStorage} from "./shopify/context/CartStorage.ts";
 import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
@@ -78,7 +79,7 @@ import {getGlobalBase} from "./shopify/lib/globalSettings.ts";
 
 export const SummaryQuery = gql([
     QuerySummary,
-    QueryImageFragment,
+    // QueryImageFragment,
     QueryCartFieldsFragment,
     QueryDeliveryFragment,
     QueryBuyerIdentityFragment,

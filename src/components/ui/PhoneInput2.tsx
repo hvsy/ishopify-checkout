@@ -5,6 +5,8 @@ import {CountriesSelector} from "./CountriesSelector.tsx";
 import {Phone2} from "../Phone2.ts";
 import {PhoneOnlyRequired} from "../../shopify/lib/globalSettings.ts";
 import {Features} from "@lib/flags.ts";
+import {useCurrentForm} from "../../container/FormContext.ts";
+import Form from "@rc-component/form";
 
 export type PhoneInput2Props = {
     countryCode?: string;
@@ -45,6 +47,12 @@ export const PhoneInputInner2: FC<PhoneInput2Props> = (props) => {
     />
 };
 const SkipInitPhoneValidate = Features.includes('skip_init_phone_validate')
+const ShowHiddenPhone = Features.includes('phone:hidden:show');
+const HiddenPhone  : FC<any> = (props) => {
+    const form = useCurrentForm();
+    const phone2 = Form.useWatch(['shipping_address','phone2'],form);
+    return <input type={'hidden'} id={'phone'} name={'phone'} value={phone2?.toString()}/>
+}
 export const PhoneInput2: FC<PhoneInput2Props> = (props) => {
     const {
         children,
@@ -106,14 +114,17 @@ export const PhoneInput2: FC<PhoneInput2Props> = (props) => {
             }
         }
     }, [countryCode,]);
-    return <PhoneInputInner2
-        elementRef={inputRef}
-        countryCode={countryCode} {...others} value={inputValue} onChange={handlePhoneValueChange}>
-        {country?.iso2 ? <CountriesSelector iso2={country.iso2}
-                                            onSelect={country => {
-                                                if (country?.iso2)
-                                                    setCountry(country?.iso2);
-                                            }}
-        /> : null}
-    </PhoneInputInner2>
+    return <>
+        <PhoneInputInner2
+            elementRef={inputRef}
+            countryCode={countryCode} {...others} value={inputValue} onChange={handlePhoneValueChange}>
+            {country?.iso2 ? <CountriesSelector iso2={country.iso2}
+                                                onSelect={country => {
+                                                    if (country?.iso2)
+                                                        setCountry(country?.iso2);
+                                                }}
+            /> : null}
+        </PhoneInputInner2>
+        {ShowHiddenPhone  && <HiddenPhone />}
+    </>
 }

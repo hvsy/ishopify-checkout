@@ -1,7 +1,6 @@
 import {FC, useEffect} from "react";
 import {PageFrame} from "@components/frames/PageFrame.tsx";
 import {useLoaderData, useParams} from "react-router-dom";
-import {ShopifyContext} from "../context/ShopifyContext.ts";
 import {OrderMain} from "./fragments/OrderMain.tsx";
 import {OrderRight} from "./fragments/OrderRight.tsx";
 import {useCleanCartCookie} from "../hooks/useCleanCartCookie.ts";
@@ -19,10 +18,7 @@ export const Order: FC<OrderProps> = (props) => {
     const data = useLoaderData() as Shopify.Order;
     useCleanCartCookie(data?.cart_id);
     const reported = data.token && !data.thanked;
-    // const reported = data.token;
-    return <ShopifyContext value={{
-        shop: data.shop
-    }}>
+    return <>
         <PageFrame
             renderRight={() => {
             return <OrderRight />
@@ -60,7 +56,6 @@ export const Order: FC<OrderProps> = (props) => {
                     currency : line.total.currencyCode,
                 }
             })
-            // quantity : datat.
         }} token={data.token}/>}
-    </ShopifyContext>;
+    </>
 };
