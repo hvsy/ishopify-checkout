@@ -77,6 +77,7 @@ export function useDelayValue<T>(value: T, delay: number) {
 }
 
 const delay = getIntFromMeta('zip_suggest_delay', 1000);
+import.meta.env.DEV && console.log('meta config zip suggest delay:',delay);
 export const ZipSuggestInner: FC<any> = (props) => {
     const {address, region, onFill} = props;
     const key = [region?.code, address?.state_code,

@@ -3,6 +3,7 @@ import {transform_address} from "./checkout.ts";
 import {getJsonFromMeta} from "./metaHelper.ts";
 
 const shipping = getJsonFromMeta('preset_shipping') || {};
+import.meta.env.DEV && console.log("meta config preset shipping:",shipping);
 export function getCheckoutFromSummary(summary : any,path : string = 'data.cart'){
     const discounts = _get(summary,`${path}.discountAllocations`,[])
     .filter((discount : any) => {

@@ -58,6 +58,7 @@ export function ValidatePhone(value : string,strict : boolean = false){
     }
 
     const phone_regex = getJsonFromMeta('phone_regex',[]);
+    import.meta.env.DEV && console.log("meta config phone regex:",phone_regex);
     if(isArray(phone_regex)){
         const hit = phone_regex.some(function(regex){
             try{

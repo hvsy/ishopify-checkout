@@ -79,13 +79,12 @@ export const CountriesSelector: FC<CountriesSelectorProps> = memo((props) => {
         </div>: null
     },[iso2]);
     if(native){
-        return <div className={'flex flex-row space-x relative overflow-hidden mx-2 w-20 flex-1'}>
+        return <div className={'flex flex-row space-x relative overflow-hidden mx-2 min-w-20 flex-1'}>
             <div className={'z-50 absolute inset-0 pointer-events-none flex flex-col justify-center'} onClick={() => {
                 if(!ref.current) return;
             }}>
                 {flag}
             </div>
-            <div className={'absolute z-10 inset-0 pointer-events-none bg-white'}></div>
             <select ref={ref} className={'absolute z-0 inset-0 appearance-none'} value={iso2} onChange={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -101,6 +100,7 @@ export const CountriesSelector: FC<CountriesSelectorProps> = memo((props) => {
                     return <option value={child.value} key={child.value + `_${i}`}>{child.label}</option>
                 })}
             </select>
+            <div className={'absolute z-10 -inset-1 pointer-events-none bg-white'}></div>
         </div>
     }
 

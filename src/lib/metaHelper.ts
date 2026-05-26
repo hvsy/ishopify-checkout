@@ -1,19 +1,26 @@
-import {isArray as _isArray,unescape as _unescape} from "lodash-es";
+import {get,isObjectLike,isArray as _isArray,unescape as _unescape} from "lodash-es";
+let mode : string = document.querySelector(`meta[name='mode']`)?.getAttribute?.('content') || 'normal';
+import.meta.env.DEV && console.log('checkout response mode:',mode);
 export function getMetaContent<T = any>(name: string, defaultValue: any | null = null) {
-    const meta = document.querySelector(`meta[name='${name}']`);
-    let content = meta?.getAttribute?.('content');
-    if (content) {
-        content = content.trim()
-        if (content.indexOf('{{') !== -1 || content.indexOf('{!') !== -1) {
-            return defaultValue;
+    if(mode === 'stream'){
+        const value = get(window.global_meta,name,defaultValue);
+        import.meta.env.DEV && console.log('get meta content:',name,value);
+        return value;
+    }else{
+        const meta = document.querySelector(`meta[name='${name}']`);
+        let content = meta?.getAttribute?.('content');
+        if (content) {
+            content = content.trim()
+            if (content.indexOf('{{') !== -1 || content.indexOf('{!') !== -1) {
+                return defaultValue;
+            } else {
+                return content;
+            }
         } else {
-            return content;
+            return defaultValue;
         }
-    } else {
-        return defaultValue;
     }
 }
-
 export function getArrayFromMeta(name: string): string[] {
     const content = getMetaContent(name, '');
     const items = content.split(',').filter(Boolean);
@@ -24,6 +31,7 @@ export function getJsonFromMeta(name: string,defaultValue : any = {}): any {
     const content = getMetaContent(name, '');
     try{
         if(!content) return defaultValue;
+        if(isObjectLike(content)) return content;
         const json = _unescape(content);
         return JSON.parse(json);
     }catch (e){

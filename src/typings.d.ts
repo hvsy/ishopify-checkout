@@ -69,6 +69,7 @@ namespace Analytics{
 }
 
 interface Window {
+    global_meta ?: any;
     paypal : any;
     fbq: (fun : string,event : string,data ?: any,extra ?: any,args ?: any)=>void;
     gtag ?: (action : string,event : string, data : any)=>void;
