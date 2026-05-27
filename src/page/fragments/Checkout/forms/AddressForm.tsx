@@ -258,6 +258,9 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                                            }
                                            formInstance.setFieldsValue({
                                                [prefix.join('.')] : value,
+                                           });
+                                           onValuesChanged({
+                                               [prefix.join('.')]: value,
                                            })
                                        }}
                                         placeholder={'Address'}
