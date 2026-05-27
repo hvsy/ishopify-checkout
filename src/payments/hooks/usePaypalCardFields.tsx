@@ -111,7 +111,7 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
     }, [status]);
     useBusListener('payment:submit', async (values :any) => {
         if(!fields){
-            console.log('paypal card field not setup');
+            console.error('paypal card field not setup');
             return;
         }
         if(!!valuesRef.current) return;

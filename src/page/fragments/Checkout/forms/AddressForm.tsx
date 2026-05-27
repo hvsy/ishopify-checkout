@@ -19,6 +19,8 @@ import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts"
 import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
 import {Features, isCN} from "@lib/flags.ts";
 import {ErrorBoundary} from "react-error-boundary";
+import {GoogleAutoCompleteLine} from "./GoogleAutoCompleteLine.tsx";
+import {getMetaContent} from "@lib/metaHelper.ts";
 const ZipSuggest = lazy(() => {
     return import('../../../../geo/ZipSuggest').then((m) => {
         return {default : m.ZipSuggest};
@@ -28,6 +30,7 @@ const ZipSuggest = lazy(() => {
 
 
 
+const GoogleMapKey = getMetaContent('google_map');
 export const StateCodeFormItem : FC<any> = (props) => {
     const {name,zones,className,autoComplete,preserve = false} = props;
     const approve = UNSAFE_useRouteId() === 'approve';
@@ -237,9 +240,32 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 // message: 'Please enter 4-200 characters to Automatically retrieve addresses.'
                 message : AddressTip,
             }]} preserve={preserve}>
-                <Input placeholder={'Address'}
+                {GoogleMapKey? <GoogleAutoCompleteLine region_code={region_code?.toString()}
+                                       onAutoComplete={(address) => {
+                                           const value : any = {
+                                               line1 : address.address1,
+                                               line2 : address.address2,
+                                               region_code : address.region_code,
+                                           };
+                                           if(address.state_code){
+                                               value.state_code = address.state_code;
+                                           }
+                                           if(address.city){
+                                               value.city = address.city;
+                                           }
+                                           if(address.postal_code){
+                                               value.zip = address.postal_code;
+                                           }
+                                           formInstance.setFieldsValue({
+                                               [prefix.join('.')] : value,
+                                           })
+                                       }}
+                                        placeholder={'Address'}
+                                        autoComplete={`${pf} address-line1`}
+                                        className={'col-span-6'}
+                />: <Input placeholder={'Address'}
                        autoComplete={`${pf} address-line1`}
-                       className={'col-span-6'}/>
+                       className={'col-span-6'}/>}
             </FormItem>
             <FormItem name={[...prefix, 'line2']} preserve={preserve}>
                 <Input placeholder={'Apartment, suite, etc. (optional)'}
@@ -284,7 +310,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                        placeholder={zipHolder && Features.includes('zip_placeholder') ? `Postal Code Like ${zipHolder}` : 'Postal Code'}
                        autoComplete={`${pf} postal-code`}
                        className={`${no_city ?'' :colSpanClass} col-span-6`}
-                       suggest={<ErrorBoundary onError={()=>{
+                       suggest={!GoogleMapKey && <ErrorBoundary onError={()=>{
 
                        }} fallback={null}>
                            <ZipSuggest region={hitRegion} prefix={prefix}/>

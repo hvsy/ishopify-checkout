@@ -35,7 +35,7 @@ export function getCountryCode4(phone : string){
         const util = new PhoneNumberUtil();
         const phoneInput = util.parseAndKeepRawInput(phone);
         const code = phoneInput.getCountryCode()?.toString()?.replace(/\s/g,'');
-        console.log('phone code:',phoneInput,code);
+        import.meta.env.DEV && console.log('phone code:',phoneInput,code);
         if(code){
             return getCountry({
                 field : 'dialCode',
@@ -58,6 +58,7 @@ export function ValidatePhone(value : string,strict : boolean = false){
     }
 
     const phone_regex = getJsonFromMeta('phone_regex',[]);
+    import.meta.env.DEV && console.log("meta config phone regex:",phone_regex);
     if(isArray(phone_regex)){
         const hit = phone_regex.some(function(regex){
             try{

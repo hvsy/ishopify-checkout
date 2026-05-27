@@ -6,6 +6,7 @@ export const strict_pixel_config : (null|{
     platforms ?: string[];
     pixel_id_names ?: string[];
 }) = getJsonFromMeta('strict_pixel',null) || null;
+import.meta.env.DEV && console.log("meta config strict pixel config:",strict_pixel_config);
 
 export let current_pixel_params : null|string[] = null;
 

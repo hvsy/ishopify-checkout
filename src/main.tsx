@@ -13,6 +13,7 @@ import {Global} from "./Global.tsx";
 
 async function setup(){
     const format = getJsonFromMeta("phone_format");
+    import.meta.env.DEV && console.log("meta config phone format:",format);
     if(format){
         Object.keys(format).forEach((country) => {
             try{
@@ -53,6 +54,7 @@ async function setup(){
     const dsn = getMetaContent("sentry");
     if(!!dsn){
         const features = getArrayFromMeta('sentry_features');
+        import.meta.env.DEV && console.log("meta config sentry features:",features);
         Sentry.init({
             dsn,
             // Setting this option to true will send default PII data to Sentry.

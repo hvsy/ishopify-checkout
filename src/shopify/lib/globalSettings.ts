@@ -5,10 +5,10 @@ let globalSettings : any = null;
 
 export function getGlobalSettings(){
     if(globalSettings === null){
-        globalSettings = getJsonFromMeta('settings',{});
-        import.meta.env.DEV && console.log('global settings:',globalSettings);
+        globalSettings = getJsonFromMeta('settings',null) || getJsonFromMeta('checkout',null);
+        import.meta.env.DEV && console.log('meta config global settings:',globalSettings);
     }
-    return globalSettings;
+    return globalSettings || {};
 }
 
 export function getGlobalPath(path : string,defaultValue : any = null){
