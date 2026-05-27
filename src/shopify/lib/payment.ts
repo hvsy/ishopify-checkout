@@ -26,7 +26,7 @@ export async function shopify_payment(options : {
     const url = getUrlFrom(token);
     const totalAmount = _get(summary,'cost.totalAmount');
     const handle=  _get(summary,'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
-    console.log('shipping handle:',handle);
+    import.meta.env.DEV && console.log('shipping handle:',handle);
     if(!handle){
         step?.(() => {
             return ('Please select the delivery method.');

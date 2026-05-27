@@ -20,7 +20,7 @@ export type CountriesSelectorProps = {
 
 const top = getGlobalPath("profile.countries",[]) as string[];
 const compact=Features.includes('phone:countries:compact');
-console.log('top countries:',top);
+import.meta.env.DEV && console.log('top countries:',top);
 export const CountriesSelector: FC<CountriesSelectorProps> = memo((props) => {
     const {iso2,onSelect} = props;
     const country = useMemo(() => {

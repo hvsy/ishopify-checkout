@@ -73,7 +73,7 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                     alert('Please select the delivery method.')
                     throw "please choice delivery shipping line";
                 }
-                console.log(after);
+                import.meta.env.DEV && console.log(after);
                 try {
                     const totalAmount = _get(summary, 'cost.totalAmount');
                     const {amount, currencyCode} = totalAmount;

@@ -35,7 +35,7 @@ export function getCountryCode4(phone : string){
         const util = new PhoneNumberUtil();
         const phoneInput = util.parseAndKeepRawInput(phone);
         const code = phoneInput.getCountryCode()?.toString()?.replace(/\s/g,'');
-        console.log('phone code:',phoneInput,code);
+        import.meta.env.DEV && console.log('phone code:',phoneInput,code);
         if(code){
             return getCountry({
                 field : 'dialCode',

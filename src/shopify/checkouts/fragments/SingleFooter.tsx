@@ -71,7 +71,7 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
                     },
                     method: method!,
                 }, setProgress)
-                console.log(result, values);
+                import.meta.env.DEV && console.log(result, values);
             }
         }}
     />;
