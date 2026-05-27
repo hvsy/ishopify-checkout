@@ -29,14 +29,13 @@ export const Pixels: FC<PixelsProps> = (props) => {
             if(!csy){
                 csy = getShopifyY();
             }
-            // const css = getShopifyS();
+            const css = getShopifyS();
             if(!!csy){
-                Clarity.identify(csy)
-                // if(!!css){
-                //     Clarity.identify(csy,css);
-                // }else{
-                // Clarity.identify(csy)
-                // }
+                if(!!css){
+                    Clarity.identify(csy,css);
+                }else{
+                    Clarity.identify(csy)
+                }
             }
         }
     }, []);
