@@ -45,7 +45,9 @@ export const FacebookPixel: FC<PixelProps> = (props) => {
                             content_type: 'product_group',
                             value: data.price,
                             currency: data.currency,
-                        },extra);
+                        },{
+                            eventID : extra.event_id,
+                        });
                     },json.contents.map((content) => {
                         return content.sku || null;
                     }))
@@ -60,7 +62,9 @@ export const FacebookPixel: FC<PixelProps> = (props) => {
                             value: data.price,
                             currency: data.currency,
                             order_id  : md5(json.token),
-                        },extra);
+                        },{
+                            eventID : extra.event_id,
+                        });
                     },json.contents.map((content) => {
                         return content.sku || null;
                     }))
@@ -73,7 +77,9 @@ export const FacebookPixel: FC<PixelProps> = (props) => {
                         window.fbq?.('trackSingle',pxid,'AddPaymentInfo',{
                             value : json.price,
                             currency : json.currency,
-                        },extra);
+                        },{
+                            eventID : extra.event_id,
+                        });
                     },(json.cart||[]).map((content) => {
                         return content.sku || null;
                     }))
