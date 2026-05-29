@@ -1,4 +1,4 @@
-import {FC, lazy, useEffect, useMemo, useRef} from "react";
+import {FC, lazy, useEffect, useMemo, useRef,} from "react";
 import {isString as _isString, find as _find, capitalize as _capitalize, startsWith, lowerCase} from "lodash-es";
 import {Input} from "../../../components/Input.tsx";
 import {CircleHelp} from "lucide-react";
@@ -19,7 +19,7 @@ import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts"
 import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
 import {Features, isCN} from "@lib/flags.ts";
 import {ErrorBoundary} from "react-error-boundary";
-import {GoogleAutoCompleteLine} from "./GoogleAutoCompleteLine.tsx";
+import {GoogleAutoCompleteLine, GoogleAutoCompleteWrap} from "./GoogleAutoCompleteLine.tsx";
 import {getMetaContent} from "@lib/metaHelper.ts";
 const ZipSuggest = lazy(() => {
     return import('../../../../geo/ZipSuggest').then((m) => {
@@ -240,33 +240,40 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 // message: 'Please enter 4-200 characters to Automatically retrieve addresses.'
                 message : AddressTip,
             }]} preserve={preserve}>
-                {GoogleMapKey? <GoogleAutoCompleteLine region_code={region_code?.toString()}
-                                       onAutoComplete={(address) => {
-                                           const value : any = {
-                                               line1 : address.address1,
-                                               line2 : address.address2,
-                                               region_code : address.region_code,
-                                           };
-                                           if(address.state_code){
-                                               value.state_code = address.state_code;
-                                           }
-                                           if(address.city){
-                                               value.city = address.city;
-                                           }
-                                           if(address.postal_code){
-                                               value.zip = address.postal_code;
-                                           }
-                                           formInstance.setFieldsValue({
-                                               [prefix.join('.')] : value,
-                                           });
-                                           onValuesChanged({
-                                               [prefix.join('.')]: value,
-                                           })
-                                       }}
-                                        placeholder={'Address'}
-                                        autoComplete={`${pf} address-line1`}
-                                        className={'col-span-6'}
-                />: <Input placeholder={'Address'}
+                {GoogleMapKey ?
+                    <GoogleAutoCompleteWrap
+                        fallback={others =>{
+                            return <Input {...others} placeholder={'Address'} autoComplete={`${pf} address-line1`} className={'col-span-6'}/>;
+                        }
+                    }
+                                         region_code={region_code?.toString()}
+                                            onAutoComplete={(address) => {
+                                                const value: any = {
+                                                    line1: address.address1,
+                                                    line2: address.address2,
+                                                    region_code: address.region_code,
+                                                };
+                                                if (address.state_code) {
+                                                    value.state_code = address.state_code;
+                                                }
+                                                if (address.city) {
+                                                    value.city = address.city;
+                                                }
+                                                if (address.postal_code) {
+                                                    value.zip = address.postal_code;
+                                                }
+                                                formInstance.setFieldsValue({
+                                                    [prefix.join('.')]: value,
+                                                });
+                                                onValuesChanged({
+                                                    [prefix.join('.')]: value,
+                                                })
+                                            }}
+                                            placeholder={'Address'}
+                                            autoComplete={`${pf} address-line1`}
+                                            className={'col-span-6'}
+                    />
+                : <Input placeholder={'Address'}
                        autoComplete={`${pf} address-line1`}
                        className={'col-span-6'}/>}
             </FormItem>

@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef} from "react";
+import {FC, JSX, ReactElement, ReactNode, useEffect, useRef} from "react";
 import {Input, InputProps} from "../../../components/Input.tsx";
 import {Search} from "lucide-react";
 import  {
@@ -7,6 +7,7 @@ import  {
 import {useOnClickOutside, useScript} from "usehooks-ts";
 import {getMetaContent} from "@lib/metaHelper.ts";
 import {Loading} from "@components/fragments/Loading.tsx";
+import {ErrorBoundary} from "react-error-boundary";
 
 export type GoogleAutoCompleteLineProps = InputProps & {
     region_code : string;
@@ -103,7 +104,13 @@ export const GoogleAutoCompleteLine: FC<GoogleAutoCompleteLineProps> = (props) =
     const ref = useRef<any>(null);
     useOnClickOutside(ref,() => {
         clearSuggestions();
-    });
+    },'mousedown');
+    useOnClickOutside(ref,()=>{
+        clearSuggestions();
+    },'touchstart')
+    useOnClickOutside(ref,()=>{
+        clearSuggestions();
+    },'focusin')
     const handleSelect = (suggestion : any) =>
             () => {
                 // const { description } = suggestion;
@@ -139,7 +146,7 @@ export const GoogleAutoCompleteLine: FC<GoogleAutoCompleteLineProps> = (props) =
 
             return (
                 <div className={'py-1 px-1 cursor-pointer hover:bg-gray-300'} key={placeId} onClick={handleSelect(suggestion)}>
-                    <strong>{mainText.text}</strong> <small>{secondaryText.text}</small>
+                    <strong>{mainText?.text}</strong> <small>{secondaryText?.text}</small>
                 </div>
             );
         });
@@ -166,3 +173,13 @@ export const GoogleAutoCompleteLine: FC<GoogleAutoCompleteLineProps> = (props) =
         </div>}
     </div>
 };
+export const GoogleAutoCompleteWrap : FC<GoogleAutoCompleteLineProps & {fallback : (props : any)=>ReactNode}> = (props) => {
+    const {fallback,...others}  =props;
+    return <ErrorBoundary onError={() => {
+        // setGoogleMapError(true);
+    }} fallbackRender={()=>{
+        return fallback(others);
+    }}>
+        <GoogleAutoCompleteLine {...others} />
+    </ErrorBoundary>;
+}
