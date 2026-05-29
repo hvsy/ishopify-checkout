@@ -20,37 +20,27 @@ export function getShopifyS(){
         return null;
     }
 }
-export function getShopifyY(){
-    const sy =  getMetaContent('sy');
-    if(!!sy) {
-        import.meta.env.DEV && console.log('meta sy:',sy);
-        return sy;
+export function getShopifyY($ignoreMeta = false){
+    if(!$ignoreMeta){
+        const sy =  getMetaContent('sy');
+        if(!!sy) {
+            import.meta.env.DEV && console.log('meta sy:',sy);
+            return sy;
+        }
     }
-    const cv = Cookies.get('_shopify_y');
-    if(!!cv) return cv;
-    try {
-        const csy = LocalExpiredStorage.getItem('_custom_shopify_y') || null;
-        if(!!csy) return csy;
-    } catch (e) {
-
-    }
-    try {
-        return sessionStorage.getItem('_custom_shopify_y') || null
-    } catch (e) {
-        return null;
-    }
+    return getStorageValue('_shopify_y','_custom_shopify_y');
 }
 
-export function getStorageValue(name : string){
+export function getStorageValue(name : string,storageName ?: string){
     const value = Cookies.get(name);
     if(!!value) return value;
     try {
-        const sv = LocalExpiredStorage.getItem(name);
+        const sv = LocalExpiredStorage.getItem(storageName || name);
         if (!!sv) return sv;
     } catch (e) {
     }
     try {
-        return sessionStorage.getItem(name) || null;
+        return sessionStorage.getItem(storageName || name) || null;
     } catch (e) {
         return null;
     }
