@@ -1,4 +1,4 @@
-import {createBrowserRouter, Params, redirect, redirectDocument, RouterProvider,} from "react-router-dom";
+import {createBrowserRouter, Params, replace,redirectDocument, RouterProvider,} from "react-router-dom";
 import {api, getFinalPath} from "@lib/api.ts";
 import Checkout from "./shopify/checkouts";
 import {preload} from "swr";
@@ -101,7 +101,7 @@ async function getCheckout(request : Request,params : Params<string>,context : a
         // if(!!direct){
             storage.key = direct;
             if(Features.includes('redirect')){
-                return redirect(getFinalPath(`/checkouts/${token}`,shop));
+                return replace(getFinalPath(`/checkouts/${token}`,shop));
             }
         }
     }

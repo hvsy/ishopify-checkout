@@ -7,6 +7,7 @@ import {useParams} from "react-router-dom";
 import {useFormValidate} from "../../hooks/useFormValidate.tsx";
 import {useCurrentForm} from "../../../container/FormContext.ts";
 import {getMetaContent} from "@lib/metaHelper.ts";
+import {Features} from "@lib/flags.ts";
 
 export type SingleFooterProps = {};
 
@@ -14,12 +15,13 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
     const {} = props;
     const {token} = useParams();
     const {ing} = useSummary();
-    const {method, setProgress, suggestZipCode} = usePaymentContext() || {};
+    const {method, setProgress,} = usePaymentContext() || {};
     const form = useCurrentForm();
     const validator = useFormValidate(form);
+    const referer = Features.includes('return:referer') ? document.referrer.toString() : null;
     return <FooterFrame
         back={{
-            to: '/cart',
+            to: referer || '/cart',
             reload: true,
             label: 'Cart',
         }}
