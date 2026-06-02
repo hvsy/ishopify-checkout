@@ -40,7 +40,7 @@ const PaypalCardForm : FC<any> = (props : any) => {
             const error = errors[keys[i]];
             if(error !== true){
                 const message = error === null ? ' is empty' : 'is invalid';
-                throw `${keys[i]} ${message}`;
+                throw `Paypal Card ${keys[i]} ${message}`;
             }
         }
         return true;
