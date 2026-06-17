@@ -66,6 +66,7 @@ export async function shopify_payment(options : {
                     return "payment api error:" + res.message;
                 });
                 console.error(res.message);
+                Bus.emit('payment:error',true);
             }
             return false;
         }
