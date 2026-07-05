@@ -1,10 +1,13 @@
 import {FC} from "react";
+import {cn} from "@lib/cn.ts";
 
-export type DeliveryTipProps = {};
+export type DeliveryTipProps = {
+    className ?: string;
+};
 
 export const DeliveryTip: FC<DeliveryTipProps> = (props) => {
-    const {} = props;
-    return <div className={'flex flex-row space-x-3 items-center p-2 sm:p-4 border border-[#D6D6D6] rounded-lg'}
+    const {className} = props;
+    return <div className={cn('flex flex-row space-x-3 items-center p-2 sm:p-4 border border-[#D6D6D6] rounded-lg',className)}
                 style={{
                     gridTemplateColumns : 'auto 1fr'
                 }}

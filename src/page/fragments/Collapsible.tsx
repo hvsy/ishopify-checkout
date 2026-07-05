@@ -33,7 +33,7 @@ export const Collapsible: FC<CollapsibleProps> = (props) => {
                 e.preventDefault();
                 setOpen(!open)
             }}
-            className={'select-none appearance-none cursor-pointer list-none [&::-webkit-details-marker]:hidden flex flex-col items-stretch  sm:hidden border-y px-6 py-3 relative'}>
+            className={'select-none appearance-none cursor-pointer list-none [&::-webkit-details-marker]:hidden flex flex-col items-stretch  sm:hidden border-y py-3 relative'}>
             {header}
         </summary>
         <div
