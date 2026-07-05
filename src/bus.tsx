@@ -1,5 +1,4 @@
-import mitt, {EventType} from 'mitt';
-import {useEventCallback} from "usehooks-ts";
+import mitt from 'mitt';
 import {useEffect, useEffectEvent} from "react";
 
 
