@@ -1,22 +1,22 @@
 import React, {FC, ReactNode, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {useWindowSize} from "usehooks-ts";
 
 export type CollapsibleProps = {
     header ?: ReactNode;
     children ?: ReactNode;
     className?: string;
     render ?:()=>ReactNode;
+    windowWidth?: number;
 };
 
 export const Collapsible: FC<CollapsibleProps> = (props) => {
-    const {header,children,className,render} = props;
+    const {windowWidth,header,children,className,render} = props;
     const [open, setOpen] = useState(() => {
         return window.innerWidth >= 640;
     });
-    const {width} = useWindowSize({
-        initializeWithValue : true,
-    });
-    const final = open || width >= 640;
+    // const {width} = useWindowSize({
+    //     initializeWithValue : true,
+    // });
+    const final = open || (windowWidth||0) >= 640;
     return <details
                     open={final}
                     id={'summary-details'} className={`sm:max-w-[478px] appearance-none flex flex-col items-stretch ${className} group`}>
@@ -33,7 +33,7 @@ export const Collapsible: FC<CollapsibleProps> = (props) => {
                 e.preventDefault();
                 setOpen(!open)
             }}
-            className={'appearance-none cursor-pointer list-none [&::-webkit-details-marker]:hidden flex items-center flex-row justify-between sm:hidden border-y border-neutral-300 px-6 py-3 relative'}>
+            className={'select-none appearance-none cursor-pointer list-none [&::-webkit-details-marker]:hidden flex flex-col items-stretch  sm:hidden border-y px-6 py-3 relative'}>
             {header}
         </summary>
         <div

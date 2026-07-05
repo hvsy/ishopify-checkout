@@ -6,6 +6,7 @@ import {Line} from "@components/cart/Line.tsx";
 import {LineDiscount} from "../../checkouts/fragments/LineItem.tsx";
 import {SummaryFrame} from "../../fragments/SummaryFrame.tsx";
 import Big from "big.js";
+import {useWindowSize} from "usehooks-ts";
 
 export type OrderRightProps = {};
 
@@ -21,7 +22,12 @@ export const OrderRight: FC<OrderRightProps> = (props) => {
     },Big(0)) as Big;
     const shippingCurrencyCode = shippingDiscounts?.[0]?.currencyCode;
     const freeShipping = amounted.cmp(data.shipping_cost?.amount || '0') === 0;
-    return <RightFrame totalPrice={format(data.total_amount)}>
+    const {width} = useWindowSize({
+        initializeWithValue : true,
+    });
+    return <RightFrame
+        windowWidth={width}
+        totalPrice={format(data.total_amount)}>
         <div className={'pb-5 w-full max-w-full space-y-5'}>
             {data.line_items.map((line,i : number) => {
                 const image = line.variant.image || line.product.image;
