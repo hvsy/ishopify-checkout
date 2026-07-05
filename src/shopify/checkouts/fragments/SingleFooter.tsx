@@ -8,6 +8,7 @@ import {useFormValidate} from "../../hooks/useFormValidate.tsx";
 import {useCurrentForm} from "../../../container/FormContext.ts";
 import {getMetaContent} from "@lib/metaHelper.ts";
 import {Features} from "@lib/flags.ts";
+import {Bus} from "../../../bus.tsx";
 
 export type SingleFooterProps = {};
 
@@ -30,29 +31,9 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
             label: getMetaContent('payment_title') || 'Place an order',
             pulsing: ing,
             async onClick() {
-
                 setProgress?.(() => {
                     return "before form validator";
                 });
-                // try {
-                //     if (AutoFillSuggestCode && !!suggestZipCode) {
-                //         const zipErrors = form.getFieldsError([
-                //             ['shipping_address', 'zip'],
-                //             ['billing_address', 'zip']
-                //         ]);
-                //         if (zipErrors.length > 0) {
-                //             form.setFields(
-                //                 zipErrors.map((error) => {
-                //                     return {
-                //                         name: error.name,
-                //                         value: suggestZipCode,
-                //                     };
-                //             }));
-                //         }
-                //     }
-                // } catch (e) {
-                //
-                // }
 
                 const after = await validator();
                 if (!after) {
@@ -64,16 +45,21 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
                 setProgress?.(() => {
                     return "pass form validator";
                 });
-                const {data, values} = after;
-                const result = await shopify_payment({
-                    summary: data,
-                    values: {
-                        ...values,
-                        token: token
-                    },
-                    method: method!,
-                }, setProgress)
-                import.meta.env.DEV && console.log(result, values);
+                await Bus.emitAsync("payment:ing",method?.type || true);
+                try {
+                    const {data, values} = after;
+                    const result = await shopify_payment({
+                        summary: data,
+                        values: {
+                            ...values,
+                            token: token
+                        },
+                        method: method!,
+                    }, setProgress)
+                    import.meta.env.DEV && console.log(result, values);
+                } finally {
+                    await Bus.emitAsync("payment:end");
+                }
             }
         }}
     />;
