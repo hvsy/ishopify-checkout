@@ -8,31 +8,37 @@ export type RightFrameProps = {
     children?: ReactNode;
     renderFooter ?: ()=>ReactNode;
     totalPrice?: ReactNode;
+    header ?: ReactNode;
+    windowWidth ?: number;
 };
 
 export const RightFrame: FC<RightFrameProps> = (props) => {
-    const {className, children, renderFooter, totalPrice} = props;
+    const {className,windowWidth,header, children, renderFooter, totalPrice} = props;
     return <Collapsible
+        windowWidth={windowWidth}
         className={className}
         header={
             <>
-            {import.meta.env.VITE_SKELETON ? <Skeleton className={'min-h-8 min-w-36'} /> :<div className={'flex flex-row items-center space-x-2 text-blue-500'}>
-                    <div>
-                        <ShoppingCart size={18}/>
-                    </div>
-                    <div className={'flex flex-row space-x-3 items-center'}>
-                        <div className={'text-base'}>
-                            <span className={'group-open:hidden'}>Show order summary</span>
-                            <span className={'hidden group-open:inline'}>Hide order summary</span>
+                <div className={'flex flex-row justify-between border-neutral-300'}>
+                    {import.meta.env.VITE_SKELETON ? <Skeleton className={'min-h-8 min-w-36'} /> :<div className={'flex flex-row items-center space-x-2 text-blue-500'}>
+                        <div>
+                            <ShoppingCart size={18}/>
                         </div>
-                        <div className={'group-open:-rotate-180 duration-300'}>
-                            <ChevronDown size={16}/>
+                        <div className={'flex flex-row space-x-3 items-center'}>
+                            <div className={'text-base'}>
+                                <span className={'group-open:hidden'}>Show order summary</span>
+                                <span className={'hidden group-open:inline'}>Hide order summary</span>
+                            </div>
+                            <div className={'group-open:-rotate-180 duration-300'}>
+                                <ChevronDown size={16}/>
+                            </div>
                         </div>
-                    </div>
-                </div>}
-                {import.meta.env.VITE_SKELETON ? <Skeleton className={'min-w-18 min-h-5 max-h-5'}/>:<div className={'font-bold'}>
-                    {totalPrice}
-                </div>}
+                    </div>}
+                    {import.meta.env.VITE_SKELETON ? <Skeleton className={'min-w-18 min-h-5 max-h-5'}/>:<div className={'font-bold'}>
+                        {totalPrice}
+                    </div>}
+                </div>
+                {header}
             </>
         } render={() => {
         return <div

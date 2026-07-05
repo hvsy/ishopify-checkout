@@ -20,7 +20,7 @@ export const LoadingContainer: FC<LoadingContainerProps> = (props) => {
         // "lab" : true,
         "*:invisible [&>*:last-child]:visible":loading,
     },className);
-    return <div className={final} style={style} {...props}>
+    return <div className={final} style={style} {...others}>
             {content}
         {loading && <div className={cn(`flex flex-row justify-center items-center  visible absolute inset-0`,loadingContainerClassName)} >
             <div className={`animate-pulse bg-slate-300 ${loadingClassName}`} />
