@@ -19,7 +19,7 @@ export const RightFrame: FC<RightFrameProps> = (props) => {
         className={className}
         header={
             <>
-                <div className={'flex flex-row justify-between border-neutral-300'}>
+                <div className={'flex flex-row justify-between border-neutral-300 px-6'}>
                     {import.meta.env.VITE_SKELETON ? <Skeleton className={'min-h-8 min-w-36'} /> :<div className={'flex flex-row items-center space-x-2 text-blue-500'}>
                         <div>
                             <ShoppingCart size={18}/>

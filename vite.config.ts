@@ -18,9 +18,8 @@ export default defineConfig(({mode}) => {
     const port = env.VITE_DEV_PORT || undefined;
     const remote_api = env.VITE_API_REMOTE_HOST || undefined;
     return {
-
         plugins: [
-            sentryVitePlugin({
+            !env['VITE_SKIP_SENTRY'] && sentryVitePlugin({
                 org: process.env.SENTRY_ORG,//"hvsy",
                 project: process.env.SENTRY_PROJECT,//"ishopify",
                 authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -30,7 +29,6 @@ export default defineConfig(({mode}) => {
                 }
             }),
             react(),
-
             // tailwindcss(),
             removeMSW(),
             {

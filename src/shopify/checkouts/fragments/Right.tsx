@@ -73,7 +73,7 @@ export const Right: FC<RightProps> = (props) => {
         initializeWithValue : true,
     });
     const final = width >= 640;
-    const lines = <div className={`${(final || !ShowLinesInMobile) ? `pb-5  ${final ? 'overflow-hidden' : ''}  space-y-5` : 'pt-3 max-h-[200px] overflow-y-scroll  space-y-3'} w-full max-w-full  sm:overflow-visible`}>
+    const lines = <div className={`${(final || !ShowLinesInMobile) ? `pb-5  ${final ? 'overflow-hidden' : ''}  space-y-5` : 'px-6 pt-3 max-h-[200px] overflow-y-scroll  space-y-3'} w-full max-w-full  sm:overflow-visible`}>
         {data.map((line: any) => {
             return <LineItem key={line.id} line={line} code={discountCode}/>
         })}
@@ -95,8 +95,6 @@ export const Right: FC<RightProps> = (props) => {
             {WhyChooseVersion ? <div className={'hidden sm:flex flex-col'}>
                 <WhyChooseUs2/>
             </div> : <WhyChooseUs/>}
-
-
         </RightFrame>
     </>;
 };
