@@ -1,16 +1,10 @@
 import {defineConfig, loadEnv} from 'vite'
 import path from "path"
 import react from '@vitejs/plugin-react-swc'
-import {rimraf} from 'rimraf';
 import {trimEnd as _trimEnd} from "lodash-es";
 import {sentryVitePlugin} from "@sentry/vite-plugin";
 
-const removeMSW = () => ({
-    name: 'remove-msw',
-    closeBundle: async () => {
-        await rimraf(path.join(__dirname, 'dist', 'mockServiceWorker.js'));
-    },
-});
+
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
     const env = loadEnv(mode, process.cwd(), '')
@@ -30,7 +24,6 @@ export default defineConfig(({mode}) => {
             }),
             react(),
             // tailwindcss(),
-            removeMSW(),
             {
                 name: 'inline-tailwind-css',
                 apply: 'build',
