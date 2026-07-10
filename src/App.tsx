@@ -78,6 +78,7 @@ import {CartStorage} from "./shopify/context/CartStorage.ts";
 import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
 import {getGlobalBase} from "./shopify/lib/globalSettings.ts";
 import {CheckoutShell} from "./CheckoutShell.tsx";
+import {getMetaContent} from "@lib/metaHelper.ts";
 
 export const SummaryQuery = gql([
     QuerySummary,
@@ -124,14 +125,18 @@ async function getCheckout(request: Request, params: Params<string>, context: an
         if (!!urlKey) {
             storage.key = urlKey;
         }else{
-            const res = await api({
-                method: "post",
-                url: getFinalPath(`/checkouts/${token}/key`, shop),
-            });
-            if (!res) {
-                return go2home();
+            if(getMetaContent('cart_key')){
+                storage.key = getMetaContent('cart_key');
+            }else{
+                const res = await api({
+                    method: "post",
+                    url: getFinalPath(`/checkouts/${token}/key`, shop),
+                });
+                if (!res) {
+                    return go2home();
+                }
+                storage.key = res;
             }
-            storage.key = res;
         }
     }
     let {ref, cart} = await PreloadCart(storage.gid);
@@ -159,7 +164,7 @@ function ignoreDirect(param : any){
     current.delete("key");
     next.delete("key");
     next.delete('direct');
-    console.log('should revalidate:',param,current.toString(),next.toString());
+    // console.log('should revalidate:',param,current.toString(),next.toString());
     return current.toString() !== next.toString() ? defaultShouldRevalidate : false;
 }
 let router = createBrowserRouter([
