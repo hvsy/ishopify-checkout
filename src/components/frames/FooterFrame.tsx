@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, ReactNode} from "react";
 import {Link, LinkProps} from "react-router-dom";
 import {ChevronLeft} from "lucide-react";
 import {AsyncButton} from "../fragments/AsyncButton.tsx";
@@ -16,7 +16,7 @@ export type FooterFrameProps = {
     },
     next ?:{
         onClick ?: ()=>Promise<any>,
-        label ?: string;
+        label ?: string|ReactNode;
         pulsing ?: boolean;
     }
 };

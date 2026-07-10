@@ -9,17 +9,25 @@ import {useCurrentForm} from "../../../container/FormContext.ts";
 import {getMetaContent} from "@lib/metaHelper.ts";
 import {Features} from "@lib/flags.ts";
 import {Bus} from "../../../bus.tsx";
+import {get as _get} from "lodash-es";
+import {useMoneyFormat} from "../../context/ShopifyContext.ts";
+import {LoadingContainer} from "@components/fragments/LoadingContainer.tsx";
 
 export type SingleFooterProps = {};
 
+const ShowTotalInButton = Features.includes("payment:show_total")
 export const SingleFooter: FC<SingleFooterProps> = (props) => {
     const {} = props;
     const {token} = useParams();
-    const {ing} = useSummary();
+    const {ing,json,loading,} = useSummary();
     const {method, setProgress,} = usePaymentContext() || {};
     const form = useCurrentForm();
     const validator = useFormValidate(form);
     const referer = Features.includes('return:referer') ? document.referrer.toString() : null;
+    const total = _get(json, 'cart.cost.totalAmount')
+    const format = useMoneyFormat();
+    const money = format(total);
+    const title = getMetaContent('payment_title') || 'Place an order';
     return <FooterFrame
         back={{
             to: referer || '/cart',
@@ -28,7 +36,10 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
         }}
 
         next={{
-            label: getMetaContent('payment_title') || 'Place an order',
+            label:<div className={'flex flex-row space-x-2 items-center'}>
+                <span>{title}</span>
+                {ShowTotalInButton && <LoadingContainer loading={ing || loading.shipping_methods||loading.summary}>{money}</LoadingContainer>}
+            </div>,
             pulsing: ing,
             async onClick() {
                 setProgress?.(() => {

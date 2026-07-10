@@ -1,4 +1,4 @@
-import {createBrowserRouter, Params, replace,redirectDocument, RouterProvider,} from "react-router-dom";
+import {createBrowserRouter,Params, redirectDocument, RouterProvider,} from "react-router-dom";
 import {api, getFinalPath} from "@lib/api.ts";
 import Checkout from "./shopify/checkouts";
 import {preload} from "swr";
@@ -13,14 +13,14 @@ import {
 import {gql,} from "@apollo/client";
 
 
-function preload_api(url : string){
+function preload_api(url: string) {
     return api({
-        method : 'get',
+        method: 'get',
         url,
     })
 }
 
-async function prefetch<T = any>(key : string){
+async function prefetch<T = any>(key: string) {
     // const hit = Cache.get(key)?.data;
     // if(!!hit){
     //     console.log('hit:',key,hit);
@@ -32,9 +32,10 @@ async function prefetch<T = any>(key : string){
     //     revalidate : false,
     // });
     // return resource;
-    return preload<T>(key,preload_api)
+    return preload<T>(key, preload_api)
     // return Preloader.fetch<T>(key,preload_api)
 }
+
 // import {Additional} from "./shopify/additional/Additional.tsx";
 // const Additional = lazy(() => {
 //     return import("./shopify/additional/Additional").then(m=>{
@@ -48,18 +49,19 @@ async function prefetch<T = any>(key : string){
 //         default : m.Order,
 //     }
 // })
-const Additional = lazy(()=>{
+const Additional = lazy(() => {
     return import("./NextPages.tsx").then((m) => {
-        return {default : m.Additional};
+        return {default: m.Additional};
     });
 })
-const OrderPage= lazy(()=>{
+const OrderPage = lazy(() => {
     return import("./NextPages.tsx").then((m) => {
-        return {default : m.Order};
+        return {default: m.Order};
     });
 })
 const prefix = getGlobalBase();
-function go2home(){
+
+function go2home() {
     return redirectDocument('/');
 }
 
@@ -74,8 +76,8 @@ import {
 } from "@query/checkouts/fragments/fragments.ts";
 import {CartStorage} from "./shopify/context/CartStorage.ts";
 import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
-import {Features} from "@lib/flags.ts";
 import {getGlobalBase} from "./shopify/lib/globalSettings.ts";
+import {CheckoutShell} from "./CheckoutShell.tsx";
 
 export const SummaryQuery = gql([
     QuerySummary,
@@ -87,108 +89,135 @@ export const SummaryQuery = gql([
 ].join("\n"));
 
 
-async function getCheckout(request : Request,params : Params<string>,context : any){
+function ShellLoader(request: Request, params: Params<string>, context: any){
     const url = new URL(request.url)
     const key = url.searchParams.get('key');
-    let {token,shop, action = 'information'} = params;
-    // console.log('params:',params);
-    const storage = new CartStorage(token!,shop);
-    if(action === 'recover' && !!key && key !== 'undefined'){
+    let {token, shop, action = 'information'} = params;
+    const storage = new CartStorage(token!, shop);
+    if (action === 'recover' && !!key && key !== 'undefined') {
         storage.key = key;
-    }else{
+    } else {
         const direct = url.searchParams.get('direct');
-        if(!!direct && direct !== 'undefined'){
-        // if(!!direct){
+        if (!!direct && direct !== 'undefined') {
             storage.key = direct;
-            if(Features.includes('redirect')){
-                return replace(getFinalPath(`/checkouts/${token}`,shop));
-            }
         }
-    }
-    if(!storage.key){
-        const res =  await api({
-            method : "post",
-            url : getFinalPath(`/checkouts/${token}/key`,shop),
-        });
-        if(!res){
-            return go2home();
-        }
-        storage.key = res;
     }
     const discount_code = url.searchParams.get('discount_code');
-    if(!!discount_code){
-        Cookies.set('discount_code',discount_code,{
-            expires : dayjs().add(2,'weeks').toDate(),
+    if (!!discount_code) {
+        Cookies.set('discount_code', discount_code, {
+            expires: dayjs().add(2, 'weeks').toDate(),
         });
     }
-    let {ref,cart} = await PreloadCart(storage.gid);
-    let checkout : any = null;
-    if(cart){
-        if(_get(cart,'data.cart.totalQuantity',0) < 1){
+    if (action === 'recover' && !!key) {
+        Cookies.set('recovery_key', key, {
+            expires: dayjs().add(1, 'day').toDate(),
+        });
+    }
+    return null;
+}
+async function getCheckout(request: Request, params: Params<string>, context: any) {
+    let {token, shop,} = params;
+    const storage = new CartStorage(token!, shop);
+    if (!storage.key) {
+        const url = new URL(request.url)
+        const urlKey = url.searchParams.get('key') || url.searchParams.get('direct') || null;
+        if (!!urlKey) {
+            storage.key = urlKey;
+        }else{
+            const res = await api({
+                method: "post",
+                url: getFinalPath(`/checkouts/${token}/key`, shop),
+            });
+            if (!res) {
+                return go2home();
+            }
+            storage.key = res;
+        }
+    }
+    let {ref, cart} = await PreloadCart(storage.gid);
+    let checkout: any = null;
+    if (cart) {
+        if (_get(cart, 'data.cart.totalQuantity', 0) < 1) {
             return go2home();
         }
         checkout = getCheckoutFromSummary(cart);
     }
 
-    if(!checkout){
+    if (!checkout) {
         return go2home();
     }
-    if(action === 'recover' && !!key){
-        Cookies.set('recovery_key', key,{
-            expires : dayjs().add(1,'day').toDate(),
-        });
-    }
-    return {checkout,ref,storage,shop};
+
+    return {checkout, ref, storage, shop};
 }
 
 import.meta.env.DEV && console.log('prefix:', prefix);
+function ignoreDirect(param : any){
+    const {currentUrl, nextUrl, defaultShouldRevalidate,} = param;
+    const current = new URLSearchParams(currentUrl.search);
+    const next = new URLSearchParams(nextUrl.search);
+    current.delete('direct');
+    current.delete("key");
+    next.delete("key");
+    next.delete('direct');
+    console.log('should revalidate:',param,current.toString(),next.toString());
+    return current.toString() !== next.toString() ? defaultShouldRevalidate : false;
+}
 let router = createBrowserRouter([
     {
-        path : `${prefix}/additional/:token`,
-        id : 'additional',
-        Component : Additional,
-        async loader(request){
+        path: `${prefix}/additional/:token`,
+        id: 'additional',
+        Component: Additional,
+        async loader(request) {
             const {params} = request;
             const {token} = params;
             const res = await api({
-                method : "get",
-                url : getFinalPath(`/api/upsell/${token}`),
+                method: "get",
+                url: getFinalPath(`/api/upsell/${token}`),
             });
-            if(res){
-               return res;
+            if (res) {
+                return res;
             }
             return go2home();
         }
-    },{
+    }, {
         path: `${prefix}/orders/:token/:action?`,
-        id : 'order',
+        id: 'order',
         async loader(request) {
             const {params} = request;
-            const {token,action}  = params;
-            return await getOrder(token!,action === 'thank-you');
+            const {token, action} = params;
+            return await getOrder(token!, action === 'thank-you');
         },
         Component: OrderPage,
-    },{
-        path : prefix + '/',
-        id : 'checkout_container',
-        Component : ShopifyCheckoutFrame,
-        async loader({request,params,context}) {
-            return await getCheckout(request,params,context)
+    }, {
+        path: prefix + '/',
+        id: "checkout_shell",
+        async loader({request, params, context}) {
+            ShellLoader(request, params, context);
+            return null;
         },
-        children : [
-            {
-                path : `approve/:token`,
-                'id' : 'approve',
-                Component : Checkout,
-            },{
-                'id' : 'checkout',
-                path : 'checkouts/:token/:action?',
-                Component: Checkout,
-            }
-        ]
+        Component : CheckoutShell,
+        shouldRevalidate : ignoreDirect,
+        children: [{
+            id: 'checkout_container',
+            shouldRevalidate : ignoreDirect,
+            Component: ShopifyCheckoutFrame,
+            async loader({request, params, context}) {
+                return await getCheckout(request, params, context)
+            },
+            children: [
+                {
+                    path: `approve/:token`,
+                    'id': 'approve',
+                    Component: Checkout,
+                }, {
+                    'id': 'checkout',
+                    path: 'checkouts/:token/:action?',
+                    Component: Checkout,
+                }
+            ]
+        }]
     }
-], {
-});
+], {});
 
 export function App() {
     return <RouterProvider router={router}/>

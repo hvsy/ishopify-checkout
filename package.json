@@ -51,9 +51,8 @@
     "react-frame-component": "^5.2.7",
     "react-international-phone": "^4.8.0",
     "react-responsive": "^10.0.0",
-    "react-router": "6.30.3",
-    "react-router-dom": "6.30.3",
-    "rimraf": "^5.0.7",
+    "react-router": "6.30.4",
+    "react-router-dom": "6.30.4",
     "swiper": "^11.2.10",
     "swr": "^2.3.0",
     "tailwind-merge": "^2.2.2",
@@ -77,15 +76,9 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "msw": "^2.2.14",
     "patch-package": "^8.0.0",
     "typescript": "npm:@typescript/typescript6@^6.0.0",
     "typescript-7": "npm:typescript@^7.0.2",
     "vite": "^5.4.0"
-  },
-  "msw": {
-    "workerDirectory": [
-      "public"
-    ]
   }
 }
