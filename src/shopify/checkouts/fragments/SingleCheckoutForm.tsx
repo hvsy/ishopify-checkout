@@ -11,15 +11,7 @@ import {LocalizedFieldsStep} from "../steps/LocalizedFields";
 
 export type SingleCheckoutFormProps = {};
 
-export const PlainField = (props: any) => {
-    const {errors,value} = props;
-    if(!!value) return null;
-    return <div className={'flex flex-row space-y-2 text-red-500'}>
-        {(errors||[]).map((error : string,i : number) => {
-            return <div key={i}>{errors}</div>
-        })}
-    </div>
-}
+
 export const SingleCheckoutForm: FC<SingleCheckoutFormProps> = (props) => {
     const {} = props;
     // useSyncDeliveryGroups();

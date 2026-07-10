@@ -12,10 +12,18 @@ import {NoShippingMethod} from "../../../../page/fragments/Checkout/Steps/Shippi
 import {useCurrentForm} from "../../../../container/FormContext.ts";
 import {useShopifyCheckoutLoading} from "../../../context/ShopifyCheckoutContext.tsx";
 import {FormItem} from "@components/fragments/FormItem.tsx";
-import {PlainField} from "../../fragments/SingleCheckoutForm.tsx";
 import {Features} from "@lib/flags.ts";
 import {DeliveryTip} from "../../../fragments/DeliveryTip.tsx";
 
+export const PlainField = (props: any) => {
+    const {errors,value} = props;
+    if(!!value) return null;
+    return <div className={'flex flex-row space-y-2 text-red-500'}>
+        {(errors||[]).map((error : string,i : number) => {
+            return <div key={i}>{errors}</div>
+        })}
+    </div>
+}
 
 const Title = "Shipping Method";
 const ShowSpin = Features.includes('shipping:spin');
