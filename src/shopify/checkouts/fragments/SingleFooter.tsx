@@ -12,6 +12,8 @@ import {Bus} from "../../../bus.tsx";
 import {get as _get} from "lodash-es";
 import {useMoneyFormat} from "../../context/ShopifyContext.ts";
 import {LoadingContainer} from "@components/fragments/LoadingContainer.tsx";
+import * as Sentry from "@sentry/react";
+
 
 export type SingleFooterProps = {};
 
@@ -68,6 +70,9 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
                         method: method!,
                     }, setProgress)
                     import.meta.env.DEV && console.log(result, values);
+                }catch (e) {
+                    console.error('sentry capture:',e);
+                    Sentry.captureException(e);
                 } finally {
                     await Bus.emitAsync("payment:end");
                 }

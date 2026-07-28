@@ -6,6 +6,9 @@ import {SnapchatPixel} from "@components/pixels/SnapchatPixel.tsx";
 import {getMetaContent} from "@lib/metaHelper.ts";
 import {getShopifyS, getShopifyY} from "@lib/shopify.ts";
 import Clarity from "@microsoft/clarity";
+import * as Sentry from "@sentry/react";
+import {useParams} from "react-router-dom";
+
 
 export type PixelsProps = {
     tracking : any;
@@ -20,15 +23,20 @@ const Platforms : any = {
     snapchat : SnapchatPixel,
 }
 export const Pixels: FC<PixelsProps> = (props) => {
+    const {token} = useParams();
     const {tracking,regex,sy} = props;
     useEffect(() => {
+        let csy = sy;
+        if(!csy){
+            csy = getShopifyY();
+        }
+        if(!!csy){
+            Sentry.setUser({ id: '4711' });
+        }
+        Sentry.setTag('token',token);
         const id = getMetaContent("clarity");
         if(!!id){
             Clarity.init(id);
-            let csy = sy;
-            if(!csy){
-                csy = getShopifyY();
-            }
             const css = getShopifyS();
             if(!!csy){
                 if(!!css){

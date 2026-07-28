@@ -85,7 +85,16 @@ async function setup(){
         rootElement = document.createElement('div');
         document.body.appendChild(rootElement);
     }
-    const root = createRoot(rootElement);
+    const root = createRoot(rootElement,{
+        // Callback called when an error is thrown and not caught by an Error Boundary.
+        onUncaughtError: Sentry.reactErrorHandler((error, errorInfo) => {
+            console.warn('Uncaught error', error, errorInfo.componentStack);
+        }),
+        // Callback called when React catches an error in an Error Boundary.
+        onCaughtError: Sentry.reactErrorHandler(),
+        // Callback called when React automatically recovers from errors.
+        onRecoverableError: Sentry.reactErrorHandler(),
+    });
     // const {App} = await import('./App.tsx');
     if(import.meta.env.DEV){
         const dev_style = document.getElementById('__dev-style__');

@@ -95,7 +95,11 @@ export async function shopify_payment(options : {
                 }else{
                     let json = '';
                     try{
-                        json = JSON.stringify(e);
+                        if(isObjectLike(e) && (e as any)?.message){
+                            json = (e as any).message;
+                        }else{
+                            json = JSON.stringify(e);
+                        }
                     }catch(e){
 
                     }
