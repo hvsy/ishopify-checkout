@@ -90,7 +90,21 @@ export async function shopify_payment(options : {
             await Bus.emitAsync('payment:submit',values);
         }catch (e) {
             step?.(() => {
-                return isString(e) ? e : method.channel  + ' submit error';
+                if(isString(e)){
+                    return e;
+                }else{
+                    let json = '';
+                    try{
+                        if(isObjectLike(e) && (e as any)?.message){
+                            json = (e as any).message;
+                        }else{
+                            json = JSON.stringify(e);
+                        }
+                    }catch(e){
+
+                    }
+                    return method.channel  + ' submit error : ' + json;
+                }
             });
             throw e;
         }
