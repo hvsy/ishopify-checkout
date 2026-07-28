@@ -3,7 +3,7 @@ import {useEffect, useMemo, useRef, useState} from "react";
 import {Bus, useBusListener} from "../../bus.tsx";
 import {PromiseLocation} from "../../shopify/lib/payment.ts";
 import {api, getFinalPath} from "@lib/api.ts";
-import {get, isEmpty, isObjectLike} from "lodash-es";
+import {get, isEmpty, isObjectLike,includes} from "lodash-es";
 
 const map : any = {
     'countryCode' : 'countryCode',
@@ -92,8 +92,8 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
                 }
                 console.error('PayPal CardFields Error:', err,...args);
             },
-            onApprove: (data : any,...args : any[]) => {
-                import.meta.env.DEV &&  console.log('paypal card approve',data,...args);
+            onApprove: (data : any,actions : any,...args : any[]) => {
+                import.meta.env.DEV &&  console.log('paypal card approve',data,actions,...args);
                 return api({
                     method : 'POST',
                     url : getFinalPath(`/api/gateways/${method_id}/approve/${data.orderID}`),
@@ -140,6 +140,11 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
             const result = await fields.submit(params);
             import.meta.env.DEV && console.log('paypal card result:',result);
         }catch(e){
+            if(e instanceof Error){
+                if(includes(['Window closed before response'],e.message)){
+                    return fields;
+                }
+            }
             console.error('paypal card error:',e);
             Bus.emit('payment:error',true);
             throw e;
