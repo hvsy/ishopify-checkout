@@ -4,6 +4,7 @@ import {Dispatch, SetStateAction} from "react";
 import {Bus} from "../../bus.tsx";
 import {summary2Cart} from "./helper.ts";
 import Big from "big.js";
+import * as Sentry from "@sentry/react";
 
 export function getUrlFrom(token : string){
     const cart_token = token.split('?')[0] ?? '';
@@ -12,6 +13,7 @@ export function getUrlFrom(token : string){
 export function PromiseLocation(location : string){
     return new Promise((resolve, reject) => {
         setTimeout(reject,15000);
+        Sentry.captureMessage("redirect to:"+location);
         window.location.href = location;
     });
 }
