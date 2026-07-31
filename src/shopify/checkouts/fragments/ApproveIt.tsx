@@ -13,6 +13,7 @@ import {getMetaContent} from "@lib/metaHelper.ts";
 import {summary2Cart} from "../../lib/helper.ts";
 import {useParams} from "react-router-dom";
 import {useCart} from "@hooks/useCart.ts";
+import {Bus} from "../../../bus.tsx";
 
 export type ApproveItProps = {};
 
@@ -48,64 +49,69 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                     })
                     return;
                 }
+                await Bus.emitAsync("payment:ing",'approve');
                 try {
-                    if (AutoFillSuggestCode && !!suggestZipCode) {
-                        const zipErrors = form.getFieldsError([
-                            ['shipping_address', 'zip'],
-                            ['billing_address', 'zip']
-                        ]);
-                        if (zipErrors.length > 0) {
-                            form.setFields(
-                                zipErrors.map((error) => {
-                                    return {
-                                        name: error.name,
-                                        value: suggestZipCode,
-                                    };
-                                }));
+                    try {
+                        if (AutoFillSuggestCode && !!suggestZipCode) {
+                            const zipErrors = form.getFieldsError([
+                                ['shipping_address', 'zip'],
+                                ['billing_address', 'zip']
+                            ]);
+                            if (zipErrors.length > 0) {
+                                form.setFields(
+                                    zipErrors.map((error) => {
+                                        return {
+                                            name: error.name,
+                                            value: suggestZipCode,
+                                        };
+                                    }));
+                            }
                         }
-                    }
-                } catch (e) {
+                    } catch (e) {
 
-                }
-                const handle=  _get(after?.data,'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
-                if(!handle){
-                    setProgress?.(() => {
-                        return "Please select the delivery method.";
-                    })
-                    alert('Please select the delivery method.')
-                    throw "please choice delivery shipping line";
-                }
-                import.meta.env.DEV && console.log(after);
-                try {
-                    const totalAmount = _get(summary, 'cost.totalAmount');
-                    const {amount, currencyCode} = totalAmount;
-                    window.report?.("add_payment_info", {
-                        price: amount + '',
-                        currency: currencyCode,
-                        cart: summary2Cart(summary),
-                        email: after.values.email,
-                        shipping_address: after.values.shipping_address,
-                        billing_address: after.values.billing_address || after.values.shipping_address,
-                    }, token + '_add_payment_info');
-                } catch (e) {
-                }
-                const res = await api({
-                    method : "post",
-                    'url' : cartApi + `/approve`,
-                });
-                if(!!res['error']){
-                    setProgress?.(() => {
-                        return "approve error";
-                    })
-                }
-                if(!!res?.url){
-                    await PromiseLocation(res.url);
-                }else if(!!res?.redirect){
-                    await PromiseLocation(res.redirect);
-                }else{
-                    setProgress?.(() => {
-                        return "response missing url";
-                    })
+                    }
+                    const handle = _get(after?.data, 'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
+                    if (!handle) {
+                        setProgress?.(() => {
+                            return "Please select the delivery method.";
+                        })
+                        alert('Please select the delivery method.')
+                        throw "please choice delivery shipping line";
+                    }
+                    import.meta.env.DEV && console.log(after);
+                    try {
+                        const totalAmount = _get(summary, 'cost.totalAmount');
+                        const {amount, currencyCode} = totalAmount;
+                        window.report?.("add_payment_info", {
+                            price: amount + '',
+                            currency: currencyCode,
+                            cart: summary2Cart(summary),
+                            email: after.values.email,
+                            shipping_address: after.values.shipping_address,
+                            billing_address: after.values.billing_address || after.values.shipping_address,
+                        }, token + '_add_payment_info');
+                    } catch (e) {
+                    }
+                    const res = await api({
+                        method: "post",
+                        'url': cartApi + `/approve`,
+                    });
+                    if (!!res['error']) {
+                        setProgress?.(() => {
+                            return "approve error";
+                        })
+                    }
+                    if (!!res?.url) {
+                        await PromiseLocation(res.url);
+                    } else if (!!res?.redirect) {
+                        await PromiseLocation(res.redirect);
+                    } else {
+                        setProgress?.(() => {
+                            return "response missing url";
+                        })
+                    }
+                } finally {
+                    await Bus.emitAsync("payment:end");
                 }
             }}
             className={`max-w-full text-xl sm:text-lg h-12`}>{payment_title}</AsyncButton>
