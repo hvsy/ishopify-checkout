@@ -69,6 +69,8 @@ export type AddressFormProps = {
     zones ?: any[];
     loading ?: boolean;
     onPhoneChange ?: (phone : string,pass : boolean)=>void;
+    presetRegionCode ?: string|null;
+    presetStateCode ?: string|null;
 };
 const AdvancedPhoneInput = Features?.includes('advanced_phone_input') || false;
 const DisablePrefillPhoneDialCode = Features?.includes('disable_prefill_phone_dial_code') || false;
@@ -87,6 +89,7 @@ const AddressTip = 'Enter an address';
 export const AddressForm: FC<AddressFormProps> = (props) => {
     const {preserve = false,onPhoneChange, loading,title,titleClassName,hidden_fields = [], prefix = [],
         zones : Regions= [],
+        presetRegionCode, presetStateCode,
     } = props;
     const pf = prefix.join('.').replace('_address','');
     const {form:formInstance,onValuesChanged} = FormContext.use()//useCurrentForm();
@@ -136,8 +139,11 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         let ipRegion = !ipCountryCode ? null : _find(Regions, (r) => {
             return (r.code) === ipCountryCode;
         });
+        let presetRegion = !presetRegionCode ? null : _find(Regions, (r : any) => {
+            return (r.code) === presetRegionCode;
+        });
         if (!region_code) {
-            let firstRegion = ipRegion || ups?.[0] || Regions?.[0];
+            let firstRegion = presetRegion || ipRegion || ups?.[0] || Regions?.[0];
             setRegion(firstRegion);
         }else{
             //有值的时候,但是该地区不配送
@@ -145,10 +151,27 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 return (r.code) === region_code;
             });
             if(!hit_region){
-                setRegion(ipRegion || ups?.[0] || Regions?.[0]);
+                setRegion(presetRegion || ipRegion || ups?.[0] || Regions?.[0]);
             }
         }
-    }, [region_code, Regions,]);
+    }, [region_code, Regions, presetRegionCode]);
+    useEffect(() => {
+        if (loading || !zones?.length || !presetStateCode) return;
+        const hit = _find(zones, (zone : any) => {
+            return zone.code === presetStateCode;
+        });
+        if(!hit) return;
+        const current = formInstance.getFieldValue([...prefix, 'state_code']);
+        if(current !== presetStateCode){
+            formInstance.setFields([{
+                name: [...prefix, 'state_code'],
+                value: presetStateCode,
+            }, {
+                name: [...prefix, 'state'],
+                value: hit,
+            }]);
+        }
+    }, [loading, region_code, presetStateCode, zones]);
     useEffect(() => {
         const region = formInstance.getFieldValue([...prefix,'region']);
         if(!region?.data){

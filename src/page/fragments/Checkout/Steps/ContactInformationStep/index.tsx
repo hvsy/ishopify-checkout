@@ -17,7 +17,8 @@ export type ContactInformationStepProps = {
 export const ContactInformationStep:FC<ContactInformationStepProps>
     = (props) => {
     const {zones,loading} = useShippingZones();
-    const {loading: summaryLoadingState} = useSummary();
+    const {loading: summaryLoadingState, checkout: getCheckout} = useSummary();
+    const shippingAddress = getCheckout()?.shipping_address || {};
     const {api: cartApi} = useCart();
     const form = useCurrentForm();
     const onPhoneChanged = useDebounceCallback((phone : string,pass : boolean) => {
@@ -45,6 +46,8 @@ export const ContactInformationStep:FC<ContactInformationStepProps>
         <AddressForm title={'Shipping'}
                      loading={summaryLoadingState.summary || loading}
                      zones={zones}
+                     presetRegionCode={shippingAddress.region_code}
+                     presetStateCode={shippingAddress.state_code}
                      preserve={true}
                      prefix={['shipping_address']}
                      onPhoneChange={onPhoneChanged}

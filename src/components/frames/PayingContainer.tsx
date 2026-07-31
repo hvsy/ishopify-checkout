@@ -42,6 +42,18 @@ export const PayingContainer: FC<PayingContainerProps> = (props) => {
         }
     }, [paying]);
     let tip = <div>payment is being processed</div>;
+    if(paying === 'approve'){
+        tip  =<div className={'flex flex-col items-center space-y-2'}>
+            <div className={'font-bold text-lg'}>Payment is being processed...</div>
+            {/*<div>Please wait while we securely redirect you to PayPal.</div>*/}
+            <div className={'flex flex-row items-center space-x-1'}>
+                <ShieldCheck className={'text-green-500'}/>
+                <div>
+                    Do not close or refresh this page
+                </div>
+            </div>
+        </div>;
+    }
     if(paying === 'paypal'){
         tip  =<div className={'flex flex-col items-center space-y-2'}>
             <div className={'font-bold text-lg'}>Redirecting to PayPal...</div>

@@ -40,9 +40,25 @@ export function scrollToError(e : any){
     }
 }
 
-
-
-
+function fillEmptyFields(form : FormInstance, values : any, prefix : (string|number)[] = []){
+    if (!values || typeof values !== 'object' || Array.isArray(values)) return;
+    Object.entries(values).forEach(([key, value]) => {
+        if (value === null || value === undefined || value === '') return;
+        if (['region_code', 'state_code', 'region', 'state'].includes(key)) return;
+        const name = [...prefix, key];
+        const currentValue = form.getFieldValue(name);
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+            if (currentValue === null || currentValue === undefined || currentValue === '' ||
+                (typeof currentValue === 'object' && !Array.isArray(currentValue))) {
+                fillEmptyFields(form, value, name);
+            }
+            return;
+        }
+        if (currentValue === null || currentValue === undefined || currentValue === '') {
+            form.setFieldValue(name, value);
+        }
+    });
+}
 
 export const FormContainer: FC<FormContainerProps> = (props) => {
     const {form,children,initialValues,page_style = 'standard'} = props;
@@ -55,7 +71,9 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     useEffect(() => {
         if (!initialValues || hydratedRef.current) return;
         hydratedRef.current = true;
-        form.setFieldsValue(initialValues);
+        // console.log(initialValues);
+        fillEmptyFields(form, initialValues);
+        // form.setFieldsValue(initialValues);
     }, [initialValues, form]);
     const error = useCallback((name: string|((string|number)[])) => {
         const path = _isArray(name) ? name.join('.') : name;
