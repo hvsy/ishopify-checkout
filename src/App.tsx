@@ -5,12 +5,7 @@ import {preload} from "swr";
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
 import {getOrder} from "@lib/payment.ts";
-import {get as _get, sum} from "lodash-es";
 import {lazy} from "react";
-import {
-    PreloadCart,
-} from "@lib/checkout.ts";
-import {gql,} from "@apollo/client";
 
 
 function preload_api(url: string) {
@@ -65,30 +60,10 @@ function go2home() {
     return redirectDocument('/');
 }
 
-import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
-import {QuerySummary} from "@query/checkouts/queries.ts";
-import {
-    QueryBuyerIdentityFragment,
-    QueryCartFieldsFragment,
-    QueryDeliveryFragment,
-    // QueryDeliveryGroupsFragment,
-    // QueryImageFragment
-} from "@query/checkouts/fragments/fragments.ts";
-import {getCartGid} from "@lib/cart.ts";
 import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
 import {getGlobalBase} from "./shopify/lib/globalSettings.ts";
 import {CheckoutShell} from "./CheckoutShell.tsx";
 import {getMetaContent} from "@lib/metaHelper.ts";
-
-export const SummaryQuery = gql([
-    QuerySummary,
-    // QueryImageFragment,
-    QueryCartFieldsFragment,
-    QueryDeliveryFragment,
-    QueryBuyerIdentityFragment,
-    // QueryDeliveryGroupsFragment,
-].join("\n"));
-
 
 function ShellLoader(request: Request, params: Params<string>){
     const url = new URL(request.url)
@@ -110,25 +85,12 @@ function ShellLoader(request: Request, params: Params<string>){
     return null;
 }
 async function getCheckout(params: Params<string>) {
-    const {token, shop} = params;
+    const {shop} = params;
     const key = getMetaContent('cart_key');
     if (!key) {
         return go2home();
     }
-    const {ref, cart} = await PreloadCart(getCartGid(token, key));
-    let checkout: any = null;
-    if (cart) {
-        if (_get(cart, 'data.cart.totalQuantity', 0) < 1) {
-            return go2home();
-        }
-        checkout = getCheckoutFromSummary(cart);
-    }
-
-    if (!checkout) {
-        return go2home();
-    }
-
-    return {checkout, ref, shop};
+    return {shop};
 }
 
 import.meta.env.DEV && console.log('prefix:', prefix);

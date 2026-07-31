@@ -1,5 +1,5 @@
 import {get as _get} from "lodash-es";
-import {ApolloClient, createQueryPreloader, from, gql, HttpLink, InMemoryCache} from "@apollo/client";
+import {ApolloClient, from, HttpLink, InMemoryCache} from "@apollo/client";
 import {getMetaContent} from "./metaHelper.ts";
 import {onError} from "@apollo/client/link/error";
 import {RetryLink} from "@apollo/client/link/retry";
@@ -66,33 +66,7 @@ export const ApolloStoreFrontClient = new ApolloClient({
         }
     }),
 });
-export const ApolloPreloader = createQueryPreloader(ApolloStoreFrontClient);
-export async function PreloadCart(gid : string){
-    let ref = null;
-    const cart  =  await (new Promise((resolve,reject) => {
-        ref = ApolloPreloader(SummaryQuery,{
-            variables : {
-                cartId : gid,
-                withCarrierRates : true,
-            }
-        });
-        ref.toPromise().then((result) => {
-            const unwrap = unwrapQueryRef(result);
-            // console.log('then:',result,unwrap?.promise);
-            resolve(unwrap?.promise);
-            return result;
-        }, (error) => {
-            console.error('error:',error);
-            reject(error);
-        })
-    }));
-    return {ref,cart};
-}
-
-
 import {Features} from "@lib/flags.ts";
-import {unwrapQueryRef} from "@apollo/client/react/internal";
-import {SummaryQuery} from "../App.tsx";
 
 export function transform_address(data : any,prefix : string = "data.cart",preset_shipping : any= null){
     const delivery = _get(data, `${prefix}.delivery.addresses.0`, {})

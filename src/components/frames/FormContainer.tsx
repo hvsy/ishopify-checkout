@@ -51,6 +51,12 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     const [formErrors,setFormErrors] = useState<any>({});
     const formErrorRef = useRef(null);
     formErrorRef.current = formErrors;
+    const hydratedRef = useRef(false);
+    useEffect(() => {
+        if (!initialValues || hydratedRef.current) return;
+        hydratedRef.current = true;
+        form.setFieldsValue(initialValues);
+    }, [initialValues, form]);
     const error = useCallback((name: string|((string|number)[])) => {
         const path = _isArray(name) ? name.join('.') : name;
         const errors = _get(formErrorRef.current,path);

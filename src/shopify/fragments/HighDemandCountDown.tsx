@@ -1,11 +1,14 @@
 import {FC,} from "react";
 import {CountDown} from "@components/fragments/CountDown.tsx";
 import {useCart} from "@hooks/useCart.ts";
+import {Skeleton} from "@components/ui/Skeleton.tsx";
 
-export type HighDemandCountDownProps = {};
+export type HighDemandCountDownProps = {
+    loading ?: boolean;
+};
 
 export const HighDemandCountDown: FC<HighDemandCountDownProps> = (props) => {
-    const {} = props;
+    const {loading = false} = props;
     const cart = useCart();
     return <div className={'flex flex-col space-y-2'}>
         <div className="flex flex-row items-center space-x-2 text-gray-700"><span
@@ -15,10 +18,10 @@ export const HighDemandCountDown: FC<HighDemandCountDownProps> = (props) => {
             className="bg-[#fff5d2] border border-[#fac444] rounded-[5px] box-border py-[10px] px-[20px] text-sm font-[600] flex flex-row items-center !mt-[8px] !mb-[20px] countDown">
             <span className="text-[#333333]">Your order is reserved for</span>
             <div className="flex flex-row items-stretch space-x-2 select-none text-gray-800">
-                <div
+                {loading ? <Skeleton className={'h-4 ml-2 w-24 rounded-lg'}/> : <div
                     className="select-none rounded-md px-2 tracking-wider bg-transparent text-[#333333] font-[600] text-sm font-[ui-sans-serif]">
                     <CountDown milliseconds={10*60*1000} name={`high-demand-${cart.gid}`} auto={true} loop={true}/>
-                </div>
+                </div>}
             </div>
         </div>
     </div>;

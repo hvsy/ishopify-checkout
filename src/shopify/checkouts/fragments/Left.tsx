@@ -2,6 +2,7 @@ import {FC, ReactNode,} from "react";
 import {SingleCheckoutForm} from "./SingleCheckoutForm.tsx";
 import {HighDemandCountDown} from "../../fragments/HighDemandCountDown.tsx";
 import {Features} from "@lib/flags.ts";
+import {useSummary} from "../hooks/useSummary.tsx";
 
 export type LeftProps = {
     className ?: string;
@@ -10,8 +11,12 @@ export type LeftProps = {
 
 const ShowDowncount = Features.includes('countdown');
 export const Left: FC<LeftProps> = (props) => {
+    const {loading} = useSummary();
     return  <>
-        {ShowDowncount && <HighDemandCountDown />}
+        {ShowDowncount && <HighDemandCountDown
+            loading={loading.summary}
+            // loading={true}
+        />}
         <div className={'flex flex-col space-y-10 flex-1'}>
             <SingleCheckoutForm />
         </div>

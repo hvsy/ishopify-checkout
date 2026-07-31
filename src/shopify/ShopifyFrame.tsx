@@ -9,14 +9,15 @@ export type ShopifyFrameProps = {
 };
 import {get as _get} from "lodash-es";
 import {useDocumentTitle} from "usehooks-ts";
-import {useCurrentReadQuery} from "./checkouts/hooks/useCurrentLoaderData.tsx";
+import {useSummary} from "./checkouts/hooks/useSummary.tsx";
+import {getMetaContent} from "@lib/metaHelper.ts";
 
 export const ShopifyFrame: FC<ShopifyFrameProps> = (props) => {
     const {children} = props;
-    const data = useCurrentReadQuery();
-    const codes = (_get(data, 'data.cart.discountCodes', []) || []).filter((c: any) => !!c.applicable).map((c: any) => c.code);
-    const shop = data?.data?.shop;
-    useDocumentTitle(shop ? shop.name + '-Checkout' : '');
+    const {json} = useSummary();
+    const codes = (_get(json, 'cart.discountCodes', []) || []).filter((c: any) => !!c.applicable).map((c: any) => c.code);
+    const shopTitle = getMetaContent('shop_title');
+    useDocumentTitle(shopTitle ? shopTitle + '-Checkout' : '');
 
     // return <ShopifyContext value={{
     //         shop: !!shop ? {

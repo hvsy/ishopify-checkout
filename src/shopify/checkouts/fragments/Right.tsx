@@ -23,6 +23,7 @@ import {WhyChooseUs2} from "../../fragments/WhyChooseUs2.tsx";
 import {Features} from "@lib/flags.ts";
 import {WhyChooseUs} from "../../fragments/WhyChooseUs.tsx";
 import {useWindowSize} from "usehooks-ts";
+import {Skeleton} from "@components/ui/Skeleton.tsx";
 
 
 const WhyChooseVersion = Features.includes('why_choose_v2')
@@ -43,6 +44,12 @@ export const Right: FC<RightProps> = (props) => {
         cartId: gid,
     }, 'cart.lines');
     const client = useApolloClient();
+    const {json: summary,} = useSummary();
+    const format = useMoneyFormat();
+    const {width} = useWindowSize({
+        initializeWithValue : true,
+    });
+    const pcImage = getGlobalPath('profile.pc.resource.image');
     const discountData = client.readQuery({
         query: gql([`query Cart($cartId : ID!){
             cart(id : $cartId){
@@ -57,31 +64,27 @@ export const Right: FC<RightProps> = (props) => {
             cartId: gid,
         }
     });
-
-    if (loading && (!data)) return <div className={'flex flex-col animate-pulse space-y-2'}>
-        <div className="grid grid-cols-3 gap-4">
-            <div className="col-span-2 h-2 rounded bg-gray-200"></div>
-            <div className="col-span-1 h-2 rounded bg-gray-200"></div>
-        </div>
-    </div>
+    const showSketeton = loading || !_get(json, 'cart.lines');
+    // const showSketeton = true;
     const discountCode = _get(discountData, 'cart.discountCodes', []).filter((d: any) => d.applicable)?.[0]?.code;
-
-    const {json: summary,} = useSummary();
-    const format = useMoneyFormat();
-    const pcImage = getGlobalPath('profile.pc.resource.image');
-    const {width} = useWindowSize({
-        initializeWithValue : true,
-    });
     const final = width >= 640;
     const lines = <div className={`${(final || !ShowLinesInMobile) ? `pb-5  ${final ? 'overflow-hidden' : ''}  space-y-5` : 'px-6 pt-3 max-h-[200px] overflow-y-scroll  space-y-3'} w-full max-w-full  sm:overflow-visible`}>
-        {data.map((line: any) => {
+        {showSketeton ? <div className={'flex flex-row items-center w-full max-w-full'}>
+            <Skeleton className={'w-16 h-16 rounded'}></Skeleton>
+            <div className={'mx-4 flex-1 flex flex-col justify-center min-h-16 space-y-2 '}>
+                <Skeleton className={'h-5 max-w-[80%]'}/>
+                <Skeleton className={'h-3 max-w-[30%]'}/>
+            </div>
+            <Skeleton className={'h-5 w-12'}/>
+        </div> :data.map((line: any) => {
             return <LineItem key={line.id} line={line} code={discountCode}/>
         })}
     </div>;
     return <>
         <RightFrame
             windowWidth={width}
-            header={!final && ShowLinesInMobile && lines} totalPrice={format(_get(summary, 'cart.cost.totalAmount'))}>
+            header={!final && ShowLinesInMobile && lines} totalPrice={
+            showSketeton ? <Skeleton className={'w-16 min-h-5 max-h-5'}/> : format(_get(summary, 'cart.cost.totalAmount'))}>
             {(final || !ShowLinesInMobile) && lines}
             <ShopifyCouponForm/>
             <Summary lines={data}/>

@@ -54,14 +54,16 @@ export const Summary: FC<SummaryProps> = (props) => {
                            total_quantity={_get(json, 'cart.totalQuantity')}
                            discount_codes={codes}
                            shipping_discounts={allocateShippingLine}
+                           loading={loading.summary}
+            // loading={true}
                            total_saved={!!totalSaved?.toNumber() ? {
                                amount: totalSaved.toFixed(2),
-                               currencyCode: total.currencyCode,
+                               currencyCode: total?.currencyCode || '',
                            } : undefined}
                            renderShipping={() => {
                                return <LoadingContainer
                                    loading={loading.shipping_methods}
-                                   loadingClassName={'w-20 h-5 rounded-xl'}
+                                   loadingClassName={'w-10 h-5 rounded-xl'}
                                    loadingContainerClassName={'justify-end'}
                                >
                                    {ing  => {
