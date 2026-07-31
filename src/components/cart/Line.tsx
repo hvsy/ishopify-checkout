@@ -26,7 +26,7 @@ export const Line: FC<LineProps> = (props) => {
         <div className={'relative w-16'}>
             <SmartDiv
                 className={"overflow-hidden relative aspect-square rounded-lg border-neutral-300 border shadow-2xl"}>
-                <NewMedia {...media||{}} />
+                <NewMedia {...media||{}} sizes="4rem" />
                 {free && <div className={`absolute 
                             bg-red-500 
                             font-semibold
