@@ -14,10 +14,17 @@ export const SiteNav: FC<any> = (props: any) => {
         width: image?.width + 'px',
         height: image?.height + 'px',
     } : null;
+    // NavFrame 里 logo 容器 max-h-[64px]，所以实际渲染宽度不会超过 min(原图宽, 64 * 宽高比)
+    const logoWidth = parseFloat(String(image?.width));
+    const logoHeight = parseFloat(String(image?.height));
+    const logoSize = Number.isFinite(logoWidth) && Number.isFinite(logoHeight) && logoHeight > 0
+        ? Math.min(logoWidth, 64 * logoWidth / logoHeight)
+        : undefined;
     return <NavFrame className={`${className}`}
                      title={title}
                      align={(profileLogo?.align || undefined) as string}
                      logo={logo ? <LogoImage {...logo}
+                                             sizes={logoSize ? `${logoSize}px` : undefined}
                                              style={{
                                                  width: 'auto',
                                                  maxHeight: '100%',

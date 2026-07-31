@@ -44,14 +44,15 @@ export const Media: FC<MediaProps> = (props) => {
         imageProps['sizes'] = sizes;
     }
 
-    const srcSet = useSrcSet(finalUrl,deviceSizes);
+    const maxWidth = typeof media?.width === 'number' && media.width > 0 ? media.width : undefined;
+    const srcSet = useSrcSet(finalUrl,deviceSizes,maxWidth);
     const finalImageClassName = cn("text-transparent select-none",{
         "absolute w-full h-full inset-0" : fill,
     },imageClassName);
     return <div className={final}>
         {finalUrl && <img
             draggable={false}
-                        // src={finalUrl}
+                        src={finalUrl}
                        loading={priority ? 'eager' : 'lazy'}
                        srcSet={srcSet}
                        style={{
