@@ -25,7 +25,7 @@ const WhyChooseVersion = Features.includes('why_choose_v2')
 export const FooterFrame: FC<FooterFrameProps> = (props) => {
     const {back,next} = props;
     const mobileImage = getGlobalPath("profile.mobile.resource.image");
-    const left  = back && <Link className={'text-sm space-x-2 flex flex-row mt-8 sm:mt-0 justify-center items-center cursor-pointer'}
+    const left  = back && <Link className={'text-base space-x-2 flex flex-row mt-8 sm:mt-0 justify-center items-center cursor-pointer'}
                                 to={back.to}
                                 reloadDocument={back.reload || false}
     >

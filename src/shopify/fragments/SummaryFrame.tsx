@@ -12,6 +12,7 @@ export type SummaryFrameProps = {
     discount_codes : any[];
     shipping_discounts : any[];
     renderShipping ?: ()=>ReactNode;
+    loading ?: boolean;
 
 };
 
@@ -20,6 +21,7 @@ export const SummaryFrame: FC<SummaryFrameProps> = (props) => {
         total,
         renderShipping,
         shipping_discounts,
+        loading = false,
     } = props;
     const format = useMoneyFormat();
     if(import.meta.env.VITE_SKELETON){
@@ -40,10 +42,10 @@ export const SummaryFrame: FC<SummaryFrameProps> = (props) => {
     }
     return <div className={'grid grid-cols-2 gap-y-2 text-sm py-2'}>
         <div className={'flex flex-row items-center'}>
-            Subtotal · {total_quantity} items
+            Subtotal · {loading ? <Skeleton className={'mx-1 min-w-4 min-h-5 max-h-5'}/>:(total_quantity || 0)} items
         </div>
         <div className={'text-right'}>
-            {format(subtotal)}
+            {loading ? <Skeleton className={'rounded-full ml-auto min-w-4 max-w-12 min-h-5 max-h-5'}/> : format(subtotal)}
         </div>
         {discount_codes.length > 0 && <div className={'flex flex-col space-y-2 col-span-2'}>
             <div className={'flex flex-col items-stretch space-y-2'}>
@@ -85,15 +87,16 @@ export const SummaryFrame: FC<SummaryFrameProps> = (props) => {
             <div>
                 Total
             </div>
-
         </div>
-        <div className={'flex flex-row justify-end items-baseline space-x-2 mt-3'}>
-            <div className={'text-sm text-gray-400'}>
-                {total.currencyCode}
-            </div>
-            <div className={'font-bold text-xl'}>
-                {format(total)}
-            </div>
+        <div className={`flex flex-row justify-end ${loading ? `items-center` :'items-baseline'} mt-3`}>
+            {loading ?<Skeleton className={'w-16 h-4 rounded-full'} /> :<div className={'flex flex-row items-baseline space-x-2'}>
+                <div className={'text-sm text-gray-400'}>
+                    {total?.currencyCode || ''}
+                </div>
+                <div className={'font-bold text-xl'}>
+                    {format(total)}
+                </div>
+            </div>}
         </div>
         {!!total_saved?.amount &&
         <div className={'text-sm font-bold uppercase flex flex-row space-x-2 items-center col-span-2'}>

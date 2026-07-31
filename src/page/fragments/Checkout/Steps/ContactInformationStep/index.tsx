@@ -3,12 +3,13 @@ import {ContactInformationForm} from "../../forms/ContactInformationForm.tsx";
 import {AddressForm} from "../../forms/AddressForm.tsx";
 import Form from "@rc-component/form";
 import {useShippingZones} from "../../../../../container/PaymentContext.tsx";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {useCart} from "@hooks/useCart.ts";
 import {api} from "@lib/api.ts";
 import {useDebounceCallback} from "usehooks-ts";
 import {useCurrentForm} from "../../../../../container/FormContext.ts";
 import {omit} from "lodash-es";
 import {PhoneOnlyRequired} from "../../../../../shopify/lib/globalSettings.ts";
+import {useSummary} from "../../../../../shopify/checkouts/hooks/useSummary.tsx";
 
 export type ContactInformationStepProps = {
 };
@@ -16,14 +17,15 @@ export type ContactInformationStepProps = {
 export const ContactInformationStep:FC<ContactInformationStepProps>
     = (props) => {
     const {zones,loading} = useShippingZones();
-    const storage = useCartStorage();
+    const {loading: summaryLoadingState} = useSummary();
+    const {api: cartApi} = useCart();
     const form = useCurrentForm();
     const onPhoneChanged = useDebounceCallback((phone : string,pass : boolean) => {
         if(!import.meta.env.DEV){
             const values = form.getFieldsValue();
             api({
                 method : "put",
-                url : storage.api + '/phone',
+                url : cartApi + '/phone',
                 data : {
                     phone,
                     pass,
@@ -36,12 +38,12 @@ export const ContactInformationStep:FC<ContactInformationStepProps>
         }
     },1500);
     return <>
-        <ContactInformationForm/>
+        <ContactInformationForm loading={summaryLoadingState.summary}/>
         <Form.Field name={['shipping_group_id']} preserve={true}>
             <div className={'hidden'}/>
         </Form.Field>
         <AddressForm title={'Shipping'}
-                     loading={loading}
+                     loading={summaryLoadingState.summary || loading}
                      zones={zones}
                      preserve={true}
                      prefix={['shipping_address']}

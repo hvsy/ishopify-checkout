@@ -3,7 +3,7 @@ import {FreeMethod} from "../../page/fragments/Checkout/Steps/PaymentMethodStep/
 import {PaymentError} from "../../page/fragments/Checkout/Steps/PaymentMethodStep/PaymentError.tsx";
 import {get as _get} from "lodash-es";
 import {StepFrame} from "./StepFrame.tsx";
-import {useCurrentReadQuery} from "../../shopify/checkouts/hooks/useCurrentLoaderData.tsx";
+import {useSummary} from "../../shopify/checkouts/hooks/useSummary.tsx";
 
 export type PaymentMethodFrameProps = {
     children ?: ReactNode;
@@ -11,9 +11,9 @@ export type PaymentMethodFrameProps = {
 
 export const PaymentMethodFrame: FC<PaymentMethodFrameProps> = (props) => {
     let {children} = props;
-    const data = useCurrentReadQuery();
-    const total = _get(data,'data.cart.cost.totalAmount.amount',0);
-    if(!parseFloat(total)){
+    const {json, loading} = useSummary();
+    const total = _get(json,'cart.cost.totalAmount.amount',0);
+    if(!loading.summary && !parseFloat(total)){
         children = <FreeMethod />;
     }
     return <StepFrame title={"Payment Method"}

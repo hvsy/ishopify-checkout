@@ -17,10 +17,11 @@ import {useEventCallback} from "usehooks-ts";
 import {getGlobalPath, PhoneOnlyRequired} from "../../../../shopify/lib/globalSettings.ts";
 import {getCountryCode4, ValidatePhone} from "../../../../shopify/lib/helper.ts";
 import {PhoneInput2} from "@components/ui/PhoneInput2.tsx";
-import {Features, isCN} from "@lib/flags.ts";
+import {Features,} from "@lib/flags.ts";
 import {ErrorBoundary} from "react-error-boundary";
-import {GoogleAutoCompleteLine, GoogleAutoCompleteWrap} from "./GoogleAutoCompleteLine.tsx";
+import {GoogleAutoCompleteWrap} from "./GoogleAutoCompleteLine.tsx";
 import {getMetaContent} from "@lib/metaHelper.ts";
+import {Skeleton} from "@components/ui/Skeleton.tsx";
 const ZipSuggest = lazy(() => {
     return import('../../../../geo/ZipSuggest').then((m) => {
         return {default : m.ZipSuggest};
@@ -190,6 +191,17 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
     }
     const colSpanClass = ['md:col-span-6','md:col-span-3' ,'md:col-span-2'][colSpan-1];
     const no_city = ['SG'].includes(region_code);
+    if(loading){
+        return <StepBlock className={'flex flex-col space-y-1'} labelClassName={titleClassName} label={`${label} address`} name={`${lowerCase(title)}-address`}>
+            <div className={'grid grid-cols-6 gap-y-1 gap-x-2'}>
+                <Skeleton className={'col-span-6 h-12 rounded-lg'}/>
+                <Skeleton className={'col-span-6 h-12 rounded-lg'}/>
+                <Skeleton className={'col-span-6 h-12 rounded-lg'}/>
+                <Skeleton className={'col-span-6 h-12 rounded-lg'}/>
+                <Skeleton className={'col-span-6 h-12 rounded-lg'}/>
+            </div>
+        </StepBlock>;
+    }
     return <StepBlock className={'flex flex-col space-y-1'} labelClassName={titleClassName} label={`${label} address`} name={`${lowerCase(title)}-address`}>
         <div className={'grid grid-cols-6 gap-y-1 gap-x-2'}>
             <FormItem name={[...prefix, 'region']} preserve={true}>

@@ -1,10 +1,10 @@
-import {NetworkStatus, useApolloClient, useQuery, useReadQuery} from "@apollo/client";
+import {NetworkStatus, useApolloClient, useQuery} from "@apollo/client";
 import {get as _get, has as _has, isArray as _isArray, isEmpty} from "lodash-es";
 
 import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
-import {CartStorage} from "../../context/CartStorage.ts";
-import {createContext, FC, use, } from "react";
+import {useCart} from "@hooks/useCart.ts";
+import {createContext, FC, useEffect, use, } from "react";
+import {redirectDocument} from "react-router-dom";
 import {FormContainer} from "@components/frames/FormContainer.tsx";
 import {ShopifyFrame} from "../../ShopifyFrame.tsx";
 import {ShopifyCheckoutProvider} from "../../context/ShopifyCheckoutContext.tsx";
@@ -12,8 +12,8 @@ import Form from "@rc-component/form";
 import {PaymentContainer} from "../../../container/PaymentContext.tsx";
 import {PayingContainer} from "@components/frames/PayingContainer.tsx";
 import {GetDeliveryGroupQuery} from "../../../gql/GetDeliveryGroupQuery.ts";
+import {SummaryQuery} from "@query/checkouts/summary.ts";
 import {Features} from "@lib/flags.ts";
-import {useCurrentLoaderData} from "./useCurrentLoaderData.tsx";
 
 
 export const SummaryContext = createContext<{
@@ -25,7 +25,6 @@ export const SummaryContext = createContext<{
     },
     refetchDeliveryGroup ?: (vars ?: any)=>Promise<any>;
     groups ?: any[],
-    storage ?: CartStorage,
     json : any,
 }>({
     checkout(){ return {}},
@@ -65,13 +64,23 @@ function useDeliveryGroups(cartId: string){
 
 export const SummaryContextProvider :FC<any> = (props) => {
     const {children} = props;
-    const {ref,storage} = useCurrentLoaderData();
-    const {data : json ,networkStatus} = useReadQuery<any>(ref);
+    const {gid} = useCart();
+    const {data : json ,networkStatus,error} = useQuery(SummaryQuery, {
+        variables : {
+            cartId : gid,
+            withCarrierRates : true,
+        },
+    });
+
+    useEffect(() => {
+        if (!error && !(json && (!json.cart || json.cart.totalQuantity < 1))) return;
+        window.location.replace('/');
+    }, [json, error]);
 
     const {loading : shipping_methods_loading,
         refetch : refetchDeliveryGroup,
         deliveryGroups,
-    } = useDeliveryGroups(storage.gid);
+    } = useDeliveryGroups(gid);
 
     const loading = {
         shipping_methods: shipping_methods_loading,
@@ -96,10 +105,9 @@ export const SummaryContextProvider :FC<any> = (props) => {
             refetchDeliveryGroup,
             loading,
             groups: deliveryGroups as any[],
-            storage: storage as CartStorage,
         }}>
             <ShopifyCheckoutProvider form={form}>
-                <FormContainer form={form} initialValues={checkout}>
+                <FormContainer form={form} initialValues={loading.summary ? null : checkout}>
                     <ShopifyFrame>
                         {children}
                         {/*<Main/>*/}
@@ -124,10 +132,10 @@ export function useSummary(){
 
 export function useDeliveryGroupMutation() {
     const client = useApolloClient();
-    const storage = useCartStorage();
+    const {gid} = useCart();
     return (groups: (any[])|null) => {
         const vars = {
-            cartId: storage.gid, withCarrierRates: true,
+            cartId: gid, withCarrierRates: true,
         };
         const all = client.readQuery({
             // query: SummaryQuery,
@@ -136,7 +144,6 @@ export function useDeliveryGroupMutation() {
         })
 
         if(!all && Features.includes('empty_delivery_redirect')){
-            storage.reset();
             window.location.reload();
             return;
         }

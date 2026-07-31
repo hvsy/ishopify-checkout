@@ -11,12 +11,5 @@ export function useCleanCartCookie(gid ?: string){
         if(decodeURIComponent(token||'') === after){
             Cookies.remove('cart');
         }
-        const hit = after.split("?key=")?.[0];
-        import.meta.env.DEV && console.log('token:',gid,token,after,hit);
-        localStorage.removeItem(`cart:${hit}`);
-        if(localStorage.getItem("cartToken") === JSON.stringify(hit)){
-            localStorage.removeItem('cartToken');
-        }
     }, [gid]);
 }
-

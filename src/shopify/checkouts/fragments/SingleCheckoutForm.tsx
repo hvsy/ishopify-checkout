@@ -22,7 +22,6 @@ export const SingleCheckoutForm: FC<SingleCheckoutFormProps> = (props) => {
         <div className={'flex flex-col space-y-8'}>
             <ContactInformationStep/>
             <ShippingMethodStep/>
-
             <LocalizedFieldsStep />
             {!approve && <PaymentMethodStep/>}
         </div>

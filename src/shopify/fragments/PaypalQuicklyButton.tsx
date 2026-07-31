@@ -4,6 +4,7 @@ import {Divider} from "@components/ui/Divider.tsx";
 import {AsyncButton} from "@components/fragments/AsyncButton.tsx";
 import {api, getFinalPath} from "@lib/api.ts";
 import {useSummary} from "../checkouts/hooks/useSummary.tsx";
+import {useCart} from "@hooks/useCart.ts";
 import {PromiseLocation} from "../lib/payment.ts";
 
 export type PaypalQuicklyButtonProps = {};
@@ -11,7 +12,8 @@ export type PaypalQuicklyButtonProps = {};
 export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
     const {} = props;
     const {methods} = usePaymentContext() || {};
-    const {storage,ing} = useSummary();
+    const {ing} = useSummary();
+    const {api: cartApi} = useCart();
     const method = (methods || []).find((method) => {
         return method.type === 'paypal';
     });
@@ -29,7 +31,7 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
                 // await sync(false,false);
                 const res = await api({
                     method : "post",
-                    'url' : storage!.api + '/quickly'
+                    'url' : cartApi + '/quickly'
                 });
                 if(!res['error']) {
                     const id = res.id;

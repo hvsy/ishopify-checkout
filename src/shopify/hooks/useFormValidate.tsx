@@ -10,7 +10,7 @@ import {useRef} from "react";
 import {scrollToError} from "@components/frames/FormContainer.tsx";
 import {get as _get, isArray, isEmpty, isEqual, isObjectLike, uniq} from "lodash-es";
 import {produce} from "@lib/api.ts";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {useCart} from "@hooks/useCart.ts";
 import {FormInstance} from "@rc-component/form";
 import {buildAddress} from "@lib/buildAddress.ts";
 import {useSummary} from "../checkouts/hooks/useSummary.tsx";
@@ -76,7 +76,7 @@ export function useFormValidate(form : FormInstance) {
     // const form = useCurrentForm();
     const sync = useCheckoutSync();
     const mutation = useMutationCheckout();
-    const cart = useCartStorage();
+    const cart = useCart();
     const last = useRef<any>(null);
     const {loading,groups,refetchDeliveryGroup} = useSummary();
     const checkoutLoading = useShopifyCheckoutLoading();

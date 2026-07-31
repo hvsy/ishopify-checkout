@@ -12,6 +12,7 @@ import {usePaymentContext} from "../../../container/PaymentContext.tsx";
 import {getMetaContent} from "@lib/metaHelper.ts";
 import {summary2Cart} from "../../lib/helper.ts";
 import {useParams} from "react-router-dom";
+import {useCart} from "@hooks/useCart.ts";
 
 export type ApproveItProps = {};
 
@@ -21,7 +22,8 @@ const FloatApprove = Features.includes('float_approve_button');
 const payment_title = getMetaContent('payment_title') || 'Place an order'
 export const ApproveIt: FC<ApproveItProps> = (props) => {
     const {} = props;
-    const {ing,storage,json : summary} = useSummary();
+    const {ing,json : summary} = useSummary();
+    const {api: cartApi} = useCart();
     const form = useCurrentForm();
     const {token} = useParams();
     useEffect(() => {
@@ -89,7 +91,7 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                 }
                 const res = await api({
                     method : "post",
-                    'url' : storage!.api + `/approve`,
+                    'url' : cartApi + `/approve`,
                 });
                 if(!!res['error']){
                     setProgress?.(() => {
