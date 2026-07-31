@@ -16,7 +16,7 @@ import {
     QueryVariantFragment
 } from "@query/checkouts/fragments/fragments.ts";
 import {QueryLineItems} from "@query/checkouts/queries.ts";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {useCart} from "@hooks/useCart.ts";
 import {getGlobalPath} from "../../lib/globalSettings.ts";
 import {Media} from "../../../page/components/Media.tsx";
 import {WhyChooseUs2} from "../../fragments/WhyChooseUs2.tsx";
@@ -31,7 +31,7 @@ const ShowLinesInMobile = Features.includes('mobile:show_lines');
 export const Right: FC<RightProps> = (props) => {
     const {} = props;
 
-    const storage = useCartStorage();
+    const {gid} = useCart();
     const {loading, data, json} = useAllEdges(([
         QueryLineItems,
         QueryLineItemsFragment,
@@ -40,7 +40,7 @@ export const Right: FC<RightProps> = (props) => {
         // QueryDeliveryFragment,
     ].join("\n")), {
         first: 10,
-        cartId: storage.gid,
+        cartId: gid,
     }, 'cart.lines');
     const client = useApolloClient();
     const discountData = client.readQuery({
@@ -54,7 +54,7 @@ export const Right: FC<RightProps> = (props) => {
         }`,
         ].join("\n")),
         variables: {
-            cartId: storage.gid,
+            cartId: gid,
         }
     });
 

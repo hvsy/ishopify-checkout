@@ -3,7 +3,7 @@ import {ContactInformationForm} from "../../forms/ContactInformationForm.tsx";
 import {AddressForm} from "../../forms/AddressForm.tsx";
 import Form from "@rc-component/form";
 import {useShippingZones} from "../../../../../container/PaymentContext.tsx";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {useCart} from "@hooks/useCart.ts";
 import {api} from "@lib/api.ts";
 import {useDebounceCallback} from "usehooks-ts";
 import {useCurrentForm} from "../../../../../container/FormContext.ts";
@@ -16,14 +16,14 @@ export type ContactInformationStepProps = {
 export const ContactInformationStep:FC<ContactInformationStepProps>
     = (props) => {
     const {zones,loading} = useShippingZones();
-    const storage = useCartStorage();
+    const {api: cartApi} = useCart();
     const form = useCurrentForm();
     const onPhoneChanged = useDebounceCallback((phone : string,pass : boolean) => {
         if(!import.meta.env.DEV){
             const values = form.getFieldsValue();
             api({
                 method : "put",
-                url : storage.api + '/phone',
+                url : cartApi + '/phone',
                 data : {
                     phone,
                     pass,

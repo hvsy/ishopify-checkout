@@ -5,10 +5,10 @@ import {
     QueryCartFieldsFragment,
     QueryDeliveryFragment
 } from "@query/checkouts/fragments/fragments.ts";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {useCart} from "@hooks/useCart.ts";
 
 export function useUpdateContactInformation(){
-    const storage = useCartStorage();
+    const {gid} = useCart();
     const [fn] = useMutation(gql([
         MutateShippingAddress,
         QueryCartFieldsFragment,
@@ -22,7 +22,7 @@ export function useUpdateContactInformation(){
         awaitRefetchQueries : true,
         update(cache){
             cache.modify({
-                id: cache.identify({ __typename: 'Cart', id: storage.gid}),
+                id: cache.identify({ __typename: 'Cart', id: gid}),
                 fields: {
                     deliveryGroups() {
                         return null;
@@ -32,7 +32,7 @@ export function useUpdateContactInformation(){
             // console.log('cache:',cache);
         },
         variables : {
-            cartId : storage.gid,
+            cartId : gid,
         }
     });
     return fn;

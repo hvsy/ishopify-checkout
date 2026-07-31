@@ -1,12 +1,12 @@
 import {FC,} from "react";
 import {CountDown} from "@components/fragments/CountDown.tsx";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {useCart} from "@hooks/useCart.ts";
 
 export type HighDemandCountDownProps = {};
 
 export const HighDemandCountDown: FC<HighDemandCountDownProps> = (props) => {
     const {} = props;
-    const cart = useCartStorage();
+    const cart = useCart();
     return <div className={'flex flex-col space-y-2'}>
         <div className="flex flex-row items-center space-x-2 text-gray-700"><span
             className="text-sm font-bold px-[8px] py-[10px] text-[#333333]">🔥 An item you ordered is in high demand. No worries, we have reserved your order.</span>

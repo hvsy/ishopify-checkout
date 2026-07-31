@@ -1,5 +1,5 @@
 import {createContext, FC, ReactNode, use, useCallback, useMemo, useRef} from "react";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {useCart} from "@hooks/useCart.ts";
 import {ApolloClient, from, gql, useApolloClient, useMutation, useQueryRefHandlers, useReadQuery} from "@apollo/client";
 import {MutateCheckout, MutateRemoveAddresses} from "@query/checkouts/mutations.ts";
 import {
@@ -153,7 +153,7 @@ export const ShopifyCheckoutProvider :FC<{
     form :FormInstance;
 }> = (props) => {
     const {children,form} = props;
-    const storage = useCartStorage();
+    const {gid} = useCart();
     const [fn,{client,error,loading,}] = useMutation(gql([
         MutateCheckout,
         QueryCartFieldsFragment,
@@ -166,7 +166,7 @@ export const ShopifyCheckoutProvider :FC<{
     ].join("\n")),{
 
         variables : {
-            cartId : storage.gid,
+            cartId : gid,
         }
     });
     const groupsMutation = useDeliveryGroupMutation();
@@ -239,7 +239,7 @@ export const ShopifyCheckoutProvider :FC<{
         let cart = result?.cart;
         const warningCode =result ?.warnings?.[0]?.code;
         if(warningCode === 'DUPLICATE_DELIVERY_ADDRESS'){
-            await removeOtherAddresses(client,storage.gid,vars.addressId)
+            await removeOtherAddresses(client,gid,vars.addressId)
             result = await UpdateMutationCallback(vars,partialUpdate,force,);
             cart = result?.cart;
         }

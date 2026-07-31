@@ -2,8 +2,7 @@ import {NetworkStatus, useApolloClient, useQuery, useReadQuery} from "@apollo/cl
 import {get as _get, has as _has, isArray as _isArray, isEmpty} from "lodash-es";
 
 import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
-import {CartStorage} from "../../context/CartStorage.ts";
+import {useCart} from "@hooks/useCart.ts";
 import {createContext, FC, use, } from "react";
 import {FormContainer} from "@components/frames/FormContainer.tsx";
 import {ShopifyFrame} from "../../ShopifyFrame.tsx";
@@ -25,7 +24,6 @@ export const SummaryContext = createContext<{
     },
     refetchDeliveryGroup ?: (vars ?: any)=>Promise<any>;
     groups ?: any[],
-    storage ?: CartStorage,
     json : any,
 }>({
     checkout(){ return {}},
@@ -65,13 +63,14 @@ function useDeliveryGroups(cartId: string){
 
 export const SummaryContextProvider :FC<any> = (props) => {
     const {children} = props;
-    const {ref,storage} = useCurrentLoaderData();
+    const {ref} = useCurrentLoaderData();
+    const {gid} = useCart();
     const {data : json ,networkStatus} = useReadQuery<any>(ref);
 
     const {loading : shipping_methods_loading,
         refetch : refetchDeliveryGroup,
         deliveryGroups,
-    } = useDeliveryGroups(storage.gid);
+    } = useDeliveryGroups(gid);
 
     const loading = {
         shipping_methods: shipping_methods_loading,
@@ -96,7 +95,6 @@ export const SummaryContextProvider :FC<any> = (props) => {
             refetchDeliveryGroup,
             loading,
             groups: deliveryGroups as any[],
-            storage: storage as CartStorage,
         }}>
             <ShopifyCheckoutProvider form={form}>
                 <FormContainer form={form} initialValues={checkout}>
@@ -124,10 +122,10 @@ export function useSummary(){
 
 export function useDeliveryGroupMutation() {
     const client = useApolloClient();
-    const storage = useCartStorage();
+    const {gid} = useCart();
     return (groups: (any[])|null) => {
         const vars = {
-            cartId: storage.gid, withCarrierRates: true,
+            cartId: gid, withCarrierRates: true,
         };
         const all = client.readQuery({
             // query: SummaryQuery,
@@ -136,7 +134,6 @@ export function useDeliveryGroupMutation() {
         })
 
         if(!all && Features.includes('empty_delivery_redirect')){
-            storage.reset();
             window.location.reload();
             return;
         }

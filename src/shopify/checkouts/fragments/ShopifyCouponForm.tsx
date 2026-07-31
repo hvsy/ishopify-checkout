@@ -12,11 +12,11 @@ import {
 } from "@query/checkouts/fragments/fragments.ts";
 import {MutateDiscountCode} from "@query/checkouts/mutations.ts";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {useCart} from "@hooks/useCart.ts";
 
 export const ShopifyCouponForm: FC<ShopifyCouponFormProps> = (props) => {
     const {} = props;
-    const storage = useCartStorage();
+    const {gid} = useCart();
     const [fn, {data, loading, error}] = useMutation(gql([
         // QueryCartFieldsFragment,
         QueryDiscountsFragment,
@@ -31,7 +31,7 @@ export const ShopifyCouponForm: FC<ShopifyCouponFormProps> = (props) => {
         refetchQueries: ['Summary', 'CartLineItems',],
         awaitRefetchQueries : true,
         variables: {
-            cartId: storage.gid,
+            cartId: gid,
             // first : 100,
         }
     });

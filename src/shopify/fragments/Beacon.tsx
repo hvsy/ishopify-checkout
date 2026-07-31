@@ -1,7 +1,7 @@
 import {FC,} from "react";
 import {useEventCallback, useEventListener} from "usehooks-ts";
 import {useCurrentForm} from "../../container/FormContext.ts";
-import {useCartStorage} from "@hooks/useCartStorage.ts";
+import {useCart} from "@hooks/useCart.ts";
 import {getBeacon} from "../lib/getBeacon.ts";
 import {usePaymentContext} from "../../container/PaymentContext.tsx";
 import {get as _get} from "lodash-es";
@@ -15,7 +15,7 @@ export type BeaconProps = {
 export const Beacon: FC<BeaconProps> = (props) => {
     const {context} = props;
     const form = useCurrentForm();
-    const cart = useCartStorage();
+    const cart = useCart();
     const ctx = usePaymentContext();
     import.meta.env.DEV && console.log('payment progress:',ctx?.progress);
 

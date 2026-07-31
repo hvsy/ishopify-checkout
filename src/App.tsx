@@ -74,7 +74,7 @@ import {
     // QueryDeliveryGroupsFragment,
     // QueryImageFragment
 } from "@query/checkouts/fragments/fragments.ts";
-import {CartStorage} from "./shopify/context/CartStorage.ts";
+import {getCartGid} from "@lib/cart.ts";
 import {ShopifyCheckoutFrame} from "./shopify/fragments/ShopifyCheckoutFrame.tsx";
 import {getGlobalBase} from "./shopify/lib/globalSettings.ts";
 import {CheckoutShell} from "./CheckoutShell.tsx";
@@ -90,56 +90,32 @@ export const SummaryQuery = gql([
 ].join("\n"));
 
 
-function ShellLoader(request: Request, params: Params<string>, context: any){
+function ShellLoader(request: Request, params: Params<string>){
     const url = new URL(request.url)
-    const key = url.searchParams.get('key');
-    let {token, shop, action = 'information'} = params;
-    const storage = new CartStorage(token!, shop);
-    if (action === 'recover' && !!key && key !== 'undefined') {
-        storage.key = key;
-    } else {
-        const direct = url.searchParams.get('direct');
-        if (!!direct && direct !== 'undefined') {
-            storage.key = direct;
-        }
-    }
+    const {action = 'information'} = params;
     const discount_code = url.searchParams.get('discount_code');
     if (!!discount_code) {
         Cookies.set('discount_code', discount_code, {
             expires: dayjs().add(2, 'weeks').toDate(),
         });
     }
-    if (action === 'recover' && !!key) {
-        Cookies.set('recovery_key', key, {
-            expires: dayjs().add(1, 'day').toDate(),
-        });
+    if (action === 'recover') {
+        const key = url.searchParams.get('key') || getMetaContent('cart_key');
+        if (key && key !== 'undefined') {
+            Cookies.set('recovery_key', key, {
+                expires: dayjs().add(1, 'day').toDate(),
+            });
+        }
     }
     return null;
 }
-async function getCheckout(request: Request, params: Params<string>, context: any) {
-    let {token, shop,} = params;
-    const storage = new CartStorage(token!, shop);
-    if (!storage.key) {
-        const url = new URL(request.url)
-        const urlKey = url.searchParams.get('key') || url.searchParams.get('direct') || null;
-        if (!!urlKey) {
-            storage.key = urlKey;
-        }else{
-            if(getMetaContent('cart_key')){
-                storage.key = getMetaContent('cart_key');
-            }else{
-                const res = await api({
-                    method: "post",
-                    url: getFinalPath(`/checkouts/${token}/key`, shop),
-                });
-                if (!res) {
-                    return go2home();
-                }
-                storage.key = res;
-            }
-        }
+async function getCheckout(params: Params<string>) {
+    const {token, shop} = params;
+    const key = getMetaContent('cart_key');
+    if (!key) {
+        return go2home();
     }
-    let {ref, cart} = await PreloadCart(storage.gid);
+    const {ref, cart} = await PreloadCart(getCartGid(token, key));
     let checkout: any = null;
     if (cart) {
         if (_get(cart, 'data.cart.totalQuantity', 0) < 1) {
@@ -152,22 +128,17 @@ async function getCheckout(request: Request, params: Params<string>, context: an
         return go2home();
     }
 
-    return {checkout, ref, storage, shop};
+    return {checkout, ref, shop};
 }
 
 import.meta.env.DEV && console.log('prefix:', prefix);
-function ignoreDirect(param : any){
+function ignoreSearchChange(param : any){
     const {currentUrl, nextUrl, defaultShouldRevalidate,} = param;
     const current = new URLSearchParams(currentUrl.search);
     const next = new URLSearchParams(nextUrl.search);
-    current.delete('direct');
-    current.delete("key");
-    next.delete("key");
-    next.delete('direct');
-    // console.log('should revalidate:',param,current.toString(),next.toString());
     return current.toString() !== next.toString() ? defaultShouldRevalidate : false;
 }
-let router = createBrowserRouter([
+const router = createBrowserRouter([
     {
         path: `${prefix}/additional/:token`,
         id: 'additional',
@@ -196,18 +167,18 @@ let router = createBrowserRouter([
     }, {
         path: prefix + '/',
         id: "checkout_shell",
-        async loader({request, params, context}) {
-            ShellLoader(request, params, context);
+        async loader({request, params}) {
+            ShellLoader(request, params);
             return null;
         },
         Component : CheckoutShell,
-        shouldRevalidate : ignoreDirect,
+        shouldRevalidate : ignoreSearchChange,
         children: [{
             id: 'checkout_container',
-            shouldRevalidate : ignoreDirect,
+            shouldRevalidate : ignoreSearchChange,
             Component: ShopifyCheckoutFrame,
-            async loader({request, params, context}) {
-                return await getCheckout(request, params, context)
+            async loader({params}) {
+                return await getCheckout(params)
             },
             children: [
                 {
