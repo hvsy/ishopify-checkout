@@ -209,23 +209,39 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         if(loading) return;
         if (!region_code) return;
         const current = formInstance?.getFieldValue([...prefix, 'state_code']);
-        if(!current || !_find(zonesRef.current||[], (z) => {
-                return z.code === current;
-        })){
-                formInstance?.setFields([{
-                    name: [...prefix, 'state_code'],
-                    value : null,
-                }, {
-                    name: [...prefix, 'state'],
-                    value : null,
-                }])
-                onValuesChanged({
-                    [prefix.join('.')]: {
-                        state_code: null,
-                        state: null,
-                    }
-                })
+        const valid = !!current && !!_find(zonesRef.current || [], (z) => {
+            return z.code === current;
+        });
+        if(valid) return;
+        if(firstZone?.code){
+            formInstance?.setFields([{
+                name: [...prefix, 'state_code'],
+                value : firstZone.code,
+            }, {
+                name: [...prefix, 'state'],
+                value : firstZone,
+            }])
+            onValuesChanged({
+                [prefix.join('.')]: {
+                    state_code: firstZone.code,
+                    state: firstZone,
+                }
+            })
+            return;
         }
+        formInstance?.setFields([{
+            name: [...prefix, 'state_code'],
+            value : null,
+        }, {
+            name: [...prefix, 'state'],
+            value : null,
+        }])
+        onValuesChanged({
+            [prefix.join('.')]: {
+                state_code: null,
+                state: null,
+            }
+        })
     }, [loading,region_code, firstZone?.id,]);
     const phonePrefix = hitRegion?.data?.phoneNumberPrefix;
     const zipHolder = hitRegion?.data?.postalCodeExample;
