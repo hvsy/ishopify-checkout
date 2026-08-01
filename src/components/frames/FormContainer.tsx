@@ -137,17 +137,26 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             // console.log('job settled :',item,queuer);
         }
     });
-    const push = ((changedValues : any) => {
-        const items =  sync.peekPendingItems();
-        const oldItem = items.reverse().reduce((pv : any,cv : any) => {
-           return _merge({},pv,cv);
-        },{});
-        sync.clear();
-        const final = _merge(oldItem,changedValues);
-        // console.log('push changed values:',changedValues,oldItem,final,items,items.length);
-        console.log('push:',final,changedValues);
-        sync.addItem(final);
-    })
+    // 一次用户操作(如切换国家)可能会在短时间内触发多次 onValuesChanged
+    // (国家变化 + effect 自动设置的第一个省份)。队列会立刻取走第一个任务执行,
+    // 导致同一次操作被同步两次。这里用短窗口合并,窗口内只提交一次同步。
+    const pendingRef = useRef<any>(null);
+    const timerRef = useRef<any>(null);
+    const push = useCallback((changedValues : any) => {
+        pendingRef.current = _merge(pendingRef.current || {}, changedValues);
+        clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+            const final = pendingRef.current;
+            pendingRef.current = null;
+            console.log('push:',final,changedValues);
+            sync.addItem(final);
+        }, 500);
+    },[sync]);
+    useEffect(() => {
+        return () => {
+            clearTimeout(timerRef.current);
+        };
+    }, []);
     const mutation = useMutationCheckout();
     const onValuesChanged = useCallback((changedValues : any) => {
         console.log('value changed:',changedValues);
