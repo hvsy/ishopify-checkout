@@ -36,6 +36,7 @@ export const StateCodeFormItem : FC<any> = (props) => {
     const {name,zones,className,autoComplete,preserve = false} = props;
     const approve = UNSAFE_useRouteId() === 'approve';
     const form = useCurrentForm();
+    const stateCode = useWatch(name, form);
     useEffect(() => {
         if(approve){
             form.validateFields([
@@ -44,7 +45,7 @@ export const StateCodeFormItem : FC<any> = (props) => {
 
             })
         }
-    }, [approve]);
+    }, [approve,stateCode]);
     if(!zones?.length) return null;
     return <FormItem name={name} rules={[{
         required :true,
@@ -142,16 +143,35 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         let presetRegion = !presetRegionCode ? null : _find(Regions, (r : any) => {
             return (r.code) === presetRegionCode;
         });
+        const chooseRegion = (region : any) => {
+            if (!region?.code) return;
+            setRegion(region);
+            const firstState = region.children?.[0];
+            if (firstState?.code && !formInstance.getFieldValue([...prefix, 'state_code'])) {
+                formInstance.setFields([{
+                    name: [...prefix, 'state_code'],
+                    value: firstState.code,
+                }, {
+                    name: [...prefix, 'state'],
+                    value: firstState,
+                }]);
+                onValuesChanged?.({
+                    [prefix.join('.')]: {
+                        region_code : region.code,
+                        state_code: firstState.code,
+                    }
+                });
+            }
+        };
         if (!region_code) {
-            let firstRegion = presetRegion || ipRegion || ups?.[0] || Regions?.[0];
-            setRegion(firstRegion);
+            chooseRegion(presetRegion || ipRegion || ups?.[0] || Regions?.[0]);
         }else{
             //有值的时候,但是该地区不配送
             let hit_region = _find(Regions, (r) => {
                 return (r.code) === region_code;
             });
             if(!hit_region){
-                setRegion(presetRegion || ipRegion || ups?.[0] || Regions?.[0]);
+                chooseRegion(presetRegion || ipRegion || ups?.[0] || Regions?.[0]);
             }
         }
     }, [region_code, Regions, presetRegionCode]);
@@ -170,6 +190,12 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 name: [...prefix, 'state'],
                 value: hit,
             }]);
+            onValuesChanged?.({
+                [prefix.join('.')]: {
+                    state_code: presetStateCode,
+                    state: hit,
+                }
+            });
         }
     }, [loading, region_code, presetStateCode, zones]);
     useEffect(() => {
