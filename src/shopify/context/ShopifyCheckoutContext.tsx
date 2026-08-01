@@ -2,6 +2,7 @@ import {createContext, FC, ReactNode, use, useCallback, useMemo, useRef} from "r
 import {useCart} from "@hooks/useCart.ts";
 import {ApolloClient, from, gql, useApolloClient, useMutation, useQueryRefHandlers, useReadQuery} from "@apollo/client";
 import {MutateCheckout, MutateRemoveAddresses} from "@query/checkouts/mutations.ts";
+import {buildCheckoutMutation} from "@query/checkouts/buildCheckoutMutation.ts";
 import {
     QueryBuyerIdentityFragment,
     QueryCartFieldsFragment,
@@ -90,10 +91,11 @@ const addressPrefix= "gid://shopify/CartSelectableAddress/";
 const groupPrefix= "gid://shopify/CartDeliveryGroup/";
 
 function start(target : string,prefix :string){
-    return prefix + target.replace(prefix,'');
+    return target.startsWith(prefix) ? target : prefix + target.replace(prefix,'');
 }
 
 function formatInput(input : CheckoutInput,keepBuyerCountryCode  : boolean = false){
+    console.log('format input:',input);
     let vars  : any= {
         createAddress : false,
         updateAddress : false,
@@ -129,11 +131,8 @@ function formatInput(input : CheckoutInput,keepBuyerCountryCode  : boolean = fal
             vars.createAddress = false;
             vars.updateAddress = true;
         }
-        vars.addressId = start(id || '0' ,addressPrefix);
-        vars.deliveryGroupId = start(
-            input?.deliveryGroupId || '0',
-            groupPrefix
-        );
+        vars.addressId = id ? start(id, addressPrefix) : null;
+        vars.deliveryGroupId = input?.deliveryGroupId ? start(input.deliveryGroupId, groupPrefix) : null;
         vars.deliveryOptionHandle = input?.deliveryHandle || '';
         vars.updateSelectedDelivery = !(!input?.deliveryGroupId || !input?.deliveryHandle)
     }
@@ -180,12 +179,20 @@ export const ShopifyCheckoutProvider :FC<{
                                               ) => {
 
         if(mutationLoading.current && !force) return;
+        if(!variables?.updateBuyer && !variables?.updateAddress && !variables?.createAddress && !variables?.updateSelectedDelivery){
+            return {
+                userErrors : [],
+                warnings : [],
+                cart : {},
+            };
+        }
         const config : any = {
             // awaitRefetchQueries : true,
             refetchQueries:
                 partialUpdate ? ['GetDeliveryGroups',] : ['GetDeliveryGroups','CartLineItems'],
             variables,
             awaitRefetchQueries : true,
+            mutation : buildCheckoutMutation(variables),
         };
         // if(!partialUpdate){
         //     // config.refetchQueries= ['CartLineItems'];
@@ -238,7 +245,7 @@ export const ShopifyCheckoutProvider :FC<{
         let result= await UpdateMutationCallback(vars,partialUpdate,force,);
         let cart = result?.cart;
         const warningCode =result ?.warnings?.[0]?.code;
-        if(warningCode === 'DUPLICATE_DELIVERY_ADDRESS'){
+        if(warningCode === 'DUPLICATE_DELIVERY_ADDRESS' && vars.addressId){
             await removeOtherAddresses(client,gid,vars.addressId)
             result = await UpdateMutationCallback(vars,partialUpdate,force,);
             cart = result?.cart;
@@ -250,12 +257,16 @@ export const ShopifyCheckoutProvider :FC<{
             const after : any = {
 
             }
+            const delivery = _get(cart,'delivery.addresses.0.id');
             if(!!groupId){
                 after['shipping_group_id'] = groupId;
             }
             const selected = group?.selectedDeliveryOption?.handle;
             if(!!selected){
                 after['shipping_line_id'] = selected;
+            }
+            if(delivery){
+                _set(after,'shipping_address.id',delivery);
             }
             await new Promise((resolve) => {
                 setTimeout(() => {

@@ -71,9 +71,7 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     useEffect(() => {
         if (!initialValues || hydratedRef.current) return;
         hydratedRef.current = true;
-        // console.log(initialValues);
         fillEmptyFields(form, initialValues);
-        // form.setFieldsValue(initialValues);
     }, [initialValues, form]);
     const error = useCallback((name: string|((string|number)[])) => {
         const path = _isArray(name) ? name.join('.') : name;
@@ -100,7 +98,10 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     },[]);
     const mutationDeliveryGroups = useDeliveryGroupMutation();
     const sync = useAsyncQueuer(async (changedValues,) => {
-        const values = form.getFieldsValue();
+        // getFieldsValue(true) 返回 store 里的全部值（含未挂载字段）。
+        // 国家/省份是 effect 在表单字段挂载前通过 setFields 写入的，
+        // 默认 getFieldsValue() 只返回已注册字段，会读成空导致首次同步失败。
+        const values = form.getFieldsValue(true);
         const countryChanged = _has(changedValues,'shipping_address.region_code');
         const provinceChanged = _has(changedValues,'shipping_address.state_code');
         const shippingMethodChanged = _has(changedValues,'shipping_line_id');
@@ -111,7 +112,12 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         if(countryChanged || provinceChanged){
             mutationDeliveryGroups(null);
         }
-        const address = buildAddress(values?.shipping_address || {});
+        // 表单可能在 summary 加载完成前挂载，initialValues 不会自动写入表单；
+        // 这里用 initialValues 兜底，保证国家/省份 effect 触发同步时能拿到完整的地址值（含 id）
+        const address = buildAddress({
+            ...(initialValues?.shipping_address || {}),
+            ...(values?.shipping_address || {}),
+        });
         const input : CheckoutInput =  map2(values,{
             email : 'email',
             deliveryHandle : 'shipping_line_id',
@@ -131,18 +137,29 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             // console.log('job settled :',item,queuer);
         }
     });
-    const push = ((changedValues : any) => {
-        const items =  sync.peekPendingItems();
-        const oldItem = items.reverse().reduce((pv : any,cv : any) => {
-           return _merge({},pv,cv);
-        },{});
-        sync.clear();
-        const final = _merge(oldItem,changedValues);
-        // console.log('push changed values:',changedValues,oldItem,final,items,items.length);
-        sync.addItem(final);
-    })
+    // 一次用户操作(如切换国家)可能会在短时间内触发多次 onValuesChanged
+    // (国家变化 + effect 自动设置的第一个省份)。队列会立刻取走第一个任务执行,
+    // 导致同一次操作被同步两次。这里用短窗口合并,窗口内只提交一次同步。
+    const pendingRef = useRef<any>(null);
+    const timerRef = useRef<any>(null);
+    const push = useCallback((changedValues : any) => {
+        pendingRef.current = _merge(pendingRef.current || {}, changedValues);
+        clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+            const final = pendingRef.current;
+            pendingRef.current = null;
+            console.log('push:',final,changedValues);
+            sync.addItem(final);
+        }, 500);
+    },[sync]);
+    useEffect(() => {
+        return () => {
+            clearTimeout(timerRef.current);
+        };
+    }, []);
     const mutation = useMutationCheckout();
     const onValuesChanged = useCallback((changedValues : any) => {
+        console.log('value changed:',changedValues);
         const path = ['shipping_address.region_code',
             'shipping_address.state_code',
             'shipping_line_id',

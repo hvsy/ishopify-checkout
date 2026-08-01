@@ -106,7 +106,8 @@ export const SummaryContextProvider :FC<any> = (props) => {
             groups: deliveryGroups as any[],
         }}>
             <ShopifyCheckoutProvider form={form}>
-                <FormContainer form={form} initialValues={loading.summary ? null : checkout}>
+                <FormContainer form={form}
+                               initialValues={loading.summary ? null : checkout}>
                     <ShopifyFrame>
                         {children}
                         {/*<Main/>*/}
