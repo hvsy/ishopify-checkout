@@ -4,7 +4,6 @@ import {get as _get, has as _has, isArray as _isArray, isEmpty} from "lodash-es"
 import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
 import {useCart} from "@hooks/useCart.ts";
 import {createContext, FC, useEffect, use, } from "react";
-import {redirectDocument} from "react-router-dom";
 import {FormContainer} from "@components/frames/FormContainer.tsx";
 import {ShopifyFrame} from "../../ShopifyFrame.tsx";
 import {ShopifyCheckoutProvider} from "../../context/ShopifyCheckoutContext.tsx";
