@@ -2,6 +2,7 @@ import {FC, ReactNode} from "react";
 import {useMoneyFormat} from "../../shopify/context/ShopifyContext.ts";
 import {SmartDiv} from "../ui/SmartDiv.tsx";
 import {NewMedia} from "../../page/components/NewMedia.tsx";
+import {Skeleton} from "../ui/Skeleton.tsx";
 
 export type LineProps = {
     media ?: DB.Media|null;
@@ -13,6 +14,7 @@ export type LineProps = {
         amount ?: number|string;
     };
     price : ReactNode;
+    priceLoading ?: boolean;
     subtotal : {
         amount ?: number|string;
     };
@@ -20,7 +22,7 @@ export type LineProps = {
 };
 
 export const Line: FC<LineProps> = (props) => {
-    const {total,price,discounted,subtotal,title,media,free,quantity,options = [] } = props;
+    const {total,price,discounted,subtotal,title,media,free,quantity,options = [],priceLoading = false } = props;
     const format = useMoneyFormat();
     return <div className={'flex flex-row w-full max-w-full'}>
         <div className={'relative w-16'}>
@@ -55,7 +57,7 @@ export const Line: FC<LineProps> = (props) => {
             </div>
         </div>
         <div className={'col-span-1 flex flex-row justify-end items-center'}>
-            {(total?.amount !== subtotal?.amount) ? <div className={'flex flex-col items-end'}>
+            {priceLoading ? <Skeleton className={'w-12 h-5'}/> : (total?.amount !== subtotal?.amount) ? <div className={'flex flex-col items-end'}>
                 <div className={'line-through text-xs'}>
                     {format(subtotal)}
                 </div>

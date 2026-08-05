@@ -6,6 +6,7 @@ import {CheckoutInput, map2, useMutationCheckout} from "../../shopify/context/Sh
 import {useDeliveryGroupMutation,} from "../../shopify/checkouts/hooks/useSummary.tsx";
 import {buildAddress} from "@lib/buildAddress.ts";
 import {useAsyncQueuer,} from "@tanstack/react-pacer";
+import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
 
 
 
@@ -97,6 +98,7 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         }
     },[]);
     const mutationDeliveryGroups = useDeliveryGroupMutation();
+    const checkoutSync = useCheckoutSync(form);
     const sync = useAsyncQueuer(async (changedValues,) => {
         // getFieldsValue(true) 返回 store 里的全部值（含未挂载字段）。
         // 国家/省份是 effect 在表单字段挂载前通过 setFields 写入的，
@@ -129,7 +131,15 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             input.deliveryHandle = undefined;
         }
         input.shipping_address = address;
-        return mutation(input,true,true,values?.context === 'approve');
+        const result = await mutation(input,true,true,values?.context === 'approve');
+        // Shopify 已更新,再把最新的 cart 同步到后端,否则服务端的 remote_data /
+        // preset_shipping 仍保留旧国家,刷新或后续支付流程会用到旧地址。
+        try {
+            await checkoutSync(false, true);
+        } catch (e) {
+            console.error('sync checkout to backend failed:', e);
+        }
+        return result;
     },{
         wait : 1000,
         concurrency : 1,
