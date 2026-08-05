@@ -1,4 +1,4 @@
-import {FC,} from "react";
+import {FC, use,} from "react";
 
 
 import {useAllEdges} from "@hooks/useAllEdges.ts";
@@ -24,6 +24,7 @@ import {Features} from "@lib/flags.ts";
 import {WhyChooseUs} from "../../fragments/WhyChooseUs.tsx";
 import {useWindowSize} from "usehooks-ts";
 import {Skeleton} from "@components/ui/Skeleton.tsx";
+import {ShopifyCheckoutContext} from "../../context/ShopifyCheckoutContext.tsx";
 
 
 const WhyChooseVersion = Features.includes('why_choose_v2')
@@ -33,6 +34,7 @@ export const Right: FC<RightProps> = (props) => {
     const {} = props;
 
     const {gid} = useCart();
+    const {cartLinePriceLoading} = use(ShopifyCheckoutContext);
     const {loading, data, json} = useAllEdges(([
         QueryLineItems,
         QueryLineItemsFragment,
@@ -64,7 +66,7 @@ export const Right: FC<RightProps> = (props) => {
             cartId: gid,
         }
     });
-    const showSketeton = loading || !_get(json, 'cart.lines');
+    const showSketeton = (loading && !cartLinePriceLoading) || !_get(json, 'cart.lines');
     // const showSketeton = true;
     const discountCode = _get(discountData, 'cart.discountCodes', []).filter((d: any) => d.applicable)?.[0]?.code;
     const final = width >= 640;
@@ -77,7 +79,7 @@ export const Right: FC<RightProps> = (props) => {
             </div>
             <Skeleton className={'h-5 w-12'}/>
         </div> :data.map((line: any) => {
-            return <LineItem key={line.id} line={line} code={discountCode}/>
+            return <LineItem key={line.id} line={line} code={discountCode} priceLoading={cartLinePriceLoading}/>
         })}
     </div>;
     return <>

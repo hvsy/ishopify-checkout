@@ -7,6 +7,7 @@ import {TagIcon} from "lucide-react";
 export type LineItemProps = {
     line: any
     code?: string;
+    priceLoading ?: boolean;
 };
 
 export const LineDiscount: FC<{code ?: string, discountAllocation:any }> = (props) => {
@@ -28,7 +29,7 @@ export const LineDiscount: FC<{code ?: string, discountAllocation:any }> = (prop
 
 };
 export const LineItem: FC<LineItemProps> = (props) => {
-    const {line = {}, code} = props;
+    const {line = {}, code, priceLoading = false} = props;
     const {merchandise = {}, quantity, cost = {}, discountAllocations} = line;
     const {totalAmount, subtotalAmount} = cost;
     const {product, price, selectedOptions, image} = merchandise;
@@ -49,5 +50,6 @@ export const LineItem: FC<LineItemProps> = (props) => {
         total={totalAmount}
         subtotal={subtotalAmount}
         free={parseFloat(totalAmount.amount) == 0}
+        priceLoading={priceLoading}
     />;
 };

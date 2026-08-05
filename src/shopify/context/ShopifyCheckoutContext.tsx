@@ -1,4 +1,4 @@
-import {createContext, FC, ReactNode, use, useCallback, useMemo, useRef} from "react";
+import {createContext, FC, ReactNode, use, useCallback, useMemo, useRef, useState} from "react";
 import {useCart} from "@hooks/useCart.ts";
 import {ApolloClient, from, gql, useApolloClient, useMutation, useQueryRefHandlers, useReadQuery} from "@apollo/client";
 import {MutateCheckout, MutateRemoveAddresses} from "@query/checkouts/mutations.ts";
@@ -81,9 +81,11 @@ export const ShopifyCheckoutContext = createContext<{
                force ?: boolean,
                keepBuyerCountryCode  ?: boolean
                )=>Promise<any>,
-    loading : boolean
+    loading : boolean,
+    cartLinePriceLoading : boolean,
 }>({
     loading : false,
+    cartLinePriceLoading : false,
 });
 
 // const addressPrefix= "gid://shopify/CartDeliveryAddress/";
@@ -168,6 +170,7 @@ export const ShopifyCheckoutProvider :FC<{
             cartId : gid,
         }
     });
+    const [cartLinePriceLoading, setCartLinePriceLoading] = useState(false);
     const groupsMutation = useDeliveryGroupMutation();
     const mutationLoading = useRef(false);
     mutationLoading.current = loading;
@@ -186,10 +189,17 @@ export const ShopifyCheckoutProvider :FC<{
                 cart : {},
             };
         }
+        const refetchQueries = ['GetDeliveryGroups'];
+        const countryChanged = !!variables?.buyerIdentity?.countryCode;
+        // 切换国家会把购物车按目标国家货币重新计价。CartFields 不包含行项目的
+        // cost,如果不 refetch CartLineItems,行价格会停留在旧货币,而总价/运费
+        // 已经是新货币,导致同一结算页出现两种货币。
+        if (!partialUpdate || countryChanged) {
+            refetchQueries.push('CartLineItems');
+        }
         const config : any = {
             // awaitRefetchQueries : true,
-            refetchQueries:
-                partialUpdate ? ['GetDeliveryGroups',] : ['GetDeliveryGroups','CartLineItems'],
+            refetchQueries,
             variables,
             awaitRefetchQueries : true,
             mutation : buildCheckoutMutation(variables),
@@ -198,7 +208,14 @@ export const ShopifyCheckoutProvider :FC<{
         //     // config.refetchQueries= ['CartLineItems'];
         // }
         import.meta.env.DEV && console.log('mutation checkout:',config);
-        const response = await fn(config);
+        if (countryChanged) {
+            setCartLinePriceLoading(true);
+        }
+        const response = await fn(config).finally(() => {
+            if (countryChanged) {
+                setCartLinePriceLoading(false);
+            }
+        });
         let data = _cloneDeep(_get(response,'data'));
 
         const increments = _get(response,'incremental',[]);
@@ -284,6 +301,7 @@ export const ShopifyCheckoutProvider :FC<{
     },[]);
     return <ShopifyCheckoutContext value={{
         loading,
+        cartLinePriceLoading,
         update : async (...args:any) => {
             return await queue.add(async() => {
                 //@ts-ignore
