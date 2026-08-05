@@ -7,6 +7,9 @@ import {useDeliveryGroupMutation,} from "../../shopify/checkouts/hooks/useSummar
 import {buildAddress} from "@lib/buildAddress.ts";
 import {useAsyncQueuer,} from "@tanstack/react-pacer";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
+import {useCart} from "@hooks/useCart.ts";
+import {useCartCache} from "@query/checkouts/cache/useCartCache.ts";
+import {getJsonFromMeta} from "@lib/metaHelper.ts";
 
 
 
@@ -99,6 +102,9 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     },[]);
     const mutationDeliveryGroups = useDeliveryGroupMutation();
     const checkoutSync = useCheckoutSync(form);
+    const {gid} = useCart();
+    const cartCache = useCartCache();
+    const presetShipping = getJsonFromMeta('preset_shipping') || {};
     const sync = useAsyncQueuer(async (changedValues,) => {
         // getFieldsValue(true) 返回 store 里的全部值（含未挂载字段）。
         // 国家/省份是 effect 在表单字段挂载前通过 setFields 写入的，
@@ -110,6 +116,22 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
 
         if(!countryChanged && !provinceChanged  && !shippingMethodChanged){
             return;
+        }
+        // 当前表单、preset、Shopify 当前地址三者的国家/省份都一致时，说明
+        // 没有实际变化（例如首次进入按 preset 自动填充），不需要调 mutation
+        // 和后端同步。任一不一致（含切走再切回、后端 preset 过期）都要更新。
+        if(countryChanged || provinceChanged){
+            const remoteAddress = _get(cartCache(gid), 'cart.delivery.addresses.0.address');
+            const region = values?.shipping_address?.region_code;
+            const state = values?.shipping_address?.state_code || null;
+            const presetRegion = presetShipping?.countryCode || null;
+            const presetState = presetShipping?.provinceCode || null;
+            const remoteRegion = remoteAddress?.countryCode || null;
+            const remoteState = remoteAddress?.provinceCode || null;
+            if(region === presetRegion && state === presetState
+                && region === remoteRegion && state === remoteState){
+                return;
+            }
         }
         if(countryChanged || provinceChanged){
             mutationDeliveryGroups(null);
