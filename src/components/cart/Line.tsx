@@ -57,7 +57,7 @@ export const Line: FC<LineProps> = (props) => {
             </div>
         </div>
         <div className={'col-span-1 flex flex-row justify-end items-center'}>
-            {priceLoading ? <Skeleton className={'w-12 h-5'}/> : (total?.amount !== subtotal?.amount) ? <div className={'flex flex-col items-end'}>
+            {(total?.amount !== subtotal?.amount) ? <div className={'flex flex-col items-end'}>
                 <div className={'line-through text-xs'}>
                     {format(subtotal)}
                 </div>
