@@ -325,11 +325,18 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     }
                                          region_code={region_code?.toString()}
                                             onAutoComplete={(address) => {
-                                                const value: any = {
-                                                    line1: address.address1,
-                                                    line2: address.address2,
-                                                    region_code: address.region_code,
-                                                };
+                                                // 仅覆盖有值的字段：Google 未返回子地址单元时 address2 为空串，
+                                                // 无条件写入会把用户先前手填的公寓/门牌号（line2）清掉。
+                                                const value: any = {};
+                                                if (address.address1) {
+                                                    value.line1 = address.address1;
+                                                }
+                                                if (address.address2) {
+                                                    value.line2 = address.address2;
+                                                }
+                                                if (address.region_code) {
+                                                    value.region_code = address.region_code;
+                                                }
                                                 if (address.state_code) {
                                                     value.state_code = address.state_code;
                                                 }
