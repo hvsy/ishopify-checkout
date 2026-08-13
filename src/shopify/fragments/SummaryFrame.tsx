@@ -54,7 +54,17 @@ export const SummaryFrame: FC<SummaryFrameProps> = (props) => {
                 </div>
                 <div className={'grid grid-cols-2'}>
                     {(discount_codes.map((code: any) => {
-                        const value = isObject(code.amount) ? code.amount : {amount : code.amount};
+                        // 兼容两种入参：完整 MoneyV2（{amount,currencyCode}）或裸 number /
+                        // 缺 currencyCode 的 {amount}。后者用总价的 currencyCode 兜底，
+                        // 否则 useMoneyFormat 因缺 currencyCode 返回 undefined，折扣金额不显示。
+                        const raw = code.amount;
+                        const rawObj = isObject(raw) ? raw as Record<string, any> : null;
+                        const value = (rawObj && rawObj.currencyCode)
+                            ? rawObj
+                            : {
+                                amount: rawObj ? rawObj.amount : raw,
+                                currencyCode: total?.currencyCode || '',
+                            };
                         return <Fragment key={code.code}>
                             <div className={'flex flex-row items-center space-x-2 text-gray-500'}>
                                 <TagIcon className={'size-4 scale-x-[-1]'}/>

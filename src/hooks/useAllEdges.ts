@@ -1,15 +1,23 @@
 import {get as _get} from 'lodash-es';
-import {gql, useQuery } from "@apollo/client";
+import {gql, NetworkStatus, useQuery } from "@apollo/client";
 import {useEffect, useRef} from "react";
 
 export function useAllEdges(query : string,variables : any  ={},path : string){
-    const { data, loading, fetchMore } = useQuery(gql(query), {
+    const { data, loading, fetchMore, networkStatus } = useQuery(gql(query), {
         variables,
         notifyOnNetworkStatusChange: true,
     });
     // 已请求过的游标集合：同一个游标最多请求一次，
     // 即使服务端返回的数据有异常也不会重复请求同一页形成死循环。
     const fetchedCursorsRef = useRef<Set<string>>(new Set());
+    useEffect(() => {
+        // 外部 refetch（切国家 / approve 后 CartLineItems 被 refetch）会把数据重置回
+        // 第一页，旧的已请求游标集合不再适用。不清空会导致 hasNextPage 为真但游标
+        // 命中集合被跳过，>first 条商品的列表永远停留在第一页。
+        if (networkStatus === NetworkStatus.refetch) {
+            fetchedCursorsRef.current.clear();
+        }
+    }, [networkStatus]);
     useEffect(() => {
         if (!data?.cart?.lines) return;
 

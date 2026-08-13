@@ -102,9 +102,12 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                         'url': cartApi + `/approve`,
                     });
                     if (!!res?.error) {
+                        // 失败时展示真实错误信息并终止，避免被下方 "response missing url" 覆盖。
+                        const msg = res?.message;
                         setProgress?.(() => {
-                            return "approve error";
-                        })
+                            return (typeof msg === 'string' && msg) ? msg : "approve error";
+                        });
+                        return;
                     }
                     if (!!res?.url) {
                         await PromiseLocation(res.url);
