@@ -25,7 +25,20 @@ export function useAsyncClick<T extends any = any>(click ?: Function){
             });
         });
         if(click){
-            const result = click(e,...args);
+            let result : any;
+            try {
+                result = click(e,...args);
+            } catch (error) {
+                // 同步抛错时也要复位 loading，否则按钮会永久停留在加载态。
+                flushSync(() => {
+                    setState({
+                        success : undefined,
+                        error,
+                        loading : false,
+                    });
+                });
+                throw error;
+            }
             if(result && result['finally']){
                 result.then((success : any)=>{
                     flushSync(() => {

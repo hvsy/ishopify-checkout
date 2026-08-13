@@ -13,6 +13,7 @@ import {getMetaContent} from "@lib/metaHelper.ts";
 import {summary2Cart} from "../../lib/helper.ts";
 import {useParams} from "react-router-dom";
 import {useCart} from "@hooks/useCart.ts";
+import {useCartCache} from "@query/checkouts/cache/useCartCache.ts";
 import {Bus} from "../../../bus.tsx";
 
 export type ApproveItProps = {};
@@ -24,7 +25,8 @@ const payment_title = getMetaContent('payment_title') || 'Place an order'
 export const ApproveIt: FC<ApproveItProps> = (props) => {
     const {} = props;
     const {ing,json : summary} = useSummary();
-    const {api: cartApi} = useCart();
+    const {api: cartApi,gid} = useCart();
+    const cartCache = useCartCache();
     const form = useCurrentForm();
     const {token} = useParams();
     useEffect(() => {
@@ -68,7 +70,6 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                             }
                         }
                     } catch (e) {
-
                     }
                     const handle = _get(after?.data, 'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
                     if (!handle) {
@@ -80,23 +81,27 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                     }
                     import.meta.env.DEV && console.log(after);
                     try {
-                        const totalAmount = _get(summary, 'cost.totalAmount');
+                        const totalAmount = _get(summary, 'cart.cost.totalAmount');
                         const {amount, currencyCode} = totalAmount;
+                        const cartForReport = _get(cartCache(gid), 'cart', null)
+                            || _get(summary, 'cart', null);
+                        import.meta.env.DEV && console.log('approve it:',totalAmount,cartForReport,summary2Cart(cartForReport));
                         window.report?.("add_payment_info", {
                             price: amount + '',
                             currency: currencyCode,
-                            cart: summary2Cart(summary),
+                            cart: summary2Cart(cartForReport),
                             email: after.values.email,
                             shipping_address: after.values.shipping_address,
                             billing_address: after.values.billing_address || after.values.shipping_address,
                         }, token + '_add_payment_info');
                     } catch (e) {
+                        import.meta.env.DEV &&  console.error(e);
                     }
                     const res = await api({
                         method: "post",
                         'url': cartApi + `/approve`,
                     });
-                    if (!!res['error']) {
+                    if (!!res?.error) {
                         setProgress?.(() => {
                             return "approve error";
                         })

@@ -31,7 +31,7 @@ export const Pixels: FC<PixelsProps> = (props) => {
             csy = getShopifyY();
         }
         if(!!csy){
-            Sentry.setUser({ id: '4711' });
+            Sentry.setUser({ id: csy });
         }
         Sentry.setTag('token',token);
         const id = getMetaContent("clarity");

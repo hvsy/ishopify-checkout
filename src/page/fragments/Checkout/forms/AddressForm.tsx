@@ -118,7 +118,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                    value: region,
                }
            ]);
-           if(region.children.length === 0 ){
+           if((region.children || []).length === 0 ){
                onValuesChanged?.({
                    [prefix.join('.')]: {
                        region_code : region?.code,

@@ -1,4 +1,4 @@
-import {FC, use,} from "react";
+import React, {FC, use,} from "react";
 
 
 import {useAllEdges} from "@hooks/useAllEdges.ts";
@@ -25,6 +25,7 @@ import {WhyChooseUs} from "../../fragments/WhyChooseUs.tsx";
 import {useWindowSize} from "usehooks-ts";
 import {Skeleton} from "@components/ui/Skeleton.tsx";
 import {ShopifyCheckoutContext} from "../../context/ShopifyCheckoutContext.tsx";
+import {CheckoutPixelReport} from "./CheckoutPixelReport.tsx";
 
 
 const WhyChooseVersion = Features.includes('why_choose_v2')
@@ -52,25 +53,33 @@ export const Right: FC<RightProps> = (props) => {
         initializeWithValue : true,
     });
     const pcImage = getGlobalPath('profile.pc.resource.image');
-    const discountData = client.readQuery({
-        query: gql([`query Cart($cartId : ID!){
-            cart(id : $cartId){
-                discountCodes {
-                    code
-                    applicable
+    let discountData = null;
+    try {
+        discountData = client.readQuery({
+            query: gql([`query Cart($cartId : ID!){
+                cart(id : $cartId){
+                    discountCodes {
+                        code
+                        applicable
+                    }
                 }
+            }`,
+            ].join("\n")),
+            variables: {
+                cartId: gid,
             }
-        }`,
-        ].join("\n")),
-        variables: {
-            cartId: gid,
-        }
-    });
+        });
+    } catch {
+        // 缓存未就绪时 readQuery 会抛异常，此时先按无折扣码渲染，
+        // 等 Summary/CartLineItems 查询返回后自然更新。
+        discountData = null;
+    }
     const showSketeton = (loading && !cartLinePriceLoading) || !_get(json, 'cart.lines');
     // const showSketeton = true;
     const discountCode = _get(discountData, 'cart.discountCodes', []).filter((d: any) => d.applicable)?.[0]?.code;
     const final = width >= 640;
-    const lines = <div className={`${(final || !ShowLinesInMobile) ? `pb-5  ${final ? 'overflow-hidden' : ''}  space-y-5` : 'px-6 pt-3 max-h-[200px] overflow-y-scroll  space-y-3'} w-full max-w-full  sm:overflow-visible`}>
+    const LinesContainerClassName=  `${(final || !ShowLinesInMobile) ? `pb-5 ${final ? 'overflow-hidden' : ''}  space-y-5` : 'px-6 pt-3 max-h-[200px] overflow-y-scroll  space-y-3'} w-full max-w-full  sm:overflow-visible`;
+    const lines = <div className={`${LinesContainerClassName}`}>
         {showSketeton ? <div className={'flex flex-row items-center w-full max-w-full'}>
             <Skeleton className={'w-16 h-16 rounded'}></Skeleton>
             <div className={'mx-4 flex-1 flex flex-col justify-center min-h-16 space-y-2 '}>
@@ -89,7 +98,8 @@ export const Right: FC<RightProps> = (props) => {
             showSketeton ? <Skeleton className={'w-16 min-h-5 max-h-5'}/> : format(_get(summary, 'cart.cost.totalAmount'))}>
             {(final || !ShowLinesInMobile) && lines}
             <ShopifyCouponForm/>
-            <Summary lines={data}/>
+            <Summary />
+            <CheckoutPixelReport lines={data} json={json} />
             {pcImage?.url && <div className={'hidden sm:flex pt-8 flex-col items-stretch'}>
                 <Media media={{
                     url: pcImage.url,

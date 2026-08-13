@@ -23,9 +23,9 @@ export function getMetaContent<T = any>(name: string, defaultValue: any | null =
 }
 export function getArrayFromMeta(name: string): string[] {
     const content = getMetaContent(name, '');
-    const items = content.split(',').filter(Boolean);
-    if(_isArray(items)) return items;
-    return [];
+    if(_isArray(content)) return content;
+    if(typeof content !== 'string') return [];
+    return content.split(',').filter(Boolean);
 }
 export function getJsonFromMeta(name: string,defaultValue : any = {}): any {
     const content = getMetaContent(name, '');
@@ -52,7 +52,7 @@ export function getIntFromMeta(name : string,defaultValue  : number= 0){
 export function getBooleanFromMeta(name : string,defaultValue : boolean = false){
     const content = getMetaContent(name);
     if(!content) return defaultValue;
-    if(['true','on','1','checkted'].includes(content)) return true;
-    if(['false','off','0','uncheckted'].includes(content)) return false;
+    if(['true','on','1','checked'].includes(content)) return true;
+    if(['false','off','0','unchecked'].includes(content)) return false;
     return defaultValue;
 }

@@ -31,9 +31,15 @@ export const ContactInformationStep:FC<ContactInformationStepProps>
                     phone,
                     pass,
                     phone_only_required : PhoneOnlyRequired(),
-                    values : omit(values,"shipping_address.region",'shipping_address.state',
-                        "billing_address.region",'billing_address.state',
-                    ),
+                    values : {
+                        ...values,
+                        shipping_address : values.shipping_address
+                            ? omit(values.shipping_address, ['region','state'])
+                            : values.shipping_address,
+                        billing_address : values.billing_address
+                            ? omit(values.billing_address, ['region','state'])
+                            : values.billing_address,
+                    },
                 }
             })
         }

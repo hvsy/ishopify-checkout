@@ -1,10 +1,13 @@
-import {FC, useCallback, useEffect, useRef, useState,} from "react";
-import {api} from "@lib/api.ts";
+import {FC, useCallback, useEffect, useRef,} from "react";
+import {api, getFinalPath} from "@lib/api.ts";
 import {useScript} from "usehooks-ts";
+import Cookies from "js-cookie";
 
 export type AsiaBillProps = {
     session: string;
     sdk : string;
+    token ?: string;
+    method ?: any;
 };
 
 let st = {
@@ -52,11 +55,11 @@ let p = {
 };
 export const AsiaBillForm : FC<any>= (props)=> {
     const {session} = props;
-    const [paying, setPaying] = useState(false);
+    const payingRef = useRef(false);
     const abRef = useRef<any>(null);
     const submit = useCallback(() => {
-        if (paying) return;
-        setPaying(true);
+        if (payingRef.current) return;
+        payingRef.current = true;
         let paymentMethodObj = {};
         abRef.current?.confirmPaymentMethod({
             apikey: session,
@@ -69,8 +72,11 @@ export const AsiaBillForm : FC<any>= (props)=> {
                 const methodId = r.data.data.customerPaymentMethodId;
                 api({
                     method: 'post',
+                    url: getFinalPath(`/api/gateways/${props.method?.id}/capture`),
                     data: {
+                        token: props.token,
                         methodId,
+                        recovery_key: Cookies.get('recovery_key'),
                     }
                 }).then((res: any) => {
                     if (res.url) {
@@ -89,9 +95,9 @@ export const AsiaBillForm : FC<any>= (props)=> {
         }, (error: any) => {
             window?.parent.postMessage({event: "payment_failed", "msg": error + ''}, '*');
         }).finally(() => {
-            setPaying(false);
+            payingRef.current = false;
         });
-    }, []);
+    }, [props.method?.id, props.token]);
     useEffect(() => {
         let ab = (window as any).AsiabillPay(session);
         ab.elementInit("payment_steps", p).then((res: any) => {
@@ -120,8 +126,7 @@ export const AsiaBill: FC<AsiaBillProps> = (props) => {
         id : 'ab',
     });
     return <div className="form-wrap">
-            {loaded && <AsiaBillForm session={session}/>}
+            {loaded && <AsiaBillForm session={session} token={props.token} method={props.method}/>}
     </div>
 
 }
-

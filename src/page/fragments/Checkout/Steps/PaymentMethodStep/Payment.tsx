@@ -86,11 +86,11 @@ export const Payment: FC<PaymentProps> = (props) => {
     }[method.type];
     const logo = null;//Logos[method.type] || null;
     let icons = ((method.icons||[]).map(i=>{
-        return Icons[method.type][i];
-    }));
+        return Icons[method.type]?.[i];
+    })).filter(Boolean);
     if(icons.length === 0){
         const target = Icons[method.type];
-        icons = (_isArray(target) ? target : Object.values(target));
+        icons = target ? (_isArray(target) ? target : Object.values(target)) : [];
     }
     import.meta.env.DEV && console.log('payment icons:',method.channel,icons);
     return  <div className={'flex flex-col flex-1 items-stretch divide-neutral-300 divide-y cursor-pointer select-none overflow-hidden max-w-full'}>

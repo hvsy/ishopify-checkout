@@ -11,6 +11,6 @@ export function useQueryState(key : string){
             newSearch.delete(key);
         }
         setSearch(newSearch);
-    },[key]);
+    },[key,search,setSearch]);
     return [search.get(key),setKey] as const;
 }

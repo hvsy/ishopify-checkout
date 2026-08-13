@@ -11,12 +11,18 @@ export type PayingContainerProps = {
 export const PayingContainer: FC<PayingContainerProps> = (props) => {
     const {children} = props;
     const [paying, setPaying] = useState<Boolean | string>(false);
-    Bus.listen('payment:ing', (which ?: string) => {
-        setPaying(which || true);
-    });
-    Bus.listen('payment:end', () => {
-        setPaying(false);
-    });
+    useEffect(() => {
+        const offIng = Bus.listen('payment:ing', (which ?: string) => {
+            setPaying(which || true);
+        });
+        const offEnd = Bus.listen('payment:end', () => {
+            setPaying(false);
+        });
+        return () => {
+            offIng();
+            offEnd();
+        };
+    }, []);
     useEventListener('message', (e) => {
         const data = e.data || {};
         const {type, event} = data;

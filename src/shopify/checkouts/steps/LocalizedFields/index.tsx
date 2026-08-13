@@ -27,7 +27,8 @@ export const LocalizedFieldsStep  :FC<any> = () => {
     if(!['BR','KR'].includes(region_code?.toUpperCase())){
         return null;
     }
-    const field = names[region_code];
+    const field = names[region_code?.toUpperCase()];
+    if(!field) return null;
     return <StepFrame title={'Additional information'}>
         <FormItem name={['localization',field.key]} rules={[{
             required : true,
