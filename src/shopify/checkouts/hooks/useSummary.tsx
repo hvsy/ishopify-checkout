@@ -137,11 +137,18 @@ export function useDeliveryGroupMutation() {
         const vars = {
             cartId: gid, withCarrierRates: true,
         };
-        const all = client.readQuery({
-            // query: SummaryQuery,
-            query : GetDeliveryGroupQuery,
-            variables: vars
-        })
+        let all;
+        try {
+            all = client.readQuery({
+                // query: SummaryQuery,
+                query : GetDeliveryGroupQuery,
+                variables: vars
+            });
+        } catch {
+            // 缓存里还没有该查询（例如首次切换国家时尚未加载完成），忽略即可，
+            // 后续 mutation 的 refetch 会重新拉取最新数据。
+            all = null;
+        }
 
         if(!all && Features.includes('empty_delivery_redirect')){
             window.location.reload();

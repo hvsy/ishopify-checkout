@@ -16,7 +16,7 @@ export const LineDiscount: FC<{code ?: string, discountAllocation:any }> = (prop
     if (!discounted) return null;
     const amount = discounted.amount;
     const format = useMoneyFormat();
-    const price = !!parseFloat(amount) ? `(-${format(discounted)})` : '';
+    const price = amount && parseFloat(amount) ? `(-${format(discounted)})` : '';
     return <div className={'flex flex-row items-center  space-x-1 text-sm text-gray-500'}>
         <TagIcon className={'size-4 scale-x-[-1]'}/>
         <span>
@@ -44,12 +44,12 @@ export const LineItem: FC<LineItemProps> = (props) => {
             height: image.height,
         } : null}
         discounted={<LineDiscount discountAllocation={discountAllocation} code={code}/>}
-        price={price.amount}
+        price={price?.amount}
         quantity={quantity}
         options={(selectedOptions || []).map((opt: any) => opt.value)}
         total={totalAmount}
         subtotal={subtotalAmount}
-        free={parseFloat(totalAmount.amount) == 0}
+        free={parseFloat(totalAmount?.amount ?? '0') == 0}
         priceLoading={priceLoading}
     />;
 };

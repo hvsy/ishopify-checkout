@@ -18,19 +18,21 @@ export const CheckoutPixelReport: FC<CheckoutPixelReportProps> = (props) => {
     return <Report name={'checkout_started'} data={{
         // eventId : md5(token),
         quantity : lines.reduce((pv : number,cv : any) => {
-            return pv + cv.quantity;
+            return pv + (cv.quantity || 0);
         },0),
         content_ids : lines.map(((line) => {
-            return line.merchandise.id.replace(/gid:\/\/shopify\/[^/]+\//ig,'');
+            return line.merchandise?.id?.replace(/gid:\/\/shopify\/[^/]+\//ig,'');
         })),
         contents : lines.map((line : any) => {
-            const cost = line.cost.totalAmount;
+            const cost = line.cost?.totalAmount;
             return {
                 sku : line.merchandise?.sku || null,
                 title : line.merchandise?.title || '',
-                id : line.merchandise.id.replace(/gid:\/\/shopify\/[^/]+\//ig,'',''),
-                quantity : line.quantity,
-                price : Big(cost.amount).div(line.quantity).toString(),
+                id : line.merchandise?.id?.replace(/gid:\/\/shopify\/[^/]+\//ig,''),
+                quantity : line.quantity || 0,
+                price : cost?.amount && line.quantity
+                    ? Big(cost.amount).div(line.quantity).toString()
+                    : '0',
                 currency : _get(json, 'cart.cost.totalAmount.currencyCode'),
             }
         }),

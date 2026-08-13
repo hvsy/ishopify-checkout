@@ -11,7 +11,17 @@ export function getUrlFrom(token : string){
 }
 export function PromiseLocation(location : string){
     return new Promise((resolve, reject) => {
-        setTimeout(reject,15000);
+        let settled = false;
+        const timer = setTimeout(() => {
+            if(!settled){
+                reject(new Error(`Redirect timed out: ${location}`));
+            }
+        },15000);
+        // 页面成功跳转后页面即将卸载，此时取消超时避免误报“跳转失败”。
+        window.addEventListener('pagehide', () => {
+            settled = true;
+            clearTimeout(timer);
+        }, { once : true });
         console.log("redirect to:"+location);
         window.location.href = location;
     });
@@ -60,15 +70,25 @@ export async function shopify_payment(options : {
         const res : any = await api<any>({
             method : "put",
             url: target,
+            // 支付发起不允许重试：axios-retry 默认会对 PUT 在 429/5xx 时重试 3 次，
+            // 可能造成同一笔支付被重复发起。
+            'axios-retry' : {
+                retries : 0,
+            },
         });
-        if(isObjectLike(res) && res.error){
-            if(res.message){
+        if(!res || (isObjectLike(res) && res.error)){
+            const message = isObjectLike(res) ? res.message : undefined;
+            if(message){
                 step?.(() => {
-                    return "payment api error:" + res.message;
+                    return "payment api error:" + message;
                 });
-                console.error(res.message);
-                Bus.emit('payment:error',true);
+                console.error(message);
+            }else{
+                step?.(() => {
+                    return "payment api error";
+                });
             }
+            Bus.emit('payment:error',true);
             return false;
         }
         const href= getFinalPath(`/api/transactions/${res}/redirect`);

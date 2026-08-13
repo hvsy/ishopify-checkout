@@ -52,20 +52,27 @@ export const Right: FC<RightProps> = (props) => {
         initializeWithValue : true,
     });
     const pcImage = getGlobalPath('profile.pc.resource.image');
-    const discountData = client.readQuery({
-        query: gql([`query Cart($cartId : ID!){
-            cart(id : $cartId){
-                discountCodes {
-                    code
-                    applicable
+    let discountData = null;
+    try {
+        discountData = client.readQuery({
+            query: gql([`query Cart($cartId : ID!){
+                cart(id : $cartId){
+                    discountCodes {
+                        code
+                        applicable
+                    }
                 }
+            }`,
+            ].join("\n")),
+            variables: {
+                cartId: gid,
             }
-        }`,
-        ].join("\n")),
-        variables: {
-            cartId: gid,
-        }
-    });
+        });
+    } catch {
+        // 缓存未就绪时 readQuery 会抛异常，此时先按无折扣码渲染，
+        // 等 Summary/CartLineItems 查询返回后自然更新。
+        discountData = null;
+    }
     const showSketeton = (loading && !cartLinePriceLoading) || !_get(json, 'cart.lines');
     // const showSketeton = true;
     const discountCode = _get(discountData, 'cart.discountCodes', []).filter((d: any) => d.applicable)?.[0]?.code;

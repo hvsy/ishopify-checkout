@@ -1,5 +1,8 @@
 import {range as _range} from "lodash-es";
-export const Prefix = `__${import.meta.env}_APP_`;
+// import.meta.env 整体会被模板字符串转成 "[object Object]"，
+// 这里应使用具体的 MODE（development/production），避免不同环境共用同一命名空间。
+const EnvMode = import.meta.env.MODE || 'app';
+export const Prefix = `__${EnvMode}_APP_`;
 
 export class AppStorage{
     private _name: string;
