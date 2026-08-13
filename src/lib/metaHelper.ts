@@ -23,9 +23,9 @@ export function getMetaContent<T = any>(name: string, defaultValue: any | null =
 }
 export function getArrayFromMeta(name: string): string[] {
     const content = getMetaContent(name, '');
-    const items = content.split(',').filter(Boolean);
-    if(_isArray(items)) return items;
-    return [];
+    if(_isArray(content)) return content;
+    if(typeof content !== 'string') return [];
+    return content.split(',').filter(Boolean);
 }
 export function getJsonFromMeta(name: string,defaultValue : any = {}): any {
     const content = getMetaContent(name, '');

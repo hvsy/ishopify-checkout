@@ -103,7 +103,10 @@ export function object_diff(to : any,from : any, map : any,callback ?: any){
 }
 
 export function summary2Cart(summary: any) {
-    const lines = _get(summary, 'lines.edges').map((edge: any) => {
+    // 兼容两种入参形态：原始查询结果 {cart:{lines}} 或直接传入 cart 对象。
+    const cart = _get(summary, 'cart', summary);
+    const lines = _get(cart, 'lines.edges', []);
+    return lines.map((edge: any) => {
         const node = edge.node;
         const merchandise = node.merchandise;
         const product = merchandise.product;
@@ -117,7 +120,6 @@ export function summary2Cart(summary: any) {
             quantity: node.quantity,
         }
     });
-    return lines;
 }
 
 export function parseSkuCategories(regex : string[],skus : (string|null|undefined)[]){
