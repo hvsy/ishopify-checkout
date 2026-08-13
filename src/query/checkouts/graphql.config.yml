@@ -1,4 +1,4 @@
 schema:
-  - https://mydraftorder.myshopify.com/api/2025-07/graphql.json:
+  - https://mydraftorder.myshopify.com/api/unstable/graphql.json:
       headers:
         Shopify-Storefront-Private-Token: ${STOREFRONT_TOKEN}
