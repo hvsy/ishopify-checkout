@@ -102,6 +102,11 @@ export const GoogleAutoCompleteLine: FC<GoogleAutoCompleteLineProps> = (props) =
     //     }
     // }, [scriptStatus]);
     const ref = useRef<any>(null);
+    // 只有焦点在本 Google Map 输入框上（用户正在输入）才触发地址自动补全：
+    // 1) 变更事件发生时焦点不在本输入框（浏览器整表自动填充、程序赋值等）→ 不搜索；
+    // 2) 事件来自自动填充（inputType === 'insertReplacementText'，即使焦点在框内）→ 不搜索。
+    // 两种情况都只同步表单值并清掉建议，避免已填充的地址又弹出 Google 地址建议。
+    const autoFillSeqRef = useRef(0);
     useOnClickOutside(ref,() => {
         clearSuggestions();
     },'mousedown');
@@ -152,6 +157,26 @@ export const GoogleAutoCompleteLine: FC<GoogleAutoCompleteLineProps> = (props) =
         });
     return <div className={`relative ${className}`} ref={ref}>
         <Input onChange={(e) => {
+                   const focused = document.activeElement === e.target;
+                   const isAutoFill = e?.nativeEvent?.inputType === 'insertReplacementText';
+                   if(!focused || isAutoFill){
+                       // 焦点不在本输入框（浏览器整表自动填充、程序赋值等）或事件来自自动填充：
+                       // 只同步表单值，不触发 Google Places 搜索，避免弹出 Google 地址建议。
+                       autoFillSeqRef.current++;
+                       const seq = autoFillSeqRef.current;
+                       clearSuggestions();
+                       setValue(e.target.value, false);
+                       // 防抖队列里可能还挂着上一次输入触发的搜索，稍后补一次清理，
+                       // 确保自动填充后建议框不会弹出；期间若用户重新输入则作废本次清理。
+                       setTimeout(() => {
+                           if(autoFillSeqRef.current === seq){
+                               clearSuggestions();
+                           }
+                       }, 800);
+                       onChange?.(e);
+                       return;
+                   }
+                   autoFillSeqRef.current++;
                    setValue(e.target.value);
                    onChange?.(e)
                }}
