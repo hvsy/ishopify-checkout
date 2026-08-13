@@ -3,18 +3,15 @@ import {get as _get, groupBy as _groupBy} from "lodash-es";
 import {useMoneyFormat} from "../../context/ShopifyContext.ts";
 
 export type SummaryProps = {
-    lines : any[]
 };
 
 import Big from "big.js";
 import {useSummary} from "../hooks/useSummary.tsx";
 import {LoadingContainer} from "@components/fragments/LoadingContainer.tsx";
 import {SummaryFrame} from "../../fragments/SummaryFrame.tsx";
-import {CheckoutPixelReport} from "./CheckoutPixelReport.tsx";
 import {DeliveryTip} from "../../fragments/DeliveryTip.tsx";
 
 export const Summary: FC<SummaryProps> = (props) => {
-    const {lines} = props;
     const {checkout: getCheckout, json, groups, loading} = useSummary();
     const checkout = getCheckout();
     const format = useMoneyFormat();
@@ -24,12 +21,13 @@ export const Summary: FC<SummaryProps> = (props) => {
     });
     const shippingCodes: string[] = [];
     const totalSaved = Big(_get(json, 'cart.cost.checkoutChargeAmount.amount', 0))
-    .minus(_get(json, 'cart.cost.subtotalAmount.amount', 0)).add(allocations.reduce((pv: number, cv: any) => {
+    .minus(_get(json, 'cart.cost.subtotalAmount.amount', 0)).add(allocations.reduce((pv: Big, cv: any) => {
         if (cv.targetType === 'SHIPPING_LINE') {
             shippingCodes.push(cv.code);
         }
-        return pv + parseFloat(cv.discountedAmount.amount);
-    }, 0));
+        const amount = cv?.discountedAmount?.amount;
+        return amount ? pv.add(amount) : pv;
+    }, Big(0)));
     const selectedDelivery = _get(groups,'0.selectedDeliveryOption',{});
     const shipping_cost = _get(selectedDelivery , 'estimatedCost')
     const codes = _get(json, 'cart.discountCodes', []).filter((discount: any) => {
@@ -85,6 +83,5 @@ export const Summary: FC<SummaryProps> = (props) => {
                                    }}
                                </LoadingContainer>;
                            }}/>
-        <CheckoutPixelReport lines={lines} json={json} />
     </div>;
 }

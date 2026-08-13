@@ -32,11 +32,11 @@ u.parentNode.insertBefore(r,u);})(window,document,
             switch (type) {
                 case "checkout_started": {
                     const json = data as Analytics.StartCheckout;
-                    const extra = getStorage({
+                    const storage = getStorage({
                         "uuid_c1": '_scid',
                     })
                     window.snaptr && window.snaptr('track', 'START_CHECKOUT', {
-                        ...extra,
+                        ...storage,
                         'currency': data.currency,
                         'price': data.price,
                         client_dedup_id: extra.event_id,
@@ -48,11 +48,11 @@ u.parentNode.insertBefore(r,u);})(window,document,
                     break;
                 case 'purchase': {
                     const json = data as Analytics.Purchase;
-                    const extra = getStorage({
+                    const storage = getStorage({
                         "uuid_c1": '_scid',
                     });
                     const payload: any = {
-                        ...extra,
+                        ...storage,
                         'currency': data.currency,
                         'price': data.price,
                         'transaction_id': extra.event_id,

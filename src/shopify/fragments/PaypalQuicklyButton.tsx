@@ -33,8 +33,8 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
                     method : "post",
                     'url' : cartApi + '/quickly'
                 });
-                if(!res['error']) {
-                    const id = res.id;
+                if(!res?.error) {
+                    const id = res?.id;
                     if(!!id) {
                         await PromiseLocation(getFinalPath(`/api/transactions/${id}/redirect?quickly=1`));
                     }

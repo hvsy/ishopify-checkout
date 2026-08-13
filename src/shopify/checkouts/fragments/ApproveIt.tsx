@@ -101,7 +101,7 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                         method: "post",
                         'url': cartApi + `/approve`,
                     });
-                    if (!!res['error']) {
+                    if (!!res?.error) {
                         setProgress?.(() => {
                             return "approve error";
                         })

@@ -33,8 +33,8 @@ class LocalExpiredStorage {
             `${this.prefix}${key}`,
             JSON.stringify({
                 value,
-                start: dayjs().format("YYYY/MM/DD hh:mm:ss"), // 存储的起始时间
-                expired: dayjs(expired).format("YYYY/MM/DD hh:mm:ss"), // 存储的过期时间
+                start: dayjs().format("YYYY/MM/DD HH:mm:ss"), // 存储的起始时间
+                expired: dayjs(expired).format("YYYY/MM/DD HH:mm:ss"), // 存储的过期时间
             })
         );
     }
