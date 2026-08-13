@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {Prefix} from "@lib/AppStorage";
 
 export type CountDownPrecision = 0 | 1 | 2;
@@ -46,6 +46,9 @@ export function useCountdown(duration: number ,
     }, [duration,callback]);
     const [initialValue, setInitialValue] = useState(iv);
     const [countdown, setCountdown] = useState(initialValue);
+    const [runId, setRunId] = useState(0);
+    const countdownRef = useRef(initialValue);
+    countdownRef.current = countdown;
     const divisor = Math.pow(10,3-precision);
     useEffect(() => {
         if (!initialValue) return;
@@ -56,30 +59,35 @@ export function useCountdown(duration: number ,
                 timer = null;
             }
         };
-        let next = () => {
-            setCountdown((v) => {
-                const next = v -   divisor;
-                if(next < 0){
-                   if(loop) {
-                       return iv;
-                   }else{
-                       stop();
-                   }
-                   return 0;
+        const next = () => {
+            const value = countdownRef.current - divisor;
+            if(value < 0){
+                if(loop) {
+                    countdownRef.current = iv;
+                    setCountdown(iv);
+                    timer = setTimeout(next, divisor) as unknown as number;
+                }else{
+                    countdownRef.current = 0;
+                    setCountdown(0);
+                    stop();
                 }
-                return next;
-            });
+                return;
+            }
+            countdownRef.current = value;
+            setCountdown(value);
             timer = setTimeout(next, divisor) as unknown as number;
         };
         next();
         return stop;
-    }, [initialValue,divisor,loop]);
+    }, [initialValue,divisor,loop,runId,iv]);
     return {
         countdown,
         start() {
             save?.(duration);
             setInitialValue(duration);
             setCountdown(duration);
+            countdownRef.current = duration;
+            setRunId((id) => id + 1);
         }
     }
 }
