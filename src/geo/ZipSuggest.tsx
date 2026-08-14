@@ -107,7 +107,7 @@ export const ZipSuggestInner: FC<any> = (props) => {
                 } else if (m.address.state) {
                     return m.address.state === address.state;
                 }
-            })?.[0].address?.zip;
+            })?.[0]?.address?.zip;
         });
     }, {})
     const ctx = usePaymentContext();

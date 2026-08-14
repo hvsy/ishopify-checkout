@@ -13,7 +13,7 @@ export type ProductProps = {
 export const ProductContainer: FC<ProductProps> = (props) => {
     const {id} = props;
     const {regionCode} =useLoaderData() as any;
-    const {data,loading,}=useQuery(gql([
+    const {data,loading,error} =useQuery(gql([
         ProductQuery
     ].join("\n")),{
         variables : {
@@ -24,6 +24,11 @@ export const ProductContainer: FC<ProductProps> = (props) => {
     if(loading){
         return <div className={'flex flex-col justify-center items-center flex-1'}>
             <Loading/>
+        </div>
+    }
+    if(error || !data?.product){
+        return <div className={'flex flex-col justify-center items-center flex-1 text-sm text-gray-500'}>
+            This product is currently unavailable. Please go back and try again.
         </div>
     }
     const product = data?.product;

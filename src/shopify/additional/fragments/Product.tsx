@@ -48,7 +48,7 @@ export const Product: FC<ProductProps> = (props) => {
     });
 
     const [selectedOptions, setSelectedOptions] = useState(() => {
-        return [...variants?.[0].options];
+        return [...(variants?.[0]?.options || [])];
     });
     const [quantity, setQuantity] = useState(1)
 

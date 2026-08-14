@@ -48,8 +48,10 @@ export const CountriesSelector: FC<CountriesSelectorProps> = memo((props) => {
                 return find(defaultCountries, (c) => {
                     return code === parseCountry(c)?.iso2?.toUpperCase();
                 })
-            }));
-            all.push(null);
+            })).filter(Boolean);
+            if(all.length > 0){
+                all.push(null);
+            }
         }
         return [...all,...after].map((c) => {
             if(!c) return c;

@@ -16,7 +16,7 @@ export function useVariant(product : any){
         }) !== -1){
             return;
         }
-        const firstId = product.variants?.[0].id;
+        const firstId = product?.variants?.[0]?.id;
         if (!!(firstId)) {
             setVariantId(firstId);
             return;
@@ -25,7 +25,7 @@ export function useVariant(product : any){
 
     const selectedVariant = useMemo(() => {
         if (!variantId) return null;
-        return product.variants.find((v : any) => {
+        return (product?.variants || []).find((v : any) => {
             return (v.id + '') === variantId;
         });
     }, [variantId]);

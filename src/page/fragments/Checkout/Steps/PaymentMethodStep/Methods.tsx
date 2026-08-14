@@ -1,4 +1,4 @@
-import {FC, memo, useEffect, Activity, ActivityProps} from "react";
+import {FC, memo, useEffect, useMemo, Activity, ActivityProps} from "react";
 import {useSearchParams} from "react-router-dom";
 import {useCurrentForm} from "../../../../../container/FormContext.ts";
 import Form from "@rc-component/form";
@@ -31,27 +31,29 @@ export const Methods: FC<{ token: string }> = memo((props) => {
 
     const ctx = usePaymentContext();
     //默认选中第一个
+    const availableMethods = useMemo(() => {
+        return (methods || []).filter((method) => {
+            return show(method, region_code);
+        });
+    }, [methods, region_code]);
 
 
     useEffect(() => {
-        const after = (methods||[]).filter((method) => {
-            return show(method,region_code);
-        });
         if (!method_id) {
-            const first = after?.[0]?.id;
+            const first = availableMethods?.[0]?.id;
             if (!!first) {
                 form.setFieldValue('payment_method_id', first);
             }
         }else{
-            const method = _find(after, m => m.id === method_id);
-            ctx?.setMethod(method || (methods?.[0] || null));
+            const method = _find(availableMethods, m => m.id === method_id);
+            ctx?.setMethod(method || (availableMethods?.[0] || null));
             if(!method){
                 form.setFieldValue('payment_method_id',null);
             }else{
                 ctx?.setMethod(method);
             }
         }
-    }, [method_id,methods,region_code]);
+    }, [method_id, availableMethods]);
 
     if(isLoading){
         return <div className={'animate-pulse border rounded-md border-neutral-300 flex flex-row items-center  space-x-3 p-4'}>
@@ -61,7 +63,7 @@ export const Methods: FC<{ token: string }> = memo((props) => {
     }
     return <Form.Field name={['payment_method_id']}>
         <RadioGroup
-            items={methods}
+            items={availableMethods}
             valueAttr={'id'}
             onSelectedChange={() => {
                 if (search.get('error')) {
