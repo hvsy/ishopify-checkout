@@ -55,10 +55,15 @@ export const ApproveIt: FC<ApproveItProps> = (props) => {
                 try {
                     try {
                         if (AutoFillSuggestCode && !!suggestZipCode) {
+                            // getFieldsError(nameList) 对每个请求字段都会返回一条记录，
+                            // 无错误的字段 errors 为 []，所以必须先过滤出真正有错误的字段，
+                            // 否则会把用户已填写的正确邮编覆盖掉。
                             const zipErrors = form.getFieldsError([
                                 ['shipping_address', 'zip'],
                                 ['billing_address', 'zip']
-                            ]);
+                            ]).filter((field: any) => {
+                                return (field?.errors?.length || 0) > 0;
+                            });
                             if (zipErrors.length > 0) {
                                 form.setFields(
                                     zipErrors.map((error) => {

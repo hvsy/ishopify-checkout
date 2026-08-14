@@ -152,5 +152,8 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
             valuesRef.current = null;
         }
     });
-    return fields;
+    return {
+        fields,
+        status,
+    };
 }

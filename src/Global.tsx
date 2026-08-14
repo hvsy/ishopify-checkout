@@ -22,8 +22,11 @@ export const Global: FC<GlobalProps> = (props) => {
         revalidateOnMount: true,
     }}>
         <ApolloProvider client={ApolloStoreFrontClient}>
-            <App/>
+            {/* Analytics 必须先于 App 挂载：它负责初始化 window.report / window.listen，
+                否则 App 子树（尤其内联 setup 时首屏就渲染的 Pixels）会在 effect 里
+                读到 undefined，导致像素事件监听永远注册不上。 */}
             <Analytics />
+            <App/>
         </ApolloProvider>
     </SWRConfig>;
 };

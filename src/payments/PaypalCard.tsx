@@ -101,9 +101,20 @@ const PaypalCardForm : FC<any> = (props : any) => {
 
 export const PaypalCard: FC<PaypalCardProps> = (props) => {
     const {method} = props;
-    const cardFields  = usePaypalCardFields(method.id,method.sdk);
-    const loaded = !!(cardFields && cardFields.isEligible());
-    if(loaded){
+    const {fields: cardFields, status} = usePaypalCardFields(method.id,method.sdk);
+    // SDK 加载失败，或 SDK ready 但 CardFields 初始化失败：给出明确错误，避免无限转圈。
+    if (status === 'error' || (status === 'ready' && !cardFields)) {
+        return <div className={'min-h-32 py-2 flex-col justify-center items-center flex text-sm text-red-500'} id={'paypal-card-container'}>
+            PayPal Card is currently unavailable. Please try again or choose another payment method.
+        </div>;
+    }
+    if (status === 'ready') {
+        // SDK 已就绪但当前设备/环境不符合 CardFields 条件：显示不可用而不是一直 loading。
+        if (!cardFields?.isEligible()) {
+            return <div className={'min-h-32 py-2 flex-col justify-center items-center flex text-sm text-gray-500'} id={'paypal-card-container'}>
+                PayPal Card is not available for this device or browser.
+            </div>;
+        }
         return <PaypalCardForm fields={cardFields}/>;
     }
     return <div className={'min-h-32 py-2 flex-col justify-center items-center flex'} id={'paypal-card-container'} >

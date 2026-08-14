@@ -107,6 +107,15 @@ export const GoogleAutoCompleteLine: FC<GoogleAutoCompleteLineProps> = (props) =
     // 2) 事件来自自动填充（inputType === 'insertReplacementText'，即使焦点在框内）→ 不搜索。
     // 两种情况都只同步表单值并清掉建议，避免已填充的地址又弹出 Google 地址建议。
     const autoFillSeqRef = useRef(0);
+    const autoFillClearTimerRef = useRef<any>(null);
+    useEffect(() => {
+        return () => {
+            // 组件卸载时清掉尚未执行的建议清理定时器，避免卸载后继续调用 setState。
+            if (autoFillClearTimerRef.current) {
+                clearTimeout(autoFillClearTimerRef.current);
+            }
+        };
+    }, []);
     useOnClickOutside(ref,() => {
         clearSuggestions();
     },'mousedown');
@@ -129,6 +138,9 @@ export const GoogleAutoCompleteLine: FC<GoogleAutoCompleteLineProps> = (props) =
                     }
                     final && onAutoComplete?.(final);
                     // console.log('suggestion detail:',res,formatAddress(res?.address_components || []))
+                }).catch((error : any) => {
+                    // Place Details 失败时不要让 Promise 变成 unhandled rejection。
+                    console.error('google place details failed:',error);
                 })
                 // console.log('select suggestion:',suggestion);
                 // When the user selects a place, we can replace the keyword without request data from API
@@ -168,7 +180,11 @@ export const GoogleAutoCompleteLine: FC<GoogleAutoCompleteLineProps> = (props) =
                        setValue(e.target.value, false);
                        // 防抖队列里可能还挂着上一次输入触发的搜索，稍后补一次清理，
                        // 确保自动填充后建议框不会弹出；期间若用户重新输入则作废本次清理。
-                       setTimeout(() => {
+                       if (autoFillClearTimerRef.current) {
+                           clearTimeout(autoFillClearTimerRef.current);
+                       }
+                       autoFillClearTimerRef.current = setTimeout(() => {
+                           autoFillClearTimerRef.current = null;
                            if(autoFillSeqRef.current === seq){
                                clearSuggestions();
                            }

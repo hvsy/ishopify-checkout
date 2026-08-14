@@ -4,14 +4,14 @@ import Form from "@rc-component/form";
 import {FormItem} from "@components/fragments/FormItem.tsx";
 import {Input} from "../../../../page/components/Input.tsx";
 import {StepFrame} from "@components/frames/StepFrame.tsx";
-import { cpf } from 'cpf-cnpj-validator';
+import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 const names : any = {
     BR : {
         key : 'SHIPPING_CREDENTIAL_BR',
         label : 'CPF/CNPJ',
         async validate(value : string){
-            if(!cpf.isValid(value)){
+            if(!cpf.isValid(value) && !cnpj.isValid(value)){
                 throw new Error("Enter a valid CPF/CNPJ");
             }
         }
