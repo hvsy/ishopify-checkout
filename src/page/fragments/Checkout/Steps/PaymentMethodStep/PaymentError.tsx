@@ -1,4 +1,4 @@
-import {FC, useEffect, useEffectEvent, useState} from "react";
+import {FC, useEffect, useEffectEvent, useRef, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 import {AlertCircleIcon} from "lucide-react";
 import {useEventListener} from "usehooks-ts";
@@ -12,6 +12,15 @@ export const PaymentError: FC<PaymentErrorProps> = (props) => {
     const [search,] = useSearchParams();
     const [methodError,setMethodError] = useState<string|boolean>(false);
     const error = search.get('error');
+    const errorRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (error === 'PAYMENT_ERROR' || !!methodError){
+            errorRef.current?.scrollIntoView({
+                behavior : "smooth",
+                block : "center",
+            });
+        }
+    },[error,methodError]);
     useBusListener('payment:error',(error : any) => {
         setMethodError(isString(error) || isBoolean(error) ? error : true);
     });
@@ -47,6 +56,7 @@ export const PaymentError: FC<PaymentErrorProps> = (props) => {
     if (error === 'PAYMENT_ERROR' || !!methodError){
         const tip = isString(methodError) ? methodError : `Unfortunately, we can't process your payment`;
         return <div
+            ref={errorRef}
             className={'border-1 border-gray-300 bg-red-100 rounded px-5 py-3 flex flex-row items-center space-x-2'}>
             <div>
                 <AlertCircleIcon className={'text-red-500'}/>
