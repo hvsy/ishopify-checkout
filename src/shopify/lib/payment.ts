@@ -70,11 +70,6 @@ export async function shopify_payment(options : {
         const res : any = await api<any>({
             method : "put",
             url: target,
-            // 支付发起不允许重试：axios-retry 默认会对 PUT 在 429/5xx 时重试 3 次，
-            // 可能造成同一笔支付被重复发起。
-            'axios-retry' : {
-                retries : 0,
-            },
         });
         if(!res || (isObjectLike(res) && res.error)){
             const message = isObjectLike(res) ? res.message : undefined;
