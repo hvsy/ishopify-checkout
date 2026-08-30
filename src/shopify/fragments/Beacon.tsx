@@ -1,17 +1,18 @@
-import {FC,} from "react";
+import {FC, useRef,} from "react";
 import {useEventCallback, useEventListener} from "usehooks-ts";
 import {useCurrentForm} from "../../container/FormContext.ts";
 import {useCart} from "@hooks/useCart.ts";
 import {getBeacon} from "../lib/getBeacon.ts";
 import {usePaymentContext} from "../../container/PaymentContext.tsx";
-import {get as _get} from "lodash-es";
 import {useSummary} from "../checkouts/hooks/useSummary.tsx";
 import {useShopifyCheckoutLoading} from "../context/ShopifyCheckoutContext.tsx";
+import {Features} from "@lib/flags.ts";
 
 export type BeaconProps = {
     context : string;
 };
 
+const DisableUnload = Features.includes("beacon:disable:unload")
 export const Beacon: FC<BeaconProps> = (props) => {
     const {context} = props;
     const form = useCurrentForm();
@@ -21,7 +22,11 @@ export const Beacon: FC<BeaconProps> = (props) => {
 
     const {loading} = useSummary();
     const checkoutLoading = useShopifyCheckoutLoading();
+    const documentRef = useRef<Document>(document);
     const callback = useEventCallback(() => {
+        if(DisableUnload){
+            if(document.visibilityState !== 'hidden') return;
+        }
         try{
             const data = getBeacon(form,context);
             if(!!data){
@@ -39,6 +44,10 @@ export const Beacon: FC<BeaconProps> = (props) => {
         }
 
     });
-    useEventListener('unload', callback);
+    if(DisableUnload){
+        useEventListener('visibilitychange', callback,documentRef);
+    }else{
+        useEventListener('unload', callback);
+    }
     return null;
 };
