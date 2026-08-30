@@ -1,35 +1,11 @@
 import {createBrowserRouter,Params, redirectDocument, RouterProvider,} from "react-router-dom";
 import {api, getFinalPath} from "@lib/api.ts";
 import Checkout from "./shopify/checkouts";
-import {preload} from "swr";
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
 import {getOrder} from "@lib/payment.ts";
 import {lazy} from "react";
 
-
-function preload_api(url: string) {
-    return api({
-        method: 'get',
-        url,
-    })
-}
-
-async function prefetch<T = any>(key: string) {
-    // const hit = Cache.get(key)?.data;
-    // if(!!hit){
-    //     console.log('hit:',key,hit);
-    //     return hit  as T;
-    // }
-    // const resource = await preload_api(key);
-    // await mutate(key,resource,{
-    //     populateCache : true,
-    //     revalidate : false,
-    // });
-    // return resource;
-    return preload<T>(key, preload_api)
-    // return Preloader.fetch<T>(key,preload_api)
-}
 
 // import {Additional} from "./shopify/additional/Additional.tsx";
 // const Additional = lazy(() => {
@@ -43,7 +19,7 @@ async function prefetch<T = any>(key: string) {
 //     return {
 //         default : m.Order,
 //     }
-// })
+// }
 const Additional = lazy(() => {
     return import("./NextPages.tsx").then((m) => {
         return {default: m.Additional};

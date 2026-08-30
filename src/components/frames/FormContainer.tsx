@@ -128,7 +128,9 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             const presetState = presetShipping?.provinceCode || null;
             const remoteRegion = remoteAddress?.countryCode || null;
             const remoteState = remoteAddress?.provinceCode || null;
-            if(region === presetRegion && state === presetState
+            // 只有"纯净的地址变更"且与 preset/远端一致时才跳过；
+            // 如果同时切换了快递方式（shipping_line_id），必须继续同步 Shopify。
+            if(!shippingMethodChanged && region === presetRegion && state === presetState
                 && region === remoteRegion && state === remoteState){
                 return;
             }
@@ -147,10 +149,23 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             deliveryHandle : 'shipping_line_id',
             deliveryGroupId : 'shipping_group_id',
         });
+        // 切换快递方式时，如果表单里的 shipping_group_id 还没就绪，
+        // 从缓存里的 deliveryGroups 兜底取 groupId，确保 Shopify 的
+        // cartSelectedDeliveryOptionsUpdate 一定会带上 deliveryGroupId。
+        if(shippingMethodChanged && !input.deliveryGroupId){
+            const groupId = _get(cartCache(gid), 'cart.deliveryGroups.edges.0.node.id');
+            if(groupId){
+                input.deliveryGroupId = groupId;
+            }
+        }
         if(countryChanged || provinceChanged){
-        // if(countryChanged){
-            input.deliveryGroupId = undefined;
-            input.deliveryHandle = undefined;
+            // 合并队列里可能同时带着地址字段与 shipping_line_id；只要本次真的
+            // 切换了快递方式，就不能把 deliveryGroupId/deliveryHandle 清掉，
+            // 否则 Shopify 永远收不到 cartSelectedDeliveryOptionsUpdate。
+            if(!shippingMethodChanged){
+                input.deliveryGroupId = undefined;
+                input.deliveryHandle = undefined;
+            }
         }
         input.shipping_address = address;
         const result = await mutation(input,true,true,values?.context === 'approve');

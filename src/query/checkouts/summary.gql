@@ -43,5 +43,6 @@ query Summary($cartId :ID!){
 #    }
     cart(id : $cartId){
         ...CartFields
+        ...Discounts
     }
 }

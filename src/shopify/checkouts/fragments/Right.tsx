@@ -74,8 +74,9 @@ export const Right: FC<RightProps> = (props) => {
         // 等 Summary/CartLineItems 查询返回后自然更新。
         discountData = null;
     }
-    const showSketeton = (loading && !cartLinePriceLoading) || !_get(json, 'cart.lines');
+    // const showSketeton = (loading && !cartLinePriceLoading) || !_get(json, 'cart.lines');
     // const showSketeton = true;
+    const showSketeton = !_get(json,'cart.lines');
     const discountCode = _get(discountData, 'cart.discountCodes', []).filter((d: any) => d.applicable)?.[0]?.code;
     const final = width >= 640;
     const LinesContainerClassName=  `${(final || !ShowLinesInMobile) ? `pb-5 ${final ? 'overflow-hidden' : ''}  space-y-5` : 'px-6 pt-3 max-h-[200px] overflow-y-scroll  space-y-3'} w-full max-w-full  sm:overflow-visible`;

@@ -10,12 +10,20 @@ import {useSummary} from "../hooks/useSummary.tsx";
 import {LoadingContainer} from "@components/fragments/LoadingContainer.tsx";
 import {SummaryFrame} from "../../fragments/SummaryFrame.tsx";
 import {DeliveryTip} from "../../fragments/DeliveryTip.tsx";
+import {getShippingAllocations, getShippingDiscountAmount} from "@lib/shippingDiscounts.ts";
 
 export const Summary: FC<SummaryProps> = (props) => {
-    const {checkout: getCheckout, json, groups, loading} = useSummary();
-    const checkout = getCheckout();
+    const {json, groups, loading} = useSummary();
     const format = useMoneyFormat();
-    const allocations = _get(json, 'cart.discountAllocations', []);
+    // cart.discountAllocations 已弃用：行项目折扣取自
+    // cart.lines[].discountAllocations(lineLevelOnly: false)，
+    // 运费折扣取自 cart.deliveryGroups[].discountAllocations。
+    const lineAllocations = _get(json, 'cart.lines.edges', []).flatMap((edge: any) => {
+        return _get(edge, 'node.discountAllocations', []);
+    });
+    const shippingAllocations = getShippingAllocations(groups, json);
+    const shippingDiscount = getShippingDiscountAmount(groups, json);
+    const allocations = [...lineAllocations, ...shippingAllocations];
     const allocateShippingLine = allocations.filter((line: any) => {
         return line?.targetType === 'SHIPPING_LINE';
     });
@@ -43,7 +51,15 @@ export const Summary: FC<SummaryProps> = (props) => {
     }).filter((item: any) => {
         return item.amount > 0;
     });
-    const freeShipping = checkout.shipping_discount?.discountedAmount?.amount === shipping_cost?.amount;
+    const shippingAmount = Big(_get(shipping_cost, 'amount', 0) || 0);
+    const effectiveShippingAmount = shippingDiscount.gt(0) && shippingAmount.gt(0)
+        ? shippingAmount.minus(shippingDiscount)
+        : shippingAmount;
+    const freeShipping = shippingDiscount.gt(0) && effectiveShippingAmount.lte(0);
+    const effectiveShipping = {
+        amount: effectiveShippingAmount.gt(0) ? effectiveShippingAmount.toString() : _get(shipping_cost, 'amount'),
+        currencyCode: _get(shipping_cost, 'currencyCode'),
+    };
     const total = _get(json, 'cart.cost.totalAmount');
     return <div className={'flex flex-col items-stretch pt-2 space-y-2'}>
         <DeliveryTip />
@@ -70,15 +86,14 @@ export const Summary: FC<SummaryProps> = (props) => {
                                        }
                                        if(freeShipping) {
                                            return <div className={'flex flex-row items-center space-x-2'}>
-                                               {checkout.shipping_discount && <div className={'line-through'}>
-                                                   <span></span>
-                                                   <span>{format(checkout.shipping_discount.discountedAmount)}</span>
+                                               {shipping_cost?.amount && <div className={'line-through'}>
+                                                   <span>{format(shipping_cost)}</span>
                                                </div>}
                                                <span className={'font-bold'}>FREE</span>
                                            </div>
                                        }
                                        return <div className={''}>
-                                           <span>{format(shipping_cost, 'Free')}</span>
+                                           <span>{format(effectiveShipping, 'Free')}</span>
                                        </div>
                                    }}
                                </LoadingContainer>;

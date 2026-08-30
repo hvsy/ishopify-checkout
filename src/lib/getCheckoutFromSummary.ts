@@ -5,7 +5,9 @@ import {getJsonFromMeta} from "./metaHelper.ts";
 const shipping = getJsonFromMeta('preset_shipping') || {};
 import.meta.env.DEV && console.log("meta config preset shipping:",shipping);
 export function getCheckoutFromSummary(summary : any,path : string = 'data.cart'){
-    const discounts = _get(summary,`${path}.discountAllocations`,[])
+    // cart.discountAllocations 已弃用：运费折扣改从 deliveryGroups[].discountAllocations 读取
+    const discounts = _get(summary,`${path}.deliveryGroups.edges`,[])
+    .flatMap((edge : any) => _get(edge,'node.discountAllocations',[]))
     .filter((discount : any) => {
         return discount.targetType === 'SHIPPING_LINE'
     });

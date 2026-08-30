@@ -49,7 +49,7 @@ fragment LineItems on Cart{
                         amount
                         currencyCode
                     }
-                    discountApplication {
+                    sourceDiscountApplication {
                         __typename
                         allocationMethod
                         targetSelection

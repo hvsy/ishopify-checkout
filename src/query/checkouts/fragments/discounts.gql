@@ -4,32 +4,26 @@ fragment Discounts on Cart{
         code
         applicable
     }
-    discountAllocations {
-        ... on CartCodeDiscountAllocation{
-            code
+    # cart.discountAllocations 已弃用（Storefront API 2026-07）：
+    # 行项目折扣 -> lines[].discountAllocations(lineLevelOnly: false)
+    # 运费折扣   -> deliveryGroups[].discountAllocations
+    lines(first : 250){
+        edges{
+            node{
+                id
+                discountAllocations(lineLevelOnly : false){
+                    ...CartDiscountAllocationFields
+                }
+            }
         }
-        ... on CartCustomDiscountAllocation{
-            title
-        }
-        ... on CartAutomaticDiscountAllocation{
-            title
-        }
-        targetType
-        __typename
-        discountedAmount {
-            __typename
-            amount
-            currencyCode
-        }
-        discountApplication {
-            __typename
-            allocationMethod
-            targetSelection
-            targetType
-            value {
-                ... on MoneyV2{
-                    currencyCode
-                    amount
+    }
+    # 注意：withCarrierRates: true 必须搭配 @defer 使用，这里只取折扣分配，不开启
+    deliveryGroups(first : 10){
+        edges{
+            node{
+                id
+                discountAllocations{
+                    ...CartDiscountAllocationFields
                 }
             }
         }

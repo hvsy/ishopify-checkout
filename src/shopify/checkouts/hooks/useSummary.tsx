@@ -5,7 +5,6 @@ import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
 import {useCart} from "@hooks/useCart.ts";
 import {createContext, FC, useEffect, use, } from "react";
 import {FormContainer} from "@components/frames/FormContainer.tsx";
-import {ShopifyFrame} from "../../ShopifyFrame.tsx";
 import {ShopifyCheckoutProvider} from "../../context/ShopifyCheckoutContext.tsx";
 import Form from "@rc-component/form";
 import {PaymentContainer} from "../../../container/PaymentContext.tsx";
@@ -13,6 +12,8 @@ import {PayingContainer} from "@components/frames/PayingContainer.tsx";
 import {GetDeliveryGroupQuery} from "../../../gql/GetDeliveryGroupQuery.ts";
 import {SummaryQuery} from "@query/checkouts/summary.ts";
 import {Features} from "@lib/flags.ts";
+import {getMetaContent} from "@lib/metaHelper.ts";
+import {useDocumentTitle} from "usehooks-ts";
 
 
 export const SummaryContext = createContext<{
@@ -70,6 +71,8 @@ export const SummaryContextProvider :FC<any> = (props) => {
             withCarrierRates : true,
         },
     });
+    const shopTitle = getMetaContent('shop_title');
+    useDocumentTitle(shopTitle ? shopTitle + '-Checkout' : '');
 
     useEffect(() => {
         if (!error && !(json && (!json.cart || json.cart.totalQuantity < 1))) return;
@@ -108,10 +111,8 @@ export const SummaryContextProvider :FC<any> = (props) => {
             <ShopifyCheckoutProvider form={form}>
                 <FormContainer form={form}
                                initialValues={loading.summary ? null : checkout}>
-                    <ShopifyFrame>
                         {children}
                         {/*<Main/>*/}
-                    </ShopifyFrame>
                 </FormContainer>
             </ShopifyCheckoutProvider>
         </SummaryContext>

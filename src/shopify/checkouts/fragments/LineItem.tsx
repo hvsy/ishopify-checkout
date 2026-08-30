@@ -20,7 +20,7 @@ export const LineDiscount: FC<{code ?: string, discountAllocation:any }> = (prop
     return <div className={'flex flex-row items-center  space-x-1 text-sm text-gray-500'}>
         <TagIcon className={'size-4 scale-x-[-1]'}/>
         <span>
-            {code || discountAllocation?.title || ''}
+            {discountAllocation?.title || ''}
         </span>
         <span>
             {price}

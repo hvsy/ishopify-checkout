@@ -14,6 +14,8 @@ import {useShopifyCheckoutLoading} from "../../../context/ShopifyCheckoutContext
 import {FormItem} from "@components/fragments/FormItem.tsx";
 import {Features} from "@lib/flags.ts";
 import {DeliveryTip} from "../../../fragments/DeliveryTip.tsx";
+import Big from "big.js";
+import {getShippingDiscountAmount, getShippingDiscountRate} from "@lib/shippingDiscounts.ts";
 
 export const PlainField = (props: any) => {
     const {errors,value} = props;
@@ -54,6 +56,11 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
         }
     }, [shipping_group_id, shipping_line_id]);
     const format = useMoneyFormat();
+    const shippingDiscount = getShippingDiscountAmount(groups, json);
+    const shippingDiscountRate = getShippingDiscountRate(groups, json);
+    // 有配置比例时优先按比例折算每个快递方式；没有比例（固定金额折扣）再按
+    // discountedAmount 回退扣除。
+    const hasShippingDiscount = shippingDiscountRate > 0 || shippingDiscount.gt(0);
     if (loading.shipping_methods || (checkoutLoading && !methods?.length)) {
         return <StepFrame title={Title}>
             <div
@@ -98,15 +105,40 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
                     }}
                     // value={shipping_line_id}
                     lines={methods.map((method: any) => {
+                        const cost = method.estimatedCost || {};
+                        const originalAmount = Big(cost.amount || 0);
+                        // 按 sourceDiscountApplication.value.PricingPercentageValue.percentage
+                        // 折算每个快递方式；没有百分比配置时回退到 discountedAmount 固定扣除。
+                        const discounted = shippingDiscountRate > 0
+                            ? originalAmount.mul(1 - shippingDiscountRate)
+                            : (shippingDiscount.gt(0) ? originalAmount.minus(shippingDiscount) : originalAmount);
+                        const discountedCost = hasShippingDiscount && discounted.lte(0)
+                            ? {amount: '0', currencyCode: cost.currencyCode}
+                            : {amount: discounted.gt(0) ? discounted.toString() : cost.amount, currencyCode: cost.currencyCode};
                         return {
                             id: method.handle,
                             name: method.title,
                             // price : method.etimatedCost,
-                            cost: method.estimatedCost,
+                            cost: discountedCost,
+                            // 有运费折扣时保留原始运费，用于在快递方式列表里划掉原价。
+                            originalCost: hasShippingDiscount ? cost : null,
                         };
                     })} renderPrice={(line: any) => {
-                    return format(line.cost, 'Free');
-                }}/>
+                        const cost = line.cost || {};
+                        const originalCost = line.originalCost;
+                        const originalAmount = Big(_get(originalCost, 'amount', 0) || 0);
+                        const discountedAmount = Big(_get(cost, 'amount', 0) || 0);
+                        const hasDiscount = hasShippingDiscount
+                            && originalAmount.gt(0)
+                            && discountedAmount.lt(originalAmount);
+                        if (hasDiscount) {
+                            return <div className={'flex flex-row items-center space-x-2'}>
+                                <span className={'line-through text-gray-600 text-sm'}>{format(originalCost)}</span>
+                                <span className={discountedAmount.lte(0) ? 'font-bold' : ''}>{format(cost, 'Free')}</span>
+                            </div>;
+                        }
+                        return format(cost, 'Free');
+                    }}/>
             </Form.Field> : <NoShippingMethod/>}
             {ShowDeliveryTip && <DeliveryTip className={'flex sm:hidden'}/>}
         </StepFrame>

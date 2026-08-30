@@ -2,6 +2,7 @@ mutation Discount($cartId : ID!,$codes : [String!]!){
     cartDiscountCodesUpdate(cartId: $cartId,discountCodes: $codes){
         cart {
             ...Discounts
+            ...CartFields
         }
         userErrors {
             ...Errors

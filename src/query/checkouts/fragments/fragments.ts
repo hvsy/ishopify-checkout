@@ -1,4 +1,5 @@
 export {default as QueryCartFieldsFragment} from "./cart_fields.gql?raw";
+export {default as QueryCartDiscountAllocationFieldsFragment} from "./cart_discount_allocation.gql?raw";
 export {default as QueryDeliveryFragment} from "./delivery.gql?raw";
 export {default as QueryDeliveryGroupsFragment} from "./delivery_groups.gql?raw";
 export {default as QueryDiscountsFragment} from "./discounts.gql?raw";
