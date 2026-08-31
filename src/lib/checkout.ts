@@ -45,7 +45,29 @@ export const ApolloStoreFrontClient = new ApolloClient({
     // uri : storefront_url,
     //@ts-ignore
     link : from([errorLink,retryLink,queueLink,httpLink]),
+    connectToDevTools : true,
     cache : new InMemoryCache({
+        // Storefront API 的 discountAllocations / sourceDiscountApplication /
+        // lines 都是接口类型。Apollo 在写缓存时需要用 possibleTypes 才能把
+        // 接口上的命名 fragment（CartDiscountAllocationFields 等）展开到
+        // 具体对象上，否则 discountAllocations 只留下 __typename，
+        // Summary 和快递方式列表就拿不到运费折扣金额（显示原价）。
+        possibleTypes : {
+            CartDiscountAllocation : [
+                'CartAutomaticDiscountAllocation',
+                'CartCodeDiscountAllocation',
+                'CartCustomDiscountAllocation',
+            ],
+            BaseCartDiscountApplication : [
+                'CartAutomaticDiscountApplication',
+                'CartCodeDiscountApplication',
+                'CartCustomDiscountApplication',
+            ],
+            BaseCartLine : [
+                'CartLine',
+                'ComponentizableCartLine',
+            ],
+        },
         typePolicies : {
             Cart : {},
             CartDeliveryGroup : {
@@ -67,6 +89,12 @@ export const ApolloStoreFrontClient = new ApolloClient({
     }),
 });
 import {Features} from "@lib/flags.ts";
+
+// @ts-ignore 调试用：暴露 Apollo 客户端便于在浏览器 console 中检查
+if(typeof window !== 'undefined'){
+    // @ts-ignore
+    window.__apollo = ApolloStoreFrontClient;
+}
 
 export function transform_address(data : any,prefix : string = "data.cart",preset_shipping : any= null){
     const delivery = _get(data, `${prefix}.delivery.addresses.0`, {})

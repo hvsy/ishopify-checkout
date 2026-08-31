@@ -36,7 +36,11 @@ export const Right: FC<RightProps> = (props) => {
 
     const {gid} = useCart();
     const {cartLinePriceLoading} = use(ShopifyCheckoutContext);
-    const {loading, data, json} = useAllEdges(([
+    const {json: summary,} = useSummary();
+    // CheckoutQuery 已经取回前 10 条行项目，这里等它返回后再让 useAllEdges
+    // 从缓存读取，避免进入结算页时再发一次独立的 CartLineItems 请求。
+    const hasLines = !!_get(summary,'cart.lines');
+    const {data, json} = useAllEdges(([
         QueryLineItems,
         QueryLineItemsFragment,
         QueryVariantFragment,
@@ -45,9 +49,11 @@ export const Right: FC<RightProps> = (props) => {
     ].join("\n")), {
         first: 10,
         cartId: gid,
-    }, 'cart.lines');
+    }, 'cart.lines', !hasLines);
     const client = useApolloClient();
-    const {json: summary,} = useSummary();
+    // useAllEdges 在 CheckoutQuery 返回前被 skip，此时先用 summary 里的缓存行项目渲染。
+    const lineNodes = data && data.length > 0 ? data : (_get(summary,'cart.lines.edges',[]) as any[]).map((edge: any) => edge.node);
+    const displayJson = json || summary;
     const format = useMoneyFormat();
     const {width} = useWindowSize({
         initializeWithValue : true,
@@ -74,8 +80,9 @@ export const Right: FC<RightProps> = (props) => {
         // 等 Summary/CartLineItems 查询返回后自然更新。
         discountData = null;
     }
-    const showSketeton = (loading && !cartLinePriceLoading) || !_get(json, 'cart.lines');
+    // const showSketeton = (loading && !cartLinePriceLoading) || !_get(json, 'cart.lines');
     // const showSketeton = true;
+    const showSketeton = !_get(displayJson,'cart.lines');
     const discountCode = _get(discountData, 'cart.discountCodes', []).filter((d: any) => d.applicable)?.[0]?.code;
     const final = width >= 640;
     const LinesContainerClassName=  `${(final || !ShowLinesInMobile) ? `pb-5 ${final ? 'overflow-hidden' : ''}  space-y-5` : 'px-6 pt-3 max-h-[200px] overflow-y-scroll  space-y-3'} w-full max-w-full  sm:overflow-visible`;
@@ -87,7 +94,7 @@ export const Right: FC<RightProps> = (props) => {
                 <Skeleton className={'h-3 max-w-[30%]'}/>
             </div>
             <Skeleton className={'h-5 w-12'}/>
-        </div> :data.map((line: any) => {
+        </div> : lineNodes.map((line: any) => {
             return <LineItem key={line.id} line={line} code={discountCode} priceLoading={cartLinePriceLoading}/>
         })}
     </div>;
@@ -99,7 +106,7 @@ export const Right: FC<RightProps> = (props) => {
             {(final || !ShowLinesInMobile) && lines}
             <ShopifyCouponForm/>
             <Summary />
-            <CheckoutPixelReport lines={data} json={json} />
+            <CheckoutPixelReport lines={lineNodes} json={summary} />
             {pcImage?.url && <div className={'hidden sm:flex pt-8 flex-col items-stretch'}>
                 <Media media={{
                     url: pcImage.url,

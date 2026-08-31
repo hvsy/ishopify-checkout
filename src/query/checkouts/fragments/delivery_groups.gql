@@ -9,7 +9,11 @@ fragment DeliveryGroups on Cart{
             node {
                 __typename
                 id
+                discountAllocations {
+                    ...CartDiscountAllocationFields
+                }
                 deliveryOptions {
+
                     __typename
                     title
                     handle

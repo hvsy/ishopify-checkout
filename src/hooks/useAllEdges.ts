@@ -2,10 +2,11 @@ import {get as _get} from 'lodash-es';
 import {gql, NetworkStatus, useQuery } from "@apollo/client";
 import {useEffect, useRef} from "react";
 
-export function useAllEdges(query : string,variables : any  ={},path : string){
+export function useAllEdges(query : string,variables : any  ={},path : string, skip : boolean = false){
     const { data, loading, fetchMore, networkStatus } = useQuery(gql(query), {
         variables,
         notifyOnNetworkStatusChange: true,
+        skip,
     });
     // 已请求过的游标集合：同一个游标最多请求一次，
     // 即使服务端返回的数据有异常也不会重复请求同一页形成死循环。

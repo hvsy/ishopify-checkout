@@ -134,9 +134,15 @@ function formatInput(input : CheckoutInput,keepBuyerCountryCode  : boolean = fal
             vars.updateAddress = true;
         }
         vars.addressId = id ? start(id, addressPrefix) : null;
-        vars.deliveryGroupId = input?.deliveryGroupId ? start(input.deliveryGroupId, groupPrefix) : null;
-        vars.deliveryOptionHandle = input?.deliveryHandle || '';
-        vars.updateSelectedDelivery = !(!input?.deliveryGroupId || !input?.deliveryHandle)
+    }
+    // 切换快递方式：只要有 groupId + handle 就必须同步到 Shopify
+    // （cartSelectedDeliveryOptionsUpdate）。之前这段写在 countryCode 分支里，
+    // 地址/国家字段缺失时 updateSelectedDelivery 会保持 false，
+    // 结果后端（PHP）同步了但 Shopify 没有更新选中的快递方式。
+    if(input?.deliveryGroupId && input?.deliveryHandle){
+        vars.deliveryGroupId = start(input.deliveryGroupId, groupPrefix);
+        vars.deliveryOptionHandle = input?.deliveryHandle;
+        vars.updateSelectedDelivery = true;
     }
     return vars;
 }
@@ -189,14 +195,11 @@ export const ShopifyCheckoutProvider :FC<{
                 cart : {},
             };
         }
-        const refetchQueries = ['GetDeliveryGroups'];
+        // 单个 CheckoutQuery 已包含 Summary、行项目和快递分组，mutation 后
+        // 只需 refetch 一次即可让整页（价格 / 行项目 / 快递方式 / 折扣）更新，
+        // 不再并发 refetch GetDeliveryGroups + CartLineItems + Summary。
+        const refetchQueries = ['CheckoutQuery'];
         const countryChanged = !!variables?.buyerIdentity?.countryCode;
-        // 切换国家会把购物车按目标国家货币重新计价。CartFields 不包含行项目的
-        // cost,如果不 refetch CartLineItems,行价格会停留在旧货币,而总价/运费
-        // 已经是新货币,导致同一结算页出现两种货币。
-        if (!partialUpdate || countryChanged) {
-            refetchQueries.push('CartLineItems');
-        }
         const config : any = {
             // awaitRefetchQueries : true,
             refetchQueries,

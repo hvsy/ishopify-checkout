@@ -1,6 +1,7 @@
 import {gql} from "@apollo/client";
 import {
     QueryBuyerIdentityFragment,
+    QueryCartDiscountAllocationFieldsFragment,
     QueryCartFieldsFragment, QueryDeliveryFragment, QueryDeliveryGroupsFragment,
     QueryImageFragment,
     QueryLineItemsFragment,
@@ -22,4 +23,5 @@ export const CacheCartQuery =  gql(([
     QueryDeliveryFragment,
     QueryBuyerIdentityFragment,
     QueryDeliveryGroupsFragment,
+    QueryCartDiscountAllocationFieldsFragment,
 ].join("\n")));
