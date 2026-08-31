@@ -32,7 +32,7 @@ fragment LineItems on Cart{
                         currencyCode
                     }
                 }
-                discountAllocations {
+                discountAllocations(lineLevelOnly : false) {
                     ... on CartCodeDiscountAllocation{
                         code
                     }

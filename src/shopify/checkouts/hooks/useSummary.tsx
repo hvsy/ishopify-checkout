@@ -1,5 +1,5 @@
 import {NetworkStatus, useApolloClient, useQuery} from "@apollo/client";
-import {get as _get, has as _has, isArray as _isArray, isEmpty} from "lodash-es";
+import {get as _get, has as _has, isArray as _isArray} from "lodash-es";
 
 import {getCheckoutFromSummary} from "@lib/getCheckoutFromSummary.ts";
 import {useCart} from "@hooks/useCart.ts";
@@ -37,37 +37,22 @@ export const SummaryContext = createContext<{
 });
 
 
-function useDeliveryGroups(cartId: string){
-    const {loading :deliveryGroupsLoading,
-        refetch,
-        data,error,
-        networkStatus : deliveryGroupsStatus} = useQuery(GetDeliveryGroupQuery,{
-        refetchWritePolicy : 'overwrite',
-        variables : {
-            cartId,
-            withCarrierRates :true,
-        }
-    })
-    const edges = _get(data,'cart.deliveryGroups.edges');
-    const groups  = (edges || []).map((group : any) => {
+export function getDeliveryGroupsFromJson(json : any){
+    const edges = _get(json,'cart.deliveryGroups.edges');
+    return (edges || []).map((group : any) => {
         return group.node;
     });
-    const query_loading = deliveryGroupsLoading || deliveryGroupsStatus !== NetworkStatus.ready;
-    const methods_loading = !_has(data?.cart, 'deliveryGroups') ||
-        !_isArray(data?.cart?.deliveryGroups?.edges) || (edges === undefined);
-    return {
-        loading : query_loading || methods_loading,
-        deliveryGroups : groups,
-        refetch,error,
-    }
 }
 
 export const SummaryContextProvider :FC<any> = (props) => {
     const {children} = props;
     const {gid} = useCart();
-    const {data : json ,networkStatus,error} = useQuery(SummaryQuery, {
+    // 单个 CheckoutQuery 一次取回 Summary/行项目/快递分组，避免进入结算页后
+    // 并发发出 Summary + GetDeliveryGroups + CartLineItems 三个 GraphQL 请求。
+    const {data : json ,networkStatus,error,refetch} = useQuery(SummaryQuery, {
         variables : {
             cartId : gid,
+            first : 10,
             withCarrierRates : true,
         },
     });
@@ -79,10 +64,11 @@ export const SummaryContextProvider :FC<any> = (props) => {
         window.location.replace('/');
     }, [json, error]);
 
-    const {loading : shipping_methods_loading,
-        refetch : refetchDeliveryGroup,
-        deliveryGroups,
-    } = useDeliveryGroups(gid);
+    const deliveryGroups = getDeliveryGroupsFromJson(json);
+    const groupsEdges = _get(json,'cart.deliveryGroups.edges');
+    const methods_loading = !_has(json?.cart, 'deliveryGroups') ||
+        !_isArray(groupsEdges) || (groupsEdges === undefined);
+    const shipping_methods_loading = methods_loading || networkStatus !== NetworkStatus.ready;
 
     const loading = {
         shipping_methods: shipping_methods_loading,
@@ -96,15 +82,13 @@ export const SummaryContextProvider :FC<any> = (props) => {
     const ing = loading.shipping_methods || loading.summary;
     const checkout = getCheckoutFromSummary(json, 'cart');
     const [form] = Form.useForm();
-    // console.log('form init:',checkout);
     return <SummaryContext value={{
             json,
             checkout() {
-                // return checkout;
                 return getCheckoutFromSummary(json, 'cart');
             },
             ing,
-            refetchDeliveryGroup,
+            refetchDeliveryGroup: refetch,
             loading,
             groups: deliveryGroups as any[],
         }}>
@@ -112,7 +96,6 @@ export const SummaryContextProvider :FC<any> = (props) => {
                 <FormContainer form={form}
                                initialValues={loading.summary ? null : checkout}>
                         {children}
-                        {/*<Main/>*/}
                 </FormContainer>
             </ShopifyCheckoutProvider>
         </SummaryContext>
@@ -141,7 +124,6 @@ export function useDeliveryGroupMutation() {
         let all;
         try {
             all = client.readQuery({
-                // query: SummaryQuery,
                 query : GetDeliveryGroupQuery,
                 variables: vars
             });
@@ -157,7 +139,6 @@ export function useDeliveryGroupMutation() {
         }
         if(!!all){
             client.writeQuery({
-                // query: SummaryQuery,
                 query: GetDeliveryGroupQuery,
                 variables: vars,
                 data: {

@@ -5,14 +5,20 @@ import {
     QueryCartDiscountAllocationFieldsFragment,
     QueryCartFieldsFragment,
     QueryDeliveryFragment,
-    QueryDiscountsFragment,
+    QueryDeliveryGroupsFragment,
+    QueryImageFragment,
+    QueryLineItemsFragment,
+    QueryVariantFragment,
 } from "./fragments/fragments.ts";
 
 export const SummaryQuery = gql([
     QuerySummary,
     QueryCartFieldsFragment,
-    QueryDiscountsFragment,
     QueryCartDiscountAllocationFieldsFragment,
     QueryDeliveryFragment,
     QueryBuyerIdentityFragment,
+    QueryLineItemsFragment,
+    QueryVariantFragment,
+    QueryImageFragment,
+    QueryDeliveryGroupsFragment,
 ].join("\n"));

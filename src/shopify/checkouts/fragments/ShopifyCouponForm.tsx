@@ -32,10 +32,9 @@ export const ShopifyCouponForm: FC = () => {
         QueryBuyerIdentityFragment,
         QueryDeliveryFragment,
     ].join("\n")), {
-        // 行项目价格/折扣分配会随优惠券变化，需要刷新 CartLineItems；
-        // 运费折扣（免运费码）在 deliveryGroups 上，刷新 Summary 与
-        // GetDeliveryGroups 才能让 Summary 和快递方式列表立即显示减免后的价格。
-        refetchQueries: ['Summary', 'CartLineItems', 'GetDeliveryGroups'],
+        // 行项目价格/折扣分配会随优惠券变化，单个 CheckoutQuery 已包含
+        // Summary / 行项目 / 快递分组，只需 refetch 一次即可全部刷新。
+        refetchQueries: ['CheckoutQuery'],
         awaitRefetchQueries: true,
         variables: {
             cartId: gid,

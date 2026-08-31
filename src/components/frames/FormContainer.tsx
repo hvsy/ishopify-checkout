@@ -3,7 +3,7 @@ import Form, {FormInstance} from "@rc-component/form";
 import {FormContext,} from "../../container/FormContext.ts";
 import {merge as _merge, get as _get, has as _has, isArray as _isArray, filter, isEmpty} from "lodash-es";
 import {CheckoutInput, map2, useMutationCheckout} from "../../shopify/context/ShopifyCheckoutContext.tsx";
-import {useDeliveryGroupMutation,} from "../../shopify/checkouts/hooks/useSummary.tsx";
+import {useDeliveryGroupMutation, useSummary} from "../../shopify/checkouts/hooks/useSummary.tsx";
 import {buildAddress} from "@lib/buildAddress.ts";
 import {useAsyncQueuer,} from "@tanstack/react-pacer";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
@@ -102,6 +102,36 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     },[]);
     const mutationDeliveryGroups = useDeliveryGroupMutation();
     const checkoutSync = useCheckoutSync(form);
+    const {loading: summaryLoading} = useSummary();
+    const summaryLoadingRef = useRef<any>(null);
+    summaryLoadingRef.current = summaryLoading;
+    // 等待 Summary 加载完成的事件闸门：loading 变 false 时统一 resolve，
+    // 避免在 sync 队列里用 while + setTimeout 轮询 summaryLoadingRef。
+    const summaryWaitersRef = useRef<Array<() => void>>([]);
+    useEffect(() => {
+        if (!summaryLoading.summary) {
+            const waiters = summaryWaitersRef.current;
+            summaryWaitersRef.current = [];
+            waiters.forEach((resolve) => resolve());
+        }
+    }, [summaryLoading.summary]);
+    const waitForSummary = useCallback(async (timeoutMs = 5000) => {
+        if (!summaryLoadingRef.current?.summary) return;
+        await new Promise<void>((resolve) => {
+            let settled = false;
+            const finish = () => {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timer);
+                resolve();
+            };
+            const timer = setTimeout(() => {
+                summaryWaitersRef.current = summaryWaitersRef.current.filter((item) => item !== finish);
+                finish();
+            }, timeoutMs);
+            summaryWaitersRef.current.push(finish);
+        });
+    }, []);
     const {gid} = useCart();
     const cartCache = useCartCache();
     const presetShipping = getJsonFromMeta('preset_shipping') || {};
@@ -135,6 +165,13 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
                 return;
             }
         }
+        // 首次进入时表单可能比 CheckoutQuery 先挂载；此时拿不到
+        // shipping_address.id，贸然 createAddress 会触发 DUPLICATE_DELIVERY_ADDRESS，
+        // 又引发 removeOtherAddresses + 重试的多次 GraphQL 调用。等 Summary 加载完
+        // （拿到远端地址 id）再同步，一次 update 即可完成。
+        if (countryChanged || provinceChanged) {
+            await waitForSummary();
+        }
         if(countryChanged || provinceChanged){
             mutationDeliveryGroups(null);
         }
@@ -144,6 +181,12 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             ...(initialValues?.shipping_address || {}),
             ...(values?.shipping_address || {}),
         });
+        // 表单可能还没同步到 remote 地址 id；直接用 CheckoutQuery 缓存里的
+        // selected delivery address id，避免 createAddress 触发 DUPLICATE_DELIVERY_ADDRESS。
+        const cachedAddress = _get(cartCache(gid), 'cart.delivery.addresses.0');
+        if (!address.id && cachedAddress?.id) {
+            address.id = cachedAddress.id;
+        }
         const input : CheckoutInput =  map2(values,{
             email : 'email',
             deliveryHandle : 'shipping_line_id',
@@ -199,7 +242,21 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
             sync.addItem(final);
         }, 500);
     },[sync]);
+    // 自动选择的国家/省份会在 effect 里触发 onValuesChanged，但由于 StrictMode
+    // 会在初次挂载时执行 effect 清理（清除上面的 debounce 定时器），而表单值在
+    // 重新挂载后保持不变、不会再触发第二次 onValuesChanged，导致首次同步丢失。
+    // 这里在挂载时兜底：如果仍有未提交的变更，重新挂上同一个 500ms 合并窗口，
+    // 让 StrictMode 重跑期间后续 onValuesChanged 合并成同一次同步，避免重复调用
+    // Shopify mutation 和 PHP 同步。
     useEffect(() => {
+        if (pendingRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = setTimeout(() => {
+                const final = pendingRef.current;
+                pendingRef.current = null;
+                sync.addItem(final);
+            }, 500);
+        }
         return () => {
             clearTimeout(timerRef.current);
         };
