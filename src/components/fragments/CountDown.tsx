@@ -3,6 +3,7 @@ import {useCountdown} from "@hooks/useCountDown";
 import {padStart as _padStart} from "lodash-es";
 import {twMerge} from "tailwind-merge"
 import {Line} from "./Line";
+import {cn} from "@lib/cn.ts";
 
 export type CountDownProps = {
     milliseconds: number;
@@ -64,12 +65,12 @@ export const CountDown :FC<CountDownProps> =  (props) => {
     };
     const content = format.replace(REGEX_FORMAT, (match, $1) => $1 || matches(match))
     return <Line
-        className={twMerge(`space-x-2 text-red-500 select-none ${containerClassName}`)}
+        className={cn(`space-x-2 text-red-500 select-none ${containerClassName}`)}
         suffix={suffix}
         prefix={prefix}
     >
         <div
-            className={twMerge(`select-none rounded-md text-white bg-red-500 px-2 tracking-wider font-mono ${className}`)}>
+            className={cn(`select-none rounded-md text-white bg-red-500 px-2 tracking-wider font-mono ${className}`)}>
             {content}
         </div>
     </Line>

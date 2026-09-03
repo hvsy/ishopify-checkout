@@ -1,9 +1,12 @@
 import {useScript} from "usehooks-ts";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {Bus, useBusListener} from "../../bus.tsx";
-import {PromiseLocation} from "../../shopify/lib/payment.ts";
 import {api, getFinalPath} from "@lib/api.ts";
 import {get, isEmpty, isObjectLike,includes} from "lodash-es";
+import Cookies from "js-cookie";
+import {PromiseLocation} from "../../shopify/lib/promiseLocation.ts";
+import {PaypalCardApproveException} from "../../exceptions/PaypalCardApproveException.ts";
+import {usePromiseTransaction} from "@lib/usePromiseTransaction.ts";
 
 const map : any = {
     'countryCode' : 'countryCode',
@@ -55,6 +58,12 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
         id : 'paypal-card-sdk',
     })
     const valuesRef = useRef<any>(null);
+    const approval =  usePromiseTransaction({
+        rejectOnUnmount : true,
+        timeout : 30 * 1000,
+    });
+    const rejectApproval = approval.reject;
+    const resolveApproval = approval.resolve;
     const fields = useMemo(() => {
         if(!window.paypal || !['ready',].includes(status)) return null;
         import.meta.env.DEV && console.log('card fields :',window.paypal.CardFields);
@@ -71,11 +80,17 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
                     data : {
                         token : valuesRef.current.token,
                         billing_address: valuesRef.current.billing_address,
+                        recovery_key : Cookies.get('recovery_key'),
                     }
                 }).then((json) => json.order_id); // Return the order ID
             },
             onError: function(err : any,...args : any[]) {
                 Bus.emit('payment:error',true);
+                // SDK 已触发错误时终止当前 transaction，避免 approval.execute
+                // 一直等待 fields.submit 的回调/超时。
+                rejectApproval(new PaypalCardApproveException(
+                    (err as any)?.message || true
+                ));
                 const url = err?.data?.url as string;
                 if(url){
                     const matches = url.match(/orders\/([^\/]+)\//im)
@@ -99,16 +114,23 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
                     url : getFinalPath(`/api/gateways/${method_id}/approve/${data.orderID}`),
                 }).then((json) => {
                     import.meta.env.DEV && console.log('paypal card approve json:',json);
+                    if(json.error){
+                        rejectApproval(new PaypalCardApproveException(json.message || true));
+                        // Bus.emit('payment:error',json.message || true);
+                        return;
+                    }
+                    // 后端已确认支付结果后先结束当前 transaction，
+                    // 避免 approval.execute 继续等待 fields.submit / PromiseLocation。
+                    resolveApproval(json);
                     if(json.redirect){
                         return PromiseLocation(json.redirect);
                     }
-                    if(json.error){
-                        Bus.emit('payment:error',json.message || true);
-                    }
+                }).catch((e) => {
+                    rejectApproval(e);
                 });
             },
         });
-    }, [status]);
+    }, [status, method_id, rejectApproval, resolveApproval]);
     useBusListener('payment:submit', async (values :any) => {
         if(!fields){
             console.error('paypal card field not setup');
@@ -137,16 +159,22 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
             }
 
             import.meta.env.DEV && console.log('submit paypal card params:',params);
-            const result = await fields.submit(params);
-            import.meta.env.DEV && console.log('paypal card result:',result);
-        }catch(e){
+             await approval.execute(async() => {
+                const result = await fields.submit(params);
+                import.meta.env.DEV && console.log('paypal card result:',result);
+            })
+        }catch(e : any){
             if(e instanceof Error){
                 if(includes(['Window closed before response'],e.message)){
                     return fields;
                 }
             }
             console.error('paypal card error:',e);
-            Bus.emit('payment:error',true);
+            if(PaypalCardApproveException.instanceOf(e)){
+                Bus.emit('payment:error',e.error);
+            }else{
+                Bus.emit('payment:error',true);
+            }
             throw e;
         }finally {
             valuesRef.current = null;

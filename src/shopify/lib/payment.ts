@@ -1,45 +1,28 @@
-import {api, getFinalPath} from "@lib/api.ts";
-import {get as _get, isObjectLike, isString,} from "lodash-es";
+import {getFinalPath} from "@lib/api.ts";
+import {get as _get,} from "lodash-es";
 import {Dispatch, SetStateAction} from "react";
 import {Bus} from "../../bus.tsx";
 import {summary2Cart} from "./helper.ts";
 import Big from "big.js";
+import {reportPaymentProgress} from "../../container/PaymentContext.tsx";
 
 export function getUrlFrom(token : string){
     const cart_token = token.split('?')[0] ?? '';
     return getFinalPath(`/api/checkouts/${cart_token}`);
-}
-export function PromiseLocation(location : string){
-    return new Promise((resolve, reject) => {
-        let settled = false;
-        const timer = setTimeout(() => {
-            if(!settled){
-                reject(new Error(`Redirect timed out: ${location}`));
-            }
-        },15000);
-        // 页面成功跳转后页面即将卸载，此时取消超时避免误报“跳转失败”。
-        window.addEventListener('pagehide', () => {
-            settled = true;
-            clearTimeout(timer);
-        }, { once : true });
-        console.log("redirect to:"+location);
-        window.location.href = location;
-    });
 }
 export async function shopify_payment(options : {
                                           summary : any,
                                           // url : string,
                                           method : DB.PaymentMethod,
                                           values : any,
-                                      },step ?: Dispatch<SetStateAction<string | undefined>>){
+                                      }){
     const {summary,method,values} = options;
     const token = _get(summary,'id').replace("gid://shopify/Cart/","");
-    const url = getUrlFrom(token);
     const totalAmount = _get(summary,'cost.totalAmount');
     const handle=  _get(summary,'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
     import.meta.env.DEV && console.log('shipping handle:',handle);
     if(!handle){
-        step?.(() => {
+        reportPaymentProgress(() => {
             return ('Please select the delivery method.');
         });
         alert('Please select the delivery method.');
@@ -50,13 +33,11 @@ export async function shopify_payment(options : {
         return;
     }
     if(!method){
-        step?.(() => {
+        reportPaymentProgress(() => {
             return "not payment method";
         });
         return;
     }
-    const mode = method.mode || 'redirect'
-    // console.log('payment:',values,summary2Cart(summary));//lines.edges[0].node);
     window.report?.("add_payment_info",{
         price : amount + '',
         currency : currencyCode,
@@ -65,83 +46,5 @@ export async function shopify_payment(options : {
         shipping_address : values.shipping_address,
         billing_address : values.billing_address || values.shipping_address,
     },token +  '_add_payment_info');
-    if(mode === 'redirect'){
-        const target = `${url}/gateway/${method.id}`;
-        const res : any = await api<any>({
-            method : "put",
-            url: target,
-        });
-        if(!res || (isObjectLike(res) && res.error)){
-            const message = isObjectLike(res) ? res.message : undefined;
-            if(message){
-                step?.(() => {
-                    return "payment api error:" + message;
-                });
-                console.error(message);
-            }else{
-                step?.(() => {
-                    return "payment api error";
-                });
-            }
-            Bus.emit('payment:error',true);
-            return false;
-        }
-        const href= getFinalPath(`/api/transactions/${res}/redirect`);
-        step?.(() => {
-            return "before payment redirect";
-        });
-        return PromiseLocation(href);
-        // window.location.href = href;
-        // return false;
-    }else if(mode === 'component'){
-        try {
-            await Bus.emitAsync('payment:validate');
-        }catch (e) {
-            step?.(() => {
-                return isString(e) ? e : method.channel  + ' validate error';
-            });
-            throw e;
-        }
-        try{
-            await Bus.emitAsync('payment:submit',values);
-        }catch (e) {
-            step?.(() => {
-                if(isString(e)){
-                    return e;
-                }else{
-                    let json = '';
-                    try{
-                        if(isObjectLike(e) && (e as any)?.message){
-                            json = (e as any).message;
-                        }else{
-                            json = JSON.stringify(e);
-                        }
-                    }catch(e){
-
-                    }
-                    return method.channel  + ' submit error : ' + json;
-                }
-            });
-            throw e;
-        }
-    }else{
-        const frame = document.getElementById(method.channel) as HTMLIFrameElement;
-        const window = frame?.contentWindow
-        if(!window){
-            step?.(() => {
-                return `can't find payment window:${method.channel}`;
-            });
-            import.meta.env.DEV && console.log(values,url,method);
-            return;
-        }
-        import.meta.env.DEV && console.log('payment method submit:',values);
-        window.postMessage({
-            event : 'submit',
-            checkout : values,
-        },'*')
-        step?.(() => {
-            return `payment ${method.channel} submit`;
-        });
-        throw '!!!';
-    }
+    await Bus.emitAsync(`payment:${method.id}`,{values,});
 }

@@ -1,7 +1,7 @@
 import {FC, ReactNode, useEffect, useState} from "react";
 import {useEventListener} from "usehooks-ts";
 import {Loading} from "../fragments/Loading.tsx";
-import {Bus} from "../../bus.tsx";
+import {useBusSet} from "../../bus.tsx";
 import {ShieldCheck} from "lucide-react";
 
 export type PayingContainerProps = {
@@ -10,19 +10,16 @@ export type PayingContainerProps = {
 
 export const PayingContainer: FC<PayingContainerProps> = (props) => {
     const {children} = props;
-    const [paying, setPaying] = useState<Boolean | string>(false);
-    useEffect(() => {
-        const offIng = Bus.listen('payment:ing', (which ?: string) => {
-            setPaying(which || true);
-        });
-        const offEnd = Bus.listen('payment:end', () => {
-            setPaying(false);
-        });
-        return () => {
-            offIng();
-            offEnd();
-        };
-    }, []);
+    // const [paying, setPaying] = useState<Boolean | string>(false);
+    const [paying, setPaying] = useState< true | null | {method ?: string,context ?: any}>(null);
+    useBusSet({
+        'payment:ing' : (method ?: string, context ?: any)=>{
+            setPaying(method ? {method,context} : true);
+        },
+        'payment:end' : ()=>{
+            setPaying(null);
+        }
+    });
     useEventListener('message', (e) => {
         const data = e.data || {};
         const {type, event} = data;
@@ -32,7 +29,7 @@ export const PayingContainer: FC<PayingContainerProps> = (props) => {
                 return;
             }
             case 'pay_end': {
-                setPaying(false);
+                setPaying(null);
                 return;
             }
         }
@@ -48,7 +45,8 @@ export const PayingContainer: FC<PayingContainerProps> = (props) => {
         }
     }, [paying]);
     let tip = <div>payment is being processed</div>;
-    if(paying === 'approve'){
+    let current = paying && (typeof (paying) === 'object') ? paying : {method : paying};
+    if(current?.method === 'approve'){
         tip  =<div className={'flex flex-col items-center space-y-2'}>
             <div className={'font-bold text-lg'}>Payment is being processed...</div>
             {/*<div>Please wait while we securely redirect you to PayPal.</div>*/}
@@ -60,7 +58,7 @@ export const PayingContainer: FC<PayingContainerProps> = (props) => {
             </div>
         </div>;
     }
-    if(paying === 'paypal'){
+    if(current?.method === 'paypal'){
         tip  =<div className={'flex flex-col items-center space-y-2'}>
             <div className={'font-bold text-lg'}>Redirecting to PayPal...</div>
             <div>Please wait while we securely redirect you to PayPal.</div>
@@ -72,7 +70,7 @@ export const PayingContainer: FC<PayingContainerProps> = (props) => {
             </div>
         </div>;
     }
-    if(paying === 'credit-card'){
+    if(current?.method === 'credit-card'){
         tip  = <div className={'flex flex-col items-center space-y-2'}>
             <div className={'font-bold text-lg'}>Processing your payment...</div>
             <div>Please wait while we securely process your payment.</div>
@@ -84,7 +82,7 @@ export const PayingContainer: FC<PayingContainerProps> = (props) => {
     }
     return <div className={'relative'}>
         {children}
-        {!!paying && <div className={'fixed inset-0 z-50'}>
+        {!!current?.method && <div className={'fixed inset-0 z-50'}>
             <div className={' absolute inset-0 bg-white/80 backdrop-blur z-50'}></div>
             <div className={'absolute inset-0  flex flex-col justify-center items-center z-50'}>
                 <div className={'flex flex-col space-y-2 items-center'}>

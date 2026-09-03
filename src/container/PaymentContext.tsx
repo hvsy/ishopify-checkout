@@ -5,6 +5,7 @@ import {Features, Setup} from "@lib/flags.ts";
 import {isString} from "lodash-es";
 import {getFinalPath} from "@lib/api.ts";
 import {AllZones} from "../assets/zones.ts";
+import {Bus, useBusListener} from "../bus.tsx";
 const Pixels = lazy(()=>{
     return import("../shopify/fragments/Pixels").then(m=>{
         return {default : m.Pixels}
@@ -82,6 +83,9 @@ export function useSetup(){
     );
     return {setup : data,isLoading,inner : false};
 }
+export function reportPaymentProgress(callback : Dispatch<SetStateAction<string | undefined>>){
+    return Bus.emit("payment:progress",callback);
+}
 export const PaymentContainer: FC<any> = (props) => {
     const {children} = props;
     const {setup, isLoading,inner} = useSetup();
@@ -116,6 +120,10 @@ export const PaymentContainer: FC<any> = (props) => {
             });
         })
     }, [!!setup]);
+    useBusListener("payment:progress", (which : ()=>string) => {
+        import.meta.env.DEV &&console.log('report payment progress...');
+        setProgress(which)
+    });
     return <PaymentContext value={{
         tracking: setup?.tracking || null,
         methods: setup?.payments || [],

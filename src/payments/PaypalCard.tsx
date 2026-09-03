@@ -1,11 +1,14 @@
 import {FC, useEffect, useEffectEvent, useMemo, useRef, useState} from "react";
 import {usePaypalCardFields} from "./hooks/usePaypalCardFields.tsx";
 import {PaypalField} from "./fragments/PaypalField.tsx";
-import {capitalize} from "lodash-es";
+import {capitalize, isObjectLike, isString} from "lodash-es";
 import {useEventCallback} from "usehooks-ts";
-import {Bus} from "../bus.tsx";
+import {Bus, useBusListener} from "../bus.tsx";
 import {Loading} from "@components/fragments/Loading.tsx";
 import {Features} from "@lib/flags.ts";
+import {PaypalCardApproveException} from "../exceptions/PaypalCardApproveException.ts";
+import {reportPaymentProgress} from "../container/PaymentContext.tsx";
+import {getJsonFromMeta} from "@lib/metaHelper.ts";
 
 export type PaypalCardProps = {
     method : any;
@@ -25,8 +28,9 @@ export function error_tip(value : any,field : string,validated : boolean){
     }
     return null;
 }
+const RecallDiscount = getJsonFromMeta('credit_card') as any;
 const PaypalCardForm : FC<any> = (props : any) => {
-    const {fields} = props;
+    const {fields,method} = props;
     const [errors,setErrors] = useState<any>({
         number : null,
         expiry : null,
@@ -45,10 +49,53 @@ const PaypalCardForm : FC<any> = (props : any) => {
         }
         return true;
     });
+    const errorCounterRef = useRef(0);
+    useBusListener(`payment:${method.id}`, async (context : {step ?: Function,values:any}) => {
+        const {step,values} = context;
+        try{
+            await validate();
+        }catch (e){
+            reportPaymentProgress(() => {
+                return isString(e) ? e : method.channel  + ' validate error';
+            });
+            throw e;
+        }
+        try{
+            await Bus.emitAsync('payment:submit',values);
+        }catch (e) {
+            reportPaymentProgress(() => {
+                if(isString(e)){
+                    return e;
+                }else{
+                    let json = '';
+                    try{
+                        if(isObjectLike(e) && (e as any)?.message){
+                            json = (e as any).message;
+                        }else{
+                            json = JSON.stringify(e);
+                        }
+                    }catch(e){
 
-    useEffect(() => {
-        return Bus.listen('payment:validate',validate);
-    }, []);
+                    }
+                    return method.channel  + ' submit error : ' + json;
+                }
+            });
+
+            if(PaypalCardApproveException.instanceOf(e)){
+                errorCounterRef.current++;
+                import.meta.env.DEV && console.log('error count:',errorCounterRef.current);
+                if(errorCounterRef.current >= (RecallDiscount?.failed?.threshold || 2)){
+                    Bus.emit("recall",{
+                        method : 'paypal',
+                        context,
+                    })
+                }
+            }
+            throw e;
+        }
+    });
+
+
     const onInputChange = useEffectEvent((data : any) => {
         const which = data.emittedBy;
         const key = `card${capitalize(which)}Field`;
@@ -115,7 +162,7 @@ export const PaypalCard: FC<PaypalCardProps> = (props) => {
                 PayPal Card is not available for this device or browser.
             </div>;
         }
-        return <PaypalCardForm fields={cardFields}/>;
+        return <PaypalCardForm fields={cardFields} method={method}/>;
     }
     return <div className={'min-h-32 py-2 flex-col justify-center items-center flex'} id={'paypal-card-container'} >
         <Loading />
