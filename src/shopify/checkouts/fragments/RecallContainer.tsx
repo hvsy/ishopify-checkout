@@ -31,20 +31,18 @@ export const RecallContainer: FC<RecallContainerProps> = (props) => {
             }
         }
     }, [enabled, method]);
-    if (!enabled) return children;
-    if(!method){
-        return children;
-    }
-    return <div className={'relative'}>
+    return <>
         {children}
-        <div className={'fixed inset-0 z-50'}>
-            <CreditCardFailedDiscount onOpenChange={() => {
-                setMethod(null);
-            }} open={true} discount={RecallDiscount?.failed?.tip}>
-                <PaypalRecall onErrorCallback={(message) => {
-                    alert(message || 'Apply Discount code error');
-                }}/>
-            </CreditCardFailedDiscount>
-        </div>
-    </div>
+        {enabled && method && (
+            <div className={'fixed inset-0 z-50'}>
+                <CreditCardFailedDiscount onOpenChange={() => {
+                    setMethod(null);
+                }} open={true} discount={RecallDiscount?.failed?.tip}>
+                    <PaypalRecall onErrorCallback={(message) => {
+                        alert(message || 'Apply Discount code error');
+                    }}/>
+                </CreditCardFailedDiscount>
+            </div>
+        )}
+    </>;
 };
