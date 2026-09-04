@@ -6,7 +6,8 @@ import {InputNumber} from "./InputNumber.tsx";
 import {useParams} from "react-router-dom";
 import {AsyncButton} from "@components/fragments/AsyncButton.tsx";
 import {api, getFinalPath} from "@lib/api.ts";
-import {PromiseLocation} from "../../lib/payment.ts";
+
+import {PromiseLocation} from "../../lib/promiseLocation.ts";
 
 export type ProductProps = {
     product: any;

@@ -5,7 +5,6 @@ import {scrollToError, } from "@components/frames/FormContainer.tsx";
 import {useSummary} from "../hooks/useSummary.tsx";
 import {api} from "@lib/api.ts";
 import {useFormValidate} from "../../hooks/useFormValidate.tsx";
-import {PromiseLocation} from "../../lib/payment.ts";
 import {get as _get} from "lodash-es";
 import {Features} from "@lib/flags.ts";
 import {usePaymentContext} from "../../../container/PaymentContext.tsx";
@@ -15,6 +14,7 @@ import {useParams} from "react-router-dom";
 import {useCart} from "@hooks/useCart.ts";
 import {useCartCache} from "@query/checkouts/cache/useCartCache.ts";
 import {Bus} from "../../../bus.tsx";
+import {PromiseLocation} from "../../lib/promiseLocation.ts";
 
 export type ApproveItProps = {};
 

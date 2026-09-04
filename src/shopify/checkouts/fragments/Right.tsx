@@ -5,6 +5,7 @@ import {useAllEdges} from "@hooks/useAllEdges.ts";
 import {LineItem} from "./LineItem.tsx";
 import {RightFrame} from "@components/frames/RightFrame.tsx";
 import {ShopifyCouponForm} from "./ShopifyCouponForm.tsx";
+import {useDiscountCodeManager} from "@hooks/useDiscountCodeManager.ts";
 import {get as _get} from "lodash-es";
 import {Summary} from "./Summary.tsx";
 import {useMoneyFormat} from "../../context/ShopifyContext.ts";
@@ -58,6 +59,7 @@ export const Right: FC<RightProps> = (props) => {
     const {width} = useWindowSize({
         initializeWithValue : true,
     });
+    const discount = useDiscountCodeManager();
     const pcImage = getGlobalPath('profile.pc.resource.image');
     let discountData = null;
     try {
@@ -104,7 +106,7 @@ export const Right: FC<RightProps> = (props) => {
             header={!final && ShowLinesInMobile && lines} totalPrice={
             showSketeton ? <Skeleton className={'w-16 min-h-5 max-h-5'}/> : format(_get(summary, 'cart.cost.totalAmount'))}>
             {(final || !ShowLinesInMobile) && lines}
-            <ShopifyCouponForm/>
+            <ShopifyCouponForm codes={discount.codes} apply={discount.apply} remove={discount.remove}/>
             <Summary />
             <CheckoutPixelReport lines={lineNodes} json={summary} />
             {pcImage?.url && <div className={'hidden sm:flex pt-8 flex-col items-stretch'}>

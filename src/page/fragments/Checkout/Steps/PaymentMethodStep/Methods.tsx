@@ -6,6 +6,7 @@ import {usePaymentContext} from "../../../../../container/PaymentContext.tsx";
 import {find as _find} from "lodash-es";
 import {RadioGroup} from "../../../../components/RadioGroup.tsx";
 import {Payment} from "./Payment.tsx";
+import {RecallContainer} from "../../../../../shopify/checkouts/fragments/RecallContainer.tsx";
 import {NoActivePaymentMethod} from "./NoActivePaymentMethod.tsx";
 import PaypalCountries from "../../../../../assets/paypal_countries.json";
 
@@ -15,8 +16,7 @@ function show(method : DB.PaymentMethod,region_code ?: string|null){
     return !(!!region_code && !PaypalCountries.includes(region_code));
 
 }
-export const Methods: FC<{ token: string }> = memo((props) => {
-    const {token} = props;
+export const Methods: FC<any> = memo((props) => {
     const [search, setSearchParams] = useSearchParams();
 
     let {methods,loading : isLoading} = usePaymentContext() || {};
@@ -55,38 +55,36 @@ export const Methods: FC<{ token: string }> = memo((props) => {
         }
     }, [method_id, availableMethods]);
 
-    if(isLoading){
-        return <div className={'animate-pulse border rounded-md border-neutral-300 flex flex-row items-center  space-x-3 p-4'}>
+    return <RecallContainer>
+        {isLoading ? <div className={'animate-pulse border rounded-md border-neutral-300 flex flex-row items-center  space-x-3 p-4'}>
             <div className={'size-4 rounded-full bg-slate-200'}></div>
             <div className={'flex-1 bg-slate-200 h-3 rounded-xl'}></div>
-        </div>;
-    }
-    return <Form.Field name={['payment_method_id']}>
-        <RadioGroup
-            items={availableMethods}
-            valueAttr={'id'}
-            onSelectedChange={() => {
-                if (search.get('error')) {
-                    const newSearch = new URLSearchParams(search);
-                    newSearch.delete('error')
-                    setSearchParams(newSearch);
-                }
-            }}
-            renderEmpty={() => {
-                return <NoActivePaymentMethod />
-            }}
-            renderItem={(method, checked, radio) => {
-                // console.log('render method item',method,checked,radio);
-                // let mode : ActivityProps['mode'] =  show(method,region_code) ? 'visible' : 'hidden';
-                // let mode : ActivityProps['mode'] =  show(method,region_code) ? 'visible' : 'hidden';
-                // return <Activity mode={mode}>
-                    return <Payment
-                        token={token}
-                        method={method} checked={checked}>
-                        {radio}
-                    </Payment>
-                // </Activity>
-            }}
-        />
-    </Form.Field>
+        </div> : <Form.Field name={['payment_method_id']}>
+            <RadioGroup
+                items={availableMethods}
+                valueAttr={'id'}
+                onSelectedChange={() => {
+                    if (search.get('error')) {
+                        const newSearch = new URLSearchParams(search);
+                        newSearch.delete('error')
+                        setSearchParams(newSearch);
+                    }
+                }}
+                renderEmpty={() => {
+                    return <NoActivePaymentMethod />
+                }}
+                renderItem={(method, checked, radio) => {
+                    // console.log('render method item',method,checked,radio);
+                    // let mode : ActivityProps['mode'] =  show(method,region_code) ? 'visible' : 'hidden';
+                    // let mode : ActivityProps['mode'] =  show(method,region_code) ? 'visible' : 'hidden';
+                    // return <Activity mode={mode}>
+                        return <Payment
+                            method={method} checked={checked}>
+                            {radio}
+                        </Payment>
+                    // </Activity>
+                }}
+            />
+        </Form.Field>}
+    </RecallContainer>
 });
