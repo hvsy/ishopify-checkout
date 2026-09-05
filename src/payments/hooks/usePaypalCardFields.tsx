@@ -85,12 +85,11 @@ export function usePaypalCardFields(method_id : string|number,sdk : string){
                 }).then((json) => json.order_id); // Return the order ID
             },
             onError: function(err : any,...args : any[]) {
-                Bus.emit('payment:error',true);
+                // Bus.emit('payment:error',true);
                 // SDK 已触发错误时终止当前 transaction，避免 approval.execute
                 // 一直等待 fields.submit 的回调/超时。
-                rejectApproval(new PaypalCardApproveException(
-                    (err as any)?.message || true
-                ));
+                const reson = get(err,'data.body.details[0].description') || true;
+                rejectApproval(new PaypalCardApproveException(reson));
                 const url = err?.data?.url as string;
                 if(url){
                     const matches = url.match(/orders\/([^\/]+)\//im)
