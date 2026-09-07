@@ -106,6 +106,27 @@ export function useFormValidate(form : FormInstance) {
                                     }
                                 },
                             },
+                            'addresses.0.address.deliveryAddress.firstName': {
+                                path: ['shipping_address', 'first_name'],
+                            },
+                            'addresses.0.address.deliveryAddress.lastName': {
+                                path: ['shipping_address', 'last_name'],
+                            },
+                            'addresses.0.address.deliveryAddress.address1': {
+                                path: ['shipping_address', 'line1'],
+                            },
+                            'addresses.0.address.deliveryAddress.address2': {
+                                path: ['shipping_address', 'line2'],
+                            },
+                            'addresses.0.address.deliveryAddress.city': {
+                                path: ['shipping_address', 'city'],
+                            },
+                            'addresses.0.address.deliveryAddress.countryCode': {
+                                path: ['shipping_address', 'region_code'],
+                            },
+                            'addresses.0.address.deliveryAddress.provinceCode': {
+                                path: ['shipping_address', 'state_code'],
+                            },
                             'addresses.0.address.deliveryAddress.phone': {
                                 path: ['shipping_address', isPhone2 ? 'phone2' : 'phone'],
                             },
