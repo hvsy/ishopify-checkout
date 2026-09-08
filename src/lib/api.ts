@@ -1,7 +1,6 @@
 import axios, {AxiosRequestConfig} from "axios";
 import {get as _get,trimEnd} from "lodash-es";
 import dayjs from "dayjs";
-import axiosRetry from "axios-retry";
 import {_start} from "../shopify/lib/helper.ts";
 import {GloablBase} from "../shopify/lib/globalSettings.ts";
 
@@ -14,7 +13,9 @@ export const AxiosInstance = axios.create({
     },
     withCredentials: false,
 });
-axiosRetry(AxiosInstance,{retries : 3,});
+// 全局重试已移除：它会连非幂等的 POST（/quickly、gateway create）一起重试。
+// 镜像 PUT 的重试由 CheckoutSyncManager 负责（带 revision + 服务端 CAS，可安全重试）；
+// GET 类请求走 SWR 自己的重试。
 
 export function getGetPathBase(base : string = GloablBase){
     if(!base || base === '/'){

@@ -68,7 +68,11 @@ export const SummaryContextProvider :FC<any> = (props) => {
     const groupsEdges = _get(json,'cart.deliveryGroups.edges');
     const methods_loading = !_has(json?.cart, 'deliveryGroups') ||
         !_isArray(groupsEdges) || (groupsEdges === undefined);
-    const shipping_methods_loading = methods_loading || networkStatus !== NetworkStatus.ready;
+    // refetch（mutation 后的 CheckoutQuery 重取，例如点支付时补同步地址）期间保持旧选项可见：
+    // 之前把它算作 shipping loading，会把快递方式清空成骨架再恢复，看起来像"快递方式重新加载"。
+    const refetching = networkStatus === NetworkStatus.refetch;
+    const shipping_methods_loading = methods_loading ||
+        (networkStatus !== NetworkStatus.ready && !refetching);
 
     const loading = {
         shipping_methods: shipping_methods_loading,

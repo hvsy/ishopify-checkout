@@ -53,7 +53,14 @@ export const SingleFooter: FC<SingleFooterProps> = (props) => {
                 const after = await validator();
                 if (!after) {
                     reportPaymentProgress(() => {
-                        return "form validator failed";
+                        try {
+                            const error = form.getFieldsError().map((e) => {
+                                return e.errors.join("\n");
+                            }).join("\n");
+                            return "form validator failed:" + error;
+                        } catch (e){
+                            return "form validator failed";
+                        }
                     });
                     return;
                 }

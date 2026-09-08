@@ -7,6 +7,7 @@ import {useSummary} from "../checkouts/hooks/useSummary.tsx";
 import {useCart} from "@hooks/useCart.ts";
 import {PaypalButton} from "./PaypalButton.tsx";
 import {PromiseLocation} from "../lib/promiseLocation.ts";
+import {useCheckoutSyncManager} from "../sync/CheckoutSyncContext.tsx";
 
 export type PaypalQuicklyButtonProps = {};
 
@@ -18,7 +19,8 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
     const method = (methods || []).find((method) => {
         return method.type === 'paypal';
     });
-    // const sync =  useCheckoutSync();
+    // 快捷支付前先把未落库的变更 flush 一次，避免后端用过期镜像建 PayPal 订单
+    const syncManager = useCheckoutSyncManager();
     if (!method) {
         return null;
     }
@@ -28,7 +30,14 @@ export const PaypalQuicklyButton: FC<PaypalQuicklyButtonProps> = (props) => {
     return <div className={'flex flex-col items-stretch space-y-5'}>
         <PaypalButton
             onClick={async () => {
-                // await sync(false,false);
+                if (syncManager) {
+                    try {
+                        await syncManager.flush('flush');
+                    } catch (e) {
+                        // 镜像/校验失败不阻断快捷支付（Express 会自己收集地址）
+                        console.error('flush before quickly failed:', e);
+                    }
+                }
                 const res = await api({
                     method : "post",
                     'url' : cartApi + '/quickly'

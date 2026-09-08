@@ -22,9 +22,12 @@ function formatAddress(address_components ?: any[]) {
     if(!address_components || !address_components.length) return null;
     const map  : any= {};
     for (const c of address_components) {
-        for (const type of c.types) {
-            map[type] = {long: c.longText, short: c.shortText};
+        if(c?.types){
+            for (const type of c.types) {
+                map[type] = {long: c.longText, short: c.shortText};
+            }
         }
+
     }
     const getLong = (...keys : string[]) => {
         for (const k of keys) {

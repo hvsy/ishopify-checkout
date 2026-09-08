@@ -7,9 +7,11 @@ import {useDeliveryGroupMutation, useSummary} from "../../shopify/checkouts/hook
 import {buildAddress} from "@lib/buildAddress.ts";
 import {useAsyncQueuer,} from "@tanstack/react-pacer";
 import {useCheckoutSync} from "@hooks/useCheckoutSync.ts";
+import {useCheckoutSyncManager} from "../../shopify/sync/CheckoutSyncContext.tsx";
 import {useCart} from "@hooks/useCart.ts";
 import {useCartCache} from "@query/checkouts/cache/useCartCache.ts";
 import {getJsonFromMeta} from "@lib/metaHelper.ts";
+import {billingToForm} from "../../shopify/sync/domains.ts";
 
 
 
@@ -76,6 +78,15 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         if (!initialValues || hydratedRef.current) return;
         hydratedRef.current = true;
         fillEmptyFields(form, initialValues);
+        // 镜像里已存的账单地址要回填进表单（含 region_code / state_code —— 这两个键
+        // 被 fillEmptyFields 跳过，所以必须显式写）。回填后指纹与 sync_mirror 才能对齐，
+        // 刷新进入不会再产生多余 PUT，也不会把库里的账单抹掉。
+        // 注意：BillingAddressStep 只在信用卡支付时才挂载，所以回填必须放在这里。
+        const mirror = getJsonFromMeta('sync_mirror') || {};
+        const billing = billingToForm(mirror?.billing_address);
+        if (billing && isEmpty(form.getFieldValue('billing_address'))) {
+            form.setFieldsValue({billing_address: billing});
+        }
     }, [initialValues, form]);
     const error = useCallback((name: string|((string|number)[])) => {
         const path = _isArray(name) ? name.join('.') : name;
@@ -102,6 +113,8 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
     },[]);
     const mutationDeliveryGroups = useDeliveryGroupMutation();
     const checkoutSync = useCheckoutSync(form);
+    // 开关打开时由 manager 接管：intent 决定能写什么，两级基线决定要不要写
+    const syncManager = useCheckoutSyncManager();
     const {loading: summaryLoading} = useSummary();
     const summaryLoadingRef = useRef<any>(null);
     summaryLoadingRef.current = summaryLoading;
@@ -262,20 +275,45 @@ export const FormContainer: FC<FormContainerProps> = (props) => {
         };
     }, []);
     const mutation = useMutationCheckout();
+    const WATCH_PATHS = ['shipping_address.region_code',
+        'shipping_address.state_code',
+        'shipping_line_id',
+    ];
     const onValuesChanged = useCallback((changedValues : any) => {
         console.log('value changed:',changedValues);
-        const path = ['shipping_address.region_code',
-            'shipping_address.state_code',
-            'shipping_line_id',
-        ].filter(function(path){
+        const path = WATCH_PATHS.filter(function(path){
             return _has(changedValues,path) && !isEmpty(_get(changedValues,path));
         });
-        if(path.length > 0){
-            push(changedValues);
+        if (syncManager) {
+            // 用户改地址 → address intent；用户点选快递方式 → delivery intent。
+            // 两者在同一手势里出现时会被 manager 合并成一个 cycle。
+            const addressWatch = path.some((item) => item.startsWith('shipping_address.'));
+            // 用户清空地址字段（line2 / 电话 / 城市…）不会命中 WATCH_PATHS，
+            // 必须单独记录并补一次 address cycle，否则清空永远同步不过去（P1-7）
+            const cleared = syncManager.noteAddressEdits(changedValues?.shipping_address);
+            if (addressWatch || cleared) {
+                syncManager.request('address');
+            }
+            if (path.includes('shipping_line_id')) {
+                syncManager.request('delivery');
+            }
+            return;
         }
-    },[push]);
+        if(path.length === 0) return;
+        push(changedValues);
+    },[push,syncManager]);
+    // 自动回填（preset/IP 国家、自动选省、清空非法省）走 hydrate：
+    // 只有和远端真的不一致时 manager 才会发请求，替代原先手写的守卫。
+    const onHydratedValues = useCallback((changedValues : any) => {
+        if (syncManager) {
+            syncManager.request('hydrate');
+            return;
+        }
+        push(changedValues);
+    },[push,syncManager]);
     return <FormContext.Provider value={{
             onValuesChanged,
+            onHydratedValues,
             form,
             error,
             setErrors : setFormErrors,

@@ -105,10 +105,16 @@ export function buildCheckoutMutation(vars: Record<string, unknown>): DocumentNo
     if (operations.length === 0) {
         return gql(`mutation Checkout { __typename }`);
     }
+    // 只有地址/快递分支会 `cart { ...CartFields }`；cartBuyerIdentityUpdate 只返回
+    // userErrors/warnings，此时再带上 CartFields 会触发 GraphQL 校验错误
+    // "Fragment CartFields was defined, but not used"（Delivery/BuyerIdentity 是它的依赖，
+    // 一起省略，否则同样报 unused）。SyncManager 的 identity-only 写入会走到这里。
+    const usesCartFields = !!(vars.updateAddress || vars.createAddress || vars.updateSelectedDelivery);
+    const fragments = usesCartFields
+        ? [QueryCartFieldsFragment, QueryDeliveryFragment, QueryBuyerIdentityFragment]
+        : [];
     return gql([
         `mutation Checkout(${declarations.join(',')}){\n${operations.join('\n')}\n}`,
-        QueryCartFieldsFragment,
-        QueryDeliveryFragment,
-        QueryBuyerIdentityFragment,
+        ...fragments,
     ].join("\n"));
 }

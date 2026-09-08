@@ -17,7 +17,15 @@ export async function shopify_payment(options : {
                                           values : any,
                                       }){
     const {summary,method,values} = options;
-    const token = _get(summary,'id').replace("gid://shopify/Cart/","");
+    const cartId = _get(summary,'id');
+    if(!cartId || typeof cartId !== 'string'){
+        reportPaymentProgress(() => {
+            return 'checkout summary missing';
+        });
+        alert('Something went wrong, please refresh the page and try again.');
+        throw 'checkout summary missing';
+    }
+    const token = cartId.replace("gid://shopify/Cart/","");
     const totalAmount = _get(summary,'cost.totalAmount');
     const handle=  _get(summary,'deliveryGroups.edges.0.node.selectedDeliveryOption.handle');
     import.meta.env.DEV && console.log('shipping handle:',handle);

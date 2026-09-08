@@ -3,6 +3,7 @@ import {transform_address} from "./checkout.ts";
 import {getJsonFromMeta} from "./metaHelper.ts";
 
 const shipping = getJsonFromMeta('preset_shipping') || {};
+const syncMirror = getJsonFromMeta('sync_mirror') || {};
 import.meta.env.DEV && console.log("meta config preset shipping:",shipping);
 export function getCheckoutFromSummary(summary : any,path : string = 'data.cart'){
     // cart.discountAllocations 已弃用：运费折扣改从 deliveryGroups[].discountAllocations 读取
@@ -26,5 +27,8 @@ export function getCheckoutFromSummary(summary : any,path : string = 'data.cart'
         ...transform_address(summary,path,shipping),
         shipping_discount : discounts?.[0] || null,
         billing_address : null,
+        // 本地化字段（BR 的 CPF/CNPJ、KR 的通关码）只存在于表单与 PHP 镜像里，
+        // 刷新后从镜像回填，避免必填项丢失 + 指纹对不上导致的多次 PUT
+        localization : syncMirror?.localization || null,
     }
 }
