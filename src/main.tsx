@@ -51,7 +51,15 @@ async function setup(){
             }
         });
     }
-    const dsn = getMetaContent("sentry");
+    // 本地开发不启用 Sentry：dev server 直接跳过；构建产物用 VITE_DISABLE_SENTRY=1 关闭。
+    // 后端在 local 环境也不会注入 dsn（ProxyController::RenderCheckoutPage）。
+    const sentryDisabled = import.meta.env.DEV || ['1', 'true', 'on', 'yes'].includes(
+        String(import.meta.env.VITE_DISABLE_SENTRY ?? '').toLowerCase(),
+    );
+    const dsn = sentryDisabled ? null : getMetaContent("sentry");
+    if(import.meta.env.DEV){
+        console.log('sentry disabled in development');
+    }
     if(!!dsn){
         const features = getArrayFromMeta('sentry_features');
         import.meta.env.DEV && console.log("meta config sentry features:",features);
@@ -85,15 +93,22 @@ async function setup(){
         rootElement = document.createElement('div');
         document.body.appendChild(rootElement);
     }
+    const sentryEnabled = !!dsn;
     const root = createRoot(rootElement,{
         // Callback called when an error is thrown and not caught by an Error Boundary.
-        onUncaughtError: Sentry.reactErrorHandler((error, errorInfo) => {
-            console.warn('Uncaught error', error, errorInfo.componentStack);
-        }),
+        onUncaughtError: sentryEnabled
+            ? Sentry.reactErrorHandler((error, errorInfo) => {
+                console.warn('Uncaught error', error, errorInfo.componentStack);
+            })
+            : (error : any, errorInfo : any) => {
+                console.warn('Uncaught error', error, errorInfo?.componentStack);
+            },
         // Callback called when React catches an error in an Error Boundary.
-        onCaughtError: Sentry.reactErrorHandler(),
-        // Callback called when React automatically recovers from errors.
-        onRecoverableError: Sentry.reactErrorHandler(),
+        ...(sentryEnabled ? {
+            onCaughtError: Sentry.reactErrorHandler(),
+            // Callback called when React automatically recovers from errors.
+            onRecoverableError: Sentry.reactErrorHandler(),
+        } : {}),
     });
     // const {App} = await import('./App.tsx');
     if(import.meta.env.DEV){

@@ -93,7 +93,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         presetRegionCode, presetStateCode,
     } = props;
     const pf = prefix.join('.').replace('_address','');
-    const {form:formInstance,onValuesChanged} = FormContext.use()//useCurrentForm();
+    const {form:formInstance,onHydratedValues} = FormContext.use()//useCurrentForm();
     useWatch([...prefix, 'region_code'], {
         form: formInstance,
         preserve,
@@ -119,7 +119,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                }
            ]);
            if((region.children || []).length === 0 ){
-               onValuesChanged?.({
+               onHydratedValues?.({
                    [prefix.join('.')]: {
                        region_code : region?.code,
                        region: region,
@@ -155,7 +155,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                     name: [...prefix, 'state'],
                     value: firstState,
                 }]);
-                onValuesChanged?.({
+                onHydratedValues?.({
                     [prefix.join('.')]: {
                         region_code : region.code,
                         state_code: firstState.code,
@@ -190,7 +190,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 name: [...prefix, 'state'],
                 value: hit,
             }]);
-            onValuesChanged?.({
+            onHydratedValues?.({
                 [prefix.join('.')]: {
                     state_code: presetStateCode,
                     state: hit,
@@ -221,7 +221,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 name: [...prefix, 'state'],
                 value : firstZone,
             }])
-            onValuesChanged({
+            onHydratedValues?.({
                 [prefix.join('.')]: {
                     state_code: firstZone.code,
                     state: firstZone,
@@ -236,7 +236,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
             name: [...prefix, 'state'],
             value : null,
         }])
-        onValuesChanged({
+        onHydratedValues?.({
             [prefix.join('.')]: {
                 state_code: null,
                 state: null,
@@ -349,7 +349,7 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                                                 formInstance.setFieldsValue({
                                                     [prefix.join('.')]: value,
                                                 });
-                                                onValuesChanged({
+                                                onHydratedValues?.({
                                                     [prefix.join('.')]: value,
                                                 })
                                             }}

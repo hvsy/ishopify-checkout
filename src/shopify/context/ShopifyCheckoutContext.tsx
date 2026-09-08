@@ -1,4 +1,4 @@
-import {createContext, FC, ReactNode, use, useCallback, useMemo, useRef, useState} from "react";
+import {createContext, FC, ReactNode, use, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useCart} from "@hooks/useCart.ts";
 import {ApolloClient, from, gql, useApolloClient, useMutation, useQueryRefHandlers, useReadQuery} from "@apollo/client";
 import {MutateCheckout, MutateRemoveAddresses} from "@query/checkouts/mutations.ts";
@@ -10,12 +10,20 @@ import {
 } from "@query/checkouts/fragments/fragments.ts";
 import { get as _get,set as _set,isString as _isString,setWith as _setWith,cloneDeep as _cloneDeep} from "lodash-es";
 import {FormInstance} from "@rc-component/form";
-import {useDeliveryGroupMutation} from "../checkouts/hooks/useSummary.tsx";
+import {useDeliveryGroupMutation, useSummary} from "../checkouts/hooks/useSummary.tsx";
 import {getBy} from "../lib/helper.ts";
 import {QueryDeliveryAddresses} from "@query/checkouts/queries.ts";
 import Validators from "validator";
 import {useEventCallback} from "usehooks-ts";
 import PQueue from "p-queue";
+import {CheckoutSyncManager} from "../sync/CheckoutSyncManager.ts";
+import {CheckoutSyncContext} from "../sync/CheckoutSyncContext.tsx";
+import {isCartReady} from "../sync/domains.ts";
+import {useCartCache} from "@query/checkouts/cache/useCartCache.ts";
+import {api, getFinalPath, produce} from "@lib/api.ts";
+import {getIntFromMeta, getJsonFromMeta, getMetaContent} from "@lib/metaHelper.ts";
+import {Features} from "@lib/flags.ts";
+import {PhoneOnlyRequired} from "../lib/globalSettings.ts";
 
 
 export async function removeOtherAddresses(client : ApolloClient<any>,cartId : string,id : string){
@@ -160,7 +168,7 @@ export const ShopifyCheckoutProvider :FC<{
     form :FormInstance;
 }> = (props) => {
     const {children,form} = props;
-    const {gid} = useCart();
+    const {gid,token} = useCart();
     const [fn,{client,error,loading,}] = useMutation(gql([
         MutateCheckout,
         QueryCartFieldsFragment,
@@ -302,17 +310,107 @@ export const ShopifyCheckoutProvider :FC<{
            concurrency : 1,
        });
     },[]);
+    // 所有 Shopify mutation 都必须经过这条串行队列（manager 也不例外）
+    const queuedUpdate = useCallback(async (...args : any[]) => {
+        return await queue.add(async () => {
+            //@ts-ignore
+            return await UpdateCallback(...args);
+        });
+    },[queue]);
+    // ---- Checkout 同步管理器：唯一的写编排者 ----
+    // 依赖统一放在 ref 里，manager 只按 token/form 建一次，避免每渲染换实例。
+    const cartCache = useCartCache();
+    const summary = useSummary();
+    const syncDepsRef = useRef<any>(null);
+    syncDepsRef.current = {
+        cartCache,
+        summary,
+        update : queuedUpdate,
+        groupsMutation,
+    };
+    const syncManager = useMemo(() => {
+        if (!Features.includes('sync-manager')) return null;
+        return new CheckoutSyncManager({
+            token,
+            form,
+            mutate : (input : any, partialUpdate ?: boolean, force ?: boolean, keepBuyerCountryCode ?: boolean) => {
+                return syncDepsRef.current.update(input, partialUpdate, force, keepBuyerCountryCode);
+            },
+            readCart : () => _get(syncDepsRef.current.cartCache(gid), 'cart') || null,
+            // 等到的是"完整快照"：只有 cart.id 还不够，deliveryGroups / lines 也必须已进缓存，
+            // 否则指纹会算错、镜像会被写残（见 domains.isCartReady）。
+            waitForCart : async (timeoutMs = 6000) => {
+                const deadline = Date.now() + timeoutMs;
+                while (!isCartReady(_get(syncDepsRef.current.cartCache(gid), 'cart')) && Date.now() < deadline) {
+                    await new Promise((resolve) => setTimeout(resolve, 50));
+                }
+            },
+            waitForSummary : async (timeoutMs = 5000) => {
+                const deadline = Date.now() + timeoutMs;
+                while (syncDepsRef.current.summary?.loading?.summary && Date.now() < deadline) {
+                    await new Promise((resolve) => setTimeout(resolve, 50));
+                }
+            },
+            put : (payload : Record<string, any>) => api({
+                method : 'put',
+                url : getFinalPath(`/checkouts/${token}`),
+                data : payload,
+            }),
+            telemetry : (action : string, payload : Record<string, any>) => {
+                produce(token, action, payload).catch(() => undefined);
+            },
+            initialRevision : getIntFromMeta('sync_revision'),
+            initialHash : getMetaContent('sync_hash'),
+            // 镜像专属字段（email / 账单 / 本地化）：客户端据此判断要不要补发 PUT
+            initialMirror : getJsonFromMeta('sync_mirror'),
+            // 老路径的 useFormValidate 会把 STRICT / COUNTRY_CODE_ONLY 交给 formatInput；
+            // manager 自己构造输入，必须显式传，否则永远走 GraphQL 默认的 COUNTRY_CODE_ONLY（P2-4）
+            validationStrategy : () => PhoneOnlyRequired() ? 'COUNTRY_CODE_ONLY' : 'STRICT',
+        });
+    },[token,form]);
+    // 页面隐藏时补发一次：PUT 走的是 XHR，浏览器可能在卸载前掐断，
+    // 所以这里是 best-effort——没发出去也没关系，服务端 sync_hash 不变，
+    // 下次进入的首屏 hydrate 会重新比对指纹并补发（P1-5）。
+    useEffect(() => {
+        if (!syncManager) return;
+        const onVisibilityChange = () => {
+            if (document.visibilityState !== 'hidden') return;
+            syncManager.flush('flush').catch((e) => {
+                console.error('[sync] flush on hide failed:', e);
+            });
+        };
+        document.addEventListener('visibilitychange', onVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+    },[syncManager]);
+    // StrictMode（dev）会 mount → cleanup → mount：cleanup 里直接 dispose 会让第二次挂载后
+    // manager 永久失效（flush 只返回空结果，支付时 summary 变成 null，报
+    // "Cannot read properties of undefined (reading 'replace')"）。
+    // 因此延迟到微任务，确认没有立刻重新挂载，才真正销毁。
+    const mountCountRef = useRef(0);
+    useEffect(() => {
+        mountCountRef.current += 1;
+        const mine = mountCountRef.current;
+        return () => {
+            const check = () => {
+                if (mountCountRef.current === mine) {
+                    syncManager?.dispose();
+                }
+            };
+            if (typeof queueMicrotask === 'function') {
+                queueMicrotask(check);
+            } else {
+                setTimeout(check, 0);
+            }
+        };
+    },[syncManager]);
     return <ShopifyCheckoutContext value={{
         loading,
         cartLinePriceLoading,
-        update : async (...args:any) => {
-            return await queue.add(async() => {
-                //@ts-ignore
-                return await UpdateCallback(...args);
-            })
-        },
+        update : queuedUpdate,
     }}>
-        {children}
+        <CheckoutSyncContext value={syncManager}>
+            {children}
+        </CheckoutSyncContext>
     </ShopifyCheckoutContext>
 }
 

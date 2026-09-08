@@ -13,6 +13,9 @@ export const BillAddress: FC<BillAddressProps> = (props) => {
     useEffect(() => {
         if(mountedRef.current) return;
         mountedRef.current = true;
+        // 表单里已经有账单地址（首屏从镜像回填）时不要用收货地址覆盖它
+        const existing = form.getFieldValue('billing_address');
+        if (existing && typeof existing === 'object' && Object.keys(existing).length > 0) return;
         const shipping = form.getFieldValue(['shipping_address']);
         const keys = [
             'region_code',

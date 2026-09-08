@@ -4,6 +4,7 @@ import {get as _get, uniq as _uniq} from "lodash-es";
 
 import {useCart} from "./useCart.ts";
 import {useCheckoutSync} from "./useCheckoutSync.ts";
+import {useCheckoutSyncManager} from "../shopify/sync/CheckoutSyncContext.tsx";
 import {useSummary} from "../shopify/checkouts/hooks/useSummary.tsx";
 import {
     QueryBuyerIdentityFragment,
@@ -50,6 +51,7 @@ export type UseDiscountCode = {
 export function useDiscountCode(): UseDiscountCode {
     const {gid} = useCart();
     const sync = useCheckoutSync();
+    const syncManager = useCheckoutSyncManager();
     const {json: query} = useSummary();
 
     const [status, setStatus] = useState<DiscountStatus>('idle');
@@ -116,8 +118,13 @@ export function useDiscountCode(): UseDiscountCode {
             },
             awaitRefetchQueries: true,
         });
+        if (syncManager) {
+            // 折扣由折扣 mutation 自己写 Shopify；manager 只负责把最新 cart 镜像到 PHP
+            syncManager.request('discount');
+            return;
+        }
         await sync();
-    }, [fn, sync, gid]);
+    }, [fn, sync, syncManager, gid]);
 
     const markFailed = useCallback((code: string) => {
         failedRef.current.add(code);
