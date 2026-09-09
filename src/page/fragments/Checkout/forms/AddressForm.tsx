@@ -1,5 +1,12 @@
 import {FC, lazy, useEffect, useMemo, useRef,} from "react";
-import {isString as _isString, find as _find, capitalize as _capitalize, startsWith, lowerCase} from "lodash-es";
+import {
+    isString as _isString,
+    find as _find,
+    capitalize as _capitalize,
+    sortBy as _sortBy,
+    startsWith,
+    lowerCase
+} from "lodash-es";
 import {Input} from "../../../components/Input.tsx";
 import {CircleHelp} from "lucide-react";
 import {Tooltip} from "@components/fragments/Tooltip.tsx";
@@ -93,6 +100,8 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
         presetRegionCode, presetStateCode,
     } = props;
     const pf = prefix.join('.').replace('_address','');
+    // 本次只修 shipping 地址：billing 复用同一个组件，但保持原样
+    const isShippingAddress = prefix.join('.') === 'shipping_address';
     const {form:formInstance,onHydratedValues} = FormContext.use()//useCurrentForm();
     useWatch([...prefix, 'region_code'], {
         form: formInstance,
@@ -163,15 +172,21 @@ export const AddressForm: FC<AddressFormProps> = (props) => {
                 });
             }
         };
+        // 兜底国家：profile.countries[0] → 下拉框里显示的第一个（按 en_name 排序）。
+        // 顾客 IP 国家不在配送列表时走这里，随后 chooseRegion 会带上该国第一个省份。
+        const sortedRegions = _sortBy(Regions || [], (r : {en_name ?: string}) => {
+            return String(r?.en_name || '');
+        });
+        const fallbackRegion = ups?.[0] || (isShippingAddress ? sortedRegions?.[0] : Regions?.[0]);
         if (!region_code) {
-            chooseRegion(presetRegion || ipRegion || ups?.[0] || Regions?.[0]);
+            chooseRegion(presetRegion || ipRegion || fallbackRegion);
         }else{
             //有值的时候,但是该地区不配送
             let hit_region = _find(Regions, (r) => {
                 return (r.code) === region_code;
             });
             if(!hit_region){
-                chooseRegion(presetRegion || ipRegion || ups?.[0] || Regions?.[0]);
+                chooseRegion(presetRegion || ipRegion || fallbackRegion);
             }
         }
     }, [region_code, Regions, presetRegionCode]);

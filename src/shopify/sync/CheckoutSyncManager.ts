@@ -1,5 +1,6 @@
 import {FormInstance} from "@rc-component/form";
 import {
+    AddressResolver,
     MirrorSnapshot,
     SyncDomain,
     SyncIntent,
@@ -11,6 +12,7 @@ import {
     diffDomains,
     formPatchFromCart,
     isCartReady,
+    isPartialAddress,
     lowerEmail,
     mergeCartSnapshot,
     mirrorDiffers,
@@ -66,8 +68,10 @@ export type CheckoutSyncDeps = {
     initialHash?: string | null;
     /** 服务端注入的镜像专属字段（sync_mirror meta） */
     initialMirror?: any;
-    /** 地址写入的校验强度（COUNTRY_CODE_ONLY / STRICT），与老路径 formatInput 保持一致 */
-    validationStrategy?: () => string | undefined;
+    /** 地址写入的校验强度（COUNTRY_CODE_ONLY / STRICT），按 intent 决定：flush 保持严格 */
+    validationStrategy?: (intents: SyncIntent[]) => string | undefined;
+    /** 配送国家/省份解析器（补省份 / 改写不支持国家时用），与页面同一份 zones 数据 */
+    addressResolver?: AddressResolver;
 };
 
 /** 一次用户手势里的连续变更合并窗口 */
@@ -128,6 +132,9 @@ export class CheckoutSyncManager {
     private localCounter = 0;
     private dirty = false;
     private disposed = false;
+    /** 是否有 cycle 在途；UI 用它决定"骨架加载中"而不是直接判定无快递方式 */
+    private running = false;
+    private listeners = new Set<() => void>();
     /** 用户主动清空的地址字段（投影名）。只有这些字段才允许把 null 写回 Shopify（P1-7） */
     private clearedAddressFields = new Set<string>();
 
@@ -205,10 +212,35 @@ export class CheckoutSyncManager {
         return this.revision;
     }
 
+    get isRunning() {
+        return this.running;
+    }
+
+    /** 订阅"在途状态"变化；返回取消订阅函数。manager 不是响应式的，UI 侧自行镜像成 state */
+    subscribe(listener: () => void) {
+        this.listeners.add(listener);
+        return () => {
+            this.listeners.delete(listener);
+        };
+    }
+
+    private setRunning(value: boolean) {
+        if (this.running === value) return;
+        this.running = value;
+        this.listeners.forEach((listener) => {
+            try {
+                listener();
+            } catch (e) {
+                // 订阅方自己的异常不能影响同步主流程
+            }
+        });
+    }
+
     dispose() {
         this.disposed = true;
         clearTimeout(this.timer);
         this.pending.clear();
+        this.listeners.clear();
     }
 
     /** 等缓存里的 cart 变完整（缺 deliveryGroups / lines 时不算就绪） */
@@ -237,11 +269,13 @@ export class CheckoutSyncManager {
     private kick(): Promise<SyncCycleResult | undefined> {
         if (this.drainPromise) return this.drainPromise;
         if (this.pending.size === 0) return Promise.resolve(undefined);
+        this.setRunning(true);
         const task = this.drain();
         const wrapped = task.finally(() => {
             if (this.drainPromise === wrapped) {
                 this.drainPromise = null;
             }
+            this.setRunning(false);
         });
         this.drainPromise = wrapped;
         return wrapped;
@@ -312,9 +346,27 @@ export class CheckoutSyncManager {
                 await this.deps.waitForSummary?.();
             }
             const input = buildMutationInput(values, mutationDomains, cart, {
-                validationStrategy: this.deps.validationStrategy?.(),
+                validationStrategy: this.deps.validationStrategy?.(uniqueIntents),
                 clearedAddressFields: this.clearedAddressFields,
+                addressResolver: this.deps.addressResolver,
             });
+            // approve 页：PayPal 回传的完整地址是经 preset 注入表单的，可能比首屏 hydrate
+            // 晚一拍（实测先写 {US,AL}、约 2.8s 后才是完整地址）。中间那次只带国家/省份的
+            // 写入几百毫秒后就会被覆盖，白写一次 Shopify + 一次镜像 PUT，所以这里直接跳过；
+            // 注入完整地址后的那次 hydrate（或支付 flush）会真正写入。
+            if (mutationDomains.includes('address')
+                && values?.context === 'approve'
+                && isPartialAddress(input.shipping_address)) {
+                const pending: SyncCycleResult = {
+                    ...this.fallbackResult(uniqueIntents),
+                    domains,
+                    skipped: 'approve-address-pending',
+                    duration: Date.now() - startedAt,
+                };
+                this.dirty = true;
+                this.report(pending);
+                return pending;
+            }
             // approve 页必须保留 buyerIdentity.countryCode（与旧逻辑一致）
             const keepBuyerCountryCode = !!options.keepBuyerCountryCode || values?.context === 'approve';
             // force=true：mutation 已经由 PQueue 串行化，force 只会放行"上一条还在 loading"的
