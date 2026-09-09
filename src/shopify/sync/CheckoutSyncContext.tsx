@@ -10,3 +10,13 @@ export const CheckoutSyncContext = createContext<CheckoutSyncManager | null>(nul
 export function useCheckoutSyncManager() {
     return use(CheckoutSyncContext);
 }
+
+/**
+ * 同步在途状态。manager 是普通类（非响应式），provider 把它镜像成 React state，
+ * 供快递方式区块决定"骨架加载中"——有 cycle 在途时不能直接判定"没有快递方式"。
+ */
+export const CheckoutSyncStatusContext = createContext<{syncing: boolean}>({syncing: false});
+
+export function useCheckoutSyncStatus() {
+    return use(CheckoutSyncStatusContext);
+}

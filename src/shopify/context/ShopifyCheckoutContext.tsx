@@ -17,13 +17,14 @@ import Validators from "validator";
 import {useEventCallback} from "usehooks-ts";
 import PQueue from "p-queue";
 import {CheckoutSyncManager} from "../sync/CheckoutSyncManager.ts";
-import {CheckoutSyncContext} from "../sync/CheckoutSyncContext.tsx";
-import {isCartReady} from "../sync/domains.ts";
+import {CheckoutSyncContext, CheckoutSyncStatusContext} from "../sync/CheckoutSyncContext.tsx";
+import {AddressResolver, isCartReady, SyncIntent, ZoneLike} from "../sync/domains.ts";
 import {useCartCache} from "@query/checkouts/cache/useCartCache.ts";
 import {api, getFinalPath, produce} from "@lib/api.ts";
 import {getIntFromMeta, getJsonFromMeta, getMetaContent} from "@lib/metaHelper.ts";
 import {Features} from "@lib/flags.ts";
-import {PhoneOnlyRequired} from "../lib/globalSettings.ts";
+import {getGlobalPath, PhoneOnlyRequired} from "../lib/globalSettings.ts";
+import {useAllZones} from "../../container/PaymentContext.tsx";
 
 
 export async function removeOtherAddresses(client : ApolloClient<any>,cartId : string,id : string){
@@ -321,6 +322,35 @@ export const ShopifyCheckoutProvider :FC<{
     // 依赖统一放在 ref 里，manager 只按 token/form 建一次，避免每渲染换实例。
     const cartCache = useCartCache();
     const summary = useSummary();
+    // 配送国家/省份解析器：与页面用同一份 zones（local_zones 开关两边一致），
+    // 供 buildMutationInput 做"改写不支持的国家 / 补第一个省份"的 payload 兜底。
+    const {zones: allZones} = useAllZones();
+    const zonesRef = useRef<ZoneLike[]>([]);
+    zonesRef.current = (allZones || []) as ZoneLike[];
+    const addressResolver = useMemo<AddressResolver>(() => ({
+        hasCountry: (code : string) => zonesRef.current.some((zone) => zone?.code === code),
+        firstProvince: (code : string) => {
+            const hit = zonesRef.current.find((zone) => zone?.code === code);
+            const first = (hit?.children || [])[0];
+            return first?.code || null;
+        },
+        hasProvince: (countryCode : string, provinceCode : string) => {
+            const hit = zonesRef.current.find((zone) => zone?.code === countryCode);
+            return (hit?.children || []).some((zone) => zone?.code === provinceCode);
+        },
+        defaultCountry: () => {
+            const tops = (getGlobalPath('profile.countries', []) || []) as string[];
+            const hit = tops
+                .map((code : string) => zonesRef.current.find((zone) => zone?.code === code))
+                .filter(Boolean)[0];
+            if (hit?.code) return hit.code;
+            // profile.countries 没配时，与下拉框显示的第一个国家保持一致（按 en_name 排序）
+            const sorted = [...zonesRef.current].sort((a, b) => {
+                return String(a?.en_name || '').localeCompare(String(b?.en_name || ''));
+            });
+            return sorted[0]?.code || null;
+        },
+    }),[]);
     const syncDepsRef = useRef<any>(null);
     syncDepsRef.current = {
         cartCache,
@@ -363,11 +393,17 @@ export const ShopifyCheckoutProvider :FC<{
             initialHash : getMetaContent('sync_hash'),
             // 镜像专属字段（email / 账单 / 本地化）：客户端据此判断要不要补发 PUT
             initialMirror : getJsonFromMeta('sync_mirror'),
-            // 老路径的 useFormValidate 会把 STRICT / COUNTRY_CODE_ONLY 交给 formatInput；
-            // manager 自己构造输入，必须显式传，否则永远走 GraphQL 默认的 COUNTRY_CODE_ONLY（P2-4）
-            validationStrategy : () => PhoneOnlyRequired() ? 'COUNTRY_CODE_ONLY' : 'STRICT',
+            addressResolver,
+            // 校验强度按 intent 区分：
+            //  - 首屏 hydrate / 用户改地址改快递 → COUNTRY_CODE_ONLY：地址只有国家/省份时也能写进 Shopify，
+            //    否则会被 ADDRESS_FIELD_IS_REQUIRED 挡回，快递方式永远出不来；
+            //  - 支付 flush → 保持 STRICT（phone.validate=required 的店铺沿用旧行为），
+            //    支付是地址质量的最后一道闸门，不在这里放宽。
+            validationStrategy : (intents : SyncIntent[]) => intents.includes('flush')
+                ? (PhoneOnlyRequired() ? 'COUNTRY_CODE_ONLY' : 'STRICT')
+                : 'COUNTRY_CODE_ONLY',
         });
-    },[token,form]);
+    },[token,form,addressResolver]);
     // 页面隐藏时补发一次：PUT 走的是 XHR，浏览器可能在卸载前掐断，
     // 所以这里是 best-effort——没发出去也没关系，服务端 sync_hash 不变，
     // 下次进入的首屏 hydrate 会重新比对指纹并补发（P1-5）。
@@ -403,13 +439,41 @@ export const ShopifyCheckoutProvider :FC<{
             }
         };
     },[syncManager]);
+    // 在途状态镜像成 React state：快递方式区块据此显示骨架，避免直接判定"没有快递方式"
+    const [syncing, setSyncing] = useState(false);
+    useEffect(() => {
+        if (!syncManager) {
+            setSyncing(false);
+            return;
+        }
+        let tail : any = null;
+        const apply = () => {
+            if (syncManager.isRunning) {
+                clearTimeout(tail);
+                setSyncing(true);
+                return;
+            }
+            // cycle 结束后留一小段尾巴：等 refetch 的 deliveryGroups 落进 Apollo 缓存，
+            // 否则可能出现"已不在途、但快递方式还没进缓存"的一帧，闪出无快递方式文案。
+            clearTimeout(tail);
+            tail = setTimeout(() => setSyncing(false), 300);
+        };
+        apply();
+        const unsubscribe = syncManager.subscribe(apply);
+        return () => {
+            clearTimeout(tail);
+            unsubscribe();
+        };
+    },[syncManager]);
     return <ShopifyCheckoutContext value={{
         loading,
         cartLinePriceLoading,
         update : queuedUpdate,
     }}>
         <CheckoutSyncContext value={syncManager}>
-            {children}
+            <CheckoutSyncStatusContext value={{syncing}}>
+                {children}
+            </CheckoutSyncStatusContext>
         </CheckoutSyncContext>
     </ShopifyCheckoutContext>
 }

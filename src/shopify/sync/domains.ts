@@ -316,13 +316,63 @@ export function diffDomains(values: any, cart: any, allowed: SyncDomain[],
     return result;
 }
 
+/** zones 列表里的最小结构（静态 AllZones 与服务端 /api/zones 都满足） */
+export type ZoneLike = {
+    code?: string;
+    en_name?: string;
+    children?: ZoneLike[];
+};
+
+/**
+ * 配送国家/省份解析器。由调用方（ShopifyCheckoutProvider）从页面同一份 zones 数据构造，
+ * 避免 domains.ts 直接依赖静态资源：local_zones 开关打开/关闭时两边必须一致。
+ */
+export type AddressResolver = {
+    /** 该国家是否在配送列表里 */
+    hasCountry: (code: string) => boolean;
+    /** 该国家的第一个省份；国家没有省份时返回 null */
+    firstProvince: (code: string) => string | null;
+    /** 该省份是否属于该国家（Shopify 会静默丢弃不属于该国的省份） */
+    hasProvince: (countryCode: string, provinceCode: string) => boolean;
+    /** 不在配送列表时改写成哪个国家：profile.countries[0] → 列表按 en_name 排序第一个 */
+    defaultCountry: () => string | null;
+};
+
+/**
+ * 省份规则：国家有省份就必须带一个（缺失或不属于该国时取第一个），
+ * 无省份国家保持"只有国家"（SG/DE/FR… 只有国家也能算出运费）。
+ */
+function applyProvinceRule(address: {provinceCode?: string | null}, countryCode: string, resolver?: AddressResolver) {
+    if (!countryCode || !resolver) return;
+    const current = str(address.provinceCode);
+    if (!!current && resolver.hasProvince(countryCode, current)) return;
+    const first = resolver.firstProvince(countryCode);
+    if (first) {
+        address.provinceCode = codeKey(first);
+        return;
+    }
+    if (current) {
+        delete address.provinceCode;
+    }
+}
+
+/**
+ * 地址是否缺"街道级"字段（只剩国家/省份）。
+ * approve 页用它跳过会被 PayPal 完整地址覆盖的中间写入：address1 / lastName 是
+ * 表单无条件必填的两项（city 对 SG 是隐藏的，zip 只在 postalCodeRequired 时要求）。
+ */
+export function isPartialAddress(address: any): boolean {
+    if (!address) return true;
+    return !str(address.address1) || !str(address.lastName);
+}
+
 /**
  * 构造 Shopify mutation 输入。
  * 注意：deliveryHandle / deliveryGroupId 只会在 delivery 域里出现，
  * 因此任何非 delivery 的 cycle 都不可能带上 cartSelectedDeliveryOptionsUpdate。
  */
 export function buildMutationInput(values: any, domains: SyncDomain[], cart: any,
-                              options: { validationStrategy ?: string, clearedAddressFields?: Iterable<string> } = {}) {
+                              options: { validationStrategy ?: string, clearedAddressFields?: Iterable<string>, addressResolver?: AddressResolver } = {}) {
     const form = domainsOfForm(values);
     const remote = domainsOfCart(cart);
     const cleared = new Set<string>(options.clearedAddressFields || []);
@@ -332,13 +382,25 @@ export function buildMutationInput(values: any, domains: SyncDomain[], cart: any
     }
     if (domains.includes('address')) {
         const address: any = {};
+        const resolver = options.addressResolver;
+        // 不在配送列表里的国家（例如 IP 定位到本店不配送的国家）改写成配送列表第一个国家：
+        // 保留原国家会让 Shopify 算不出运费（deliveryGroups 为空）→ 结算页不显示快递方式。
+        let countryCode = form.address.countryCode || remote.address.countryCode;
+        if (!!countryCode && !!resolver && !resolver.hasCountry(countryCode)) {
+            const fallback = resolver.defaultCountry();
+            if (fallback) countryCode = codeKey(fallback);
+        }
         // 换国家时，旧国家的省份 / 邮编对新地址就是脏数据，绝不能再拿远端兜底：
         // US→DE 时表单已清空 state_code，若兜底会把 provinceCode: CA 一起发出去，
         // Shopify 直接回 "Province is invalid"（P1-3）。
-        const countryChanged = !!form.address.countryCode
-            && form.address.countryCode !== remote.address.countryCode;
+        const countryChanged = !!countryCode
+            && countryCode !== remote.address.countryCode;
         // 其余字段：表单有值就用表单，没有就用远端兜底，避免空值把远端地址清掉
         ADDRESS_FIELDS.forEach((field) => {
+            if (field === 'countryCode') {
+                if (countryCode) address.countryCode = countryCode;
+                return;
+            }
             // 用户主动清空的字段必须显式发 null，且**不能**再走远端兜底，
             // 否则等于把用户清掉的值又写回去（P1-7）
             if (!form.address[field] && cleared.has(field)) {
@@ -350,6 +412,9 @@ export function buildMutationInput(values: any, domains: SyncDomain[], cart: any
             const value = form.address[field] || (staleAfterCountryChange ? EMPTY : remote.address[field]);
             if (value) address[field] = value;
         });
+        // 国家在配送列表、但地址只有国家（IP 定位只给到国家）→ 补该国第一个省份；
+        // 无省份国家不补（Q4 payload 兜底，与 AddressForm 的表单补全保持一致）。
+        applyProvinceRule(address, countryCode, resolver);
         const id = form.address.id || remote.address.id;
         if (id) address.id = id;
         input.shipping_address = address;

@@ -1,6 +1,9 @@
 import React, {FC, useEffect} from "react";
 import {get as _get, isEmpty as _isEmpty} from "lodash-es";
-import Form from "@rc-component/form";
+import Form, {useWatch} from "@rc-component/form";
+import {useAllZones} from "../../../../container/PaymentContext.tsx";
+import {useCheckoutSyncStatus} from "../../../sync/CheckoutSyncContext.tsx";
+import {ZoneLike} from "../../../sync/domains.ts";
 
 export type ShippingMethodStepProps = {};
 
@@ -40,7 +43,19 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
     const shipping_line_id = _get(group, 'selectedDeliveryOption.handle', null);
     const shipping_group_id = _get(group, 'id', null);
     const form = useCurrentForm();
-    const state_code = form.getFieldValue(['shipping_address', 'state_code']);
+    // 必须用 useWatch：AddressForm 的程序化写入（兜底国家 / 自动补省份）不会触发
+    // onValuesChange，用 getFieldValue 读到的值不会让本组件重渲染。
+    const region_code = useWatch(['shipping_address', 'region_code'], form);
+    const state_code = useWatch(['shipping_address', 'state_code'], form);
+    const {syncing} = useCheckoutSyncStatus();
+    const {zones} = useAllZones();
+    // 国家没有省份（SG/DE/FR…）时省份本来就为空，不能因此一直显示骨架；
+    // 国家不在配送列表、或 zones 还没加载时按"需要省份"处理——宁可骨架，
+    // 也不能闪出 "There are no shipping methods…"。
+    const hitCountry = ((zones || []) as ZoneLike[]).find((zone) => zone?.code === region_code);
+    const provinceRequired = !!region_code && !(hitCountry && (hitCountry.children || []).length === 0);
+    const addressNotReady = !region_code || (provinceRequired && !state_code);
+    const noMethods = !methods?.length;
     useEffect(() => {
         const current = form.getFieldsValue(['shipping_line_id', 'shipping_group_id']);
         const changed: any = {};
@@ -61,7 +76,10 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
     // 有配置比例时优先按比例折算每个快递方式；没有比例（固定金额折扣）再按
     // discountedAmount 回退扣除。
     const hasShippingDiscount = shippingDiscountRate > 0 || shippingDiscount.gt(0);
-    if (loading.shipping_methods || (checkoutLoading && !methods?.length)) {
+    // 地址未就绪 / 同步在途时 groups 为空并不代表"没有快递方式"：
+    // 只是地址还没写进 Shopify（首屏 hydrate 正在补），或刚写完还没重新算出来。
+    if (loading.shipping_methods || (checkoutLoading && noMethods)
+        || (noMethods && (addressNotReady || syncing))) {
         return <StepFrame title={Title}>
             <div
                 className={'animate-pulse border rounded-md border-neutral-300 flex flex-row items-center  space-x-3 p-4'}>
