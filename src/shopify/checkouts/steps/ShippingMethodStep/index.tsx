@@ -94,7 +94,10 @@ export const ShippingMethodStep: FC<ShippingMethodStepProps> = (props) => {
             </div>
         </StepFrame>
     }
-    if ((!methods?.length) && !state_code) {
+    // 兜底提示：只有"该国家需要省份、但省份还没选"时才是"请先填地址"。
+    // 无省份国家（SG/DE/FR）state_code 结构性恒为 null，不能再拿它当判据，
+    // 否则永远显示这句、真正的 NoShippingMethod 文案不可达（B-4）。
+    if ((!methods?.length) && provinceRequired && !state_code) {
         return <StepFrame title={Title}>
             <div className={'rounded-lg bg-gray-100 p-5 text-gray-500'}>
                 Enter your shipping address to view available shipping methods.
