@@ -108,16 +108,42 @@ export function useDiscountCode(): UseDiscountCode {
         return failedRef.current.has(code);
     }, []);
 
-    const runMutation = useCallback(async (codes: string[]) => {
+    /**
+     * 执行 mutation，并按"结果里这个码是否真的生效 / 真的移除"判定成功。
+     *
+     * 判据必须落在 `cart.discountCodes` 上：Shopify 对无效码**不返回 userErrors**
+     * （实测 userErrors: []，只在 discountCodes 里给 applicable:false），
+     * 只看 userErrors 会把无效券当成功（输入框被清空、没有报错、总价却没变）。
+     */
+    const runMutation = useCallback(async (codes: string[], expect?: { code: string, applied: boolean }) => {
         setStatus('applying');
         setError(null);
-        await fn({
+        const result = await fn({
             variables: {
                 cartId: gid,
                 codes,
             },
             awaitRefetchQueries: true,
         });
+        const payload = result?.data?.cartDiscountCodesUpdate;
+        const userErrors = (payload?.userErrors || []) as { message?: string }[];
+        if (userErrors.length > 0) {
+            throw new Error(userErrors[0]?.message || DEFAULT_DISCOUNT_ERROR);
+        }
+        if (!payload) {
+            throw new Error(DEFAULT_DISCOUNT_ERROR);
+        }
+        if (expect) {
+            const wanted = expect.code.trim().toUpperCase();
+            const entries = (payload.cart?.discountCodes || []) as { code?: string, applicable?: boolean }[];
+            const hit = entries.find((entry) => String(entry?.code || '').trim().toUpperCase() === wanted);
+            // applied: 必须真的 applicable（无效码也在列表里，只是 applicable=false）
+            // 移除:     必须真的不在列表里了
+            const ok = expect.applied ? !!hit?.applicable : !hit;
+            if (!ok) {
+                throw new Error(DEFAULT_DISCOUNT_ERROR);
+            }
+        }
         if (syncManager) {
             // 折扣由折扣 mutation 自己写 Shopify；manager 只负责把最新 cart 镜像到 PHP
             syncManager.request('discount');
@@ -142,7 +168,7 @@ export function useDiscountCode(): UseDiscountCode {
         return enqueue(async () => {
             if (currentCodesRef.current.includes(code)) return;
             try {
-                await runMutation(_uniq([...currentCodesRef.current, code]));
+                await runMutation(_uniq([...currentCodesRef.current, code]), {code, applied: true});
                 currentCodesRef.current = _uniq([...currentCodesRef.current, code]);
                 setStatus('success');
                 clearFailed(code);
@@ -159,7 +185,7 @@ export function useDiscountCode(): UseDiscountCode {
         return enqueue(async () => {
             if (!currentCodesRef.current.includes(code)) return;
             try {
-                await runMutation(_uniq(currentCodesRef.current.filter(c => c !== code)));
+                await runMutation(_uniq(currentCodesRef.current.filter(c => c !== code)), {code, applied: false});
                 currentCodesRef.current = _uniq(currentCodesRef.current.filter(c => c !== code));
                 setStatus('success');
             } catch (e) {
